@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import storage, { STORAGE } from "../../storage";
-import { ROUTES } from "../routes";
-import { initialState } from "../views/user";
-import { IPatientRecord } from "../views/patient";
+import { IPatientRecord } from "../interfaces";
 
 export function usePatientsRecord() {
   const [patientsRecord, setPatients] = useState<IPatientRecord[]>([]);

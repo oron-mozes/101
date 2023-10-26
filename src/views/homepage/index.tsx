@@ -8,14 +8,15 @@ import {
   View,
 } from "react-native";
 import { Button, Card, Text } from "react-native-paper";
-
 import storage, { STORAGE } from "../../../storage";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { usePatientsRecord } from "../../hooks/usePatientsRecord";
 import { ROUTES } from "../../routes";
 import { PatientCard } from "../patient/patient-card";
 import { initialState } from "../user";
-import { StackNavigation } from "../../interfaces";
+import { STATUS, StackNavigation } from "../../interfaces";
+import { IStatusChipProps, StatusChip } from "../../components/status-chip";
+import { CheckButton } from "../../components/select-button";
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
@@ -41,8 +42,45 @@ export default function HomeScreen() {
     return navigation.addListener("focus", loadRecords);
   }, [userDetails]);
 
+  const chips: IStatusChipProps[] = [
+    { label: translation("statusActive"), status: STATUS.ACTIVE },
+    { label: translation("statusUrgent"), status: STATUS.URGENT },
+    { label: translation("statusNoneUrgent"), status: STATUS.NONE_URGENT },
+    { label: translation("evacuated"), status: STATUS.EVACUATED },
+    { label: translation("reActive"), status: STATUS.RE_ACTIVE },
+    { label: translation("urgentEvac"), status: STATUS.URGENT_EVAC },
+    { label: translation("noneUrgentEvac"), status: STATUS.NONE_URGENT_EVAC },
+  ];
+
+  const [yesCheck, toggleYesCheck] = useState<boolean>(false);
   return (
     <SafeAreaView style={styles.container}>
+      <View>
+        <FlatList
+          numColumns={3}
+          data={chips}
+          renderItem={({ item }) => (
+            <StatusChip label={item.label} status={item.status} />
+          )}
+        />
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <CheckButton
+          label={translation("yes")}
+          checked={yesCheck}
+          onSelect={() => {
+            toggleYesCheck(!yesCheck);
+          }}
+        />
+        <CheckButton
+          label={translation("no")}
+          checked={false}
+          disabled={true}
+          onSelect={() => {
+            toggleYesCheck(!yesCheck);
+          }}
+        />
+      </View>
       <View style={styles.scrollView}>
         <StatusBar barStyle="light-content" />
         <Text>
@@ -75,8 +113,6 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row-reverse",
-    flex: 1,
     paddingTop: StatusBar.currentHeight,
     width: "100%",
   },
