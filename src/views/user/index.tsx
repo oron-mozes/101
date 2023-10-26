@@ -11,20 +11,12 @@ import {
 } from "react-native";
 import ReactNativeForm from "rjsf-native";
 import storage, { STORAGE } from "../../../storage";
-import { ROUTES, StackNavigation } from "../../routes";
+import { ROUTES } from "../../routes";
 import { useTranslation } from "../../hooks/useMyTranslation";
+import { ICareGiver, StackNavigation } from "../../interfaces";
 
-export interface ICareTeamMember {
-  fullName: string;
-  idf_id: number;
-  rank: string;
-  unit: string;
-  role: string;
-  expertise: string;
-}
-
-export const initialState = {
-  fullName: null,
+export const initialState: ICareGiver = {
+  full_name: null,
   idf_id: null,
   rank: null,
   unit: null,
@@ -35,9 +27,9 @@ export const initialState = {
 export default function UserScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
-  const [userDetails, setUserDetails] = useState(initialState);
+  const [userDetails, setUserDetails] = useState<ICareGiver>(initialState);
   const [allowNavigation, toggleAllowNavigation] = useState<boolean>(
-    Boolean(userDetails.fullName)
+    Boolean(userDetails.full_name)
   );
 
   useEffect(

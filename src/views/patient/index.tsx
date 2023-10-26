@@ -1,34 +1,10 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect, useMemo, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet } from "react-native";
 import storage, { STORAGE } from "../../../storage";
-import { RootStackParamList } from "../../routes";
 import Context from "./context";
 import { PersonalInformation } from "./partials/personal-information";
 import QrCode from "../qr-code";
-import { ICareTeamMember } from "../user";
-
-interface IPersonalInformation {
-  full_name: string;
-  idf_id: number;
-}
-interface IIncidentInformation {
-  injury_time: Date;
-  care_time: Date;
-  date: Date;
-}
-
-interface IInjury {}
-type TCconsciousness = "awake" | "voice" | "pain" | "none";
-
-export interface IPatientRecord {
-  id?: string;
-  personal_information: IPersonalInformation;
-  incident_information: IIncidentInformation;
-  care_team: ICareTeamMember[];
-  injuries: IInjury[];
-  consciousness: TCconsciousness[];
-}
+import { IPatientRecord, IProps } from "../../interfaces";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -44,7 +20,6 @@ export const emptyPatient: IPatientRecord = {
   injuries: [],
   consciousness: [],
 };
-interface IProps extends NativeStackScreenProps<RootStackParamList> {}
 
 export function PatientForm({ route }: IProps) {
   const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
