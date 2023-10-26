@@ -15,5 +15,15 @@
   "expertise": "התמחות",
   "save": "שמור",
   "importPatient": "ייבא מטופל",
-  "exportPatient": "ייצא מטופל"
+  "exportPatient": "ייצא מטופל",
+  "statusActive": "פעילות",
+  "statusUrgent": "דחוף",
+  "statusNoneUrgent": "לא דחוף",
+  "evacuated": "לאחר פינוי",
+  "reActive": "חזרה לפעילות",
+  "urgentEvac": "פינוי דחוף",
+  "noneUrgentEvac": "פינוי לא דחוף",
+  "yes": "כן",
+  "no": "לא",
+  "patientName": "שם פצוע.ה"
 }
