@@ -5,12 +5,13 @@ import { StyleSheet } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { useCameraPermission } from "react-native-vision-camera";
 import { useTranslation } from "./src/hooks/useMyTranslation";
-import { ROUTES, RootStackParamList } from "./src/routes";
+import { ROUTES } from "./src/routes";
 import HomeScreen from "./src/views/homepage";
 import MainMenu from "./src/views/main-menu";
 import { PatientForm } from "./src/views/patient";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import UserScreen from "./src/views/user";
+import { RootStackParamList } from "./src/interfaces";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
