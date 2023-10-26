@@ -26,6 +26,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "bc3202ce-a848-4dc5-99d9-208f3e9aed42"
+      }
+    },
+    "owner": "oron-mozes"
   }
 }

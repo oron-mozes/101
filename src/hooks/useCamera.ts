@@ -2,6 +2,7 @@ import {
   Camera,
   Code,
   useCameraDevice,
+  useCameraFormat,
   useCameraPermission,
   useCodeScanner,
 } from "react-native-vision-camera";
@@ -12,6 +13,11 @@ export function useCamera() {
   const device = useCameraDevice("back");
   const [permission, updatePermission] = useState<string>();
   const [scannedInformation, updateScannedInformation] = useState<Code[]>();
+  const format = useCameraFormat(device, [
+    { videoResolution: { width: 250, height: 250 } },
+    { fps: 60 },
+  ]);
+
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
     onCodeScanned: (codes) => {
@@ -35,5 +41,5 @@ export function useCamera() {
     !permission && askForPermission();
   }, []);
 
-  return { device, codeScanner, scannedInformation };
+  return { device, codeScanner, scannedInformation, format };
 }

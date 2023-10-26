@@ -1,0 +1,18 @@
+{
+  "homepageTitle": "עמוד הבית",
+  "accountTitle": "פרטים אישיים",
+  "welcomeMessage": "ברוכים הבאים {{name}}",
+  "mainMenu": "תפריט ראשי",
+  "personalInformation": "מטופל",
+  "personalInformationName": "שם",
+  "treatmentStartingTime": "זמן",
+  "addPatient": "צור 101",
+  "name": "שם",
+  "idfId": "מ.א",
+  "rank": "דרגה",
+  "idfUnit": "יחידה",
+  "position": "תפקיד",
+  "expertise": "התמחות",
+  "save": "שמור",
+  "importPatient": "ייבא מטופל"
+}
