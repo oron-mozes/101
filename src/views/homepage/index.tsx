@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
-  ScrollView,
+  View,
   StatusBar,
   StyleSheet,
 } from "react-native";
@@ -15,22 +15,15 @@ import storage, { STORAGE } from "../../../storage";
 import { IPatientRecord } from "../patient";
 import { PatientCard } from "../patient/patient-card";
 import { useTranslation } from "../../hooks/useMyTranslation";
+import { usePatientsRecord } from "../../hooks/usePatientsRecord";
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
   const [userDetails, setUserDetails] = useState<typeof initialState | null>();
-  const [patients, setPatients] = useState<IPatientRecord[]>([]);
+  const { patientsRecord, loadRecords } = usePatientsRecord();
   // storage.clearMapForKey(STORAGE.PATIENTS_RECORD);
 
-  const loadRecords = () => {
-    storage
-      .getAllDataForKey(STORAGE.PATIENTS_RECORD)
-      .then((data) => {
-        setPatients(data);
-      })
-      .catch(() => {});
-  };
   useEffect(() => {
     !userDetails &&
       storage
@@ -50,7 +43,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <View style={styles.scrollView}>
         <StatusBar barStyle="light-content" />
         <Text>
           {translation("welcomeMessage", {
@@ -73,9 +66,9 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id}
           numColumns={1}
           renderItem={({ item }) => <PatientCard patient={item} />}
-          data={patients}
+          data={patientsRecord}
         />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -91,8 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: "pink",
   },
   scrollView: {
-    width: "100%",
-    marginHorizontal: 20,
+    width: "90%",
   },
   list: {
     alignContent: "flex-end",

@@ -1,17 +1,16 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StyleSheet, View } from "react-native";
-import { PaperProvider, Text } from "react-native-paper";
-import { ROUTES, RootStackParamList } from "./src/routes";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import { PaperProvider } from "react-native-paper";
+import { useCameraPermission } from "react-native-vision-camera";
+import { useTranslation } from "./src/hooks/useMyTranslation";
+import { ROUTES, RootStackParamList } from "./src/routes";
 import HomeScreen from "./src/views/homepage";
 import MainMenu from "./src/views/main-menu";
-import UserScreen from "./src/views/user";
 import { PatientForm } from "./src/views/patient";
-import { useEffect } from "react";
-import { useCameraPermission } from "react-native-vision-camera";
-import QrCode from "./src/views/qr-code";
-import { useTranslation } from "./src/hooks/useMyTranslation";
 import ReceivePatientScreen from "./src/views/recieve-patient";
+import UserScreen from "./src/views/user";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
@@ -53,9 +52,6 @@ export default function App() {
             name={ROUTES.REPORT}
             options={{
               title: translation("addPatient"),
-              headerRight: (data) => {
-                return <QrCode />;
-              },
             }}
             component={PatientForm}
           />

@@ -14,5 +14,6 @@
   "position": "תפקיד",
   "expertise": "התמחות",
   "save": "שמור",
-  "importPatient": "ייבא מטופל"
+  "importPatient": "ייבא מטופל",
+  "exportPatient": "ייצא מטופל"
 }

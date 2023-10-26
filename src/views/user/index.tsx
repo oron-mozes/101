@@ -14,6 +14,15 @@ import storage, { STORAGE } from "../../../storage";
 import { ROUTES, StackNavigation } from "../../routes";
 import { useTranslation } from "../../hooks/useMyTranslation";
 
+export interface ICareTeamMember {
+  fullName: string;
+  idf_id: number;
+  rank: string;
+  unit: string;
+  role: string;
+  expertise: string;
+}
+
 export const initialState = {
   fullName: null,
   idf_id: null,

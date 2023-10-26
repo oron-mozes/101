@@ -17,12 +17,13 @@ export function useCamera() {
     { videoResolution: { width: 250, height: 250 } },
     { fps: 60 },
   ]);
-
+  
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
     onCodeScanned: (codes) => {
       updateScannedInformation(codes);
-      console.log(`Scanned ${codes.length} codes!`);
+      // console.log({ codes });
+
     },
   });
   useEffect(() => {
