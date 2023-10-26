@@ -51,3 +51,14 @@ export type RootStackParamList = Record<
   { patient?: IPatientRecord } | undefined
 >;
 export type StackNavigation = NavigationProp<RootStackParamList>;
+
+export enum STATUS {
+  ACTIVE = "active",
+  URGENT = "urgent",
+  NONE_URGENT = "noneUrgent",
+  EVACUATED = "evacuated",
+  RE_ACTIVE = "reActive",
+  URGENT_EVAC = "urgentEvac",
+  NONE_URGENT_EVAC = "noneUrgentEvac",
+  
+}
