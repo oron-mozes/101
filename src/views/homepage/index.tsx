@@ -17,6 +17,7 @@ import { initialState } from "../user";
 import { STATUS, StackNavigation } from "../../interfaces";
 import { IStatusChipProps, StatusChip } from "../../components/status-chip";
 import { CheckButton } from "../../components/select-button";
+import { InputField } from "../../components/input-field";
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
@@ -53,6 +54,7 @@ export default function HomeScreen() {
   ];
 
   const [yesCheck, toggleYesCheck] = useState<boolean>(false);
+  const [inputTest, updateInputTest] = useState<string>();
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -79,6 +81,13 @@ export default function HomeScreen() {
           onSelect={() => {
             toggleYesCheck(!yesCheck);
           }}
+        />
+      </View>
+      <View>
+        <InputField
+          label={translation("patientName")}
+          value={inputTest}
+          onChange={updateInputTest}
         />
       </View>
       <View style={styles.scrollView}>
