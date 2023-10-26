@@ -3,19 +3,19 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
-  View,
   StatusBar,
   StyleSheet,
+  View,
 } from "react-native";
 import { Button, Card, Text } from "react-native-paper";
 
-import { StackNavigation, ROUTES } from "../../routes";
-import { initialState } from "../user";
 import storage, { STORAGE } from "../../../storage";
-import { IPatientRecord } from "../patient";
-import { PatientCard } from "../patient/patient-card";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { usePatientsRecord } from "../../hooks/usePatientsRecord";
+import { ROUTES } from "../../routes";
+import { PatientCard } from "../patient/patient-card";
+import { initialState } from "../user";
+import { StackNavigation } from "../../interfaces";
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
