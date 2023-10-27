@@ -33,10 +33,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "rgba(222, 231, 237, 1)",
     borderRadius: 8,
-    margin: 4,
+    margin: 8,
     textAlign: "right",
     justifyContent: "flex-end",
     alignItems: "flex-end",
     borderColor: "rgba(190, 207, 218, 1)",
+    color: textColor,
   },
 });

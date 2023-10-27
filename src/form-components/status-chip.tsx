@@ -1,7 +1,7 @@
-import { StatusBar, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { Chip } from "react-native-paper";
-import { chipContainer, chipText, priority } from "./shared-style";
 import { STATUS } from "../interfaces";
+import { chipContainer, chipText, priority } from "./shared-style";
 
 export interface IStatusChipProps {
   status: STATUS;

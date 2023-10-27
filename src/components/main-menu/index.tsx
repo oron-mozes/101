@@ -3,7 +3,8 @@ import { StyleSheet, View } from "react-native";
 import { Button, Divider, Menu } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { useNavigation } from "@react-navigation/native";
-import { ROUTES, StackNavigation } from "../../routes";
+import { ROUTES } from "../../routes";
+import { StackNavigation } from "../../interfaces";
 
 export default function MainMenu() {
   const [visible, setVisible] = React.useState(false);
@@ -14,9 +15,14 @@ export default function MainMenu() {
   return (
     <View>
       <Menu
+        style={styles.item}
         visible={visible}
         onDismiss={closeMenu}
-        anchor={<Button onPress={openMenu}>{translation("mainMenu")}</Button>}
+        anchor={
+          <Button onPress={openMenu} textColor="white">
+            {translation("mainMenu")}
+          </Button>
+        }
       >
         <Menu.Item onPress={() => {}} title="Item 1" />
         <Menu.Item onPress={() => {}} title="Item 2" />
@@ -33,4 +39,7 @@ export default function MainMenu() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  menuButton: {},
+  item: {},
+});

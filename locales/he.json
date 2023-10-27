@@ -2,7 +2,7 @@
   "homepageTitle": "עמוד הבית",
   "accountTitle": "פרטים אישיים",
   "welcomeMessage": "ברוכים הבאים {{name}}",
-  "mainMenu": "תפריט ראשי",
+  "mainMenu": "מעקב פצועים",
   "personalInformation": "מטופל",
   "personalInformationName": "שם",
   "treatmentStartingTime": "זמן",
@@ -25,5 +25,7 @@
   "noneUrgentEvac": "פינוי לא דחוף",
   "yes": "כן",
   "no": "לא",
-  "patientName": "שם פצוע.ה"
+  "patientName": "שם פצוע.ה",
+  "text": "טקסט",
+  "avpu": "מצב הכרה AVPU"
 }

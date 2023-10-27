@@ -15,9 +15,14 @@ import { ROUTES } from "../../routes";
 import { PatientCard } from "../patient/patient-card";
 import { initialState } from "../user";
 import { STATUS, StackNavigation } from "../../interfaces";
-import { IStatusChipProps, StatusChip } from "../../components/status-chip";
-import { CheckButton } from "../../components/select-button";
-import { InputField } from "../../components/input-field";
+import { CheckButton } from "../../form-components/select-button";
+import { InputField } from "../../form-components/input-field";
+import { RadioButton } from "../../form-components/radio-button";
+import { SectionHeader } from "../../form-components/section-header";
+import {
+  IStatusChipProps,
+  StatusChip,
+} from "../../form-components/status-chip";
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
@@ -55,6 +60,7 @@ export default function HomeScreen() {
 
   const [yesCheck, toggleYesCheck] = useState<boolean>(false);
   const [inputTest, updateInputTest] = useState<string>();
+  const [radioCheck, toggleRadioCheck] = useState<boolean>(false);
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -66,7 +72,13 @@ export default function HomeScreen() {
           )}
         />
       </View>
-      <View style={{ flexDirection: "row" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          width: "100%",
+          justifyContent: "flex-end",
+        }}
+      >
         <CheckButton
           label={translation("yes")}
           checked={yesCheck}
@@ -90,8 +102,31 @@ export default function HomeScreen() {
           onChange={updateInputTest}
         />
       </View>
+      <View
+        style={{
+          flexDirection: "row",
+          width: "100%",
+          justifyContent: "flex-end",
+        }}
+      >
+        <RadioButton
+          value={"yes"}
+          status={radioCheck}
+          onSelect={() => {
+            toggleRadioCheck(!radioCheck);
+          }}
+          label={translation("text")}
+        />
+        <RadioButton
+          disabled={true}
+          value={"yes"}
+          status={false}
+          onSelect={() => {}}
+          label={translation("text")}
+        />
+      </View>
+      <SectionHeader label={translation("avpu")} />
       <View style={styles.scrollView}>
-        <StatusBar barStyle="light-content" />
         <Text>
           {translation("welcomeMessage", {
             name: userDetails?.fullName || "",
