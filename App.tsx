@@ -12,12 +12,14 @@ import { PatientForm } from "./src/views/patient";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import UserScreen from "./src/views/user";
 import { RootStackParamList } from "./src/interfaces";
-import { Logo101 } from "./src/components/101-logo";
+import { Logo101 } from "./src/components/left-menu/101-logo";
+import QrCode from "./src/views/qr-code";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   const translation = useTranslation();
   const { hasPermission, requestPermission } = useCameraPermission();
+  const headerColor: string = "rgba(0, 107, 229, 1)";
 
   useEffect(() => {
     if (!hasPermission) {
@@ -26,17 +28,14 @@ export default function App() {
   }, []);
   return (
     <PaperProvider>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="rgba(0, 107, 229, 1)"
-      />
+      <StatusBar barStyle="light-content" backgroundColor={headerColor} />
       <NavigationContainer>
         <Stack.Navigator initialRouteName={ROUTES.HOME}>
           <Stack.Screen
             name={ROUTES.HOME}
             options={{
               headerStyle: {
-                backgroundColor: "rgba(0, 107, 229, 1)",
+                backgroundColor: headerColor,
               },
               title: "",
 
@@ -49,10 +48,10 @@ export default function App() {
             name={ROUTES.ACCOUNT}
             options={{
               headerStyle: {
-                backgroundColor: "rgba(0, 107, 229, 1)",
+                backgroundColor: headerColor,
               },
               headerLeft: () => <Logo101 />,
-              title: translation("accountTitle"),
+              title: "",
             }}
             component={UserScreen}
           />
@@ -60,10 +59,10 @@ export default function App() {
             name={ROUTES.IMPORT_PATIENT}
             options={{
               headerStyle: {
-                backgroundColor: "rgba(0, 107, 229, 1)",
+                backgroundColor: headerColor,
               },
               headerLeft: () => <Logo101 />,
-              title: translation("importPatient"),
+              title: "",
             }}
             component={ReceivePatientScreen}
           />
@@ -71,12 +70,23 @@ export default function App() {
             name={ROUTES.REPORT}
             options={{
               headerStyle: {
-                backgroundColor: "rgba(0, 107, 229, 1)",
+                backgroundColor: headerColor,
               },
               headerLeft: () => <Logo101 />,
-              title: translation("addPatient"),
+              title: "",
             }}
             component={PatientForm}
+          />
+          <Stack.Screen
+            name={ROUTES.EXPORT_PATIENT}
+            options={{
+              headerStyle: {
+                backgroundColor: headerColor,
+              },
+              headerLeft: () => <Logo101 />,
+              title: "",
+            }}
+            component={QrCode}
           />
         </Stack.Navigator>
       </NavigationContainer>

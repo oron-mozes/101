@@ -2,7 +2,10 @@ import { useState } from "react";
 import storage, { STORAGE } from "../../storage";
 import { IPatientRecord } from "../interfaces";
 
-export function usePatientsRecord() {
+export function usePatientsRecord(): {
+  patientsRecord: IPatientRecord[];
+  loadRecords(): void;
+} {
   const [patientsRecord, setPatients] = useState<IPatientRecord[]>([]);
 
   const loadRecords = () => {

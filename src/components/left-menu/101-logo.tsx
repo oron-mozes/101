@@ -1,10 +1,21 @@
+import { useNavigation } from "@react-navigation/native";
 import { View, Text, Image } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import { StackNavigation } from "../../interfaces";
+import { useMemo } from "react";
 
 export function Logo101() {
+  const navigation = useNavigation<StackNavigation>();
+  const isHomeRoute = useMemo(() => navigation.getState().index === 0, []);
   return (
     <View>
-      <Svg width={56} height={39} viewBox="0 0 56 39" fill="none">
+      <Svg
+        onPress={() => !isHomeRoute && navigation.goBack()}
+        width={56}
+        height={39}
+        viewBox="0 0 56 39"
+        fill="none"
+      >
         <Path
           d="M0 0v4.177h56V0H0zM2.672 12.901a30.478 30.478 0 00-1.806.01c-.584.04-.826-.204-.866-.794l3.423-3.763h7.61v16.722H3.705V12.911c-.361 0-.703-.005-1.033-.01zM29.799 12.076c.02.61-.222.835-.826.814-.537-.009-1.074-.002-1.61.005a43.04 43.04 0 01-2.014-.005c-.846-.06-1.087.244-1.087 1.078.013 3.335.009 6.678.004 10.018v.036c-.002 1.661-.004 3.322-.004 4.98v1.587c-.277 0-.546.004-.808.007-.632.008-1.226.016-1.81-.027-.282-.02-.604-.244-.825-.468l-.49-.486c-.988-.978-1.98-1.96-2.913-2.973a1.896 1.896 0 01-.503-1.24 779.84 779.84 0 01-.02-11.881c0-.407.18-.875.442-1.16a72.396 72.396 0 013.524-3.52c.262-.264.685-.467 1.027-.467 1.37-.023 2.732-.02 4.092-.017 1.02.003 2.038.005 3.055-.003.544 0 .786.203.766.773-.02.976-.04 1.973 0 2.95z"
           fill="#fff"

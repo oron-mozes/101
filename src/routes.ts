@@ -3,4 +3,5 @@ export const ROUTES = {
   ACCOUNT: "UserDetails",
   REPORT: "Report",
   IMPORT_PATIENT: "ImportPatient",
+  EXPORT_PATIENT: "ExportPatient",
 };

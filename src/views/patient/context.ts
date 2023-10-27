@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction, createContext } from "react";
-import { IPatientRecord, emptyPatient } from ".";
+import { createContext } from "react";
+import { emptyPatient } from ".";
+import { IPatientRecord } from "../../interfaces";
 
 export default createContext({
   patient: emptyPatient,

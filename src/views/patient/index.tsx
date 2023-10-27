@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet } from "react-native";
 import storage, { STORAGE } from "../../../storage";
+import { IPatientRecord, IProps, STATUS } from "../../interfaces";
 import Context from "./context";
 import { PersonalInformation } from "./partials/personal-information";
-import QrCode from "../qr-code";
-import { IPatientRecord, IProps } from "../../interfaces";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -15,6 +14,7 @@ export const emptyPatient: IPatientRecord = {
     injury_time: new Date(),
     care_time: new Date(),
     date: new Date(),
+    status: STATUS.ACTIVE,
   },
   care_team: [],
   injuries: [],
@@ -45,7 +45,11 @@ export function PatientForm({ route }: IProps) {
         update: (value) => {
           const selectedId = patientRecord.id || id;
 
-          const updateData = { ...patientRecord, ...value, id: selectedId };
+          const updateData: IPatientRecord = {
+            ...patientRecord,
+            ...value,
+            id: selectedId,
+          };
 
           setPatientRecord(updateData);
           storage.save({
@@ -58,7 +62,6 @@ export function PatientForm({ route }: IProps) {
     >
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollView}>
-          <QrCode />
           <PersonalInformation />
         </ScrollView>
       </SafeAreaView>

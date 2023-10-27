@@ -9,6 +9,7 @@ interface IIncidentInformation {
   injury_time: Date;
   care_time: Date;
   date: Date;
+  status: STATUS;
 }
 
 interface IInjury {}
@@ -60,5 +61,4 @@ export enum STATUS {
   RE_ACTIVE = "reActive",
   URGENT_EVAC = "urgentEvac",
   NONE_URGENT_EVAC = "noneUrgentEvac",
-  
 }

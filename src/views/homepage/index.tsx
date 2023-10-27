@@ -7,22 +7,22 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Button, Card, Text } from "react-native-paper";
+import { Button, Card, DataTable, Text } from "react-native-paper";
 import storage, { STORAGE } from "../../../storage";
-import { useTranslation } from "../../hooks/useMyTranslation";
-import { usePatientsRecord } from "../../hooks/usePatientsRecord";
-import { ROUTES } from "../../routes";
-import { PatientCard } from "../patient/patient-card";
-import { initialState } from "../user";
-import { STATUS, StackNavigation } from "../../interfaces";
-import { CheckButton } from "../../form-components/select-button";
 import { InputField } from "../../form-components/input-field";
 import { RadioButton } from "../../form-components/radio-button";
 import { SectionHeader } from "../../form-components/section-header";
+import { CheckButton } from "../../form-components/select-button";
 import {
   IStatusChipProps,
   StatusChip,
 } from "../../form-components/status-chip";
+import { useTranslation } from "../../hooks/useMyTranslation";
+import { usePatientsRecord } from "../../hooks/usePatientsRecord";
+import { STATUS, StackNavigation } from "../../interfaces";
+import { ROUTES } from "../../routes";
+import { initialState } from "../user";
+import { QrIcon } from "../../components/qr-icon/qr";
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
@@ -126,12 +126,49 @@ export default function HomeScreen() {
         />
       </View>
       <SectionHeader label={translation("avpu")} />
-      <View style={styles.scrollView}>
-        <Text>
-          {translation("welcomeMessage", {
-            name: userDetails?.fullName || "",
+
+      <View>
+        <DataTable style={styles.table}>
+          <DataTable.Header style={styles.tableHeader}>
+            <DataTable.Title>{translation("qr")}</DataTable.Title>
+            <DataTable.Title>{translation("evacStatus")}</DataTable.Title>
+            <DataTable.Title>{translation("idfId")}</DataTable.Title>
+            <DataTable.Title>{translation("patientName")}</DataTable.Title>
+          </DataTable.Header>
+          {patientsRecord.map((patient) => {
+            const disable: boolean =
+              patient.incident_information.status === STATUS.EVACUATED;
+            return (
+              <DataTable.Row
+                key={patient.id}
+                style={[disable ? styles.disableRow : {}]}
+              >
+                <DataTable.Cell
+                  disabled={disable}
+                  onPress={() =>
+                    navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
+                  }
+                >
+                  <QrIcon />
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  <StatusChip
+                    label={translation(patient.incident_information.status)}
+                    status={patient.incident_information.status}
+                  />
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  {patient.personal_information.idf_id}
+                </DataTable.Cell>
+                <DataTable.Cell>
+                  {patient.personal_information.full_name}
+                </DataTable.Cell>
+              </DataTable.Row>
+            );
           })}
-        </Text>
+        </DataTable>
+      </View>
+      <View style={styles.scrollView}>
         <Card>
           <Button onPress={() => navigation.navigate(ROUTES.REPORT)}>
             {translation("addPatient")}
@@ -142,20 +179,17 @@ export default function HomeScreen() {
             {translation("importPatient")}
           </Button>
         </Card>
-        <FlatList
-          style={styles.list}
-          //@ts-ignore
-          keyExtractor={(item) => item.id}
-          numColumns={1}
-          renderItem={({ item }) => <PatientCard patient={item} />}
-          data={patientsRecord}
-        />
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  disableRow: {
+    opacity: 0.6,
+  },
+  table: { margin: 4, width: "98%" },
+  tableHeader: { backgroundColor: "rgba(229, 241, 255, 1)" },
   container: {
     paddingTop: StatusBar.currentHeight,
     width: "100%",

@@ -8,7 +8,7 @@
   "treatmentStartingTime": "זמן",
   "addPatient": "צור 101",
   "name": "שם",
-  "idfId": "מ.א",
+  "idfId": "מ.א / ת.ז",
   "rank": "דרגה",
   "idfUnit": "יחידה",
   "position": "תפקיד",
@@ -16,9 +16,9 @@
   "save": "שמור",
   "importPatient": "ייבא מטופל",
   "exportPatient": "ייצא מטופל",
-  "statusActive": "פעילות",
-  "statusUrgent": "דחוף",
-  "statusNoneUrgent": "לא דחוף",
+  "active": "פעילות",
+  "urgent": "דחוף",
+  "noneUrgent": "לא דחוף",
   "evacuated": "לאחר פינוי",
   "reActive": "חזרה לפעילות",
   "urgentEvac": "פינוי דחוף",
@@ -27,5 +27,9 @@
   "no": "לא",
   "patientName": "שם פצוע.ה",
   "text": "טקסט",
-  "avpu": "מצב הכרה AVPU"
+  "avpu": "מצב הכרה AVPU",
+  "evacStatus": "סטטוס פינוי",
+  "qr": "הפקת קוד QR",
+  "approveEvac": "אישור פינוי",
+  "cancel": "ביטול"
 }
