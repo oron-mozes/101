@@ -3,26 +3,30 @@ import { TextInput } from "react-native-paper";
 import { textColor } from "./shared-style";
 
 export interface IInputField {
-  onChange(value: string): void;
+  onChange(value: string | number): void;
   label: string;
   disabled?: boolean;
-  value?: string;
+  numeric?: boolean;
+  value?: string | number;
 }
 export function InputField({
   label,
   onChange,
   disabled = false,
   value = "",
+  numeric = false,
 }: IInputField) {
   return (
     <TextInput
+      keyboardType={numeric ? "numeric" : "default"}
       style={[styles.container]}
       disabled={disabled}
       label={label}
-      value={value}
+      value={value && String(value)}
       textAlign="right"
       mode="outlined"
-      onChangeText={(text) => onChange(text)}
+      textColor="rgba(0, 36, 77, 1)"
+      onChangeText={onChange}
       outlineColor="rgba(190, 207, 218, 1)"
       activeOutlineColor="rgba(0, 36, 77, 1)"
     />

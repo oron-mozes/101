@@ -13,9 +13,9 @@ import ReactNativeForm from "rjsf-native";
 import storage, { STORAGE } from "../../../storage";
 import { ROUTES } from "../../routes";
 import { useTranslation } from "../../hooks/useMyTranslation";
-import { ICareGiver, StackNavigation } from "../../interfaces";
+import { ICareProvider, StackNavigation } from "../../interfaces";
 
-export const initialState: ICareGiver = {
+export const initialState: ICareProvider = {
   full_name: null,
   idf_id: null,
   rank: null,
@@ -27,7 +27,7 @@ export const initialState: ICareGiver = {
 export default function UserScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
-  const [userDetails, setUserDetails] = useState<ICareGiver>(initialState);
+  const [userDetails, setUserDetails] = useState<ICareProvider>(initialState);
   const [allowNavigation, toggleAllowNavigation] = useState<boolean>(
     Boolean(userDetails.full_name)
   );

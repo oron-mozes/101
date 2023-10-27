@@ -6,12 +6,13 @@
   "personalInformation": "מטופל",
   "personalInformationName": "שם",
   "treatmentStartingTime": "זמן",
-  "addPatient": "צור 101",
+  "addPatient": "טיפול בפצוע.ה",
+  "patientsStatus": "סטטוס פצועים",
   "name": "שם",
   "idfId": "מ.א / ת.ז",
   "rank": "דרגה",
-  "idfUnit": "יחידה",
-  "position": "תפקיד",
+  "idfUnit": "שם יחידה",
+  "role": "תפקיד",
   "expertise": "התמחות",
   "save": "שמור",
   "importPatient": "ייבא מטופל",
@@ -31,5 +32,7 @@
   "evacStatus": "סטטוס פינוי",
   "qr": "הפקת קוד QR",
   "approveEvac": "אישור פינוי",
-  "cancel": "ביטול"
+  "cancel": "ביטול",
+  "addCareProvider": "הוסף דרג טיפול",
+  "continue": "המשך"
 }

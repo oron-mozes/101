@@ -32,18 +32,18 @@ export interface ICareTeamMember {
   expertise: string;
 }
 
-export interface ICareGiver {
+export interface ICareProvider {
   full_name: string;
   idf_id: number;
   rank: string;
-  unit: string;
+  unit_name: string;
   role: string;
   expertise: string;
 }
 
 export interface ITaagad {
-  unit: string;
-  care_givers: Map<string, ICareGiver>;
+  unit_name: string;
+  care_providers: { [key: string]: ICareProvider };
 }
 
 export interface IProps extends NativeStackScreenProps<RootStackParamList> {}
