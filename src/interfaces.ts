@@ -6,14 +6,14 @@ export interface IPersonalInformation {
   idf_id: number;
 }
 interface IIncidentInformation {
-  injury_time: Date;
-  care_time: Date;
-  date: Date;
+  injury_time: number;
+  care_time: number;
+  date: number;
   status: STATUS;
 }
 
 interface IInjury {}
-type TCconsciousness = "awake" | "voice" | "pain" | "none";
+export type TCconsciousness = "awake" | "voice" | "pain" | "none";
 
 export interface IPatientRecord {
   id?: string;

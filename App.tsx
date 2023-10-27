@@ -10,7 +10,6 @@ import { useTranslation } from "./src/hooks/useMyTranslation";
 import { RootStackParamList } from "./src/interfaces";
 import { ROUTES } from "./src/routes";
 import HomeScreen from "./src/views/homepage";
-import { PatientForm } from "./src/views/patient";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
@@ -77,17 +76,6 @@ export default function App() {
               title: "",
             }}
             component={ReceivePatientScreen}
-          />
-          <Stack.Screen
-            name={ROUTES.REPORT}
-            options={{
-              headerStyle: {
-                backgroundColor: theme.colors.primary,
-              },
-              headerLeft: () => <Logo101 />,
-              title: "",
-            }}
-            component={PatientForm}
           />
           <Stack.Screen
             name={ROUTES.EXPORT_PATIENT}

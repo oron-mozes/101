@@ -18,7 +18,6 @@ export function CheckButton({
     <Button
       mode="contained"
       onPress={(e) => {
-        console.log("CLICK");
         onSelect(e);
       }}
       disabled={disabled}

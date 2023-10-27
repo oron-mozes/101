@@ -48,6 +48,7 @@ export default function MainMenu() {
       >
         {Object.values(careProviders).map((careProvider) => (
           <Menu.Item
+            key={careProvider.idf_id}
             disabled={careProvider.idf_id === selectedCareProvider?.idf_id}
             onPress={() => {
               storage.save({ key: STORAGE.USER, data: careProvider });

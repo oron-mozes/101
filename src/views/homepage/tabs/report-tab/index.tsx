@@ -1,17 +1,62 @@
+import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Card } from "react-native-paper";
-import { SectionHeader } from "../../../../form-components/section-header";
+import storage, { STORAGE } from "../../../../../storage";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
+import { IPatientRecord, STATUS } from "../../../../interfaces";
 import { gutter } from "../../../../shared-config";
-import { InputField } from "../../../../form-components/input-field";
+import Context from "./context";
 import { PatientDetails } from "./create-components/patient-details";
+import { Avpu } from "./create-components/avpu";
 
-export function ReportTab() {
+export const emptyPatient: IPatientRecord = {
+  personal_information: {
+    full_name: "",
+    idf_id: 0,
+  },
+  incident_information: {
+    injury_time: new Date().getTime(),
+    care_time: new Date().getTime(),
+    date: new Date().getTime(),
+    status: STATUS.ACTIVE,
+  },
+  care_team: [],
+  injuries: [],
+  consciousness: [],
+};
+export function ReportTab({ patient }: { patient?: IPatientRecord }) {
   const translation = useTranslation();
+  const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
+    patient || emptyPatient
+  );
+  const id = useMemo(() => new Date().getTime().toString(), []);
+
   return (
-    <View>
-      <PatientDetails />
-    </View>
+    <Context.Provider
+      value={{
+        patient: patientRecord,
+        update: (value) => {
+          const selectedId = patientRecord.id || id;
+
+          const updateData: IPatientRecord = {
+            ...patientRecord,
+            ...value,
+            id: selectedId,
+          };
+
+          setPatientRecord(updateData);
+          storage.save({
+            key: STORAGE.PATIENTS_RECORD,
+            id: selectedId,
+            data: updateData,
+          });
+        },
+      }}
+    >
+      <View>
+        <PatientDetails />
+        <Avpu />
+      </View>
+    </Context.Provider>
   );
 }
 

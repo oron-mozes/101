@@ -5,6 +5,8 @@ export const colors = {
   text: "rgba(0, 36, 77, 1)",
   textInputBorderColor: "rgba(190, 207, 218, 1)",
   textInputBG: "rgba(255, 255, 255, 1)",
+  disabled: "rgba(157, 183, 200, 1)",
+  radio: "rgba(222, 231, 237, 1)",
 };
 
 export const gutter: number = 4;

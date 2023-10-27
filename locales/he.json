@@ -35,5 +35,12 @@
   "cancel": "ביטול",
   "addCareProvider": "הוסף דרג טיפול",
   "continue": "המשך",
-  "continue": "המשך"
+  "timeOfInjury": "שעת פציעה",
+  "timeOfTreatment": "שעת טיפול",
+  "date": "תאריך",
+  "providerTeam": "צוות מטפל",
+  "avpuAwake": "ערני.ת",
+  "avpuVoice": "מגיב.ה לקול",
+  "avpuPain": "מגיב.ה לכאב",
+  "avpuUnReponsive": "לא מגיב.ה"
 }

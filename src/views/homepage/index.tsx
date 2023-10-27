@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import storage, { STORAGE } from "../../../storage";
 import { InputField } from "../../form-components/input-field";
-import { RadioButton } from "../../form-components/radio-button";
+import { ToggleButton } from "../../form-components/ToggleButton";
 import { SectionHeader } from "../../form-components/section-header";
 import { CheckButton } from "../../form-components/select-button";
 import {
@@ -18,7 +18,12 @@ import {
 } from "../../form-components/status-chip";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { usePatientsRecord } from "../../hooks/usePatientsRecord";
-import { ITaagad, STATUS, StackNavigation } from "../../interfaces";
+import {
+  IPatientRecord,
+  ITaagad,
+  STATUS,
+  StackNavigation,
+} from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { initialState } from "../care-provider";
 import { HomepageFooter } from "./footer";
@@ -29,7 +34,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
   const [userDetails, setUserDetails] = useState<typeof initialState | null>();
-  const [tab, changeTabView] = useState<"status" | "create">("create");
+  const [tab, changeTabView] = useState<"status" | "create">("status");
   const { patientsRecord, loadRecords } = usePatientsRecord();
   // storage.clearMapForKey(STORAGE.USER);
 
@@ -71,7 +76,7 @@ export default function HomeScreen() {
     { label: translation("noneUrgentEvac"), status: STATUS.NONE_URGENT_EVAC },
   ];
 
-  const [yesCheck, toggleYesCheck] = useState<boolean>(false);
+  const [selectedPatient, setPatient] = useState<IPatientRecord>();
   const [inputTest, updateInputTest] = useState<string>();
   const [radioCheck, toggleRadioCheck] = useState<boolean>(false);
   return (
@@ -139,8 +144,15 @@ export default function HomeScreen() {
         />
       </View> */}
       {/* <SectionHeader label={translation("avpu")} /> */}
-      {tab === "status" && <StatusTab />}
-      {tab === "create" && <ReportTab />}
+      {tab === "status" && (
+        <StatusTab
+          setPatient={(patient: IPatientRecord) => {
+            setPatient(patient);
+            changeTabView("create");
+          }}
+        />
+      )}
+      {tab === "create" && <ReportTab patient={selectedPatient} />}
 
       <HomepageFooter onViewChange={changeTabView} selected={tab} />
 

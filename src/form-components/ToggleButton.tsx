@@ -1,6 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { RadioButton as RadioButtonPaper, Text } from "react-native-paper";
 import { textColor } from "./shared-style";
+import { colors } from "../shared-config";
 export interface IRadioButton {
   onSelect(e: any): void;
   label: string;
@@ -8,7 +9,7 @@ export interface IRadioButton {
   disabled?: boolean;
   status?: boolean;
 }
-export function RadioButton({
+export function ToggleButton({
   label,
   value,
   onSelect,
@@ -38,21 +39,21 @@ export function RadioButton({
 
 const styles = StyleSheet.create({
   disabled: {
-    color: "rgba(157, 183, 200, 1)",
+    color: colors.disabled,
   },
   text: {
     fontSize: 17,
     color: textColor,
   },
   container: {
-    backgroundColor: "rgba(222, 231, 237, 1)",
+    backgroundColor: colors.radio,
     borderRadius: 20,
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
     paddingLeft: 20,
     paddingRight: 10,
-    margin: 5,
-    height: 50,
+    height: 40,
+    marginLeft: 3,
   },
 });
