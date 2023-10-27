@@ -31,15 +31,22 @@ export default function HomeScreen() {
   const [tab, changeTabView] = useState<"status" | "create">("status");
   const { patientsRecord, loadRecords } = usePatientsRecord();
   // storage.clearMapForKey(STORAGE.PATIENTS_RECORD);
-
+  
   useEffect(() => {
     !userDetails &&
       storage
         .load({
-          key: STORAGE.USER,
+          key: STORAGE.TAAGAD,
         })
         .then((data) => {
-          setUserDetails(data);
+          storage
+            .load({
+              key: STORAGE.USER,
+            })
+            .then((user) => {
+              setUserDetails(user);
+            })
+            .catch(() => {});
           loadRecords();
         })
         .catch(() => {

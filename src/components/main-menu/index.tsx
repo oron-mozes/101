@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, Menu } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { useNavigation } from "@react-navigation/native";
 import { ROUTES } from "../../routes";
-import { StackNavigation } from "../../interfaces";
+import { ICareProvider, ITaagad, StackNavigation } from "../../interfaces";
+import storage, { STORAGE } from "../../../storage";
 
 export default function MainMenu() {
   const [visible, setVisible] = React.useState(false);
@@ -12,6 +13,27 @@ export default function MainMenu() {
   const translation = useTranslation();
   const closeMenu = () => setVisible(false);
   const navigation = useNavigation<StackNavigation>();
+  const [careProviders, setCareProviders] = useState<{
+    [key: string]: ICareProvider;
+  }>({});
+  const [selectedCareProvider, setSelectedCareProviders] =
+    useState<ICareProvider>();
+  storage
+    .load({
+      key: STORAGE.TAAGAD,
+    })
+    .then((data: ITaagad) => {
+      setCareProviders(data.care_providers);
+    })
+    .catch(() => {});
+  storage
+    .load({
+      key: STORAGE.USER,
+    })
+    .then((user: ICareProvider) => {
+      setSelectedCareProviders(user);
+    })
+    .catch(() => {});
   return (
     <View>
       <Menu
@@ -20,20 +42,21 @@ export default function MainMenu() {
         onDismiss={closeMenu}
         anchor={
           <Button onPress={openMenu} textColor="white">
-            {translation("mainMenu")}
+            {translation("mainMenu")} - {selectedCareProvider.full_name}
           </Button>
         }
       >
-        <Menu.Item onPress={() => {}} title="Item 1" />
-        <Menu.Item onPress={() => {}} title="Item 2" />
-        <Divider />
-        <Menu.Item
-          onPress={() => {
-            navigation.navigate(ROUTES.ACCOUNT);
-            closeMenu();
-          }}
-          title={translation("accountTitle")}
-        />
+        {Object.values(careProviders).map((careProvider) => (
+          <Menu.Item
+            disabled={careProvider.idf_id === selectedCareProvider.idf_id}
+            onPress={() => {
+              storage.save({ key: STORAGE.USER, data: careProvider });
+              navigation.navigate(ROUTES.HOME);
+              closeMenu();
+            }}
+            title={`${careProvider.full_name}, ${careProvider.idf_id}`}
+          />
+        ))}
       </Menu>
     </View>
   );
