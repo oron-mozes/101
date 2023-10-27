@@ -9,6 +9,7 @@ export interface IInputField {
   disabled?: boolean;
   numeric?: boolean;
   icon?: string;
+  numberOfLines?: number;
   value?: string | number;
 }
 export function InputField({
@@ -17,6 +18,7 @@ export function InputField({
   disabled = false,
   value = "",
   numeric = false,
+  numberOfLines = 1,
   icon,
 }: IInputField) {
   return (
@@ -27,6 +29,8 @@ export function InputField({
         </View>
       )}
       <TextInput
+        numberOfLines={numberOfLines}
+        multiline={numberOfLines > 1}
         style={[styles.text]}
         keyboardType={numeric ? "numeric" : "default"}
         disabled={disabled}

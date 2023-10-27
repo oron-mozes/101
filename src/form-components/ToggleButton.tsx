@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { RadioButton as RadioButtonPaper, Text } from "react-native-paper";
 import { textColor } from "./shared-style";
-import { colors } from "../shared-config";
+import { colors, gutter } from "../shared-config";
 export interface IRadioButton {
   onSelect(e: any): void;
   label: string;
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     color: colors.disabled,
   },
   text: {
-    fontSize: 17,
+    fontSize: 16,
     color: textColor,
   },
   container: {
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 10,
     height: 40,
-    marginLeft: 3,
+    marginLeft: gutter,
+    marginBottom: gutter,
   },
 });

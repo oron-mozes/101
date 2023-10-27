@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationProp } from "@react-navigation/native";
+import { InjuryReason } from "./views/homepage/tabs/report-tab/create-components/injury-reason";
 
 export interface IPersonalInformation {
   full_name: string;
@@ -14,7 +15,22 @@ interface IIncidentInformation {
 
 interface IInjury {}
 export type TCconsciousness = "awake" | "voice" | "pain" | "none";
+export type TE = "undressing" | "flipping" | "splinting";
+export type TInjuryReason =
+  | "shooting"
+  | "charge"
+  | "falling"
+  | "blunt"
+  | "burns"
+  | "smoke"
+  | "accident"
+  | "guided"
+  | "gas";
 
+export interface IInjuryReason {
+  reasons: TInjuryReason[];
+  circumstance: string;
+}
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
@@ -22,6 +38,9 @@ export interface IPatientRecord {
   care_team: ICareTeamMember[];
   injuries: IInjury[];
   consciousness: TCconsciousness[];
+  e: TE[];
+  injuryReason: IInjuryReason;
+  prognosis: string;
 }
 export interface ICareTeamMember {
   fullName: string;

@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native";
 import storage, { STORAGE } from "../../../../../storage";
-import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { IPatientRecord, STATUS } from "../../../../interfaces";
-import { gutter } from "../../../../shared-config";
 import Context from "./context";
-import { PatientDetails } from "./create-components/patient-details";
 import { Avpu } from "./create-components/avpu";
+import { ESection } from "./create-components/e-section";
+import { InjuryReason } from "./create-components/injury-reason";
+import { PatientDetails } from "./create-components/patient-details";
+import { Prognosis } from "./create-components/prognosis";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -21,10 +22,14 @@ export const emptyPatient: IPatientRecord = {
   },
   care_team: [],
   injuries: [],
+  e: [],
   consciousness: [],
+  injuryReason: {
+    reasons: [],
+    circumstance: null,
+  },
 };
 export function ReportTab({ patient }: { patient?: IPatientRecord }) {
-  const translation = useTranslation();
   const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
     patient || emptyPatient
   );
@@ -52,18 +57,13 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
         },
       }}
     >
-      <View>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <PatientDetails />
         <Avpu />
-      </View>
+        <ESection />
+        <InjuryReason />
+        <Prognosis />
+      </ScrollView>
     </Context.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    margin: gutter * 3,
-    borderRadius: 8,
-  },
-  content: { paddingTop: 0, paddingLeft: 0, paddingRight: 0 },
-});

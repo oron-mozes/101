@@ -42,5 +42,21 @@
   "avpuAwake": "ערני.ת",
   "avpuVoice": "מגיב.ה לקול",
   "avpuPain": "מגיב.ה לכאב",
-  "avpuUnReponsive": "לא מגיב.ה"
+  "avpuUnReponsive": "לא מגיב.ה",
+  "undressing": "הפשטה וכיסוי",
+  "flipping": "הפיכה",
+  "splinting": "קיבוע עמ״ש",
+  "eSection": "E",
+  "injuryReason": "מנגנון פציעה",
+  "injuryReasonShooting": "ירי",
+  "injuryReasonCharge": "מטען",
+  "injuryReasonFalling": "נפילה",
+  "injuryReasonBlunt": "חבלה קהה",
+  "injuryReasonBurns": "כוויות",
+  "injuryReasonSmoke": "שאיפת עשן",
+  "injuryReasonAccident": "תאונת דרכים",
+  "injuryReasonGuided": "תלול מסלול",
+  "injuryReasonGas": "אב״כ",
+  "circumstance": "נסיבות",
+  "prognosis": "אבחנות"
 }
