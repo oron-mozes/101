@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationProp } from "@react-navigation/native";
 
-interface IPersonalInformation {
+export interface IPersonalInformation {
   full_name: string;
   idf_id: number;
 }

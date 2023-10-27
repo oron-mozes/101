@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
+import { colors, gutter } from "../shared-config";
 
 export interface ISectionHeader {
   label: string;
@@ -17,13 +18,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     textAlign: "center",
-    backgroundColor: "rgba(204, 228, 255, 1)",
-    color: "rgba(0, 36, 77, 1)",
+    backgroundColor: colors.surface,
+    color: colors.text,
     height: 32,
     lineHeight: 32,
     borderTopRightRadius: 8,
     borderTopLeftRadius: 8,
-    margin: 8,
   },
   container: {},
 });

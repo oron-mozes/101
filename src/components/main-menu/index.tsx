@@ -42,13 +42,13 @@ export default function MainMenu() {
         onDismiss={closeMenu}
         anchor={
           <Button onPress={openMenu} textColor="white">
-            {translation("mainMenu")} - {selectedCareProvider.full_name}
+            {translation("mainMenu")} - {selectedCareProvider?.full_name}
           </Button>
         }
       >
         {Object.values(careProviders).map((careProvider) => (
           <Menu.Item
-            disabled={careProvider.idf_id === selectedCareProvider.idf_id}
+            disabled={careProvider.idf_id === selectedCareProvider?.idf_id}
             onPress={() => {
               storage.save({ key: STORAGE.USER, data: careProvider });
               navigation.navigate(ROUTES.HOME);

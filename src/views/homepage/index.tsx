@@ -18,27 +18,32 @@ import {
 } from "../../form-components/status-chip";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { usePatientsRecord } from "../../hooks/usePatientsRecord";
-import { STATUS, StackNavigation } from "../../interfaces";
+import { ITaagad, STATUS, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { initialState } from "../care-provider";
 import { HomepageFooter } from "./footer";
 import { StatusTab } from "./tabs/status-tab";
+import { ReportTab } from "./tabs/report-tab";
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
   const [userDetails, setUserDetails] = useState<typeof initialState | null>();
-  const [tab, changeTabView] = useState<"status" | "create">("status");
+  const [tab, changeTabView] = useState<"status" | "create">("create");
   const { patientsRecord, loadRecords } = usePatientsRecord();
-  // storage.clearMapForKey(STORAGE.PATIENTS_RECORD);
-  
+  // storage.clearMapForKey(STORAGE.USER);
+
   useEffect(() => {
     !userDetails &&
       storage
         .load({
           key: STORAGE.TAAGAD,
         })
-        .then((data) => {
+        .then((taagad: ITaagad) => {
+          if (Object.values(taagad.care_providers).length === 0) {
+            navigation.navigate(ROUTES.ACCOUNT);
+            return;
+          }
           storage
             .load({
               key: STORAGE.USER,
@@ -57,9 +62,9 @@ export default function HomeScreen() {
   }, [userDetails]);
 
   const chips: IStatusChipProps[] = [
-    { label: translation("statusActive"), status: STATUS.ACTIVE },
-    { label: translation("statusUrgent"), status: STATUS.URGENT },
-    { label: translation("statusNoneUrgent"), status: STATUS.NONE_URGENT },
+    { label: translation("active"), status: STATUS.ACTIVE },
+    { label: translation("urgent"), status: STATUS.URGENT },
+    { label: translation("noneUrgent"), status: STATUS.NONE_URGENT },
     { label: translation("evacuated"), status: STATUS.EVACUATED },
     { label: translation("reActive"), status: STATUS.RE_ACTIVE },
     { label: translation("urgentEvac"), status: STATUS.URGENT_EVAC },
@@ -71,7 +76,7 @@ export default function HomeScreen() {
   const [radioCheck, toggleRadioCheck] = useState<boolean>(false);
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      {/* <View>
         <FlatList
           numColumns={3}
           data={chips}
@@ -79,8 +84,8 @@ export default function HomeScreen() {
             <StatusChip label={item.label} status={item.status} />
           )}
         />
-      </View>
-      <View
+      </View> */}
+      {/* <View
         style={{
           flexDirection: "row",
           width: "100%",
@@ -109,8 +114,8 @@ export default function HomeScreen() {
           value={inputTest}
           onChange={updateInputTest}
         />
-      </View>
-      <View
+      </View> */}
+      {/* <View
         style={{
           flexDirection: "row",
           width: "100%",
@@ -132,13 +137,13 @@ export default function HomeScreen() {
           onSelect={() => {}}
           label={translation("text")}
         />
-      </View>
-      <SectionHeader label={translation("avpu")} />
+      </View> */}
+      {/* <SectionHeader label={translation("avpu")} /> */}
       {tab === "status" && <StatusTab />}
+      {tab === "create" && <ReportTab />}
 
-      <View>
-        <HomepageFooter onViewChange={changeTabView} />
-      </View>
+      <HomepageFooter onViewChange={changeTabView} selected={tab} />
+
       {/* <View style={styles.scrollView}>
         <Card>
           <Button onPress={() => navigation.navigate(ROUTES.REPORT)}>
@@ -159,9 +164,8 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: StatusBar.currentHeight,
     width: "100%",
-  },
-  header: {
-    backgroundColor: "pink",
+    height: "100%",
+    justifyContent: "space-between",
   },
   scrollView: {
     width: "90%",

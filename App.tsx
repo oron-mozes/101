@@ -2,20 +2,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect } from "react";
 import { StatusBar, StyleSheet } from "react-native";
-import { PaperProvider, DefaultTheme } from "react-native-paper";
+import { DefaultTheme, PaperProvider } from "react-native-paper";
 import { useCameraPermission } from "react-native-vision-camera";
+import { Logo101 } from "./src/components/left-menu/101-logo";
+import MainMenu from "./src/components/main-menu";
 import { useTranslation } from "./src/hooks/useMyTranslation";
+import { RootStackParamList } from "./src/interfaces";
 import { ROUTES } from "./src/routes";
 import HomeScreen from "./src/views/homepage";
-import MainMenu from "./src/components/main-menu";
 import { PatientForm } from "./src/views/patient";
-import ReceivePatientScreen from "./src/views/recieve-patient";
-import UserScreen from "./src/views/care-provider";
-import { RootStackParamList } from "./src/interfaces";
-import { Logo101 } from "./src/components/left-menu/101-logo";
 import QrCode from "./src/views/qr-code";
+import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
-import { ThemeProp } from "react-native-paper/lib/typescript/types";
+import { colors } from "./src/shared-config";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const theme = {
@@ -23,10 +22,7 @@ export const theme = {
   roundness: 1,
   colors: {
     ...DefaultTheme.colors,
-    primary: "rgba(0, 107, 229, 1)",
-    outline: "rgba(0, 107, 229, 1)",
-    surface: "rgba(229, 241, 255, 1)",
-    text: "rgba(0, 36, 77, 1)",
+    ...colors,
   },
 };
 

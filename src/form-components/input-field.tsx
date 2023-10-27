@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import { TextInput } from "react-native-paper";
 import { textColor } from "./shared-style";
+import { borderRadius, colors } from "../shared-config";
 
 export interface IInputField {
   onChange(value: string | number): void;
@@ -25,23 +26,24 @@ export function InputField({
       value={value && String(value)}
       textAlign="right"
       mode="outlined"
-      textColor="rgba(0, 36, 77, 1)"
+      textColor={colors.text}
       onChangeText={onChange}
-      outlineColor="rgba(190, 207, 218, 1)"
-      activeOutlineColor="rgba(0, 36, 77, 1)"
+      outlineColor={colors.textInputBorderColor}
+      activeOutlineColor={colors.text}
     />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(222, 231, 237, 1)",
-    borderRadius: 8,
+    flex: 1,
+    backgroundColor: colors.textInputBG,
+    borderRadius: borderRadius,
     margin: 8,
     textAlign: "right",
     justifyContent: "flex-end",
     alignItems: "flex-end",
-    borderColor: "rgba(190, 207, 218, 1)",
+    borderColor: colors.textInputBorderColor,
     color: textColor,
   },
 });
