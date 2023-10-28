@@ -31,7 +31,6 @@ export default function QrCode({ route }: IProps) {
         status: STATUS.EVACUATED,
       },
     };
-    console.log(updatedPatient);
     await storage.save({
       key: STORAGE.PATIENTS_RECORD,
       id: patient.id,

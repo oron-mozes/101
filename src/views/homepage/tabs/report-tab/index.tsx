@@ -8,6 +8,8 @@ import { ESection } from "./create-components/e-section";
 import { InjuryReason } from "./create-components/injury-reason";
 import { PatientDetails } from "./create-components/patient-details";
 import { Prognosis } from "./create-components/prognosis";
+import { ASection } from "./create-components/a-section";
+import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -23,11 +25,13 @@ export const emptyPatient: IPatientRecord = {
   care_team: [],
   injuries: [],
   e: [],
+  airway: [],
   consciousness: [],
   injuryReason: {
     reasons: [],
     circumstance: null,
   },
+  prognosis: null,
 };
 export function ReportTab({ patient }: { patient?: IPatientRecord }) {
   const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
@@ -36,34 +40,37 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
   const id = useMemo(() => new Date().getTime().toString(), []);
 
   return (
-    <Context.Provider
-      value={{
-        patient: patientRecord,
-        update: (value) => {
-          const selectedId = patientRecord.id || id;
+    <AutocompleteDropdownContextProvider>
+      <Context.Provider
+        value={{
+          patient: patientRecord,
+          update: (value) => {
+            const selectedId = patientRecord.id || id;
 
-          const updateData: IPatientRecord = {
-            ...patientRecord,
-            ...value,
-            id: selectedId,
-          };
+            const updateData: IPatientRecord = {
+              ...patientRecord,
+              ...value,
+              id: selectedId,
+            };
 
-          setPatientRecord(updateData);
-          storage.save({
-            key: STORAGE.PATIENTS_RECORD,
-            id: selectedId,
-            data: updateData,
-          });
-        },
-      }}
-    >
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <PatientDetails />
-        <Avpu />
-        <ESection />
-        <InjuryReason />
-        <Prognosis />
-      </ScrollView>
-    </Context.Provider>
+            setPatientRecord(updateData);
+            storage.save({
+              key: STORAGE.PATIENTS_RECORD,
+              id: selectedId,
+              data: updateData,
+            });
+          },
+        }}
+      >
+        <ScrollView keyboardShouldPersistTaps="handled">
+          <PatientDetails />
+          <Avpu />
+          <ASection />
+          <ESection />
+          <InjuryReason />
+          <Prognosis />
+        </ScrollView>
+      </Context.Provider>
+    </AutocompleteDropdownContextProvider>
   );
 }

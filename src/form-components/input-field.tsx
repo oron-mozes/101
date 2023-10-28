@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { Icon, TextInput } from "react-native-paper";
 import { textColor } from "./shared-style";
-import { borderRadius, colors } from "../shared-config";
+import { borderRadius, colors, inputContainer } from "../shared-config";
 
 export interface IInputField {
   onChange(value: string | number): void;
@@ -48,19 +48,7 @@ export function InputField({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignContent: "center",
-    flex: 1,
-    margin: 4,
-    backgroundColor: colors.textInputBG,
-    borderRadius: borderRadius,
-    textAlign: "right",
-    alignItems: "center",
-    borderColor: colors.textInputBorderColor,
-    borderWidth: 1,
-    color: textColor,
-  },
+  container: inputContainer,
   text: {
     flex: 1,
     textAlign: "right",

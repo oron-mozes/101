@@ -2,7 +2,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
-import { borderRadius, colors, gutter } from "../shared-config";
+import {
+  borderRadius,
+  offset,
+  colors,
+  gutter,
+  inputHeight,
+} from "../shared-config";
 import date from "date-and-time";
 
 export function TimePicker({
@@ -61,7 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    height: 62,
+    height: inputHeight,
     margin: gutter,
     backgroundColor: colors.textInputBG,
     borderRadius: borderRadius,
@@ -69,10 +75,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   offset: {
-    textAlign: "right",
-    marginTop: -65,
-    marginRight: 25,
-    fontSize: 12,
+    ...offset,
   },
   time: {
     fontSize: 18,

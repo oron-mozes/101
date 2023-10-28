@@ -13,7 +13,18 @@ interface IIncidentInformation {
   status: STATUS;
 }
 
+export interface IOption {
+  id: string;
+  title: string;
+}
+
 interface IInjury {}
+export enum EAirWayTreatment {
+  AW = "AW",
+  INTUBE = "INTUBE",
+  CONIOTOMY = "CONIOTOMY",
+}
+export type TAirWayTreatment = "aw" | "intube" | "coniotomy";
 export type TCconsciousness = "awake" | "voice" | "pain" | "none";
 export type TE = "undressing" | "flipping" | "splinting";
 export type TInjuryReason =
@@ -31,6 +42,17 @@ export interface IInjuryReason {
   reasons: TInjuryReason[];
   circumstance: string;
 }
+
+export interface IAirWayInformation {
+  action: TAirWayTreatment;
+  time: number;
+  successful: boolean;
+}
+
+export const TOGGLE = {
+  YES: "yes",
+  NO: "no",
+};
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
@@ -39,6 +61,7 @@ export interface IPatientRecord {
   injuries: IInjury[];
   consciousness: TCconsciousness[];
   e: TE[];
+  airway: IAirWayInformation[];
   injuryReason: IInjuryReason;
   prognosis: string;
 }
