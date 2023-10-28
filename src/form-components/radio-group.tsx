@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
   horizontal: {
     flexDirection: "row-reverse",
     alignItems: "center",
+    flex: 1,
   },
   vertical: {},
 });

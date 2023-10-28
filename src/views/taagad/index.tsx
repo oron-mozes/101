@@ -13,6 +13,7 @@ import { QrIcon } from "../../components/qr-icon/qr";
 import { InputField } from "../../form-components/input-field";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { ICareProvider, ITaagad, StackNavigation } from "../../interfaces";
+import { ROUTES } from "../../routes";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,
@@ -33,32 +34,13 @@ export default function TaagadScreen() {
     storage
       .load({ key: STORAGE.TAAGAD })
       .then((data) => {
-        console.log({ data });
         data && updateTaagadDetails(data);
       })
       .catch(() => {});
   }, []);
 
-  // const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
-  // const [userDetails, setUserDetails] = useState<ICareProvider>(initialProviderState);
-  // const [allowNavigation, toggleAllowNavigation] = useState<boolean>(
-  //   Boolean(userDetails.full_name)
-  // );
-  // storage.remove({ key: STORAGE.TAAGAD });
-
-  // useEffect(
-  //   () =>
-  //     navigation.addListener("beforeRemove", (e: any) => {
-  //       if (allowNavigation) {
-  //         return;
-  //       }
-
-  //       e.preventDefault();
-  //     }),
-  //   [allowNavigation, userDetails, navigation]
-  // );
-
+  const navigation = useNavigation<StackNavigation>();
   const saveNewProvider = () => {
     updateTaagadDetails({
       ...taagadDetails,
@@ -210,7 +192,7 @@ export default function TaagadScreen() {
           mode="contained"
           disabled={!isFormValid()}
           onPress={() => {
-            toggleProviderForm(false);
+            navigation.navigate(ROUTES.HOME);
           }}
         >
           {translation("continue")}

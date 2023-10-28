@@ -13,8 +13,6 @@ export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
   const [userDetails, setUserDetails] = useState<typeof initialState | null>();
   const [tab, changeTabView] = useState<"status" | "create">("status");
-  // storage.clearMapForKey(STORAGE.PATIENTS_RECORD);
-
   useEffect(() => {
     !userDetails &&
       storage

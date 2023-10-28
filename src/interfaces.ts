@@ -24,7 +24,14 @@ export enum EAirWayTreatment {
   INTUBE = "INTUBE",
   CONIOTOMY = "CONIOTOMY",
 }
-export type TAirWayTreatment = "aw" | "intube" | "coniotomy";
+export type TAirWayTreatment = "AW" | "INTUBE" | "CONIOTOMY";
+export enum EBreathingTreatment {
+  OXIGEN = "OXIGEN",
+  MOUTH = "MOUTH",
+  NA = "NA",
+  CHEST_TUBE = "CHEST_TUBE",
+}
+export type TBreathingTreatment = "OXIGEN" | "MOUTH" | "NA" | "CHEST_TUBE";
 export type TCconsciousness = "awake" | "voice" | "pain" | "none";
 export type TE = "undressing" | "flipping" | "splinting";
 export type TInjuryReason =
@@ -48,30 +55,70 @@ export interface IAirWayInformation {
   time: number;
   successful: boolean;
 }
+export interface IBreathingInformation {
+  action: TBreathingTreatment;
+  time: number;
+  successful: boolean;
+}
 
 export const TOGGLE = {
   YES: "yes",
   NO: "no",
 };
+
+export interface IBreathing {
+  actions: IBreathingInformation[];
+  breathingCount: number;
+  saturation: number;
+  fulfill: boolean;
+}
+
+export interface IAirway {
+  actions: IAirWayInformation[];
+  fulfill: boolean;
+}
+
+export enum EMeasurementsTreatments {
+  STOP_BLEEDING = "STOP_BLEEDING",
+  PERIPHERAL_VAIN = "PERIPHERAL",
+  CENTRAL_VAIN = "CENTRAL_VAIN",
+  IO = "IO",
+}
+export type TMeasurementsTreatments =
+  | "STOP_BLEEDING"
+  | "PERIPHERAL"
+  | "CENTRAL_VAIN"
+  | "IO";
+
+export interface IMeasurementsInformation {
+  action: TMeasurementsTreatments;
+  time: number;
+  successful: boolean;
+}
+export interface IMeasurements {
+  actions: IMeasurementsInformation[];
+  fulfill: boolean;
+  shock: boolean;
+  palpated: boolean;
+  puls: number;
+  bloodPressure: {
+    diastolic: number;
+    systolic: number;
+  };
+}
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
   incident_information: IIncidentInformation;
-  care_team: ICareTeamMember[];
+  care_team: ICareProvider[];
   injuries: IInjury[];
   consciousness: TCconsciousness[];
   e: TE[];
-  airway: IAirWayInformation[];
+  airway: IAirway;
+  breathing: IBreathing;
+  measurements: IMeasurements;
   injuryReason: IInjuryReason;
   prognosis: string;
-}
-export interface ICareTeamMember {
-  fullName: string;
-  idf_id: number;
-  rank: string;
-  unit: string;
-  role: string;
-  expertise: string;
 }
 
 export interface ICareProvider {

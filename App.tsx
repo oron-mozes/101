@@ -6,14 +6,14 @@ import { DefaultTheme, PaperProvider } from "react-native-paper";
 import { useCameraPermission } from "react-native-vision-camera";
 import { Logo101 } from "./src/components/left-menu/101-logo";
 import MainMenu from "./src/components/main-menu";
-import { useTranslation } from "./src/hooks/useMyTranslation";
 import { RootStackParamList } from "./src/interfaces";
 import { ROUTES } from "./src/routes";
+import { colors } from "./src/shared-config";
 import HomeScreen from "./src/views/homepage";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
-import { colors } from "./src/shared-config";
+import storage, { STORAGE } from "./storage";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const theme = {
@@ -26,9 +26,10 @@ export const theme = {
 };
 
 export default function App() {
-  const translation = useTranslation();
   const { hasPermission, requestPermission } = useCameraPermission();
-
+  // storage.clearMapForKey(STORAGE.PATIENTS_RECORD);
+  // storage.remove({ key: STORAGE.USER });
+  // storage.remove({ key: STORAGE.TAAGAD });
   useEffect(() => {
     if (!hasPermission) {
       requestPermission();

@@ -16,6 +16,7 @@ export function PatientDetails() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
+        console.log(patient.care_team?.[patient.care_team.length - 1]);
         return (
           <Card style={styles.card}>
             <Card.Content style={styles.content}>
@@ -51,10 +52,12 @@ export function PatientDetails() {
               </View>
               <View style={styles.personalInfo}>
                 <InputField
+                  onChange={(value) => {}}
                   label={translation("providerTeam")}
-                  onChange={(idf_id: string) => {}}
                   numeric
-                  value={patient.personal_information.idf_id}
+                  value={
+                    patient.care_team?.[patient.care_team.length - 1]?.idf_id
+                  }
                 />
 
                 <DatePicker

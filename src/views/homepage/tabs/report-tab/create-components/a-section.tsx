@@ -25,46 +25,47 @@ const emptyState: IAirWayInformation = {
 };
 export function ASection() {
   const translation = useTranslation();
-  const [hasAirwayInjury, toggleAirWayInjury] = useState<string>(null);
+
   return (
     <Context.Consumer>
       {({ patient, update }) => {
+        const { airway = { actions: [], fulfill: null } } = patient;
+        const { actions = [], fulfill } = airway;
+
         const addRow = () => {
-          update({ airway: [...patient.airway, emptyState] });
+          update({
+            airway: { ...airway, actions: [...actions, emptyState] },
+          });
         };
-        if (
-          hasAirwayInjury === TOGGLE.YES &&
-          !Boolean(patient.airway?.length)
-        ) {
+
+        if (fulfill && !Boolean(actions?.length)) {
           addRow();
-        }
-        if (hasAirwayInjury !== TOGGLE.YES && patient.airway.length !== 0) {
-          toggleAirWayInjury(TOGGLE.YES);
         }
 
         const updateInIndex = (
           data: Partial<IAirWayInformation>,
           index: number
         ) => {
-          const newData = patient.airway;
+          const newData = actions;
           newData[index] = { ...newData[index], ...data };
-          update({ airway: newData });
+          update({ airway: { ...airway, actions: newData } });
         };
         const isLastItemValid = () => {
           return (
-            patient.airway.length !== 0 &&
-            !Object.values(patient.airway[patient.airway.length - 1]).some(
-              (v) => v === null
-            )
+            actions.length !== 0 &&
+            !Object.values(actions[actions.length - 1]).some((v) => v === null)
           );
         };
 
         const removeByIndex = (index: number) => {
-          const newData = patient.airway.filter((_, i) => i !== index);
-          update({ airway: newData });
-          if (newData.length === 0) {
-            toggleAirWayInjury(null);
-          }
+          const newData = actions.filter((_, i) => i !== index);
+          update({
+            airway: {
+              ...airway,
+              actions: newData,
+              fulfill: newData.length !== 0,
+            },
+          });
         };
 
         return (
@@ -78,20 +79,22 @@ export function ASection() {
                 label={translation("airWayInjury")}
                 onSelect={(id: string) => {
                   if (id === TOGGLE.YES) {
-                    toggleAirWayInjury(id);
+                    update({ airway: { ...airway, fulfill: true } });
                   } else {
-                    toggleAirWayInjury(id);
+                    update({ airway: { ...airway, fulfill: false } });
                   }
                 }}
-                selected={hasAirwayInjury ?? null}
+                selected={
+                  fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
+                }
                 options={[
                   { id: TOGGLE.YES, value: translation(TOGGLE.YES) },
                   { id: TOGGLE.NO, value: translation(TOGGLE.NO) },
                 ]}
               />
             </Card.Content>
-            {hasAirwayInjury === TOGGLE.YES &&
-              patient.airway?.map((airWayInfo: IAirWayInformation, index) => {
+            {fulfill &&
+              actions?.map((airWayInfo: IAirWayInformation, index) => {
                 const isSuccessful =
                   airWayInfo.successful === null
                     ? null
@@ -99,7 +102,6 @@ export function ASection() {
                     ? TOGGLE.YES
                     : TOGGLE.NO;
 
-                console.log({ airWayInfo });
                 return (
                   <Card.Content
                     style={[styles.innerContent, styles.actionRow]}
@@ -143,16 +145,12 @@ export function ASection() {
                       <DropDown
                         label={translation("actionTaken")}
                         placeholder={translation("select")}
-                        initialValue={
-                          airWayInfo.action &&
-                          translation(airWayInfo.action.toLowerCase())
-                        }
+                        initialValue={airWayInfo.action}
                         onSelect={(value: TAutocompleteDropdownItem) => {
                           value &&
                             updateInIndex(
                               {
-                                action:
-                                  value.id.toLowerCase() as TAirWayTreatment,
+                                action: value.id as TAirWayTreatment,
                               },
                               index
                             );
@@ -163,16 +161,12 @@ export function ASection() {
                             title: translation(EAirWayTreatment.AW),
                           },
                           {
-                            id: EAirWayTreatment.INTUBE.toLowerCase(),
-                            title: translation(
-                              EAirWayTreatment.INTUBE.toLowerCase()
-                            ),
+                            id: EAirWayTreatment.INTUBE,
+                            title: translation(EAirWayTreatment.INTUBE),
                           },
                           {
-                            id: EAirWayTreatment.CONIOTOMY.toLowerCase(),
-                            title: translation(
-                              EAirWayTreatment.CONIOTOMY.toLowerCase()
-                            ),
+                            id: EAirWayTreatment.CONIOTOMY,
+                            title: translation(EAirWayTreatment.CONIOTOMY),
                           },
                         ]}
                       />

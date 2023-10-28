@@ -7,6 +7,7 @@ import { IOption } from "../interfaces";
 import {
   borderSetup,
   colors,
+  gutter,
   inputContainer,
   inputHeight,
   offset,
@@ -27,22 +28,22 @@ export function DropDown({
   options: IOption[];
 }) {
   const translation = useTranslation();
-  console.log(initialValue, options);
+  const selected = initialValue || 0;
   return (
-    <View>
+    <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
       <Picker
         mode="dialog"
-        selectedValue={initialValue || placeholder}
+        selectedValue={selected}
         onValueChange={(itemValue, itemIndex) => {
           if (itemValue) {
             onSelect(options[itemIndex - 1]);
           }
         }}
       >
-        <Picker.Item label={translation("select")} value={null} />
+        <Picker.Item label={translation("select")} value={0} />
         {options.map((option) => (
-          <Picker.Item label={option.title} value={option.id} />
+          <Picker.Item label={option.title} value={option.id} key={option.id} />
         ))}
       </Picker>
     </View>
@@ -50,63 +51,17 @@ export function DropDown({
 }
 
 const styles = StyleSheet.create({
-  option: {
+  picker: {
     fontSize: 17,
-    width: 100,
-    textAlign: "center",
-    margin: 10,
-    justifyContent: "center",
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-
-  buttonClose: {
-    backgroundColor: colors.primary,
-    marginTop: 10,
-    width: 150,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  centeredView: {
+  field: {
     ...borderSetup,
-    width: "50%",
-    marginLeft: "25%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "50%",
-    padding: 20,
-  },
-  modalView: {},
-  container: {
-    ...inputContainer,
-    flexDirection: "column",
-    justifyContent: "center",
+    height: inputHeight,
+    marginTop: gutter,
   },
   label: {
-    ...offset,
     marginRight: 50,
-    marginTop: 0,
-    width: "100%",
-    flex: 1,
-  },
-  selectedOption: {
-    width: "100%",
     textAlign: "right",
-    flex: 1,
-    height: inputHeight,
-    verticalAlign: "middle",
-    marginRight: 15,
-    marginTop: -40,
-    fontSize: 17,
+    fontSize: 12,
   },
 });
