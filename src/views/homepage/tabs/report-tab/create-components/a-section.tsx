@@ -98,6 +98,8 @@ export function ASection() {
                     : airWayInfo.successful
                     ? TOGGLE.YES
                     : TOGGLE.NO;
+
+                console.log({ airWayInfo });
                 return (
                   <Card.Content
                     style={[styles.innerContent, styles.actionRow]}
@@ -148,7 +150,10 @@ export function ASection() {
                         onSelect={(value: TAutocompleteDropdownItem) => {
                           value &&
                             updateInIndex(
-                              { action: value.id as TAirWayTreatment },
+                              {
+                                action:
+                                  value.id.toLowerCase() as TAirWayTreatment,
+                              },
                               index
                             );
                         }}
@@ -158,12 +163,16 @@ export function ASection() {
                             title: translation(EAirWayTreatment.AW),
                           },
                           {
-                            id: EAirWayTreatment.INTUBE,
-                            title: translation(EAirWayTreatment.INTUBE),
+                            id: EAirWayTreatment.INTUBE.toLowerCase(),
+                            title: translation(
+                              EAirWayTreatment.INTUBE.toLowerCase()
+                            ),
                           },
                           {
-                            id: EAirWayTreatment.CONIOTOMY,
-                            title: translation(EAirWayTreatment.CONIOTOMY),
+                            id: EAirWayTreatment.CONIOTOMY.toLowerCase(),
+                            title: translation(
+                              EAirWayTreatment.CONIOTOMY.toLowerCase()
+                            ),
                           },
                         ]}
                       />

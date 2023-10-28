@@ -11,6 +11,7 @@ import {
   inputHeight,
   offset,
 } from "../shared-config";
+import { Picker } from "@react-native-picker/picker";
 
 export function DropDown({
   label,
@@ -22,56 +23,28 @@ export function DropDown({
   label: string;
   initialValue?: string;
   placeholder: string;
-  onSelect(value: TAutocompleteDropdownItem): void;
+  onSelect(value: IOption): void;
   options: IOption[];
 }) {
-  const [visible, setVisible] = useState<boolean>(false);
-
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
   const translation = useTranslation();
-
+  console.log(initialValue, options);
   return (
     <View>
-      <Modal
-        onTouchCancel={hideModal}
-        style={styles.modalView}
-        animationType="slide"
-        visible={visible}
-        onRequestClose={hideModal}
+      <Text style={styles.label}>{label}</Text>
+      <Picker
+        mode="dialog"
+        selectedValue={initialValue || placeholder}
+        onValueChange={(itemValue, itemIndex) => {
+          if (itemValue) {
+            onSelect(options[itemIndex - 1]);
+          }
+        }}
       >
-        <View style={styles.centeredView}>
-          <FlatList
-            data={options}
-            renderItem={({ item }) => (
-              <View>
-                <Text
-                  style={styles.option}
-                  onPress={() => {
-                    onSelect(item);
-                    hideModal();
-                  }}
-                >
-                  {translation(item.title.toLowerCase())}
-                </Text>
-                <Divider />
-              </View>
-            )}
-          />
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={hideModal}
-          >
-            <Text style={styles.textStyle}>{translation("close")}</Text>
-          </Pressable>
-        </View>
-      </Modal>
-      <View style={styles.container}>
-        <Text style={styles.label}>{label}</Text>
-        <Text style={styles.selectedOption} onPress={showModal}>
-          {initialValue || placeholder}
-        </Text>
-      </View>
+        <Picker.Item label={translation("select")} value={null} />
+        {options.map((option) => (
+          <Picker.Item label={option.title} value={option.id} />
+        ))}
+      </Picker>
     </View>
   );
 }
