@@ -33,7 +33,7 @@ export function StatusTab({
         </DataTable.Header>
         {patientsRecord.map((patient) => {
           const disable: boolean =
-            patient.evacuation.status === STATUS.EVACUATED;
+            patient?.evacuation?.status === STATUS.EVACUATED;
           return (
             <DataTable.Row
               key={patient.id}
@@ -49,8 +49,8 @@ export function StatusTab({
               </DataTable.Cell>
               <DataTable.Cell onPress={() => setPatient(patient)}>
                 <StatusChip
-                  label={translation(patient.evacuation.status ?? "")}
-                  status={patient.evacuation.status}
+                  label={translation(patient?.evacuation?.status ?? "")}
+                  status={patient?.evacuation?.status}
                 />
               </DataTable.Cell>
               <DataTable.Cell onPress={() => setPatient(patient)}>

@@ -94,10 +94,6 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
     patient || emptyPatient
   );
 
-  useEffect(() => {
-    setPatientRecord(patient);
-  }, [patient]);
-
   const [providers, setProviders] = useState<ICareProvider[]>();
   const id = useMemo(() => new Date().getTime().toString(), []);
   useEffect(() => {

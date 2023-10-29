@@ -1,14 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { StackNavigation } from "../../interfaces";
 import { useMemo } from "react";
+import { Icon } from "react-native-paper";
+import { ROUTES } from "../../routes";
 
 export function Logo101() {
   const navigation = useNavigation<StackNavigation>();
   const isHomeRoute = useMemo(() => navigation.getState().index === 0, []);
   return (
-    <View>
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
       <Svg
         onPress={() => !isHomeRoute && navigation.goBack()}
         width={56}
@@ -25,6 +27,13 @@ export function Logo101() {
           fill="#fff"
         />
       </Svg>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
+      >
+        <View style={{ marginLeft: 10 }}>
+          <Icon size={20} source="cog-outline" color="white" />
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }

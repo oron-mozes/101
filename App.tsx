@@ -13,7 +13,6 @@ import HomeScreen from "./src/views/homepage";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
-import storage, { STORAGE } from "./storage";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const theme = {
@@ -27,9 +26,7 @@ export const theme = {
 
 export default function App() {
   const { hasPermission, requestPermission } = useCameraPermission();
-  // storage.clearMapForKey(STORAGE.PATIENTS_RECORD);
-  // storage.remove({ key: STORAGE.USER });
-  // storage.remove({ key: STORAGE.TAAGAD });
+
   useEffect(() => {
     if (!hasPermission) {
       requestPermission();

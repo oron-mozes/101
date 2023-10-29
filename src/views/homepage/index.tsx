@@ -17,19 +17,17 @@ export enum TAB_STATUS {
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
-  const [userDetails, setUserDetails] = useState<typeof initialState | null>();
   const [tab, changeTabView] = useState<TAB_STATUS>(TAB_STATUS.STATUS);
   useEffect(() => {
-    !userDetails &&
-      storage
-        .load({
-          key: STORAGE.TAAGAD,
-        })
-        .then(() => {})
-        .catch(() => {
-          navigation.navigate(ROUTES.ACCOUNT);
-        });
-  }, [userDetails]);
+    storage
+      .load({
+        key: STORAGE.TAAGAD,
+      })
+      .then(() => {})
+      .catch(() => {
+        navigation.navigate(ROUTES.ACCOUNT);
+      });
+  }, []);
 
   const [selectedPatient, setPatient] = useState<IPatientRecord>();
 

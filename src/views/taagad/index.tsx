@@ -197,6 +197,16 @@ export default function TaagadScreen() {
         >
           {translation("continue")}
         </Button>
+        <Button
+          mode="contained"
+          disabled={!isFormValid()}
+          style={{ backgroundColor: "red", marginTop: 100 }}
+          onPress={() => {
+            storage.clearMap();
+          }}
+        >
+          CAUTION!! DELETE ALL
+        </Button>
       </ScrollView>
     </SafeAreaView>
   );
