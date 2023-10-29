@@ -21,3 +21,7 @@ $eas build -p android --profile preview
 ## issues and resolutions
 
 npx react-native start --reset-cache
+
+## figma:
+
+https://www.figma.com/file/arl3RP1jwbWoE9Fua9bAdp/101?type=design&node-id=49-227306&mode=design&t=c1v6taorHSX8lY8b-0
