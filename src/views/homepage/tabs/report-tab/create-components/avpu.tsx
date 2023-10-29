@@ -6,6 +6,7 @@ import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import Context from "../context";
 import { design } from "./shared-style";
 import { TCconsciousness } from "../../../../../interfaces";
+import { toggleListData } from "./utils";
 
 export function Avpu() {
   const translation = useTranslation();
@@ -14,15 +15,9 @@ export function Avpu() {
     <Context.Consumer>
       {({ patient, update }) => {
         const toggleValue = (value: TCconsciousness) => {
-          const hasValue = patient.consciousness.find((c) => c === value);
-          let newList: TCconsciousness[] = patient.consciousness;
-          if (hasValue) {
-            newList = newList.filter((c) => c !== value);
-          } else {
-            newList.push(value);
-          }
-
-          update({ consciousness: newList });
+          update({
+            consciousness: toggleListData(patient.consciousness, value),
+          });
         };
 
         return (

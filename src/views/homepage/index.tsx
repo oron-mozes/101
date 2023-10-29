@@ -9,10 +9,16 @@ import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";
 import { StatusTab } from "./tabs/status-tab";
 
+export enum TAB_STATUS {
+  STATUS = "STATUS",
+  CREATE = "CREATE",
+  SCAN = "SCAN",
+}
+
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigation>();
   const [userDetails, setUserDetails] = useState<typeof initialState | null>();
-  const [tab, changeTabView] = useState<"status" | "create">("status");
+  const [tab, changeTabView] = useState<TAB_STATUS>(TAB_STATUS.STATUS);
   useEffect(() => {
     !userDetails &&
       storage
@@ -42,15 +48,15 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {tab === "status" && (
+      {tab === TAB_STATUS.STATUS && (
         <StatusTab
           setPatient={(patient: IPatientRecord) => {
             setPatient(patient);
-            changeTabView("create");
+            changeTabView(TAB_STATUS.CREATE);
           }}
         />
       )}
-      {tab === "create" && <ReportTab patient={selectedPatient} />}
+      {tab === TAB_STATUS.CREATE && <ReportTab patient={selectedPatient} />}
 
       <HomepageFooter onViewChange={changeTabView} selected={tab} />
     </SafeAreaView>

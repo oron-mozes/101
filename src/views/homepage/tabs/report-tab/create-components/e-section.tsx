@@ -5,7 +5,8 @@ import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import Context from "../context";
 import { design } from "./shared-style";
-import { TE } from "../../../../../interfaces";
+import { EEsectionChips, TE } from "../../../../../interfaces";
+import { isSelectedHandler, toggleListData } from "./utils";
 
 export function ESection() {
   const translation = useTranslation();
@@ -14,17 +15,9 @@ export function ESection() {
     <Context.Consumer>
       {({ patient, update }) => {
         const toggleValue = (value: TE) => {
-          const hasValue = patient.e.find((c) => c === value);
-          let newList: TE[] = patient.e;
-          if (hasValue) {
-            newList = newList.filter((c) => c !== value);
-          } else {
-            newList.push(value);
-          }
-
-          update({ e: newList });
+          update({ e: toggleListData(patient.e, value) });
         };
-        const isSelected = (value) => patient.e?.indexOf(value) !== -1;
+        const isSelected = isSelectedHandler(patient.e);
 
         return (
           <Card style={styles.card}>
@@ -32,24 +25,15 @@ export function ESection() {
               <SectionHeader label={translation("eSection")} />
             </Card.Content>
             <Card.Content style={styles.innerContent}>
-              <ToggleButton
-                label={translation("undressing")}
-                status={isSelected("undressing")}
-                onSelect={toggleValue}
-                value="undressing"
-              />
-              <ToggleButton
-                label={translation("flipping")}
-                onSelect={toggleValue}
-                status={isSelected("flipping")}
-                value="flipping"
-              />
-              <ToggleButton
-                label={translation("splinting")}
-                onSelect={toggleValue}
-                status={isSelected("splinting")}
-                value="splinting"
-              />
+              {Object.values(EEsectionChips).map((item) => (
+                <ToggleButton
+                  key={item}
+                  label={translation(item)}
+                  status={isSelected(item)}
+                  onSelect={toggleValue}
+                  value={item}
+                />
+              ))}
             </Card.Content>
           </Card>
         );

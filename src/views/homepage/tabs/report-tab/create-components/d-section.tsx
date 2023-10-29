@@ -19,7 +19,14 @@ import {
 import Context from "../context";
 import { design } from "./shared-style";
 import { ToggleButton } from "../../../../../form-components/ToggleButton";
-import { calcGCS } from "./utils";
+import {
+  calcGCS,
+  convertToOptions,
+  isSelectedHandler,
+  mergeData,
+  toggleListData,
+} from "./utils";
+import { emptyPatient } from "..";
 
 const emptyState: IReaction = {
   GCS: null,
@@ -34,24 +41,18 @@ export function DSection() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const general = patient?.reaction.general || [];
-        const speech = patient?.reaction.speech || EReactionSpeech.NONE;
-        const movement = patient?.reaction.movement || EReactionMovement.NONE;
-        const eyes = patient?.reaction.eyes || EReactionEyes.NONE;
-        const toggleValue = (value) => {
-          const hasValue = general.find((c) => c === value);
-          let newList: EReactionGeneral[] = general;
-          if (hasValue) {
-            newList = newList.filter((c) => c !== value);
-          } else {
-            newList.push(value);
-          }
+        const reaction = mergeData(patient.reaction, emptyPatient.reaction);
+        const { general, speech, movement, eyes } = reaction;
 
-          update({ reaction: { ...patient.reaction, general: newList } });
+        const toggleValue = (value) => {
+          update({
+            reaction: {
+              ...patient.reaction,
+              general: toggleListData(general, value),
+            },
+          });
         };
-        const isSelected = (value: EReactionGeneral) => {
-          return general.includes(value);
-        };
+        const isSelected = isSelectedHandler(general);
 
         return (
           <Card style={styles.card}>
@@ -98,32 +99,7 @@ export function DSection() {
                     });
                   }}
                   label={translation("speech")}
-                  options={[
-                    {
-                      id: EReactionSpeech.NONE,
-                      title: translation(EReactionSpeech.NONE),
-                    },
-
-                    {
-                      id: EReactionSpeech.VOICES,
-                      title: translation(EReactionSpeech.VOICES),
-                    },
-
-                    {
-                      id: EReactionSpeech.WORDS,
-                      title: translation(EReactionSpeech.WORDS),
-                    },
-
-                    {
-                      id: EReactionSpeech.CONFUSED,
-                      title: translation(EReactionSpeech.CONFUSED),
-                    },
-
-                    {
-                      id: EReactionSpeech.STRAIGHT,
-                      title: translation(EReactionSpeech.STRAIGHT),
-                    },
-                  ]}
+                  options={convertToOptions(EReactionSpeech, translation)}
                 />
                 <DropDown
                   placeholder=""
@@ -137,24 +113,7 @@ export function DSection() {
                     });
                   }}
                   label={translation("eys")}
-                  options={[
-                    {
-                      id: EReactionEyes.NONE,
-                      title: translation(EReactionEyes.NONE),
-                    },
-                    {
-                      id: EReactionEyes.TO_PAIN,
-                      title: translation(EReactionEyes.TO_PAIN),
-                    },
-                    {
-                      id: EReactionEyes.TO_VOICE,
-                      title: translation(EReactionEyes.TO_VOICE),
-                    },
-                    {
-                      id: EReactionEyes.SPONTANEITY,
-                      title: translation(EReactionEyes.SPONTANEITY),
-                    },
-                  ]}
+                  options={convertToOptions(EReactionEyes, translation)}
                 />
               </View>
               <View style={[styles.section]}>
@@ -170,36 +129,7 @@ export function DSection() {
                     });
                   }}
                   label={translation("speech")}
-                  options={[
-                    {
-                      id: EReactionMovement.NONE,
-                      title: translation(EReactionMovement.NONE),
-                    },
-
-                    {
-                      id: EReactionMovement.STRAIGHTENING,
-                      title: translation(EReactionMovement.STRAIGHTENING),
-                    },
-
-                    {
-                      id: EReactionMovement.BENDING,
-                      title: translation(EReactionMovement.BENDING),
-                    },
-
-                    {
-                      id: EReactionMovement.RETREAT,
-                      title: translation(EReactionMovement.RETREAT),
-                    },
-                    {
-                      id: EReactionMovement.IN_PLACE,
-                      title: translation(EReactionMovement.IN_PLACE),
-                    },
-
-                    {
-                      id: EReactionMovement.OFTEN,
-                      title: translation(EReactionMovement.OFTEN),
-                    },
-                  ]}
+                  options={convertToOptions(EReactionMovement, translation)}
                 />
                 <View style={[styles.section, styles.GCS]}>
                   <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>

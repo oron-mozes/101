@@ -1,24 +1,24 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
-import { Button, Card, Icon, Text } from "react-native-paper";
-import { Autocomplete } from "../../../../../form-components/autocomplete";
+import { Card, Icon, Text } from "react-native-paper";
+import { DropDown } from "../../../../../form-components/dropdown";
 import { RadioGroup } from "../../../../../form-components/radio-group";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import {
-  EAirWayTreatment,
-  IAirWayInformation,
-  TAirWayTreatment,
+  EMedications,
+  IMedicationsAndFluidInformation,
   TOGGLE,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
-import { DropDown } from "../../../../../form-components/dropdown";
+import { InputField } from "../../../../../form-components/input-field";
 import {
   convertToOptions,
+  getDoseByValue,
   mergeData,
   removeByIndexHandler,
   updateDataInIndex,
@@ -26,53 +26,49 @@ import {
 } from "./utils";
 import { emptyPatient } from "..";
 
-const emptyState: IAirWayInformation = {
+const emptyState: IMedicationsAndFluidInformation = {
   action: null,
   time: null,
-  successful: null,
+  dose: null,
 };
-export function ASection() {
+export function MedicationsAndFluidSection() {
   const translation = useTranslation();
 
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const airway = mergeData(patient.airway, emptyPatient.airway);
-        const { actions, fulfill } = airway;
+        const medicationsAndFluids = mergeData(
+          patient.medicationsAndFluids,
+          emptyPatient.medicationsAndFluids
+        );
 
+        const { actions = [] } = medicationsAndFluids;
         const addRow = () => {
           update({
-            airway: { ...airway, actions: [...actions, emptyState] },
-          });
-        };
-
-        if (fulfill && !Boolean(actions?.length)) {
-          addRow();
-        }
-
-        const updateInIndex = (
-          data: Partial<IAirWayInformation>,
-          index: number
-        ) => {
-          update({
-            airway: {
-              ...airway,
-              actions: updateDataInIndex(
-                actions,
-                data as IAirWayInformation,
-                index
-              ),
+            medicationsAndFluids: {
+              actions: [...actions, emptyState],
             },
           });
         };
 
-        const removeByIndex = (index: number) => {
-          const newData = removeByIndexHandler(actions, index);
+        const updateInIndex = (
+          data: Partial<IMedicationsAndFluidInformation>,
+          index: number
+        ) =>
           update({
-            airway: {
-              ...airway,
-              actions: newData,
-              fulfill: newData.length !== 0,
+            medicationsAndFluids: {
+              actions: updateDataInIndex(
+                actions,
+                data as IMedicationsAndFluidInformation,
+                index
+              ),
+            },
+          });
+
+        const removeByIndex = (index: number) => {
+          update({
+            medicationsAndFluids: {
+              actions: removeByIndexHandler(actions, index),
             },
           });
         };
@@ -80,38 +76,15 @@ export function ASection() {
         return (
           <Card style={styles.card}>
             <Card.Content style={styles.content}>
-              <SectionHeader label={translation("aSection")} />
+              <SectionHeader label={translation("medicationsAndFluid")} />
             </Card.Content>
-            <Card.Content style={[styles.innerContent, styles.airwayView]}>
-              <RadioGroup
-                horizontal
-                label={translation("airWayInjury")}
-                onSelect={(id: string) => {
-                  if (id === TOGGLE.YES) {
-                    update({ airway: { ...airway, fulfill: true } });
-                  } else {
-                    update({ airway: { ...airway, fulfill: false } });
-                  }
-                }}
-                selected={
-                  fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
-                }
-                options={convertToOptions(TOGGLE, translation)}
-              />
-            </Card.Content>
-            {fulfill &&
-              actions?.map((airWayInfo: IAirWayInformation, index) => {
-                const isSuccessful =
-                  airWayInfo.successful === null
-                    ? null
-                    : airWayInfo.successful
-                    ? TOGGLE.YES
-                    : TOGGLE.NO;
 
+            {actions?.map(
+              (measurements: IMedicationsAndFluidInformation, index) => {
                 return (
                   <Card.Content
                     style={[styles.innerContent, styles.actionRow]}
-                    key={airWayInfo.action}
+                    key={measurements.action}
                   >
                     <View style={[styles.element, styles.actionRow]}>
                       <Text
@@ -124,20 +97,14 @@ export function ASection() {
                           color={colors.primary}
                         />
                       </Text>
-
-                      <RadioGroup
-                        label={translation("actionResult")}
-                        onSelect={(id: string) => {
-                          updateInIndex(
-                            { successful: id === TOGGLE.YES },
-                            index
-                          );
-                        }}
-                        selected={isSuccessful}
-                        options={convertToOptions(TOGGLE, translation)}
+                      <InputField
+                        disabled={false}
+                        label={translation("dose")}
+                        value={measurements.dose}
+                        onChange={(value) => {}}
                       />
                       <TimePicker
-                        value={airWayInfo.time}
+                        value={measurements.time}
                         label={translation("actionTime")}
                         onChange={(time: number) => {
                           updateInIndex({ time }, index);
@@ -148,25 +115,24 @@ export function ASection() {
                       <DropDown
                         label={translation("actionTaken")}
                         placeholder={translation("select")}
-                        initialValue={airWayInfo.action}
+                        initialValue={measurements.action}
                         onSelect={(value: TAutocompleteDropdownItem) => {
                           value &&
                             updateInIndex(
                               {
-                                action: value.id as TAirWayTreatment,
+                                action: value.id as EMedications,
+                                dose: getDoseByValue(value.id),
                               },
                               index
                             );
                         }}
-                        options={convertToOptions(
-                          EAirWayTreatment,
-                          translation
-                        )}
+                        options={convertToOptions(EMedications, translation)}
                       />
                     </View>
                   </Card.Content>
                 );
-              })}
+              }
+            )}
             {validateLastItem(actions) && (
               <Card.Content style={[styles.innerContent, styles.addItemAction]}>
                 <Icon size={20} source="plus" color={colors.primary} />
@@ -174,7 +140,7 @@ export function ASection() {
                   style={{ color: colors.primary, fontSize: 17 }}
                   onPress={addRow}
                 >
-                  {translation("addAction")}
+                  {translation("addMedication")}
                 </Text>
               </Card.Content>
             )}
@@ -199,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     margin: gutter,
   },
-  airwayView: {
+  measurementsView: {
     justifyContent: "flex-start",
   },
   card: {

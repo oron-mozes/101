@@ -17,6 +17,14 @@ import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
 import { InputField } from "../../../../../form-components/input-field";
+import {
+  convertToOptions,
+  mergeData,
+  removeByIndexHandler,
+  updateDataInIndex,
+  validateLastItem,
+} from "./utils";
+import { emptyPatient } from "..";
 
 const emptyState: IBreathingInformation = {
   action: null,
@@ -29,8 +37,9 @@ export function BSection() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const { breathing = { actions: [], fulfill: null } } = patient;
-        const { actions = [], fulfill } = breathing;
+        const breathing = mergeData(patient.breathing, emptyPatient.breathing);
+        const { actions, fulfill } = breathing;
+
         const addRow = () => {
           update({
             breathing: { ...breathing, actions: [...actions, emptyState] },
@@ -44,20 +53,20 @@ export function BSection() {
         const updateInIndex = (
           data: Partial<IBreathingInformation>,
           index: number
-        ) => {
-          const newData = actions;
-          newData[index] = { ...newData[index], ...data };
-          update({ breathing: { ...breathing, actions: newData } });
-        };
-        const isLastItemValid = () => {
-          return (
-            actions.length !== 0 &&
-            !Object.values(actions[actions.length - 1]).some((v) => v === null)
-          );
-        };
+        ) =>
+          update({
+            breathing: {
+              ...breathing,
+              actions: updateDataInIndex(
+                actions,
+                data as IBreathingInformation,
+                index
+              ),
+            },
+          });
 
         const removeByIndex = (index: number) => {
-          const newData = actions.filter((_, i) => i !== index);
+          const newData = removeByIndexHandler(actions, index);
           update({
             breathing: {
               ...breathing,
@@ -86,10 +95,7 @@ export function BSection() {
                 selected={
                   fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
                 }
-                options={[
-                  { id: TOGGLE.YES, value: translation(TOGGLE.YES) },
-                  { id: TOGGLE.NO, value: translation(TOGGLE.NO) },
-                ]}
+                options={convertToOptions(TOGGLE, translation)}
               />
             </Card.Content>
             {fulfill && (
@@ -147,10 +153,7 @@ export function BSection() {
                           );
                         }}
                         selected={isSuccessful}
-                        options={[
-                          { id: TOGGLE.YES, value: translation(TOGGLE.YES) },
-                          { id: TOGGLE.NO, value: translation(TOGGLE.NO) },
-                        ]}
+                        options={convertToOptions(TOGGLE, translation)}
                       />
                       <TimePicker
                         value={breathingInfo.time}
@@ -174,30 +177,16 @@ export function BSection() {
                               index
                             );
                         }}
-                        options={[
-                          {
-                            id: EBreathingTreatment.OXIGEN,
-                            title: translation(EBreathingTreatment.OXIGEN),
-                          },
-                          {
-                            id: EBreathingTreatment.MOUTH,
-                            title: translation(EBreathingTreatment.MOUTH),
-                          },
-                          {
-                            id: EBreathingTreatment.NA,
-                            title: translation(EBreathingTreatment.NA),
-                          },
-                          {
-                            id: EBreathingTreatment.CHEST_TUBE,
-                            title: translation(EBreathingTreatment.CHEST_TUBE),
-                          },
-                        ]}
+                        options={convertToOptions(
+                          EBreathingTreatment,
+                          translation
+                        )}
                       />
                     </View>
                   </Card.Content>
                 );
               })}
-            {isLastItemValid() && (
+            {validateLastItem(actions) && (
               <Card.Content style={[styles.innerContent, styles.addItemAction]}>
                 <Icon size={20} source="plus" color={colors.primary} />
                 <Text

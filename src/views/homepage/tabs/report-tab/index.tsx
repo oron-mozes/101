@@ -20,6 +20,7 @@ import { InjuryReason } from "./create-components/injury-reason";
 import { PatientDetails } from "./create-components/patient-details";
 import { Prognosis } from "./create-components/prognosis";
 import { DSection } from "./create-components/d-section";
+import { MedicationsAndFluidSection } from "./create-components/medication";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -69,6 +70,15 @@ export const emptyPatient: IPatientRecord = {
     movement: EReactionMovement.NONE,
     GCS: null,
   },
+  medicationsAndFluids: {
+    actions: [
+      {
+        action: null,
+        dose: null,
+        time: null,
+      },
+    ],
+  },
 };
 export function ReportTab({ patient }: { patient?: IPatientRecord }) {
   const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
@@ -116,6 +126,7 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
           <CSection />
           <DSection />
           <ESection />
+          <MedicationsAndFluidSection />
           <InjuryReason />
           <Prognosis />
         </ScrollView>

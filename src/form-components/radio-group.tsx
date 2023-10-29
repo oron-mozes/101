@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { CheckButton } from "./select-button";
+import { IOption } from "../interfaces";
 
 export function RadioGroup({
   label,
@@ -11,7 +12,7 @@ export function RadioGroup({
   horizontal?: boolean;
   selected: string;
   onSelect(id: string): void;
-  options: { id: string; value: string }[];
+  options: IOption[];
   label: string;
 }) {
   return (
@@ -21,7 +22,7 @@ export function RadioGroup({
         {options.map((option) => (
           <CheckButton
             key={option.id}
-            label={option.value}
+            label={option.title}
             onSelect={() => {
               onSelect(option.id);
             }}

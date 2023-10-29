@@ -33,20 +33,25 @@ export enum EBreathingTreatment {
 }
 export type TBreathingTreatment = "OXIGEN" | "MOUTH" | "NA" | "CHEST_TUBE";
 export type TCconsciousness = "awake" | "voice" | "pain" | "none";
-export type TE = "undressing" | "flipping" | "splinting";
-export type TInjuryReason =
-  | "shooting"
-  | "charge"
-  | "falling"
-  | "blunt"
-  | "burns"
-  | "smoke"
-  | "accident"
-  | "guided"
-  | "gas";
+export enum EEsectionChips {
+  UNDRESSING = "UNDRESSING",
+  FLIPPING = "FLIPPING",
+  SPLINTING = "SPLINTING",
+}
+export enum EInjuryReason {
+  SHOOTING = "SHOOTING",
+  CHARGE = "CHARGE",
+  FALLING = "FALLING",
+  BLUNT = "BLUNT",
+  BURNS = "BURNS",
+  SMOKE = "SMOKE",
+  ACCIDENT = "ACCIDENT",
+  GUIDED = "GUIDED",
+  GAS = "GAS",
+}
 
 export interface IInjuryReason {
-  reasons: TInjuryReason[];
+  reasons: EInjuryReason[];
   circumstance: string;
 }
 
@@ -144,6 +149,42 @@ export interface IReaction {
   movement: EReactionMovement;
   GCS: number;
 }
+
+export enum EFluid {
+  BLOOD_1 = "BLOOD_1",
+  BLOOD = "BLOOD",
+  PLASMA_1 = "PLASMA_1",
+  PLASMA = "PLASMA",
+  HARTMAN_500 = "HARTMAN_500",
+  HARTMAN = "HARTMAN",
+}
+export enum EMedications {
+  HEXAKAPRON = "HEXAKAPRON",
+  HEXAKAPRON_1 = "HEXAKAPRON_1",
+  CETRIAXONE = "CETRIAXONE",
+  CETRIAXONE_1 = "CETRIAXONE_1",
+  FLAGYL = "FLAGYL",
+  FLAGYL_500 = "FLAGYL_500",
+  KETAMINE = "KETAMINE",
+  KETAMINE_500 = "KETAMINE_500",
+  KETAMINE_250 = "KETAMINE_250",
+  KETAMINE_25 = "KETAMINE_25",
+  DORMICUM = "DORMICUM",
+  DORMICUM_5 = "DORMICUM_5",
+  ACTIQ = "ACTIQ",
+  ACTIQ_800 = "ACTIQ_800",
+}
+export type TFluid = "";
+export type TMedications = "";
+export interface IMedicationsAndFluidInformation {
+  action: EMedications;
+  dose: number;
+  time: number;
+}
+export interface IMedicationsAndFluid {
+  actions: IMedicationsAndFluidInformation[];
+}
+
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
@@ -151,11 +192,12 @@ export interface IPatientRecord {
   care_team: ICareProvider[];
   injuries: IInjury[];
   consciousness: TCconsciousness[];
-  e: TE[];
+  e: EEsectionChips[];
   airway: IAirway;
   breathing: IBreathing;
   measurements: IMeasurements;
   reaction: IReaction;
+  medicationsAndFluids: IMedicationsAndFluid;
   injuryReason: IInjuryReason;
   prognosis: string;
 }

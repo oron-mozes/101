@@ -17,6 +17,14 @@ import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
 import { InputField } from "../../../../../form-components/input-field";
+import {
+  convertToOptions,
+  mergeData,
+  removeByIndexHandler,
+  updateDataInIndex,
+  validateLastItem,
+} from "./utils";
+import { emptyPatient } from "..";
 
 const emptyState: IMeasurementsInformation = {
   action: null,
@@ -29,17 +37,13 @@ export function CSection() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const {
-          measurements = {
-            actions: [],
-            fulfill: null,
-            puls: null,
-            shock: null,
-            palpated: null,
-            bloodPressure: { diastolic: null, systolic: null },
-          },
-        } = patient;
-        const { actions = [], fulfill } = measurements;
+        const measurements = mergeData(
+          patient.measurements,
+          emptyPatient.measurements
+        );
+
+        const { actions, fulfill } = measurements;
+
         const addRow = () => {
           update({
             measurements: {
@@ -56,20 +60,21 @@ export function CSection() {
         const updateInIndex = (
           data: Partial<IMeasurementsInformation>,
           index: number
-        ) => {
-          const newData = actions;
-          newData[index] = { ...newData[index], ...data };
-          update({ measurements: { ...measurements, actions: newData } });
-        };
-        const isLastItemValid = () => {
-          return (
-            actions.length !== 0 &&
-            !Object.values(actions[actions.length - 1]).some((v) => v === null)
-          );
-        };
+        ) =>
+          update({
+            measurements: {
+              ...measurements,
+              actions: updateDataInIndex(
+                actions,
+                data as IMeasurementsInformation,
+                index
+              ),
+            },
+          });
 
         const removeByIndex = (index: number) => {
-          const newData = actions.filter((_, i) => i !== index);
+          const newData = removeByIndexHandler(actions, index);
+
           update({
             measurements: {
               ...measurements,
@@ -105,10 +110,7 @@ export function CSection() {
                       : TOGGLE.NO
                     : null
                 }
-                options={[
-                  { id: TOGGLE.YES, value: translation(TOGGLE.YES) },
-                  { id: TOGGLE.NO, value: translation(TOGGLE.NO) },
-                ]}
+                options={convertToOptions(TOGGLE, translation)}
               />
               <RadioGroup
                 horizontal
@@ -128,10 +130,7 @@ export function CSection() {
                       : TOGGLE.NO
                     : null
                 }
-                options={[
-                  { id: TOGGLE.YES, value: translation(TOGGLE.YES) },
-                  { id: TOGGLE.NO, value: translation(TOGGLE.NO) },
-                ]}
+                options={convertToOptions(TOGGLE, translation)}
               />
             </Card.Content>
 
@@ -212,10 +211,7 @@ export function CSection() {
                         updateInIndex({ successful: id === TOGGLE.YES }, index);
                       }}
                       selected={isSuccessful}
-                      options={[
-                        { id: TOGGLE.YES, value: translation(TOGGLE.YES) },
-                        { id: TOGGLE.NO, value: translation(TOGGLE.NO) },
-                      ]}
+                      options={convertToOptions(TOGGLE, translation)}
                     />
                     <TimePicker
                       value={measurements.time}
@@ -239,36 +235,16 @@ export function CSection() {
                             index
                           );
                       }}
-                      options={[
-                        {
-                          id: EMeasurementsTreatments.PERIPHERAL_VAIN,
-                          title: translation(
-                            EMeasurementsTreatments.PERIPHERAL_VAIN
-                          ),
-                        },
-                        {
-                          id: EMeasurementsTreatments.CENTRAL_VAIN,
-                          title: translation(
-                            EMeasurementsTreatments.CENTRAL_VAIN
-                          ),
-                        },
-                        {
-                          id: EMeasurementsTreatments.STOP_BLEEDING,
-                          title: translation(
-                            EMeasurementsTreatments.STOP_BLEEDING
-                          ),
-                        },
-                        {
-                          id: EMeasurementsTreatments.IO,
-                          title: translation(EMeasurementsTreatments.IO),
-                        },
-                      ]}
+                      options={convertToOptions(
+                        EMeasurementsTreatments,
+                        translation
+                      )}
                     />
                   </View>
                 </Card.Content>
               );
             })}
-            {isLastItemValid() && (
+            {validateLastItem(actions) && (
               <Card.Content style={[styles.innerContent, styles.addItemAction]}>
                 <Icon size={20} source="plus" color={colors.primary} />
                 <Text

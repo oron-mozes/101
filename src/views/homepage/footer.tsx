@@ -2,27 +2,22 @@ import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Card, Text } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import Svg, { G, Path, Defs, ClipPath } from "react-native-svg";
+import { TAB_STATUS } from ".";
 
 export function HomepageFooter({
   onViewChange,
   selected,
 }: {
-  selected: "status" | "create";
-  onViewChange(view: "status" | "create"): void;
+  selected: TAB_STATUS;
+  onViewChange(view: TAB_STATUS): void;
 }) {
   const translation = useTranslation();
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => onViewChange("create")}>
+      <TouchableWithoutFeedback onPress={() => onViewChange(TAB_STATUS.CREATE)}>
         <View style={styles.textBox}>
-          {selected === "create" ? (
-            <Svg
-              onPress={() => onViewChange("create")}
-              width={25}
-              height={24}
-              viewBox="0 0 25 24"
-              fill="none"
-            >
+          {selected === TAB_STATUS.CREATE ? (
+            <Svg width={25} height={24} viewBox="0 0 25 24" fill="none">
               <Path
                 d="M5.5 2a3 3 0 00-3 3v14a3 3 0 003 3h14a3 3 0 003-3V5a3 3 0 00-3-3h-14z"
                 fill="#00244D"
@@ -41,13 +36,7 @@ export function HomepageFooter({
               />
             </Svg>
           ) : (
-            <Svg
-              onPress={() => onViewChange("create")}
-              width={25}
-              height={24}
-              viewBox="0 0 25 24"
-              fill="none"
-            >
+            <Svg width={25} height={24} viewBox="0 0 25 24" fill="none">
               <Path
                 fillRule="evenodd"
                 clipRule="evenodd"
@@ -72,29 +61,17 @@ export function HomepageFooter({
           <Text style={styles.text}>{translation("addPatient")}</Text>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => onViewChange("status")}>
+      <TouchableWithoutFeedback onPress={() => onViewChange(TAB_STATUS.STATUS)}>
         <View style={styles.textBox}>
-          {selected === "status" ? (
-            <Svg
-              onPress={() => onViewChange("status")}
-              width={23}
-              height={22}
-              viewBox="0 0 23 22"
-              fill="none"
-            >
+          {selected === TAB_STATUS.STATUS ? (
+            <Svg width={23} height={22} viewBox="0 0 23 22" fill="none">
               <Path
                 d="M16.45.884a6.5 6.5 0 00-4.598 1.905l-.352.353-.353-.353a6.501 6.501 0 00-9.194 9.194l8.84 8.84a1 1 0 001.414 0l8.84-8.84A6.5 6.5 0 0016.45.884z"
                 fill="#00244D"
               />
             </Svg>
           ) : (
-            <Svg
-              onPress={() => onViewChange("status")}
-              width={25}
-              height={24}
-              viewBox="0 0 25 24"
-              fill="none"
-            >
+            <Svg width={25} height={24} viewBox="0 0 25 24" fill="none">
               <G clipPath="url(#clip0_37_226811)">
                 <Path
                   fillRule="evenodd"
