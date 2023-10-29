@@ -22,7 +22,7 @@ export function InputField({
   icon,
 }: IInputField) {
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, numberOfLines > 1 ? styles.fixHeight : {}]}>
       {icon && (
         <View style={[styles.icon]}>
           <Icon source={icon} size={20} />
@@ -31,7 +31,7 @@ export function InputField({
       <TextInput
         numberOfLines={numberOfLines}
         multiline={numberOfLines > 1}
-        style={[styles.text]}
+        style={[styles.text, numberOfLines > 1 ? styles.fixHeight : {}]}
         keyboardType={numeric ? "numeric" : "default"}
         disabled={disabled}
         label={label}
@@ -48,12 +48,16 @@ export function InputField({
 }
 
 const styles = StyleSheet.create({
+  fixHeight: {
+    height: 100,
+  },
   container: inputContainer,
   text: {
     flex: 1,
     textAlign: "right",
     alignItems: "flex-end",
     marginBottom: 4,
+    width: "100%",
   },
   icon: {
     marginLeft: 4,
