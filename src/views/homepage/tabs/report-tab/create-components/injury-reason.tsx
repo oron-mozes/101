@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   innerContent: {
     flexDirection: "row-reverse",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignContent: "center",
     marginTop: 10,
   },
