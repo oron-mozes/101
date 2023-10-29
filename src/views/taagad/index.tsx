@@ -26,7 +26,7 @@ export const initialProviderState: ICareProvider = {
   full_name: null,
   idf_id: null,
   rank: null,
-  // unit_name: null,
+  unit_name: null,
   role: null,
   // expertise: null,
 };
