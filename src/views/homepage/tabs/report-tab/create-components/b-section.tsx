@@ -166,7 +166,6 @@ export function BSection() {
                         placeholder={translation("select")}
                         initialValue={breathingInfo.action}
                         onSelect={(value: TAutocompleteDropdownItem) => {
-                          console.log(value.id, EBreathingTreatment.MOUTH);
                           value &&
                             updateInIndex(
                               {

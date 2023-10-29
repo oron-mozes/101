@@ -2,7 +2,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
-import { borderRadius, colors, gutter, offset } from "../shared-config";
+import {
+  borderRadius,
+  colors,
+  gutter,
+  offset,
+  inputContainer,
+} from "../shared-config";
 import date from "date-and-time";
 
 export function DatePicker({
@@ -72,5 +78,6 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 18,
+    // ...inputContainer,
   },
 });

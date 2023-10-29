@@ -2,7 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { ScrollView } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import storage, { STORAGE } from "../../../../../storage";
-import { ICareProvider, IPatientRecord, STATUS } from "../../../../interfaces";
+import {
+  EReactionEyes,
+  EReactionMovement,
+  EReactionSpeech,
+  ICareProvider,
+  IPatientRecord,
+  STATUS,
+} from "../../../../interfaces";
 import Context from "./context";
 import { ASection } from "./create-components/a-section";
 import { Avpu } from "./create-components/avpu";
@@ -12,6 +19,7 @@ import { ESection } from "./create-components/e-section";
 import { InjuryReason } from "./create-components/injury-reason";
 import { PatientDetails } from "./create-components/patient-details";
 import { Prognosis } from "./create-components/prognosis";
+import { DSection } from "./create-components/d-section";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -53,6 +61,13 @@ export const emptyPatient: IPatientRecord = {
       diastolic: null,
       systolic: null,
     },
+  },
+  reaction: {
+    general: [],
+    eyes: EReactionEyes.NONE,
+    voice: EReactionSpeech.NONE,
+    movement: EReactionMovement.NONE,
+    GCS: null,
   },
 };
 export function ReportTab({ patient }: { patient?: IPatientRecord }) {
@@ -107,6 +122,7 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
           <ASection />
           <BSection />
           <CSection />
+          <DSection />
           <ESection />
           <InjuryReason />
           <Prognosis />

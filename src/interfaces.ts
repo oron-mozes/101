@@ -106,6 +106,44 @@ export interface IMeasurements {
     systolic: number;
   };
 }
+
+export enum EReactionGeneral {
+  OK = "OK",
+  NON_SENSORY = "NON_SENSORY",
+  NON_MOTORIZED = "NON_MOTORIZED",
+  UN_EQUAL_PUPILS = "UN_EQUAL_PUPILS",
+}
+
+export enum EReactionEyes {
+  NONE = "NONE",
+  TO_PAIN = "TO_PAIN",
+  TO_VOICE = "TO_VOICE",
+  SPONTANEITY = "SPONTANEITY",
+}
+
+export enum EReactionSpeech {
+  NONE = "NONE",
+  VOICES = "VOICES",
+  WORDS = "WORDS",
+  CONFUSED = "CONFUSED",
+  STRAIGHT = "STRAIGHT",
+}
+export enum EReactionMovement {
+  NONE = "NONE",
+  OFTEN = "OFTEN",
+  IN_PLACE = "IN_PLACE",
+  RETREAT = "RETREAT",
+  BENDING = "BENDING",
+  STRAIGHTENING = "STRAIGHTENING",
+}
+
+export interface IReaction {
+  general: EReactionGeneral[];
+  eyes: EReactionEyes;
+  voice: EReactionSpeech;
+  movement: EReactionMovement;
+  GCS: number;
+}
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
@@ -117,6 +155,7 @@ export interface IPatientRecord {
   airway: IAirway;
   breathing: IBreathing;
   measurements: IMeasurements;
+  reaction: IReaction;
   injuryReason: IInjuryReason;
   prognosis: string;
 }

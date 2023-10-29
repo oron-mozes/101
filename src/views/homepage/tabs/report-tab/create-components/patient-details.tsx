@@ -16,7 +16,6 @@ export function PatientDetails() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        console.log(patient.care_team?.[patient.care_team.length - 1]);
         return (
           <Card style={styles.card}>
             <Card.Content style={styles.content}>

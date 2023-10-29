@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { textColor } from "./shared-style";
+import { colors } from "../shared-config";
 
 export interface ICheckButton {
   onSelect(e: any): void;
@@ -31,11 +32,11 @@ export function CheckButton({
 
 const styles = StyleSheet.create({
   checked: {
-    backgroundColor: "rgba(159, 96, 159, 1)",
-    color: "#fff",
+    backgroundColor: colors.active,
+    color: colors.textInputBG,
   },
   container: {
-    backgroundColor: "rgba(222, 231, 237, 1)",
+    backgroundColor: colors.radio,
     borderRadius: 20,
     margin: 4,
   },
