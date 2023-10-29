@@ -32,7 +32,8 @@ export function PatientDetails() {
             </Card.Content>
             <Card.Content style={[styles.innerContent]}>
               <InputField
-                label={translation("idfId")}
+                label={translation("idf_id")}
+                maxLength={7}
                 onChange={(idf_id: number) => {
                   update({
                     personal_information: {

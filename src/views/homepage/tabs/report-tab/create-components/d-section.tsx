@@ -60,30 +60,15 @@ export function DSection() {
               <SectionHeader label={translation("dSection")} />
             </Card.Content>
             <Card.Content style={[styles.innerContent]}>
-              <ToggleButton
-                label={translation(EReactionGeneral.UN_EQUAL_PUPILS)}
-                status={isSelected(EReactionGeneral.UN_EQUAL_PUPILS)}
-                onSelect={toggleValue}
-                value={EReactionGeneral.UN_EQUAL_PUPILS}
-              />
-              <ToggleButton
-                label={translation(EReactionGeneral.NON_MOTORIZED)}
-                onSelect={toggleValue}
-                status={isSelected(EReactionGeneral.NON_MOTORIZED)}
-                value={EReactionGeneral.NON_MOTORIZED}
-              />
-              <ToggleButton
-                label={translation(EReactionGeneral.NON_SENSORY)}
-                onSelect={toggleValue}
-                status={isSelected(EReactionGeneral.NON_SENSORY)}
-                value={EReactionGeneral.NON_SENSORY}
-              />
-              <ToggleButton
-                label={translation(EReactionGeneral.OK)}
-                onSelect={toggleValue}
-                status={isSelected(EReactionGeneral.OK)}
-                value={EReactionGeneral.OK}
-              />
+              {Object.values(EReactionGeneral).map((item) => (
+                <ToggleButton
+                  label={translation(item)}
+                  status={isSelected(item)}
+                  onSelect={toggleValue}
+                  value={item}
+                  key={item}
+                />
+              ))}
             </Card.Content>
             <Card.Content style={[styles.innerContent]}>
               <View style={[styles.section]}>
@@ -128,7 +113,7 @@ export function DSection() {
                       },
                     });
                   }}
-                  label={translation("speech")}
+                  label={translation("movement")}
                   options={convertToOptions(EReactionMovement, translation)}
                 />
                 <View style={[styles.section, styles.GCS]}>

@@ -21,6 +21,7 @@ export function TimePicker({
   onChange(value: number): void;
 }) {
   const [showTime, toggleTime] = useState<boolean>(false);
+
   const [time, setTime] = useState<number>(value || new Date().getTime());
   useEffect(() => {
     onChange(time);

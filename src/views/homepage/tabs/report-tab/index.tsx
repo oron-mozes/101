@@ -7,33 +7,32 @@ import {
   EReactionMovement,
   EReactionSpeech,
   ICareProvider,
-  IPatientRecord,
-  STATUS,
+  IPatientRecord
 } from "../../../../interfaces";
 import Context from "./context";
 import { ASection } from "./create-components/a-section";
 import { Avpu } from "./create-components/avpu";
 import { BSection } from "./create-components/b-section";
 import { CSection } from "./create-components/c-section";
+import { CareProvider } from "./create-components/care-provider";
+import { DSection } from "./create-components/d-section";
 import { ESection } from "./create-components/e-section";
+import { Evacuation } from "./create-components/evacuation";
 import { InjuryReason } from "./create-components/injury-reason";
+import { MedicationsAndFluidSection } from "./create-components/medication";
+import { PatientBodyPicker } from "./create-components/patient-body-picker";
 import { PatientDetails } from "./create-components/patient-details";
 import { Prognosis } from "./create-components/prognosis";
-import { DSection } from "./create-components/d-section";
-import { MedicationsAndFluidSection } from "./create-components/medication";
-import { CareProvider } from "./create-components/care-provider";
-import { Evacuation } from "./create-components/evacuation";
-import { PatientBodyPicker } from "./create-components/patient-body-picker";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
-    full_name: "",
-    idf_id: 0,
+    full_name: null,
+    idf_id: null,
   },
   incident_information: {
-    injury_time: new Date().getTime(),
-    care_time: new Date().getTime(),
-    date: new Date().getTime(),
+    injury_time: null,
+    care_time: null,
+    date: null,
   },
   provider: { full_name: null, idf_id: null },
   injuries: [],
@@ -124,11 +123,13 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
             };
 
             setPatientRecord(updateData);
-            storage.save({
-              key: STORAGE.PATIENTS_RECORD,
-              id: selectedId,
-              data: updateData,
-            });
+            updateData.personal_information?.full_name &&
+              updateData.personal_information?.idf_id &&
+              storage.save({
+                key: STORAGE.PATIENTS_RECORD,
+                id: selectedId,
+                data: updateData,
+              });
           },
         }}
       >

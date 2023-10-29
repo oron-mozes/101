@@ -5,14 +5,16 @@ import { StackNavigation } from "../../interfaces";
 import { useMemo } from "react";
 import { Icon } from "react-native-paper";
 import { ROUTES } from "../../routes";
+import { TAB_STATUS } from "../../views/homepage";
 
 export function Logo101() {
   const navigation = useNavigation<StackNavigation>();
-  const isHomeRoute = useMemo(() => navigation.getState().index === 0, []);
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
       <Svg
-        onPress={() => !isHomeRoute && navigation.goBack()}
+        onPress={() =>
+          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS })
+        }
         width={56}
         height={39}
         viewBox="0 0 56 39"

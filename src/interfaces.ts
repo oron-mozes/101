@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationProp } from "@react-navigation/native";
 import { InjuryReason } from "./views/homepage/tabs/report-tab/create-components/injury-reason";
+import { TAB_STATUS } from "./views/homepage";
 
 export interface IPersonalInformation {
   full_name: string;
@@ -35,7 +36,7 @@ export enum ECconsciousness {
   AWAKE = "AWAKE",
   VOICE = "VOICE",
   PAIN = "PAIN",
-  APVN_NONE = "APVU_NONE",
+  APVN_NONE = "APVN_NONE",
 }
 export enum EEsectionChips {
   UNDRESSING = "UNDRESSING",
@@ -247,7 +248,7 @@ export interface ITaagad {
 export interface IProps extends NativeStackScreenProps<RootStackParamList> {}
 export type RootStackParamList = Record<
   string,
-  { patient?: IPatientRecord } | undefined
+  { patient?: IPatientRecord; tab?: TAB_STATUS } | undefined
 >;
 export type StackNavigation = NavigationProp<RootStackParamList>;
 

@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import storage, { STORAGE } from "../../../storage";
-import { IPatientRecord, StackNavigation } from "../../interfaces";
+import { IPatientRecord, IProps, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { initialState } from "../care-provider";
 import { HomepageFooter } from "./footer";
@@ -15,9 +15,11 @@ export enum TAB_STATUS {
   SCAN = "SCAN",
 }
 
-export default function HomeScreen() {
+export default function HomeScreen({ route }: IProps) {
   const navigation = useNavigation<StackNavigation>();
-  const [tab, changeTabView] = useState<TAB_STATUS>(TAB_STATUS.STATUS);
+  const [tab, changeTabView] = useState<TAB_STATUS>(
+    route.params?.tab ?? TAB_STATUS.STATUS
+  );
   useEffect(() => {
     storage
       .load({
@@ -28,7 +30,9 @@ export default function HomeScreen() {
         navigation.navigate(ROUTES.ACCOUNT);
       });
   }, []);
-
+  useEffect(() => {
+    route.params?.tab && changeTabView(route.params.tab);
+  }, [route.params]);
   const [selectedPatient, setPatient] = useState<IPatientRecord>();
 
   return (
