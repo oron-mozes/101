@@ -3,9 +3,9 @@ import { Card } from "react-native-paper";
 import { ToggleButton } from "../../../../../form-components/ToggleButton";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
+import { EEsectionChips } from "../../../../../interfaces";
 import Context from "../context";
 import { design } from "./shared-style";
-import { EEsectionChips, TE } from "../../../../../interfaces";
 import { isSelectedHandler, toggleListData } from "./utils";
 
 export function ESection() {
@@ -14,7 +14,7 @@ export function ESection() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const toggleValue = (value: TE) => {
+        const toggleValue = (value: EEsectionChips) => {
           update({ e: toggleListData(patient.e, value) });
         };
         const isSelected = isSelectedHandler(patient.e);

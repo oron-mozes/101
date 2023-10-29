@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
-import { Button, Card, Icon, Text } from "react-native-paper";
-import { Autocomplete } from "../../../../../form-components/autocomplete";
+import { Card, Icon, Text } from "react-native-paper";
+import { emptyPatient } from "..";
+import { DropDown } from "../../../../../form-components/dropdown";
 import { RadioGroup } from "../../../../../form-components/radio-group";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
@@ -16,7 +16,6 @@ import {
 import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
-import { DropDown } from "../../../../../form-components/dropdown";
 import {
   convertToOptions,
   mergeData,
@@ -24,7 +23,6 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
-import { emptyPatient } from "..";
 
 const emptyState: IAirWayInformation = {
   action: null,

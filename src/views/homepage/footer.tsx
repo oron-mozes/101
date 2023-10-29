@@ -1,8 +1,8 @@
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
-import { Card, Text } from "react-native-paper";
-import { useTranslation } from "../../hooks/useMyTranslation";
-import Svg, { G, Path, Defs, ClipPath } from "react-native-svg";
+import { Text } from "react-native-paper";
+import Svg, { ClipPath, Defs, G, Path } from "react-native-svg";
 import { TAB_STATUS } from ".";
+import { useTranslation } from "../../hooks/useMyTranslation";
 
 export function HomepageFooter({
   onViewChange,

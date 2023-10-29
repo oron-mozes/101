@@ -1,8 +1,9 @@
-import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Card, Icon, Text } from "react-native-paper";
+import { emptyPatient } from "..";
 import { DropDown } from "../../../../../form-components/dropdown";
+import { InputField } from "../../../../../form-components/input-field";
 import { RadioGroup } from "../../../../../form-components/radio-group";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
@@ -16,7 +17,6 @@ import {
 import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
-import { InputField } from "../../../../../form-components/input-field";
 import {
   convertToOptions,
   mergeData,
@@ -24,7 +24,6 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
-import { emptyPatient } from "..";
 
 const emptyState: IMeasurementsInformation = {
   action: null,

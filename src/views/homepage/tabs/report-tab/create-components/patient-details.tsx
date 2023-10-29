@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card } from "react-native-paper";
 import { DatePicker } from "../../../../../form-components/date-picker";
@@ -6,9 +5,8 @@ import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import { IPersonalInformation } from "../../../../../interfaces";
-import { design } from "./shared-style";
 import Context from "../context";
+import { design } from "./shared-style";
 
 export function PatientDetails() {
   const translation = useTranslation();
