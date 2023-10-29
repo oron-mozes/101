@@ -140,7 +140,7 @@ export enum EReactionMovement {
 export interface IReaction {
   general: EReactionGeneral[];
   eyes: EReactionEyes;
-  voice: EReactionSpeech;
+  speech: EReactionSpeech;
   movement: EReactionMovement;
   GCS: number;
 }

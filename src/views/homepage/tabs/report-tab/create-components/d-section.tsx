@@ -19,11 +19,12 @@ import {
 import Context from "../context";
 import { design } from "./shared-style";
 import { ToggleButton } from "../../../../../form-components/ToggleButton";
+import { calcGCS } from "./utils";
 
 const emptyState: IReaction = {
   GCS: null,
   eyes: EReactionEyes.NONE,
-  voice: EReactionSpeech.NONE,
+  speech: EReactionSpeech.NONE,
   movement: EReactionMovement.NONE,
   general: [],
 };
@@ -34,10 +35,9 @@ export function DSection() {
     <Context.Consumer>
       {({ patient, update }) => {
         const general = patient?.reaction.general || [];
-        const voice = patient?.reaction.voice || EReactionSpeech.NONE;
+        const speech = patient?.reaction.speech || EReactionSpeech.NONE;
         const movement = patient?.reaction.movement || EReactionMovement.NONE;
         const eyes = patient?.reaction.eyes || EReactionEyes.NONE;
-        const GCS = patient?.reaction.GCS || 0;
         const toggleValue = (value) => {
           const hasValue = general.find((c) => c === value);
           let newList: EReactionGeneral[] = general;
@@ -88,12 +88,12 @@ export function DSection() {
               <View style={[styles.section]}>
                 <DropDown
                   placeholder=""
-                  initialValue={voice}
+                  initialValue={speech}
                   onSelect={(value) => {
                     update({
                       reaction: {
                         ...patient.reaction,
-                        voice: value.id as EReactionSpeech,
+                        speech: value.id as EReactionSpeech,
                       },
                     });
                   }}
@@ -203,7 +203,9 @@ export function DSection() {
                 />
                 <View style={[styles.section, styles.GCS]}>
                   <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>
-                  <Text style={[styles.fakeInput]}>{GCS}</Text>
+                  <Text style={[styles.fakeInput]}>
+                    {calcGCS({ eyes, movement, speech })}
+                  </Text>
                 </View>
               </View>
             </Card.Content>
