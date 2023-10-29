@@ -41,7 +41,7 @@ export function DSection() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const reaction = mergeData(patient.reaction, emptyPatient.reaction);
+        const reaction = mergeData(patient?.reaction, emptyPatient.reaction);
         const { general, speech, movement, eyes } = reaction;
 
         const toggleValue = (value) => {

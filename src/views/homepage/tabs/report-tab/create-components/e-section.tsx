@@ -6,7 +6,8 @@ import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { EEsectionChips } from "../../../../../interfaces";
 import Context from "../context";
 import { design } from "./shared-style";
-import { isSelectedHandler, toggleListData } from "./utils";
+import { isSelectedHandler, mergeData, toggleListData } from "./utils";
+import { emptyPatient } from "..";
 
 export function ESection() {
   const translation = useTranslation();
@@ -14,10 +15,11 @@ export function ESection() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
+        const eSection = patient?.eSection || emptyPatient.eSection;
         const toggleValue = (value: EEsectionChips) => {
-          update({ e: toggleListData(patient.e, value) });
+          update({ eSection: toggleListData(eSection, value) });
         };
-        const isSelected = isSelectedHandler(patient.e);
+        const isSelected = isSelectedHandler(eSection);
 
         return (
           <Card style={styles.card}>

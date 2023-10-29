@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import storage, { STORAGE } from "../../../../../storage";
 import {
@@ -22,6 +22,8 @@ import { Prognosis } from "./create-components/prognosis";
 import { DSection } from "./create-components/d-section";
 import { MedicationsAndFluidSection } from "./create-components/medication";
 import { CareProvider } from "./create-components/care-provider";
+import { Evacuation } from "./create-components/evacuation";
+import { PatientBodyPicker } from "./create-components/patient-body-picker";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -32,11 +34,10 @@ export const emptyPatient: IPatientRecord = {
     injury_time: new Date().getTime(),
     care_time: new Date().getTime(),
     date: new Date().getTime(),
-    status: STATUS.ACTIVE,
   },
   provider: { full_name: null, idf_id: null },
   injuries: [],
-  e: [],
+  eSection: [],
   airway: {
     actions: [],
     fulfill: null,
@@ -80,12 +81,24 @@ export const emptyPatient: IPatientRecord = {
       },
     ],
   },
+
+  evacuation: {
+    status: null,
+    time: null,
+    transportation: null,
+    destination: null,
+  },
 };
 export function ReportTab({ patient }: { patient?: IPatientRecord }) {
   const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
     patient || emptyPatient
   );
-  const [providers, setProviders] = useState<ICareProvider[]>([]);
+
+  useEffect(() => {
+    setPatientRecord(patient);
+  }, [patient]);
+
+  const [providers, setProviders] = useState<ICareProvider[]>();
   const id = useMemo(() => new Date().getTime().toString(), []);
   useEffect(() => {
     storage
@@ -95,6 +108,10 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
       })
       .catch(() => {});
   }, []);
+
+  if (!providers && !patientRecord) {
+    return <View></View>;
+  }
   return (
     <AutocompleteDropdownContextProvider>
       <Context.Provider
@@ -102,7 +119,7 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
           providers,
           patient: patientRecord,
           update: (value) => {
-            const selectedId = patientRecord.id || id;
+            const selectedId = patientRecord?.id || id;
 
             const updateData: IPatientRecord = {
               ...patientRecord,
@@ -121,6 +138,7 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
       >
         <ScrollView keyboardShouldPersistTaps="handled">
           <PatientDetails />
+          <PatientBodyPicker />
           <Avpu />
           <ASection />
           <BSection />
@@ -131,6 +149,7 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
           <InjuryReason />
           <Prognosis />
           <CareProvider />
+          <Evacuation />
         </ScrollView>
       </Context.Provider>
     </AutocompleteDropdownContextProvider>

@@ -5,8 +5,9 @@ import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import Context from "../context";
 import { design } from "./shared-style";
-import { TCconsciousness } from "../../../../../interfaces";
+import { ECconsciousness } from "../../../../../interfaces";
 import { toggleListData } from "./utils";
+import { emptyPatient } from "..";
 
 export function Avpu() {
   const translation = useTranslation();
@@ -14,9 +15,11 @@ export function Avpu() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const toggleValue = (value: TCconsciousness) => {
+        const consciousness =
+          patient?.consciousness || emptyPatient.consciousness;
+        const toggleValue = (value: ECconsciousness) => {
           update({
-            consciousness: toggleListData(patient.consciousness, value),
+            consciousness: toggleListData(consciousness, value),
           });
         };
 
@@ -26,30 +29,15 @@ export function Avpu() {
               <SectionHeader label={translation("avpu")} />
             </Card.Content>
             <Card.Content style={styles.innerContent}>
-              <ToggleButton
-                label={translation("avpuAwake")}
-                onSelect={toggleValue}
-                status={patient.consciousness.indexOf("awake") !== -1}
-                value={"awake"}
-              />
-              <ToggleButton
-                label={translation("avpuVoice")}
-                status={patient.consciousness.indexOf("voice") !== -1}
-                onSelect={toggleValue}
-                value={"voice"}
-              />
-              <ToggleButton
-                label={translation("avpuPain")}
-                onSelect={toggleValue}
-                status={patient.consciousness.indexOf("pain") !== -1}
-                value={"pain"}
-              />
-              <ToggleButton
-                label={translation("avpuUnReponsive")}
-                onSelect={toggleValue}
-                status={patient.consciousness.indexOf("none") !== -1}
-                value={"none"}
-              />
+              {Object.values(ECconsciousness).map((item) => (
+                <ToggleButton
+                  label={translation(item)}
+                  onSelect={toggleValue}
+                  status={consciousness.indexOf(item) !== -1}
+                  value={item}
+                  key={item}
+                />
+              ))}
             </Card.Content>
           </Card>
         );

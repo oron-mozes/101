@@ -26,8 +26,10 @@ export function CareProvider() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const provider = mergeData(patient.provider, emptyPatient.provider);
-        console.log("????", provider);
+        const provider = mergeData(
+          patient?.provider ?? {},
+          emptyPatient.provider
+        );
         return (
           <Card style={styles.card}>
             <Card.Content style={styles.content}>
@@ -39,7 +41,7 @@ export function CareProvider() {
                 <DropDown
                   placeholder={translation("select")}
                   label={translation("careProviderName")}
-                  initialValue={provider.idf_id.toString()}
+                  initialValue={provider.idf_id?.toString()}
                   onSelect={(value) => {
                     const setProvider = Object.values(providers).find(
                       (p) => p.idf_id.toString() === value.id

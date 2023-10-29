@@ -7,7 +7,8 @@ import Context from "../context";
 import { design } from "./shared-style";
 import { EInjuryReason } from "../../../../../interfaces";
 import { InputField } from "../../../../../form-components/input-field";
-import { isSelectedHandler, toggleListData } from "./utils";
+import { isSelectedHandler, mergeData, toggleListData } from "./utils";
+import { emptyPatient } from "..";
 
 export function InjuryReason() {
   const translation = useTranslation();
@@ -15,16 +16,20 @@ export function InjuryReason() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
+        const injuryReason = mergeData(
+          patient?.injuryReason,
+          emptyPatient.injuryReason
+        );
         const toggleValue = (value: EInjuryReason) => {
           update({
             injuryReason: {
-              ...patient.injuryReason,
-              reasons: toggleListData(patient.injuryReason.reasons, value),
+              ...injuryReason,
+              reasons: toggleListData(injuryReason.reasons, value),
             },
           });
         };
 
-        const isSelected = isSelectedHandler(patient.injuryReason.reasons);
+        const isSelected = isSelectedHandler(injuryReason?.reasons ?? []);
 
         return (
           <Card style={styles.card}>
@@ -46,10 +51,10 @@ export function InjuryReason() {
               <InputField
                 onChange={(circumstance: string) => {
                   update({
-                    injuryReason: { ...patient.injuryReason, circumstance },
+                    injuryReason: { ...injuryReason, circumstance },
                   });
                 }}
-                value={patient.injuryReason.circumstance}
+                value={injuryReason?.circumstance}
                 label={translation("circumstance")}
               />
             </Card.Content>

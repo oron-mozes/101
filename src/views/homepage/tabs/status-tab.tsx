@@ -21,6 +21,7 @@ export function StatusTab({
     loadRecords();
     return navigation.addListener("focus", loadRecords);
   }, []);
+
   return (
     <View>
       <DataTable style={styles.table}>
@@ -32,7 +33,7 @@ export function StatusTab({
         </DataTable.Header>
         {patientsRecord.map((patient) => {
           const disable: boolean =
-            patient.incident_information.status === STATUS.EVACUATED;
+            patient.evacuation.status === STATUS.EVACUATED;
           return (
             <DataTable.Row
               key={patient.id}
@@ -48,15 +49,15 @@ export function StatusTab({
               </DataTable.Cell>
               <DataTable.Cell onPress={() => setPatient(patient)}>
                 <StatusChip
-                  label={translation(patient.incident_information.status)}
-                  status={patient.incident_information.status}
+                  label={translation(patient.evacuation.status ?? "")}
+                  status={patient.evacuation.status}
                 />
               </DataTable.Cell>
               <DataTable.Cell onPress={() => setPatient(patient)}>
-                {patient.personal_information.idf_id}
+                {patient?.personal_information?.idf_id}
               </DataTable.Cell>
               <DataTable.Cell onPress={() => setPatient(patient)}>
-                {patient.personal_information.full_name}
+                {patient?.personal_information?.full_name}
               </DataTable.Cell>
             </DataTable.Row>
           );

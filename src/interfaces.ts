@@ -10,7 +10,6 @@ interface IIncidentInformation {
   injury_time: number;
   care_time: number;
   date: number;
-  status: STATUS;
 }
 
 export interface IOption {
@@ -32,7 +31,12 @@ export enum EBreathingTreatment {
   CHEST_TUBE = "CHEST_TUBE",
 }
 export type TBreathingTreatment = "OXIGEN" | "MOUTH" | "NA" | "CHEST_TUBE";
-export type TCconsciousness = "awake" | "voice" | "pain" | "none";
+export enum ECconsciousness {
+  AWAKE = "AWAKE",
+  VOICE = "VOICE",
+  PAIN = "PAIN",
+  APVN_NONE = "APVU_NONE",
+}
 export enum EEsectionChips {
   UNDRESSING = "UNDRESSING",
   FLIPPING = "FLIPPING",
@@ -190,14 +194,28 @@ export interface ISignedProvider {
   signature: string;
   idf_id: number;
 }
+
+export enum ETransportation {
+  VEHICLE = "VEHICLE",
+  CHOPPER = "CHOPPER",
+  NAVEL = "NAVEL",
+  SPECIAL_CARE = "SPECIAL_CARE",
+}
+export interface IEvacuationInformation {
+  time: number;
+  destination: string;
+  transportation: ETransportation;
+  status: STATUS;
+}
+
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
   incident_information: IIncidentInformation;
   provider: Partial<ICareProvider>;
   injuries: IInjury[];
-  consciousness: TCconsciousness[];
-  e: EEsectionChips[];
+  consciousness: ECconsciousness[];
+  eSection: EEsectionChips[];
   airway: IAirway;
   breathing: IBreathing;
   measurements: IMeasurements;
@@ -205,6 +223,7 @@ export interface IPatientRecord {
   medicationsAndFluids: IMedicationsAndFluid;
   injuryReason: IInjuryReason;
   prognosis: string;
+  evacuation: IEvacuationInformation;
 }
 
 export interface ICareProvider {
@@ -229,11 +248,9 @@ export type RootStackParamList = Record<
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
 export enum STATUS {
-  ACTIVE = "active",
-  URGENT = "urgent",
-  NONE_URGENT = "noneUrgent",
-  EVACUATED = "evacuated",
-  RE_ACTIVE = "reActive",
-  URGENT_EVAC = "urgentEvac",
-  NONE_URGENT_EVAC = "noneUrgentEvac",
+  URGENT = "URGENT",
+  EVACUATED = "EVACUATED",
+  ACTIVE = "ACTIVE",
+  NEW_PATIENT = "NEW_PATIENT",
+  PENDING = "PENDING",
 }

@@ -35,7 +35,7 @@ export function MedicationsAndFluidSection() {
     <Context.Consumer>
       {({ patient, update }) => {
         const medicationsAndFluids = mergeData(
-          patient.medicationsAndFluids,
+          patient?.medicationsAndFluids,
           emptyPatient.medicationsAndFluids
         );
 

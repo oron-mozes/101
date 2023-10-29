@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import storage, { STORAGE } from "../../../storage";
-import { IPatientRecord, ITaagad, StackNavigation } from "../../interfaces";
+import { IPatientRecord, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { initialState } from "../care-provider";
 import { HomepageFooter } from "./footer";
@@ -25,20 +25,7 @@ export default function HomeScreen() {
         .load({
           key: STORAGE.TAAGAD,
         })
-        .then((taagad: ITaagad) => {
-          if (Object.values(taagad.care_providers).length === 0) {
-            navigation.navigate(ROUTES.ACCOUNT);
-            return;
-          }
-          storage
-            .load({
-              key: STORAGE.USER,
-            })
-            .then((user) => {
-              setUserDetails(user);
-            })
-            .catch(() => {});
-        })
+        .then(() => {})
         .catch(() => {
           navigation.navigate(ROUTES.ACCOUNT);
         });
@@ -58,7 +45,13 @@ export default function HomeScreen() {
       )}
       {tab === TAB_STATUS.CREATE && <ReportTab patient={selectedPatient} />}
 
-      <HomepageFooter onViewChange={changeTabView} selected={tab} />
+      <HomepageFooter
+        onViewChange={(view) => {
+          setPatient(null);
+          changeTabView(view);
+        }}
+        selected={tab}
+      />
     </SafeAreaView>
   );
 }

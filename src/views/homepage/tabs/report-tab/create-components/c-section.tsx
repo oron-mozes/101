@@ -37,7 +37,7 @@ export function CSection() {
     <Context.Consumer>
       {({ patient, update }) => {
         const measurements = mergeData(
-          patient.measurements,
+          patient?.measurements,
           emptyPatient.measurements
         );
 

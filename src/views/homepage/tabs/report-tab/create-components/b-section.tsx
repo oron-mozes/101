@@ -36,7 +36,7 @@ export function BSection() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const breathing = mergeData(patient.breathing, emptyPatient.breathing);
+        const breathing = mergeData(patient?.breathing, emptyPatient.breathing);
         const { actions, fulfill } = breathing;
 
         const addRow = () => {

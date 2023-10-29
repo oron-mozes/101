@@ -7,6 +7,8 @@ import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import Context from "../context";
 import { design } from "./shared-style";
+import { mergeData } from "./utils";
+import { emptyPatient } from "..";
 
 export function PatientDetails() {
   const translation = useTranslation();
@@ -14,6 +16,15 @@ export function PatientDetails() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
+        const personal_information = mergeData(
+          patient?.personal_information,
+          emptyPatient.personal_information
+        );
+        const incident_information = mergeData(
+          patient?.incident_information,
+          emptyPatient.incident_information
+        );
+
         return (
           <Card style={styles.card}>
             <Card.Content style={styles.content}>
@@ -25,35 +36,35 @@ export function PatientDetails() {
                 onChange={(idf_id: number) => {
                   update({
                     personal_information: {
-                      ...patient.personal_information,
+                      ...personal_information,
                       idf_id,
                     },
                   });
                 }}
                 numeric
-                value={patient.personal_information.idf_id}
+                value={personal_information?.idf_id?.toString()}
               />
               <InputField
                 label={translation("patientName")}
                 onChange={(full_name: string) => {
                   update({
                     personal_information: {
-                      ...patient.personal_information,
+                      ...personal_information,
                       full_name,
                     },
                   });
                 }}
-                value={patient.personal_information.full_name}
+                value={personal_information.full_name}
               />
             </Card.Content>
             <Card.Content style={[styles.innerContent]}>
               <DatePicker
-                value={patient.incident_information.date}
+                value={incident_information.date}
                 label={translation("date")}
                 onChange={(date: number) => {
                   update({
                     incident_information: {
-                      ...patient.incident_information,
+                      ...incident_information,
                       date,
                     },
                   });
@@ -61,24 +72,24 @@ export function PatientDetails() {
               />
               <View style={styles.personalInfo}>
                 <TimePicker
-                  value={patient.incident_information.care_time}
+                  value={incident_information.care_time}
                   label={translation("timeOfTreatment")}
                   onChange={(care_time: number) => {
                     update({
                       incident_information: {
-                        ...patient.incident_information,
+                        ...incident_information,
                         care_time,
                       },
                     });
                   }}
                 />
                 <TimePicker
-                  value={patient.incident_information.injury_time}
+                  value={incident_information.injury_time}
                   label={translation("timeOfInjury")}
                   onChange={(injury_time: number) => {
                     update({
                       incident_information: {
-                        ...patient.incident_information,
+                        ...incident_information,
                         injury_time,
                       },
                     });

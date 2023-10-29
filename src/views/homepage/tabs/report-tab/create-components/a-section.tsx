@@ -35,7 +35,7 @@ export function ASection() {
   return (
     <Context.Consumer>
       {({ patient, update }) => {
-        const airway = mergeData(patient.airway, emptyPatient.airway);
+        const airway = mergeData(patient?.airway, emptyPatient.airway);
         const { actions, fulfill } = airway;
 
         const addRow = () => {
