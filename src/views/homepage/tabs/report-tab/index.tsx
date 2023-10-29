@@ -21,6 +21,7 @@ import { PatientDetails } from "./create-components/patient-details";
 import { Prognosis } from "./create-components/prognosis";
 import { DSection } from "./create-components/d-section";
 import { MedicationsAndFluidSection } from "./create-components/medication";
+import { CareProvider } from "./create-components/care-provider";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -33,7 +34,7 @@ export const emptyPatient: IPatientRecord = {
     date: new Date().getTime(),
     status: STATUS.ACTIVE,
   },
-  care_team: [],
+  provider: { full_name: null, idf_id: null },
   injuries: [],
   e: [],
   airway: {
@@ -129,6 +130,7 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
           <MedicationsAndFluidSection />
           <InjuryReason />
           <Prognosis />
+          <CareProvider />
         </ScrollView>
       </Context.Provider>
     </AutocompleteDropdownContextProvider>

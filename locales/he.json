@@ -133,5 +133,8 @@
   "PLASMA_1": "פלזמה 1",
   "PLASMA": "פלזמה",
   "HARTMAN_500": "הארטמן 500",
-  "HARTMAN": "הארטמן"
+  "HARTMAN": "הארטמן",
+  "careProviderSection": "פרטי מטפל.ת",
+  "careProviderName": "שם המטפל.ת",
+  "signeture": "חתימה"
 }

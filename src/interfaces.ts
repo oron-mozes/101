@@ -185,11 +185,16 @@ export interface IMedicationsAndFluid {
   actions: IMedicationsAndFluidInformation[];
 }
 
+export interface ISignedProvider {
+  full_name: string;
+  signature: string;
+  idf_id: number;
+}
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
   incident_information: IIncidentInformation;
-  care_team: ICareProvider[];
+  provider: Partial<ICareProvider>;
   injuries: IInjury[];
   consciousness: TCconsciousness[];
   e: EEsectionChips[];
