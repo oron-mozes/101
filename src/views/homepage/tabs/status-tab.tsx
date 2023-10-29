@@ -26,10 +26,18 @@ export function StatusTab({
     <View>
       <DataTable style={styles.table}>
         <DataTable.Header style={styles.tableHeader}>
-          <DataTable.Title>{translation("qr")}</DataTable.Title>
-          <DataTable.Title>{translation("evacStatus")}</DataTable.Title>
-          <DataTable.Title>{translation("idf_id")}</DataTable.Title>
-          <DataTable.Title>{translation("patientName")}</DataTable.Title>
+          <DataTable.Title style={{ justifyContent: "center" }}>
+            {translation("qr")}
+          </DataTable.Title>
+          <DataTable.Title style={{ justifyContent: "center" }}>
+            {translation("evacStatus")}
+          </DataTable.Title>
+          <DataTable.Title style={{ justifyContent: "center" }}>
+            {translation("idf_id")}
+          </DataTable.Title>
+          <DataTable.Title style={{ justifyContent: "center" }}>
+            {translation("patientName")}
+          </DataTable.Title>
         </DataTable.Header>
         {patientsRecord.map((patient) => {
           const disable: boolean =
@@ -40,6 +48,7 @@ export function StatusTab({
               style={[disable ? styles.disableRow : {}]}
             >
               <DataTable.Cell
+                style={{ justifyContent: "center" }}
                 disabled={disable}
                 onPress={() =>
                   navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
@@ -47,16 +56,25 @@ export function StatusTab({
               >
                 <QrIcon />
               </DataTable.Cell>
-              <DataTable.Cell onPress={() => setPatient(patient)}>
+              <DataTable.Cell
+                onPress={() => setPatient(patient)}
+                style={{ justifyContent: "center" }}
+              >
                 <StatusChip
                   label={translation(patient?.evacuation?.status ?? "")}
                   status={patient?.evacuation?.status}
                 />
               </DataTable.Cell>
-              <DataTable.Cell onPress={() => setPatient(patient)}>
+              <DataTable.Cell
+                onPress={() => setPatient(patient)}
+                style={{ justifyContent: "center" }}
+              >
                 {patient?.personal_information?.idf_id}
               </DataTable.Cell>
-              <DataTable.Cell onPress={() => setPatient(patient)}>
+              <DataTable.Cell
+                onPress={() => setPatient(patient)}
+                style={{ justifyContent: "center" }}
+              >
                 {patient?.personal_information?.full_name}
               </DataTable.Cell>
             </DataTable.Row>

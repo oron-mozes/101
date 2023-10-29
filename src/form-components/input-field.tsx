@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { Icon, TextInput } from "react-native-paper";
-import { textColor } from "./shared-style";
-import { borderRadius, colors, inputContainer } from "../shared-config";
+import { colors, inputContainer } from "../shared-config";
 
 export interface IInputField {
   onChange(value: string | number): void;
@@ -43,7 +42,7 @@ export function InputField({
         mode="outlined"
         textColor={colors.text}
         onChangeText={onChange}
-        outlineColor={"transparent"}
+        outlineColor="transparent"
         activeOutlineColor={colors.text}
       />
     </View>
