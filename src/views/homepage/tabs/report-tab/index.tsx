@@ -65,7 +65,7 @@ export const emptyPatient: IPatientRecord = {
   reaction: {
     general: [],
     eyes: EReactionEyes.NONE,
-    voice: EReactionSpeech.NONE,
+    speech: EReactionSpeech.NONE,
     movement: EReactionMovement.NONE,
     GCS: null,
   },
@@ -74,21 +74,13 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
   const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
     patient || emptyPatient
   );
-  const [provider, setProvider] = useState<ICareProvider>();
+  const [providers, setProviders] = useState<ICareProvider[]>([]);
   const id = useMemo(() => new Date().getTime().toString(), []);
   useEffect(() => {
     storage
-      .load({ key: STORAGE.USER })
-      .then((user) => {
-        setProvider(user);
-        if (
-          patientRecord.care_team.length === 0 ||
-          patientRecord.care_team[patientRecord.care_team.length - 1].idf_id !==
-            user.idf_id
-        ) {
-          patientRecord.care_team.push(user);
-          setPatientRecord(patientRecord);
-        }
+      .load({ key: STORAGE.TAAGAD })
+      .then((data) => {
+        setProviders(data.care_providers);
       })
       .catch(() => {});
   }, []);
@@ -96,7 +88,7 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
     <AutocompleteDropdownContextProvider>
       <Context.Provider
         value={{
-          provider,
+          providers,
           patient: patientRecord,
           update: (value) => {
             const selectedId = patientRecord.id || id;

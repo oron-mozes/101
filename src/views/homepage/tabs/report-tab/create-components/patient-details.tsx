@@ -21,56 +21,47 @@ export function PatientDetails() {
             <Card.Content style={styles.content}>
               <SectionHeader label={translation("accountTitle")} />
             </Card.Content>
-            <Card.Content style={styles.innerContent}>
+            <Card.Content style={[styles.innerContent]}>
+              <InputField
+                label={translation("idfId")}
+                onChange={(idf_id: number) => {
+                  update({
+                    personal_information: {
+                      ...patient.personal_information,
+                      idf_id,
+                    },
+                  });
+                }}
+                numeric
+                value={patient.personal_information.idf_id}
+              />
+              <InputField
+                label={translation("patientName")}
+                onChange={(full_name: string) => {
+                  update({
+                    personal_information: {
+                      ...patient.personal_information,
+                      full_name,
+                    },
+                  });
+                }}
+                value={patient.personal_information.full_name}
+              />
+            </Card.Content>
+            <Card.Content style={[styles.innerContent]}>
+              <DatePicker
+                value={patient.incident_information.date}
+                label={translation("date")}
+                onChange={(date: number) => {
+                  update({
+                    incident_information: {
+                      ...patient.incident_information,
+                      date,
+                    },
+                  });
+                }}
+              />
               <View style={styles.personalInfo}>
-                <InputField
-                  label={translation("idfId")}
-                  onChange={(idf_id: number) => {
-                    update({
-                      personal_information: {
-                        ...patient.personal_information,
-                        idf_id,
-                      },
-                    });
-                  }}
-                  numeric
-                  value={patient.personal_information.idf_id}
-                />
-                <InputField
-                  label={translation("patientName")}
-                  onChange={(full_name: string) => {
-                    update({
-                      personal_information: {
-                        ...patient.personal_information,
-                        full_name,
-                      },
-                    });
-                  }}
-                  value={patient.personal_information.full_name}
-                />
-              </View>
-              <View style={styles.personalInfo}>
-                <InputField
-                  onChange={(value) => {}}
-                  label={translation("providerTeam")}
-                  numeric
-                  value={
-                    patient.care_team?.[patient.care_team.length - 1]?.idf_id
-                  }
-                />
-
-                <DatePicker
-                  value={patient.incident_information.date}
-                  label={translation("date")}
-                  onChange={(date: number) => {
-                    update({
-                      incident_information: {
-                        ...patient.incident_information,
-                        date,
-                      },
-                    });
-                  }}
-                />
                 <TimePicker
                   value={patient.incident_information.care_time}
                   label={translation("timeOfTreatment")}
@@ -105,7 +96,10 @@ export function PatientDetails() {
 }
 
 const styles = StyleSheet.create({
-  personalInfo: { flexDirection: "row", justifyContent: "space-between" },
+  personalInfo: {
+    flex: 1,
+    flexDirection: "row",
+  },
   card: {
     ...design.card,
   },
@@ -113,6 +107,6 @@ const styles = StyleSheet.create({
   innerContent: {
     ...design.content,
     margin: 4,
-    justifyContent: "space-between",
+    flexDirection: "row",
   },
 });
