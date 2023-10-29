@@ -10,6 +10,7 @@ export interface IInputField {
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
+  maxLength?: number;
   value?: string | number;
 }
 export function InputField({
@@ -19,6 +20,7 @@ export function InputField({
   value = "",
   numeric = false,
   numberOfLines = 1,
+  maxLength,
   icon,
 }: IInputField) {
   return (
@@ -29,6 +31,7 @@ export function InputField({
         </View>
       )}
       <TextInput
+        maxLength={maxLength}
         numberOfLines={numberOfLines}
         multiline={numberOfLines > 1}
         style={[styles.text, numberOfLines > 1 ? styles.fixHeight : {}]}

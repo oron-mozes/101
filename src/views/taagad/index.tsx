@@ -12,16 +12,23 @@ import storage, { STORAGE } from "../../../storage";
 import { QrIcon } from "../../components/qr-icon/qr";
 import { InputField } from "../../form-components/input-field";
 import { useTranslation } from "../../hooks/useMyTranslation";
-import { ICareProvider, ITaagad, StackNavigation } from "../../interfaces";
+import {
+  ICareProvider,
+  ITaagad,
+  ROLE,
+  StackNavigation,
+} from "../../interfaces";
 import { ROUTES } from "../../routes";
+import { DropDown } from "../../form-components/dropdown";
+import { convertToOptions } from "../homepage/tabs/report-tab/create-components/utils";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,
   idf_id: null,
   rank: null,
-  unit_name: null,
+  // unit_name: null,
   role: null,
-  expertise: null,
+  // expertise: null,
 };
 
 export default function TaagadScreen() {
@@ -96,16 +103,16 @@ export default function TaagadScreen() {
         {Boolean(taagadDetails.unit_name) && (
           <DataTable style={styles.table}>
             <DataTable.Header style={styles.tableHeader}>
-              <DataTable.Title>{translation("expertise")}</DataTable.Title>
+              {/* <DataTable.Title>{translation("expertise")}</DataTable.Title> */}
               <DataTable.Title>{translation("role")}</DataTable.Title>
               <DataTable.Title>{translation("rank")}</DataTable.Title>
-              <DataTable.Title>{translation("idfId")}</DataTable.Title>
-              <DataTable.Title>{translation("name")}</DataTable.Title>
+              <DataTable.Title>{translation("idf_id")}</DataTable.Title>
+              <DataTable.Title>{translation("full_name")}</DataTable.Title>
             </DataTable.Header>
             {Object.values(taagadDetails.care_providers).map((careProvider) => {
               return (
                 <DataTable.Row key={careProvider.idf_id}>
-                  <DataTable.Cell>{careProvider.expertise}</DataTable.Cell>
+                  {/* <DataTable.Cell>{careProvider.expertise}</DataTable.Cell> */}
                   <DataTable.Cell>{careProvider.role}</DataTable.Cell>
                   <DataTable.Cell>{careProvider.rank}</DataTable.Cell>
                   <DataTable.Cell>{careProvider.idf_id}</DataTable.Cell>
@@ -131,40 +138,24 @@ export default function TaagadScreen() {
           <View>
             <Card style={styles.form} mode="outlined">
               <Card.Content>
-                <InputField
-                  label={translation("name")}
-                  onChange={(full_name: string) => {
-                    saveCareProviderInfo({ full_name });
-                  }}
-                  value={newCareProvider.full_name}
-                />
-                <InputField
-                  label={translation("idfId")}
-                  onChange={(idf_id: number) => {
-                    saveCareProviderInfo({ idf_id });
-                  }}
-                  value={newCareProvider.idf_id}
-                  numeric
-                />
-                <InputField
-                  label={translation("rank")}
-                  onChange={(rank: string) => {
-                    saveCareProviderInfo({ rank });
-                  }}
-                  value={newCareProvider.rank}
-                />
-                <InputField
+                {["full_name", "idf_id", "rank"].map((item) => (
+                  <InputField
+                    maxLength={item === "idf_id" ? 7 : null}
+                    numeric={item === "idf_id"}
+                    label={translation(item)}
+                    onChange={(value: string) => {
+                      saveCareProviderInfo({ [item]: value });
+                    }}
+                    value={newCareProvider[item]}
+                  />
+                ))}
+                <DropDown
+                  placeholder={translation("select")}
                   label={translation("role")}
-                  onChange={(role: string) => {
-                    saveCareProviderInfo({ role });
-                  }}
-                  value={newCareProvider.role}
-                />
-                <InputField
-                  value={newCareProvider.expertise}
-                  label={translation("expertise")}
-                  onChange={(expertise: string) => {
-                    saveCareProviderInfo({ expertise });
+                  options={convertToOptions(ROLE, translation)}
+                  initialValue={newCareProvider.role}
+                  onSelect={(role) => {
+                    saveCareProviderInfo({ role: role.id as ROLE });
                   }}
                 />
               </Card.Content>

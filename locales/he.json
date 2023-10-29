@@ -8,10 +8,10 @@
   "treatmentStartingTime": "זמן",
   "addPatient": "טיפול בפצוע.ה",
   "patientsStatus": "סטטוס פצועים",
-  "name": "שם",
-  "idfId": "מ.א / ת.ז",
+  "full_name": "שם",
+  "idf_id": "מ.א",
   "rank": "דרגה",
-  "idfUnit": "שם יחידה",
+  "idfUnit": "שם תחנה",
   "role": "תפקיד",
   "expertise": "התמחות",
   "save": "שמור",
@@ -31,7 +31,7 @@
   "qr": "הפקת קוד QR",
   "approveEvac": "אישור פינוי",
   "cancel": "ביטול",
-  "addCareProvider": "הוסף דרג טיפול",
+  "addCareProvider": "הוסף מטפל",
   "continue": "המשך",
   "timeOfInjury": "שעת פציעה",
   "timeOfTreatment": "שעת טיפול",
@@ -141,5 +141,8 @@
   "CHOPPER": "מסוק",
   "NAVEL": "ימי",
   "SPECIAL_CARE": "ליווי בכיר",
-  "bodyPicker": "מיקום פציעות"
+  "bodyPicker": "מיקום פציעות",
+  "MEDIC": "חובש",
+  "PARAMEDIC": "פאראמדיק",
+  "MD": "רופא"
 }

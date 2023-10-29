@@ -225,14 +225,18 @@ export interface IPatientRecord {
   prognosis: string;
   evacuation: IEvacuationInformation;
 }
-
+export enum ROLE {
+  MEDIC = "MEDIC",
+  PARAMEDIC = "PARAMEDIC",
+  MD = "MD",
+}
 export interface ICareProvider {
   full_name: string;
   idf_id: number;
   rank: string;
   unit_name: string;
-  role: string;
-  expertise: string;
+  role: ROLE;
+  // expertise: string;
 }
 
 export interface ITaagad {

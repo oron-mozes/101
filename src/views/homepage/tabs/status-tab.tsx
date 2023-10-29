@@ -28,7 +28,7 @@ export function StatusTab({
         <DataTable.Header style={styles.tableHeader}>
           <DataTable.Title>{translation("qr")}</DataTable.Title>
           <DataTable.Title>{translation("evacStatus")}</DataTable.Title>
-          <DataTable.Title>{translation("idfId")}</DataTable.Title>
+          <DataTable.Title>{translation("idf_id")}</DataTable.Title>
           <DataTable.Title>{translation("patientName")}</DataTable.Title>
         </DataTable.Header>
         {patientsRecord.map((patient) => {
