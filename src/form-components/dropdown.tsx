@@ -1,18 +1,9 @@
-import { useState } from "react";
-import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
-import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
-import { Divider, Text } from "react-native-paper";
+import { Picker } from "@react-native-picker/picker";
+import { StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 import { useTranslation } from "../hooks/useMyTranslation";
 import { IOption } from "../interfaces";
-import {
-  borderSetup,
-  colors,
-  gutter,
-  inputContainer,
-  inputHeight,
-  offset,
-} from "../shared-config";
-import { Picker } from "@react-native-picker/picker";
+import { borderSetup, gutter, inputHeight } from "../shared-config";
 
 export function DropDown({
   label,
@@ -58,6 +49,7 @@ const styles = StyleSheet.create({
     ...borderSetup,
     height: inputHeight,
     marginTop: gutter,
+    flex: 1,
   },
   label: {
     marginRight: 50,

@@ -246,6 +246,37 @@ export interface IEvacuationInformation {
   status: STATUS;
 }
 
+export interface IMeasurementsAction {
+  time: number;
+  provider: ICareProvider;
+  puls: number;
+  systolic: number;
+  diastolic: number;
+  breath: number;
+  spo2: number;
+  etcos: number;
+  pain: number;
+  prpo: number;
+  GCS: number;
+  urine: number;
+  blood: number;
+}
+export interface ITreatmentGuideMeasurementsInformation {
+  period: number;
+  actions: IMeasurementsAction[];
+}
+export interface ITreatmentGuide {
+  care_guide: string;
+  order_time: number;
+  execution_time: number;
+  provider_issuer: ICareProvider;
+  provider_executer: ICareProvider;
+}
+
+export interface ITreatment {
+  guides: ITreatmentGuide[];
+  measurements: ITreatmentGuideMeasurementsInformation;
+}
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
@@ -262,6 +293,7 @@ export interface IPatientRecord {
   injuryReason: IInjuryReason;
   prognosis: string;
   evacuation: IEvacuationInformation;
+  treatmentGuide: ITreatment;
 }
 export enum ROLE {
   MEDIC = "MEDIC",

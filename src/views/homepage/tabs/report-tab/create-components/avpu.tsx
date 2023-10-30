@@ -8,41 +8,35 @@ import { design } from "./shared-style";
 import { ECconsciousness } from "../../../../../interfaces";
 import { toggleListData } from "./utils";
 import { emptyPatient } from "..";
+import { useContext } from "react";
 
 export function Avpu() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const consciousness = patient?.consciousness || emptyPatient.consciousness;
+  const toggleValue = (value: ECconsciousness) => {
+    update({
+      consciousness: toggleListData(consciousness, value),
+    });
+  };
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const consciousness =
-          patient?.consciousness || emptyPatient.consciousness;
-        const toggleValue = (value: ECconsciousness) => {
-          update({
-            consciousness: toggleListData(consciousness, value),
-          });
-        };
-
-        return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("avpu")} />
-            </Card.Content>
-            <Card.Content style={styles.innerContent}>
-              {Object.values(ECconsciousness).map((item) => (
-                <ToggleButton
-                  label={translation(item)}
-                  onSelect={toggleValue}
-                  status={consciousness.indexOf(item) !== -1}
-                  value={item}
-                  key={item}
-                />
-              ))}
-            </Card.Content>
-          </Card>
-        );
-      }}
-    </Context.Consumer>
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("avpu")} />
+      </Card.Content>
+      <Card.Content style={styles.innerContent}>
+        {Object.values(ECconsciousness).map((item) => (
+          <ToggleButton
+            label={translation(item)}
+            onSelect={(selected: boolean) => toggleValue(item)}
+            status={consciousness.indexOf(item) !== -1}
+            key={item}
+          />
+        ))}
+      </Card.Content>
+    </Card>
   );
 }
 

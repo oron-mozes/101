@@ -23,6 +23,7 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
+import { useContext } from "react";
 
 const emptyState: IAirWayInformation = {
   action: null,
@@ -31,155 +32,133 @@ const emptyState: IAirWayInformation = {
 };
 export function ASection() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const airway = mergeData(patient?.airway, emptyPatient.airway);
+  const { actions, fulfill } = airway;
+
+  const addRow = () => {
+    update({
+      airway: { ...airway, actions: [...actions, emptyState] },
+    });
+  };
+
+  if (fulfill && !Boolean(actions?.length)) {
+    addRow();
+  }
+
+  const updateInIndex = (data: Partial<IAirWayInformation>, index: number) => {
+    update({
+      airway: {
+        ...airway,
+        actions: updateDataInIndex(actions, data as IAirWayInformation, index),
+      },
+    });
+  };
+
+  const removeByIndex = (index: number) => {
+    const newData = removeByIndexHandler(actions, index);
+    update({
+      airway: {
+        ...airway,
+        actions: newData,
+        fulfill: newData.length !== 0,
+      },
+    });
+  };
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const airway = mergeData(patient?.airway, emptyPatient.airway);
-        const { actions, fulfill } = airway;
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("aSection")} />
+      </Card.Content>
+      <Card.Content style={[styles.innerContent, styles.airwayView]}>
+        <RadioGroup
+          horizontal
+          label={translation("airWayInjury")}
+          onSelect={(id: string) => {
+            if (id === TOGGLE.YES) {
+              update({ airway: { ...airway, fulfill: true } });
+            } else {
+              update({ airway: { ...airway, fulfill: false } });
+            }
+          }}
+          selected={
+            fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
+          }
+          options={convertToOptions(TOGGLE, translation)}
+        />
+      </Card.Content>
+      {fulfill &&
+        actions?.map((airWayInfo: IAirWayInformation, index) => {
+          const isSuccessful =
+            airWayInfo.successful === null
+              ? null
+              : airWayInfo.successful
+              ? TOGGLE.YES
+              : TOGGLE.NO;
 
-        const addRow = () => {
-          update({
-            airway: { ...airway, actions: [...actions, emptyState] },
-          });
-        };
-
-        if (fulfill && !Boolean(actions?.length)) {
-          addRow();
-        }
-
-        const updateInIndex = (
-          data: Partial<IAirWayInformation>,
-          index: number
-        ) => {
-          update({
-            airway: {
-              ...airway,
-              actions: updateDataInIndex(
-                actions,
-                data as IAirWayInformation,
-                index
-              ),
-            },
-          });
-        };
-
-        const removeByIndex = (index: number) => {
-          const newData = removeByIndexHandler(actions, index);
-          update({
-            airway: {
-              ...airway,
-              actions: newData,
-              fulfill: newData.length !== 0,
-            },
-          });
-        };
-
-        return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("aSection")} />
-            </Card.Content>
-            <Card.Content style={[styles.innerContent, styles.airwayView]}>
-              <RadioGroup
-                horizontal
-                label={translation("airWayInjury")}
-                onSelect={(id: string) => {
-                  if (id === TOGGLE.YES) {
-                    update({ airway: { ...airway, fulfill: true } });
-                  } else {
-                    update({ airway: { ...airway, fulfill: false } });
-                  }
-                }}
-                selected={
-                  fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
-                }
-                options={convertToOptions(TOGGLE, translation)}
-              />
-            </Card.Content>
-            {fulfill &&
-              actions?.map((airWayInfo: IAirWayInformation, index) => {
-                const isSuccessful =
-                  airWayInfo.successful === null
-                    ? null
-                    : airWayInfo.successful
-                    ? TOGGLE.YES
-                    : TOGGLE.NO;
-
-                return (
-                  <Card.Content
-                    style={[styles.innerContent, styles.actionRow]}
-                    key={airWayInfo.action}
-                  >
-                    <View style={[styles.element, styles.actionRow]}>
-                      <Text
-                        onPress={() => removeByIndex(index)}
-                        style={styles.deleteAction}
-                      >
-                        <Icon
-                          size={20}
-                          source="delete"
-                          color={colors.primary}
-                        />
-                      </Text>
-
-                      <RadioGroup
-                        label={translation("actionResult")}
-                        onSelect={(id: string) => {
-                          updateInIndex(
-                            { successful: id === TOGGLE.YES },
-                            index
-                          );
-                        }}
-                        selected={isSuccessful}
-                        options={convertToOptions(TOGGLE, translation)}
-                      />
-                      <TimePicker
-                        value={airWayInfo.time}
-                        label={translation("actionTime")}
-                        onChange={(time: number) => {
-                          updateInIndex({ time }, index);
-                        }}
-                      />
-                    </View>
-                    <View style={styles.element}>
-                      <DropDown
-                        label={translation("actionTaken")}
-                        placeholder={translation("select")}
-                        initialValue={airWayInfo.action}
-                        onSelect={(value: TAutocompleteDropdownItem) => {
-                          value &&
-                            updateInIndex(
-                              {
-                                action: value.id as TAirWayTreatment,
-                              },
-                              index
-                            );
-                        }}
-                        options={convertToOptions(
-                          EAirWayTreatment,
-                          translation
-                        )}
-                      />
-                    </View>
-                  </Card.Content>
-                );
-              })}
-            {validateLastItem(actions) && (
-              <Card.Content style={[styles.innerContent, styles.addItemAction]}>
-                <Icon size={20} source="plus" color={colors.primary} />
+          return (
+            <Card.Content
+              style={[styles.innerContent, styles.actionRow]}
+              key={airWayInfo.action}
+            >
+              <View style={[styles.element, styles.actionRow]}>
                 <Text
-                  style={{ color: colors.primary, fontSize: 17 }}
-                  onPress={addRow}
+                  onPress={() => removeByIndex(index)}
+                  style={styles.deleteAction}
                 >
-                  {translation("addAction")}
+                  <Icon size={20} source="delete" color={colors.primary} />
                 </Text>
-              </Card.Content>
-            )}
-          </Card>
-        );
-      }}
-    </Context.Consumer>
+
+                <RadioGroup
+                  label={translation("actionResult")}
+                  onSelect={(id: string) => {
+                    updateInIndex({ successful: id === TOGGLE.YES }, index);
+                  }}
+                  selected={isSuccessful}
+                  options={convertToOptions(TOGGLE, translation)}
+                />
+                <TimePicker
+                  value={airWayInfo.time}
+                  label={translation("actionTime")}
+                  onChange={(time: number) => {
+                    updateInIndex({ time }, index);
+                  }}
+                />
+              </View>
+              <View style={styles.element}>
+                <DropDown
+                  label={translation("actionTaken")}
+                  placeholder={translation("select")}
+                  initialValue={airWayInfo.action}
+                  onSelect={(value: TAutocompleteDropdownItem) => {
+                    value &&
+                      updateInIndex(
+                        {
+                          action: value.id as TAirWayTreatment,
+                        },
+                        index
+                      );
+                  }}
+                  options={convertToOptions(EAirWayTreatment, translation)}
+                />
+              </View>
+            </Card.Content>
+          );
+        })}
+      {validateLastItem(actions) && (
+        <Card.Content style={[styles.innerContent, styles.addItemAction]}>
+          <Icon size={20} source="plus" color={colors.primary} />
+          <Text
+            style={{ color: colors.primary, fontSize: 17 }}
+            onPress={addRow}
+          >
+            {translation("addAction")}
+          </Text>
+        </Card.Content>
+      )}
+    </Card>
   );
 }
 

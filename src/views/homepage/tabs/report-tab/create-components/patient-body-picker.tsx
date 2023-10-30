@@ -11,7 +11,7 @@ import { SectionHeader } from "../../../../../form-components/section-header";
 import { design } from "./shared-style";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { InjuryModal } from "../../../../../components/body-picker/injury-modal";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   EHT_POSITION,
   EPosition,
@@ -33,47 +33,44 @@ export function PatientBodyPicker() {
       toggleModal(true);
     }
   };
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const injuries = patient.injuries || {};
+
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const injuries = patient.injuries || {};
-        return (
-          <>
-            {showModal && (
-              <InjuryModal
-                data={injuries[selectedPosition]}
-                closeHandler={() => toggleModal(false)}
-                onChange={(positionData: {
-                  data: IInjuryInformation;
-                  position: EPosition;
-                }) => {
-                  update({
-                    injuries: {
-                      ...injuries,
-                      [positionData.position]: {
-                        ...(injuries[positionData.position] ?? {}),
-                        ...positionData.data,
-                      },
-                    },
-                  });
-                }}
-                position={selectedPosition}
-              />
-            )}
-            <TouchableWithoutFeedback onPress={handlePress}>
-              <Card style={styles.card}>
-                <Card.Content style={styles.content}>
-                  <SectionHeader label={translation("bodyPicker")} />
-                </Card.Content>
-                <Card.Content style={[styles.innerContent]}>
-                  <BodyPicker injuries={injuries} />
-                </Card.Content>
-              </Card>
-            </TouchableWithoutFeedback>
-          </>
-        );
-      }}
-    </Context.Consumer>
+    <>
+      {showModal && (
+        <InjuryModal
+          data={injuries[selectedPosition]}
+          closeHandler={() => toggleModal(false)}
+          onChange={(positionData: {
+            data: IInjuryInformation;
+            position: EPosition;
+          }) => {
+            update({
+              injuries: {
+                ...injuries,
+                [positionData.position]: {
+                  ...(injuries[positionData.position] ?? {}),
+                  ...positionData.data,
+                },
+              },
+            });
+          }}
+          position={selectedPosition}
+        />
+      )}
+      <TouchableWithoutFeedback onPress={handlePress}>
+        <Card style={styles.card}>
+          <Card.Content style={styles.content}>
+            <SectionHeader label={translation("bodyPicker")} />
+          </Card.Content>
+          <Card.Content style={[styles.innerContent]}>
+            <BodyPicker injuries={injuries} />
+          </Card.Content>
+        </Card>
+      </TouchableWithoutFeedback>
+    </>
   );
 }
 

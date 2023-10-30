@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import storage, { STORAGE } from "../../../../../storage";
 import {
@@ -7,7 +7,7 @@ import {
   EReactionMovement,
   EReactionSpeech,
   ICareProvider,
-  IPatientRecord
+  IPatientRecord,
 } from "../../../../interfaces";
 import Context from "./context";
 import { ASection } from "./create-components/a-section";
@@ -23,6 +23,10 @@ import { MedicationsAndFluidSection } from "./create-components/medication";
 import { PatientBodyPicker } from "./create-components/patient-body-picker";
 import { PatientDetails } from "./create-components/patient-details";
 import { Prognosis } from "./create-components/prognosis";
+import { List, Text } from "react-native-paper";
+import { useTranslation } from "../../../../hooks/useMyTranslation";
+import { colors } from "../../../../shared-config";
+import { TreatmentGuide } from "./create-components/treatment-guide";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -35,7 +39,7 @@ export const emptyPatient: IPatientRecord = {
     date: null,
   },
   provider: { full_name: null, idf_id: null },
-  injuries: [],
+  injuries: {},
   eSection: [],
   airway: {
     actions: [],
@@ -87,12 +91,27 @@ export const emptyPatient: IPatientRecord = {
     transportation: null,
     destination: null,
   },
+  treatmentGuide: {
+    guides: [],
+    measurements: {
+      period: null,
+      actions: [],
+    },
+  },
 };
+
+enum ACCORDION_ITEM {
+  FIRST_TAB = "1",
+  SECOND_TAB = "2",
+}
 export function ReportTab({ patient }: { patient?: IPatientRecord }) {
+  const translation = useTranslation();
   const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
     patient || emptyPatient
   );
 
+  const [selectedAccordionItemId, setSelectedAccordionItemId] =
+    useState<ACCORDION_ITEM>(ACCORDION_ITEM.FIRST_TAB);
   const [providers, setProviders] = useState<ICareProvider[]>();
   const id = useMemo(() => new Date().getTime().toString(), []);
   useEffect(() => {
@@ -133,22 +152,57 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
           },
         }}
       >
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <PatientDetails />
-          <PatientBodyPicker />
-          <Avpu />
-          <ASection />
-          <BSection />
-          <CSection />
-          <DSection />
-          <ESection />
-          <MedicationsAndFluidSection />
-          <InjuryReason />
-          <Prognosis />
-          <CareProvider />
-          <Evacuation />
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          style={styles.container}
+        >
+          <List.AccordionGroup
+            expandedId={selectedAccordionItemId}
+            onAccordionPress={(expend) => {
+              setSelectedAccordionItemId(expend as ACCORDION_ITEM);
+            }}
+          >
+            <List.Accordion
+              title={translation("first-care")}
+              style={styles.accordion}
+              id={ACCORDION_ITEM.FIRST_TAB}
+            >
+              <PatientDetails />
+              <PatientBodyPicker />
+              <Avpu />
+              <ASection />
+              <BSection />
+              <CSection />
+              <DSection />
+              <ESection />
+              <MedicationsAndFluidSection />
+              <InjuryReason />
+              <Prognosis />
+              <CareProvider />
+              <Evacuation />
+            </List.Accordion>
+            <List.Accordion
+              style={styles.accordion}
+              title={translation("treatments")}
+              id={ACCORDION_ITEM.SECOND_TAB}
+            >
+              <TreatmentGuide />
+            </List.Accordion>
+          </List.AccordionGroup>
         </ScrollView>
       </Context.Provider>
     </AutocompleteDropdownContextProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 0,
+    margin: 0,
+    marginTop: -StatusBar.currentHeight,
+  },
+  accordion: {
+    backgroundColor: colors.accordion,
+    color: colors.textInputBG,
+  },
+});

@@ -11,85 +11,77 @@ import { ETransportation, STATUS } from "../../../../../interfaces";
 import Context from "../context";
 import { design } from "./shared-style";
 import { mergeData } from "./utils";
+import { useContext } from "react";
 
 export function Evacuation() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const evacuation = mergeData(patient?.evacuation, emptyPatient.evacuation);
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const evacuation = mergeData(
-          patient?.evacuation,
-          emptyPatient.evacuation
-        );
-
-        return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("evacuate")} />
-            </Card.Content>
-            <Card.Content style={[styles.innerContent]}>
-              <View style={{ width: 120 }}>
-                <TimePicker
-                  label={translation("time")}
-                  onChange={(time: number) => {
-                    update({
-                      evacuation: { ...evacuation, time },
-                    });
-                  }}
-                />
-              </View>
-              <View style={{ flex: 1 }}>
-                <InputField
-                  label={translation("destination")}
-                  onChange={(destination: string) => {
-                    update({
-                      evacuation: { ...evacuation, destination },
-                    });
-                  }}
-                />
-              </View>
-            </Card.Content>
-            <Card.Content style={[styles.innerContent]}>
-              <View style={{ flex: 1 }}></View>
-            </Card.Content>
-            <Card.Content style={styles.innerContent}>
-              {Object.values(ETransportation).map((item) => (
-                <ToggleButton
-                  key={item}
-                  label={translation(item)}
-                  status={evacuation.transportation === item}
-                  onSelect={() =>
-                    update({
-                      evacuation: { ...evacuation, transportation: item },
-                    })
-                  }
-                  value={item}
-                />
-              ))}
-            </Card.Content>
-            <Card.Content style={styles.innerContent}>
-              {Object.values(STATUS).map((item) => (
-                <StatusChip
-                  key={item}
-                  label={translation(item)}
-                  status={item}
-                  allowSelect
-                  selected={evacuation.status === item}
-                  onSelect={() => {
-                    update({
-                      evacuation: { ...evacuation, status: item },
-                    });
-                  }}
-                  // onSelect={toggleValue}
-                  // value={item}
-                />
-              ))}
-            </Card.Content>
-          </Card>
-        );
-      }}
-    </Context.Consumer>
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("evacuate")} />
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        <View style={{ width: 120 }}>
+          <TimePicker
+            label={translation("time")}
+            onChange={(time: number) => {
+              update({
+                evacuation: { ...evacuation, time },
+              });
+            }}
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <InputField
+            label={translation("destination")}
+            onChange={(destination: string) => {
+              update({
+                evacuation: { ...evacuation, destination },
+              });
+            }}
+          />
+        </View>
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        <View style={{ flex: 1 }}></View>
+      </Card.Content>
+      <Card.Content style={styles.innerContent}>
+        {Object.values(ETransportation).map((item) => (
+          <ToggleButton
+            key={item}
+            label={translation(item)}
+            status={evacuation.transportation === item}
+            onSelect={() =>
+              update({
+                evacuation: { ...evacuation, transportation: item },
+              })
+            }
+          />
+        ))}
+      </Card.Content>
+      <Card.Content style={styles.innerContent}>
+        {Object.values(STATUS).map((item) => (
+          <StatusChip
+            key={item}
+            label={translation(item)}
+            status={item}
+            allowSelect
+            selected={evacuation.status === item}
+            onSelect={() => {
+              update({
+                evacuation: { ...evacuation, status: item },
+              });
+            }}
+            // onSelect={toggleValue}
+            // value={item}
+          />
+        ))}
+      </Card.Content>
+    </Card>
   );
 }
 

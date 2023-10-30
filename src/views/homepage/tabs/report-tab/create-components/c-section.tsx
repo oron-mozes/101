@@ -24,6 +24,7 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
+import { useContext } from "react";
 
 const emptyState: IMeasurementsInformation = {
   action: null,
@@ -32,235 +33,224 @@ const emptyState: IMeasurementsInformation = {
 };
 export function CSection() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const measurements = mergeData(
+    patient?.measurements,
+    emptyPatient.measurements
+  );
+
+  const { actions, fulfill } = measurements;
+
+  const addRow = () => {
+    update({
+      measurements: {
+        ...measurements,
+        actions: [...actions, emptyState],
+      },
+    });
+  };
+
+  if (fulfill && !Boolean(actions?.length)) {
+    addRow();
+  }
+
+  const updateInIndex = (
+    data: Partial<IMeasurementsInformation>,
+    index: number
+  ) =>
+    update({
+      measurements: {
+        ...measurements,
+        actions: updateDataInIndex(
+          actions,
+          data as IMeasurementsInformation,
+          index
+        ),
+      },
+    });
+
+  const removeByIndex = (index: number) => {
+    const newData = removeByIndexHandler(actions, index);
+
+    update({
+      measurements: {
+        ...measurements,
+        actions: newData,
+        fulfill: newData.length !== 0,
+      },
+    });
+  };
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const measurements = mergeData(
-          patient?.measurements,
-          emptyPatient.measurements
-        );
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("cSection")} />
+      </Card.Content>
+      <Card.Content style={[styles.innerContent, styles.measurementsView]}>
+        <RadioGroup
+          horizontal
+          label={translation("shock")}
+          onSelect={(id: string) => {
+            update({
+              measurements: {
+                ...measurements,
+                shock: id === TOGGLE.YES,
+              },
+            });
+          }}
+          selected={
+            measurements.shock !== null
+              ? measurements.shock
+                ? TOGGLE.YES
+                : TOGGLE.NO
+              : null
+          }
+          options={convertToOptions(TOGGLE, translation)}
+        />
+        <RadioGroup
+          horizontal
+          label={translation("palpated")}
+          onSelect={(id: string) => {
+            update({
+              measurements: {
+                ...measurements,
+                palpated: id === TOGGLE.YES,
+              },
+            });
+          }}
+          selected={
+            measurements.palpated !== null
+              ? measurements.palpated
+                ? TOGGLE.YES
+                : TOGGLE.NO
+              : null
+          }
+          options={convertToOptions(TOGGLE, translation)}
+        />
+      </Card.Content>
 
-        const { actions, fulfill } = measurements;
+      <Card.Content style={[styles.innerContent]}>
+        <InputField
+          value={measurements.puls}
+          numeric
+          label={translation("puls")}
+          onChange={(puls: number) => {
+            update({
+              measurements: {
+                ...measurements,
+                puls,
+              },
+            });
+          }}
+        />
+        {/* <View style={{ flex: 1, flexDirection: "row-reverse" }}> */}
+        <InputField
+          numeric
+          value={measurements.bloodPressure.diastolic}
+          label={translation("bloodPressureDiastolic")}
+          onChange={(diastolic: number) => {
+            update({
+              measurements: {
+                ...measurements,
+                bloodPressure: {
+                  ...measurements.bloodPressure,
+                  diastolic,
+                },
+              },
+            });
+          }}
+        />
+        <InputField
+          value={measurements.bloodPressure.systolic}
+          label={translation("bloodPressureSystolic")}
+          numeric
+          onChange={(systolic: number) => {
+            update({
+              measurements: {
+                ...measurements,
+                bloodPressure: {
+                  ...measurements.bloodPressure,
+                  systolic,
+                },
+              },
+            });
+          }}
+        />
+        {/* </View> */}
+      </Card.Content>
 
-        const addRow = () => {
-          update({
-            measurements: {
-              ...measurements,
-              actions: [...actions, emptyState],
-            },
-          });
-        };
-
-        if (fulfill && !Boolean(actions?.length)) {
-          addRow();
-        }
-
-        const updateInIndex = (
-          data: Partial<IMeasurementsInformation>,
-          index: number
-        ) =>
-          update({
-            measurements: {
-              ...measurements,
-              actions: updateDataInIndex(
-                actions,
-                data as IMeasurementsInformation,
-                index
-              ),
-            },
-          });
-
-        const removeByIndex = (index: number) => {
-          const newData = removeByIndexHandler(actions, index);
-
-          update({
-            measurements: {
-              ...measurements,
-              actions: newData,
-              fulfill: newData.length !== 0,
-            },
-          });
-        };
+      {actions?.map((measurements: IMeasurementsInformation, index) => {
+        const isSuccessful =
+          measurements.successful === null
+            ? null
+            : measurements.successful
+            ? TOGGLE.YES
+            : TOGGLE.NO;
 
         return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("cSection")} />
-            </Card.Content>
-            <Card.Content
-              style={[styles.innerContent, styles.measurementsView]}
-            >
+          <Card.Content
+            style={[styles.innerContent, styles.actionRow]}
+            key={measurements.action}
+          >
+            <View style={[styles.element, styles.actionRow]}>
+              <Text
+                onPress={() => removeByIndex(index)}
+                style={styles.deleteAction}
+              >
+                <Icon size={20} source="delete" color={colors.primary} />
+              </Text>
+
               <RadioGroup
-                horizontal
-                label={translation("shock")}
+                label={translation("actionResult")}
                 onSelect={(id: string) => {
-                  update({
-                    measurements: {
-                      ...measurements,
-                      shock: id === TOGGLE.YES,
-                    },
-                  });
+                  updateInIndex({ successful: id === TOGGLE.YES }, index);
                 }}
-                selected={
-                  measurements.shock !== null
-                    ? measurements.shock
-                      ? TOGGLE.YES
-                      : TOGGLE.NO
-                    : null
-                }
+                selected={isSuccessful}
                 options={convertToOptions(TOGGLE, translation)}
               />
-              <RadioGroup
-                horizontal
-                label={translation("palpated")}
-                onSelect={(id: string) => {
-                  update({
-                    measurements: {
-                      ...measurements,
-                      palpated: id === TOGGLE.YES,
-                    },
-                  });
-                }}
-                selected={
-                  measurements.palpated !== null
-                    ? measurements.palpated
-                      ? TOGGLE.YES
-                      : TOGGLE.NO
-                    : null
-                }
-                options={convertToOptions(TOGGLE, translation)}
-              />
-            </Card.Content>
-
-            <Card.Content style={[styles.innerContent]}>
-              <InputField
-                value={measurements.puls}
-                numeric
-                label={translation("puls")}
-                onChange={(puls: number) => {
-                  update({
-                    measurements: {
-                      ...measurements,
-                      puls,
-                    },
-                  });
+              <TimePicker
+                value={measurements.time}
+                label={translation("actionTime")}
+                onChange={(time: number) => {
+                  updateInIndex({ time }, index);
                 }}
               />
-              {/* <View style={{ flex: 1, flexDirection: "row-reverse" }}> */}
-              <InputField
-                numeric
-                value={measurements.bloodPressure.diastolic}
-                label={translation("bloodPressureDiastolic")}
-                onChange={(diastolic: number) => {
-                  update({
-                    measurements: {
-                      ...measurements,
-                      bloodPressure: {
-                        ...measurements.bloodPressure,
-                        diastolic,
+            </View>
+            <View style={styles.element}>
+              <DropDown
+                label={translation("actionTaken")}
+                placeholder={translation("select")}
+                initialValue={measurements.action}
+                onSelect={(value: TAutocompleteDropdownItem) => {
+                  value &&
+                    updateInIndex(
+                      {
+                        action: value.id as TMeasurementsTreatments,
                       },
-                    },
-                  });
+                      index
+                    );
                 }}
+                options={convertToOptions(EMeasurementsTreatments, translation)}
               />
-              <InputField
-                value={measurements.bloodPressure.systolic}
-                label={translation("bloodPressureSystolic")}
-                numeric
-                onChange={(systolic: number) => {
-                  update({
-                    measurements: {
-                      ...measurements,
-                      bloodPressure: {
-                        ...measurements.bloodPressure,
-                        systolic,
-                      },
-                    },
-                  });
-                }}
-              />
-              {/* </View> */}
-            </Card.Content>
-
-            {actions?.map((measurements: IMeasurementsInformation, index) => {
-              const isSuccessful =
-                measurements.successful === null
-                  ? null
-                  : measurements.successful
-                  ? TOGGLE.YES
-                  : TOGGLE.NO;
-
-              return (
-                <Card.Content
-                  style={[styles.innerContent, styles.actionRow]}
-                  key={measurements.action}
-                >
-                  <View style={[styles.element, styles.actionRow]}>
-                    <Text
-                      onPress={() => removeByIndex(index)}
-                      style={styles.deleteAction}
-                    >
-                      <Icon size={20} source="delete" color={colors.primary} />
-                    </Text>
-
-                    <RadioGroup
-                      label={translation("actionResult")}
-                      onSelect={(id: string) => {
-                        updateInIndex({ successful: id === TOGGLE.YES }, index);
-                      }}
-                      selected={isSuccessful}
-                      options={convertToOptions(TOGGLE, translation)}
-                    />
-                    <TimePicker
-                      value={measurements.time}
-                      label={translation("actionTime")}
-                      onChange={(time: number) => {
-                        updateInIndex({ time }, index);
-                      }}
-                    />
-                  </View>
-                  <View style={styles.element}>
-                    <DropDown
-                      label={translation("actionTaken")}
-                      placeholder={translation("select")}
-                      initialValue={measurements.action}
-                      onSelect={(value: TAutocompleteDropdownItem) => {
-                        value &&
-                          updateInIndex(
-                            {
-                              action: value.id as TMeasurementsTreatments,
-                            },
-                            index
-                          );
-                      }}
-                      options={convertToOptions(
-                        EMeasurementsTreatments,
-                        translation
-                      )}
-                    />
-                  </View>
-                </Card.Content>
-              );
-            })}
-            {validateLastItem(actions) && (
-              <Card.Content style={[styles.innerContent, styles.addItemAction]}>
-                <Icon size={20} source="plus" color={colors.primary} />
-                <Text
-                  style={{ color: colors.primary, fontSize: 17 }}
-                  onPress={addRow}
-                >
-                  {translation("addAction")}
-                </Text>
-              </Card.Content>
-            )}
-          </Card>
+            </View>
+          </Card.Content>
         );
-      }}
-    </Context.Consumer>
+      })}
+      {validateLastItem(actions) && (
+        <Card.Content style={[styles.innerContent, styles.addItemAction]}>
+          <Icon size={20} source="plus" color={colors.primary} />
+          <Text
+            style={{ color: colors.primary, fontSize: 17 }}
+            onPress={addRow}
+          >
+            {translation("addAction")}
+          </Text>
+        </Card.Content>
+      )}
+    </Card>
   );
 }
-
 const styles = StyleSheet.create({
   deleteAction: {
     justifyContent: "center",

@@ -9,59 +9,54 @@ import { EInjuryReason } from "../../../../../interfaces";
 import { InputField } from "../../../../../form-components/input-field";
 import { isSelectedHandler, mergeData, toggleListData } from "./utils";
 import { emptyPatient } from "..";
+import { useContext } from "react";
 
 export function InjuryReason() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const injuryReason = mergeData(
+    patient?.injuryReason,
+    emptyPatient.injuryReason
+  );
+  const toggleValue = (value: EInjuryReason) => {
+    update({
+      injuryReason: {
+        ...injuryReason,
+        reasons: toggleListData(injuryReason.reasons, value),
+      },
+    });
+  };
+
+  const isSelected = isSelectedHandler(injuryReason?.reasons ?? []);
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const injuryReason = mergeData(
-          patient?.injuryReason,
-          emptyPatient.injuryReason
-        );
-        const toggleValue = (value: EInjuryReason) => {
-          update({
-            injuryReason: {
-              ...injuryReason,
-              reasons: toggleListData(injuryReason.reasons, value),
-            },
-          });
-        };
-
-        const isSelected = isSelectedHandler(injuryReason?.reasons ?? []);
-
-        return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("injuryReason")} />
-            </Card.Content>
-            <Card.Content style={styles.innerContent}>
-              {Object.values(EInjuryReason).map((item) => (
-                <ToggleButton
-                  key={item}
-                  label={translation(item)}
-                  status={isSelected(item)}
-                  onSelect={toggleValue}
-                  value={item}
-                />
-              ))}
-            </Card.Content>
-            <Card.Content style={[styles.innerContent]}>
-              <InputField
-                onChange={(circumstance: string) => {
-                  update({
-                    injuryReason: { ...injuryReason, circumstance },
-                  });
-                }}
-                value={injuryReason?.circumstance}
-                label={translation("circumstance")}
-              />
-            </Card.Content>
-          </Card>
-        );
-      }}
-    </Context.Consumer>
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("injuryReason")} />
+      </Card.Content>
+      <Card.Content style={styles.innerContent}>
+        {Object.values(EInjuryReason).map((item) => (
+          <ToggleButton
+            key={item}
+            label={translation(item)}
+            status={isSelected(item)}
+            onSelect={() => toggleValue(item)}
+          />
+        ))}
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        <InputField
+          onChange={(circumstance: string) => {
+            update({
+              injuryReason: { ...injuryReason, circumstance },
+            });
+          }}
+          value={injuryReason?.circumstance}
+          label={translation("circumstance")}
+        />
+      </Card.Content>
+    </Card>
   );
 }
 

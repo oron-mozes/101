@@ -22,6 +22,7 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
+import { useContext } from "react";
 
 const emptyState: IMedicationsAndFluidInformation = {
   action: null,
@@ -30,121 +31,110 @@ const emptyState: IMedicationsAndFluidInformation = {
 };
 export function MedicationsAndFluidSection() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const medicationsAndFluids = mergeData(
+    patient?.medicationsAndFluids,
+    emptyPatient.medicationsAndFluids
+  );
+
+  const { actions = [] } = medicationsAndFluids;
+  const addRow = () => {
+    update({
+      medicationsAndFluids: {
+        actions: [...actions, emptyState],
+      },
+    });
+  };
+
+  const updateInIndex = (
+    data: Partial<IMedicationsAndFluidInformation>,
+    index: number
+  ) =>
+    update({
+      medicationsAndFluids: {
+        actions: updateDataInIndex(
+          actions,
+          data as IMedicationsAndFluidInformation,
+          index
+        ),
+      },
+    });
+
+  const removeByIndex = (index: number) => {
+    update({
+      medicationsAndFluids: {
+        actions: removeByIndexHandler(actions, index),
+      },
+    });
+  };
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const medicationsAndFluids = mergeData(
-          patient?.medicationsAndFluids,
-          emptyPatient.medicationsAndFluids
-        );
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("medicationsAndFluid")} />
+      </Card.Content>
 
-        const { actions = [] } = medicationsAndFluids;
-        const addRow = () => {
-          update({
-            medicationsAndFluids: {
-              actions: [...actions, emptyState],
-            },
-          });
-        };
-
-        const updateInIndex = (
-          data: Partial<IMedicationsAndFluidInformation>,
-          index: number
-        ) =>
-          update({
-            medicationsAndFluids: {
-              actions: updateDataInIndex(
-                actions,
-                data as IMedicationsAndFluidInformation,
-                index
-              ),
-            },
-          });
-
-        const removeByIndex = (index: number) => {
-          update({
-            medicationsAndFluids: {
-              actions: removeByIndexHandler(actions, index),
-            },
-          });
-        };
-
+      {actions?.map((measurements: IMedicationsAndFluidInformation, index) => {
         return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("medicationsAndFluid")} />
-            </Card.Content>
-
-            {actions?.map(
-              (measurements: IMedicationsAndFluidInformation, index) => {
-                return (
-                  <Card.Content
-                    style={[styles.innerContent, styles.actionRow]}
-                    key={measurements.action}
-                  >
-                    <View style={[styles.element, styles.actionRow]}>
-                      <Text
-                        onPress={() => removeByIndex(index)}
-                        style={styles.deleteAction}
-                      >
-                        <Icon
-                          size={20}
-                          source="delete"
-                          color={colors.primary}
-                        />
-                      </Text>
-                      <InputField
-                        disabled={false}
-                        label={translation("dose")}
-                        value={measurements.dose}
-                        onChange={(value) => {}}
-                      />
-                      <TimePicker
-                        value={measurements.time}
-                        label={translation("actionTime")}
-                        onChange={(time: number) => {
-                          updateInIndex({ time }, index);
-                        }}
-                      />
-                    </View>
-                    <View style={styles.element}>
-                      <DropDown
-                        label={translation("actionTaken")}
-                        placeholder={translation("select")}
-                        initialValue={measurements.action}
-                        onSelect={(value: TAutocompleteDropdownItem) => {
-                          value &&
-                            updateInIndex(
-                              {
-                                action: value.id as EMedications,
-                                dose: getDoseByValue(value.id),
-                              },
-                              index
-                            );
-                        }}
-                        options={convertToOptions(EMedications, translation)}
-                      />
-                    </View>
-                  </Card.Content>
-                );
-              }
-            )}
-            {validateLastItem(actions) && (
-              <Card.Content style={[styles.innerContent, styles.addItemAction]}>
-                <Icon size={20} source="plus" color={colors.primary} />
-                <Text
-                  style={{ color: colors.primary, fontSize: 17 }}
-                  onPress={addRow}
-                >
-                  {translation("addMedication")}
-                </Text>
-              </Card.Content>
-            )}
-          </Card>
+          <Card.Content
+            style={[styles.innerContent, styles.actionRow]}
+            key={measurements.action}
+          >
+            <View style={[styles.element, styles.actionRow]}>
+              <Text
+                onPress={() => removeByIndex(index)}
+                style={styles.deleteAction}
+              >
+                <Icon size={20} source="delete" color={colors.primary} />
+              </Text>
+              <InputField
+                disabled={false}
+                label={translation("dose")}
+                value={measurements.dose}
+                onChange={(value) => {}}
+              />
+              <TimePicker
+                value={measurements.time}
+                label={translation("actionTime")}
+                onChange={(time: number) => {
+                  updateInIndex({ time }, index);
+                }}
+              />
+            </View>
+            <View style={styles.element}>
+              <DropDown
+                label={translation("actionTaken")}
+                placeholder={translation("select")}
+                initialValue={measurements.action}
+                onSelect={(value: TAutocompleteDropdownItem) => {
+                  value &&
+                    updateInIndex(
+                      {
+                        action: value.id as EMedications,
+                        dose: getDoseByValue(value.id),
+                      },
+                      index
+                    );
+                }}
+                options={convertToOptions(EMedications, translation)}
+              />
+            </View>
+          </Card.Content>
         );
-      }}
-    </Context.Consumer>
+      })}
+      {validateLastItem(actions) && (
+        <Card.Content style={[styles.innerContent, styles.addItemAction]}>
+          <Icon size={20} source="plus" color={colors.primary} />
+          <Text
+            style={{ color: colors.primary, fontSize: 17 }}
+            onPress={addRow}
+          >
+            {translation("addMedication")}
+          </Text>
+        </Card.Content>
+      )}
+    </Card>
   );
 }
 

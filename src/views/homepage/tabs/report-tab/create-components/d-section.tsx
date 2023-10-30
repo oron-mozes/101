@@ -27,6 +27,7 @@ import {
   toggleListData,
 } from "./utils";
 import { emptyPatient } from "..";
+import { useContext } from "react";
 
 const emptyState: IReaction = {
   GCS: null,
@@ -37,97 +38,91 @@ const emptyState: IReaction = {
 };
 export function DSection() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const reaction = mergeData(patient?.reaction, emptyPatient.reaction);
+  const { general, speech, movement, eyes } = reaction;
+
+  const toggleValue = (value) => {
+    update({
+      reaction: {
+        ...patient.reaction,
+        general: toggleListData(general, value),
+      },
+    });
+  };
+  const isSelected = isSelectedHandler(general);
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const reaction = mergeData(patient?.reaction, emptyPatient.reaction);
-        const { general, speech, movement, eyes } = reaction;
-
-        const toggleValue = (value) => {
-          update({
-            reaction: {
-              ...patient.reaction,
-              general: toggleListData(general, value),
-            },
-          });
-        };
-        const isSelected = isSelectedHandler(general);
-
-        return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("dSection")} />
-            </Card.Content>
-            <Card.Content style={[styles.innerContent]}>
-              {Object.values(EReactionGeneral).map((item) => (
-                <ToggleButton
-                  label={translation(item)}
-                  status={isSelected(item)}
-                  onSelect={toggleValue}
-                  value={item}
-                  key={item}
-                />
-              ))}
-            </Card.Content>
-            <Card.Content style={[styles.innerContent]}>
-              <View style={[styles.section]}>
-                <DropDown
-                  placeholder=""
-                  initialValue={speech}
-                  onSelect={(value) => {
-                    update({
-                      reaction: {
-                        ...patient.reaction,
-                        speech: value.id as EReactionSpeech,
-                      },
-                    });
-                  }}
-                  label={translation("speech")}
-                  options={convertToOptions(EReactionSpeech, translation)}
-                />
-                <DropDown
-                  placeholder=""
-                  initialValue={eyes}
-                  onSelect={(value) => {
-                    update({
-                      reaction: {
-                        ...patient.reaction,
-                        eyes: value.id as EReactionEyes,
-                      },
-                    });
-                  }}
-                  label={translation("eys")}
-                  options={convertToOptions(EReactionEyes, translation)}
-                />
-              </View>
-              <View style={[styles.section]}>
-                <DropDown
-                  placeholder=""
-                  initialValue={movement}
-                  onSelect={(value) => {
-                    update({
-                      reaction: {
-                        ...patient.reaction,
-                        movement: value.id as EReactionMovement,
-                      },
-                    });
-                  }}
-                  label={translation("movement")}
-                  options={convertToOptions(EReactionMovement, translation)}
-                />
-                <View style={[styles.section, styles.GCS]}>
-                  <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>
-                  <Text style={[styles.fakeInput]}>
-                    {calcGCS({ eyes, movement, speech })}
-                  </Text>
-                </View>
-              </View>
-            </Card.Content>
-          </Card>
-        );
-      }}
-    </Context.Consumer>
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("dSection")} />
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        {Object.values(EReactionGeneral).map((item) => (
+          <ToggleButton
+            label={translation(item)}
+            status={isSelected(item)}
+            onSelect={() => toggleValue(item)}
+            key={item}
+          />
+        ))}
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        <View style={[styles.section]}>
+          <DropDown
+            placeholder=""
+            initialValue={speech}
+            onSelect={(value) => {
+              update({
+                reaction: {
+                  ...patient.reaction,
+                  speech: value.id as EReactionSpeech,
+                },
+              });
+            }}
+            label={translation("speech")}
+            options={convertToOptions(EReactionSpeech, translation)}
+          />
+          <DropDown
+            placeholder=""
+            initialValue={eyes}
+            onSelect={(value) => {
+              update({
+                reaction: {
+                  ...patient.reaction,
+                  eyes: value.id as EReactionEyes,
+                },
+              });
+            }}
+            label={translation("eys")}
+            options={convertToOptions(EReactionEyes, translation)}
+          />
+        </View>
+        <View style={[styles.section]}>
+          <DropDown
+            placeholder=""
+            initialValue={movement}
+            onSelect={(value) => {
+              update({
+                reaction: {
+                  ...patient.reaction,
+                  movement: value.id as EReactionMovement,
+                },
+              });
+            }}
+            label={translation("movement")}
+            options={convertToOptions(EReactionMovement, translation)}
+          />
+          <View style={[styles.section, styles.GCS]}>
+            <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>
+            <Text style={[styles.fakeInput]}>
+              {calcGCS({ eyes, movement, speech })}
+            </Text>
+          </View>
+        </View>
+      </Card.Content>
+    </Card>
   );
 }
 

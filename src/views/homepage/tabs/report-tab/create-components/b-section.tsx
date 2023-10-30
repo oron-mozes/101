@@ -24,6 +24,7 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
+import { useContext } from "react";
 
 const emptyState: IBreathingInformation = {
   action: null,
@@ -32,174 +33,156 @@ const emptyState: IBreathingInformation = {
 };
 export function BSection() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const breathing = mergeData(patient?.breathing, emptyPatient.breathing);
+  const { actions, fulfill } = breathing;
+
+  const addRow = () => {
+    update({
+      breathing: { ...breathing, actions: [...actions, emptyState] },
+    });
+  };
+
+  if (fulfill && !Boolean(actions?.length)) {
+    addRow();
+  }
+
+  const updateInIndex = (data: Partial<IBreathingInformation>, index: number) =>
+    update({
+      breathing: {
+        ...breathing,
+        actions: updateDataInIndex(
+          actions,
+          data as IBreathingInformation,
+          index
+        ),
+      },
+    });
+
+  const removeByIndex = (index: number) => {
+    const newData = removeByIndexHandler(actions, index);
+    update({
+      breathing: {
+        ...breathing,
+        actions: newData,
+        fulfill: newData.length !== 0,
+      },
+    });
+  };
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const breathing = mergeData(patient?.breathing, emptyPatient.breathing);
-        const { actions, fulfill } = breathing;
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("bSection")} />
+      </Card.Content>
+      <Card.Content style={[styles.innerContent, styles.breathingView]}>
+        <RadioGroup
+          horizontal
+          label={translation("breathingInjury")}
+          onSelect={(id: string) => {
+            if (id === TOGGLE.YES) {
+              update({ breathing: { ...breathing, fulfill: true } });
+            } else {
+              update({ breathing: { ...breathing, fulfill: false } });
+            }
+          }}
+          selected={
+            fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
+          }
+          options={convertToOptions(TOGGLE, translation)}
+        />
+      </Card.Content>
+      {fulfill && (
+        <Card.Content style={[styles.innerContent]}>
+          <InputField
+            label={translation("breathings")}
+            numeric
+            onChange={(breathingCount: number) => {
+              update({
+                breathing: { ...breathing, breathingCount },
+              });
+            }}
+          />
+          <InputField
+            numeric
+            label={translation("saturation")}
+            onChange={(saturation: number) => {
+              update({ breathing: { ...breathing, saturation } });
+            }}
+          />
+        </Card.Content>
+      )}
+      {fulfill &&
+        actions?.map((breathingInfo: IBreathingInformation, index) => {
+          const isSuccessful =
+            breathingInfo.successful === null
+              ? null
+              : breathingInfo.successful
+              ? TOGGLE.YES
+              : TOGGLE.NO;
 
-        const addRow = () => {
-          update({
-            breathing: { ...breathing, actions: [...actions, emptyState] },
-          });
-        };
-
-        if (fulfill && !Boolean(actions?.length)) {
-          addRow();
-        }
-
-        const updateInIndex = (
-          data: Partial<IBreathingInformation>,
-          index: number
-        ) =>
-          update({
-            breathing: {
-              ...breathing,
-              actions: updateDataInIndex(
-                actions,
-                data as IBreathingInformation,
-                index
-              ),
-            },
-          });
-
-        const removeByIndex = (index: number) => {
-          const newData = removeByIndexHandler(actions, index);
-          update({
-            breathing: {
-              ...breathing,
-              actions: newData,
-              fulfill: newData.length !== 0,
-            },
-          });
-        };
-
-        return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("bSection")} />
-            </Card.Content>
-            <Card.Content style={[styles.innerContent, styles.breathingView]}>
-              <RadioGroup
-                horizontal
-                label={translation("breathingInjury")}
-                onSelect={(id: string) => {
-                  if (id === TOGGLE.YES) {
-                    update({ breathing: { ...breathing, fulfill: true } });
-                  } else {
-                    update({ breathing: { ...breathing, fulfill: false } });
-                  }
-                }}
-                selected={
-                  fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
-                }
-                options={convertToOptions(TOGGLE, translation)}
-              />
-            </Card.Content>
-            {fulfill && (
-              <Card.Content style={[styles.innerContent]}>
-                <InputField
-                  label={translation("breathings")}
-                  numeric
-                  onChange={(breathingCount: number) => {
-                    update({
-                      breathing: { ...breathing, breathingCount },
-                    });
-                  }}
-                />
-                <InputField
-                  numeric
-                  label={translation("saturation")}
-                  onChange={(saturation: number) => {
-                    update({ breathing: { ...breathing, saturation } });
-                  }}
-                />
-              </Card.Content>
-            )}
-            {fulfill &&
-              actions?.map((breathingInfo: IBreathingInformation, index) => {
-                const isSuccessful =
-                  breathingInfo.successful === null
-                    ? null
-                    : breathingInfo.successful
-                    ? TOGGLE.YES
-                    : TOGGLE.NO;
-
-                return (
-                  <Card.Content
-                    style={[styles.innerContent, styles.actionRow]}
-                    key={breathingInfo.action}
-                  >
-                    <View style={[styles.element, styles.actionRow]}>
-                      <Text
-                        onPress={() => removeByIndex(index)}
-                        style={styles.deleteAction}
-                      >
-                        <Icon
-                          size={20}
-                          source="delete"
-                          color={colors.primary}
-                        />
-                      </Text>
-
-                      <RadioGroup
-                        label={translation("actionResult")}
-                        onSelect={(id: string) => {
-                          updateInIndex(
-                            { successful: id === TOGGLE.YES },
-                            index
-                          );
-                        }}
-                        selected={isSuccessful}
-                        options={convertToOptions(TOGGLE, translation)}
-                      />
-                      <TimePicker
-                        value={breathingInfo.time}
-                        label={translation("actionTime")}
-                        onChange={(time: number) => {
-                          updateInIndex({ time }, index);
-                        }}
-                      />
-                    </View>
-                    <View style={styles.element}>
-                      <DropDown
-                        label={translation("actionTaken")}
-                        placeholder={translation("select")}
-                        initialValue={breathingInfo.action}
-                        onSelect={(value: TAutocompleteDropdownItem) => {
-                          value &&
-                            updateInIndex(
-                              {
-                                action: value.id as TBreathingTreatment,
-                              },
-                              index
-                            );
-                        }}
-                        options={convertToOptions(
-                          EBreathingTreatment,
-                          translation
-                        )}
-                      />
-                    </View>
-                  </Card.Content>
-                );
-              })}
-            {validateLastItem(actions) && (
-              <Card.Content style={[styles.innerContent, styles.addItemAction]}>
-                <Icon size={20} source="plus" color={colors.primary} />
+          return (
+            <Card.Content
+              style={[styles.innerContent, styles.actionRow]}
+              key={breathingInfo.action}
+            >
+              <View style={[styles.element, styles.actionRow]}>
                 <Text
-                  style={{ color: colors.primary, fontSize: 17 }}
-                  onPress={addRow}
+                  onPress={() => removeByIndex(index)}
+                  style={styles.deleteAction}
                 >
-                  {translation("addAction")}
+                  <Icon size={20} source="delete" color={colors.primary} />
                 </Text>
-              </Card.Content>
-            )}
-          </Card>
-        );
-      }}
-    </Context.Consumer>
+
+                <RadioGroup
+                  label={translation("actionResult")}
+                  onSelect={(id: string) => {
+                    updateInIndex({ successful: id === TOGGLE.YES }, index);
+                  }}
+                  selected={isSuccessful}
+                  options={convertToOptions(TOGGLE, translation)}
+                />
+                <TimePicker
+                  value={breathingInfo.time}
+                  label={translation("actionTime")}
+                  onChange={(time: number) => {
+                    updateInIndex({ time }, index);
+                  }}
+                />
+              </View>
+              <View style={styles.element}>
+                <DropDown
+                  label={translation("actionTaken")}
+                  placeholder={translation("select")}
+                  initialValue={breathingInfo.action}
+                  onSelect={(value: TAutocompleteDropdownItem) => {
+                    value &&
+                      updateInIndex(
+                        {
+                          action: value.id as TBreathingTreatment,
+                        },
+                        index
+                      );
+                  }}
+                  options={convertToOptions(EBreathingTreatment, translation)}
+                />
+              </View>
+            </Card.Content>
+          );
+        })}
+      {validateLastItem(actions) && (
+        <Card.Content style={[styles.innerContent, styles.addItemAction]}>
+          <Icon size={20} source="plus" color={colors.primary} />
+          <Text
+            style={{ color: colors.primary, fontSize: 17 }}
+            onPress={addRow}
+          >
+            {translation("addAction")}
+          </Text>
+        </Card.Content>
+      )}
+    </Card>
   );
 }
 

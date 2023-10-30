@@ -10,6 +10,7 @@ export const colors = {
   disabled: "rgba(157, 183, 200, 1)",
   radio: "rgba(222, 231, 237, 1)",
   active: "rgba(159, 96, 159, 1)",
+  accordion: "rgba(3, 59, 99, 1)",
 };
 
 export const gutter: number = 4;

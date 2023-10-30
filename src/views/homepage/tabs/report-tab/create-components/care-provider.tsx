@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Button, Card } from "react-native-paper";
+import { useContext, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Card } from "react-native-paper";
+import { emptyPatient } from "..";
 import storage, { STORAGE } from "../../../../../../storage";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { SectionHeader } from "../../../../../form-components/section-header";
@@ -9,7 +10,6 @@ import { ICareProvider, ITaagad } from "../../../../../interfaces";
 import Context from "../context";
 import { design } from "./shared-style";
 import { mergeData } from "./utils";
-import { emptyPatient } from "..";
 
 export function CareProvider() {
   const translation = useTranslation();
@@ -22,48 +22,40 @@ export function CareProvider() {
       .then((data: ITaagad) => setProviders(data.care_providers))
       .catch(() => {});
   }, []);
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const provider = mergeData(patient?.provider ?? {}, emptyPatient.provider);
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        const provider = mergeData(
-          patient?.provider ?? {},
-          emptyPatient.provider
-        );
-        return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("careProviderSection")} />
-            </Card.Content>
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("careProviderSection")} />
+      </Card.Content>
 
-            <Card.Content style={[styles.innerContent]}>
-              <View style={{ flex: 1 }}>
-                <DropDown
-                  placeholder={translation("select")}
-                  label={translation("careProviderName")}
-                  initialValue={provider.idf_id?.toString()}
-                  onSelect={(value) => {
-                    const setProvider = Object.values(providers).find(
-                      (p) => p.idf_id.toString() === value.id
-                    );
-                    update({
-                      provider: setProvider,
-                    });
-                  }}
-                  options={Object.values(providers).map((provider) => ({
-                    id: provider.idf_id.toString(),
-                    title: `${provider.full_name}, ${provider.idf_id}`,
-                  }))}
-                />
-              </View>
-            </Card.Content>
-          </Card>
-        );
-      }}
-    </Context.Consumer>
+      <Card.Content style={[styles.innerContent]}>
+        <View style={{ flex: 1 }}>
+          <DropDown
+            placeholder={translation("select")}
+            label={translation("careProviderName")}
+            initialValue={provider.idf_id?.toString()}
+            onSelect={(value) => {
+              const setProvider = Object.values(providers).find(
+                (p) => p.idf_id.toString() === value.id
+              );
+              update({
+                provider: setProvider,
+              });
+            }}
+            options={Object.values(providers).map((provider) => ({
+              id: provider.idf_id.toString(),
+              title: `${provider.full_name}, ${provider.idf_id}`,
+            }))}
+          />
+        </View>
+      </Card.Content>
+    </Card>
   );
 }
-
 const styles = StyleSheet.create({
   signature: {
     height: 100,

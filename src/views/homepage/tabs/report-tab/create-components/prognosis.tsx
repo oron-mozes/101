@@ -5,37 +5,32 @@ import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import Context from "../context";
 import { design } from "./shared-style";
-import { mergeData } from "./utils";
-import { emptyPatient } from "..";
+import { useContext } from "react";
 
 export function Prognosis() {
   const translation = useTranslation();
+  const context = useContext(Context);
+  const { patient, update } = context;
 
   return (
-    <Context.Consumer>
-      {({ patient, update }) => {
-        return (
-          <Card style={styles.card}>
-            <Card.Content style={styles.content}>
-              <SectionHeader label={translation("prognosis")} />
-            </Card.Content>
+    <Card style={styles.card}>
+      <Card.Content style={styles.content}>
+        <SectionHeader label={translation("prognosis")} />
+      </Card.Content>
 
-            <Card.Content style={[styles.innerContent]}>
-              <InputField
-                numberOfLines={5}
-                onChange={(prognosis: string) => {
-                  update({
-                    prognosis: prognosis,
-                  });
-                }}
-                value={patient?.prognosis ?? ""}
-                label={translation("prognosis")}
-              />
-            </Card.Content>
-          </Card>
-        );
-      }}
-    </Context.Consumer>
+      <Card.Content style={[styles.innerContent]}>
+        <InputField
+          numberOfLines={5}
+          onChange={(prognosis: string) => {
+            update({
+              prognosis: prognosis,
+            });
+          }}
+          value={patient?.prognosis ?? ""}
+          label={translation("prognosis")}
+        />
+      </Card.Content>
+    </Card>
   );
 }
 
