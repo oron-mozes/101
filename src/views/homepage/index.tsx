@@ -1,8 +1,13 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import React, { useEffect, useMemo } from "react";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import storage, { STORAGE } from "../../../storage";
-import { IPatientRecord, IProps, StackNavigation } from "../../interfaces";
+import {
+  IPatientRecord,
+  IProps,
+  RootStackParamList,
+  StackNavigation,
+} from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";
@@ -14,11 +19,14 @@ export enum TAB_STATUS {
   SCAN = "SCAN",
 }
 
-export default function HomeScreen({ route }: IProps) {
+export default function HomeScreen() {
+  const route = useRoute<RouteProp<RootStackParamList>>();
   const navigation = useNavigation<StackNavigation>();
-  const [tab, changeTabView] = useState<TAB_STATUS>(
-    route.params?.tab ?? TAB_STATUS.STATUS
+  const tab = useMemo(
+    () => route.params?.tab ?? TAB_STATUS.STATUS,
+    [route.params?.tab]
   );
+
   useEffect(() => {
     storage
       .load({
@@ -29,35 +37,12 @@ export default function HomeScreen({ route }: IProps) {
         navigation.navigate(ROUTES.ACCOUNT);
       });
   }, []);
-  useEffect(() => {
-    route.params?.tab && changeTabView(route.params.tab);
-  }, [route.params]);
-  const [selectedPatient, setPatient] = useState<IPatientRecord>();
 
-  useEffect(() => {
-    if (tab === TAB_STATUS.SCAN) {
-      navigation.navigate(ROUTES.IMPORT_PATIENT);
-    }
-  }, [tab]);
   return (
     <SafeAreaView style={styles.container}>
-      {tab === TAB_STATUS.STATUS && (
-        <StatusTab
-          setPatient={(patient: IPatientRecord) => {
-            setPatient(patient);
-            changeTabView(TAB_STATUS.CREATE);
-          }}
-        />
-      )}
-      {tab === TAB_STATUS.CREATE && <ReportTab patient={selectedPatient} />}
-
-      <HomepageFooter
-        onViewChange={(view) => {
-          setPatient(null);
-          changeTabView(view);
-        }}
-        selected={tab}
-      />
+      {tab === TAB_STATUS.STATUS && <StatusTab />}
+      {tab === TAB_STATUS.CREATE && <ReportTab />}
+      <HomepageFooter />
     </SafeAreaView>
   );
 }

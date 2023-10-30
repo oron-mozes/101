@@ -48,7 +48,9 @@ export default function App() {
               },
               title: "",
 
-              headerRight: () => <MainMenu />,
+              headerRight: () => (
+                <MainMenu />
+              ),
               headerLeft: () => <Logo101 />,
             }}
             component={HomeScreen}

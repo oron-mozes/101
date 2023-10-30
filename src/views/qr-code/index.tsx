@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useMemo } from "react";
 import {
   SafeAreaView,
@@ -13,13 +13,14 @@ import storage, { STORAGE } from "../../../storage";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import {
   IPatientRecord,
-  IProps,
+  RootStackParamList,
   STATUS,
   StackNavigation,
 } from "../../interfaces";
 import { ROUTES } from "../../routes";
 
-export default function QrCode({ route }: IProps) {
+export default function QrCode() {
+  const route = useRoute<RouteProp<RootStackParamList>>();
   const patient = useMemo(() => route.params.patient, []);
   const translation = useTranslation();
   const navigation = useNavigation<StackNavigation>();
@@ -39,7 +40,7 @@ export default function QrCode({ route }: IProps) {
     goBackHome();
   };
   const goBackHome = () => navigation.navigate(ROUTES.HOME);
-  console.log({ patient });
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>

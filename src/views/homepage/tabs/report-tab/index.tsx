@@ -8,6 +8,7 @@ import {
   EReactionSpeech,
   ICareProvider,
   IPatientRecord,
+  RootStackParamList,
 } from "../../../../interfaces";
 import Context from "./context";
 import { ASection } from "./create-components/a-section";
@@ -28,6 +29,7 @@ import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { colors } from "../../../../shared-config";
 import { TreatmentGuide } from "./create-components/treatment-guide";
 import { Measurements } from "./create-components/mesurements";
+import { useRoute, RouteProp } from "@react-navigation/native";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -105,12 +107,12 @@ enum ACCORDION_ITEM {
   FIRST_TAB = "1",
   SECOND_TAB = "2",
 }
-export function ReportTab({ patient }: { patient?: IPatientRecord }) {
+export function ReportTab() {
+  const route = useRoute<RouteProp<RootStackParamList>>();
   const translation = useTranslation();
   const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
-    patient || emptyPatient
+    route.params?.patient || emptyPatient
   );
-
   const [selectedAccordionItemId, setSelectedAccordionItemId] =
     useState<ACCORDION_ITEM>(ACCORDION_ITEM.FIRST_TAB);
   const [providers, setProviders] = useState<ICareProvider[]>();

@@ -1,25 +1,18 @@
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { DataTable } from "react-native-paper";
+import { TAB_STATUS } from "../..";
 import { QrIcon } from "../../../../components/qr-icon/qr";
 import { StatusChip } from "../../../../form-components/status-chip";
-import {
-  IPatientRecord,
-  STATUS,
-  StackNavigation,
-} from "../../../../interfaces";
-import { ROUTES } from "../../../../routes";
-import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { usePatientsRecord } from "../../../../hooks/usePatientsRecord";
-import { useEffect } from "react";
+import { STATUS, StackNavigation } from "../../../../interfaces";
+import { ROUTES } from "../../../../routes";
 import { colors } from "../../../../shared-config";
 import { sortByPriority } from "./utils";
 
-export function StatusTab({
-  setPatient,
-}: {
-  setPatient(patient: IPatientRecord): void;
-}) {
+export function StatusTab() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
   const { patientsRecord, loadRecords } = usePatientsRecord();
@@ -27,7 +20,8 @@ export function StatusTab({
     loadRecords();
     return navigation.addListener("focus", loadRecords);
   }, []);
-
+  const goToPatientPage = (patient) =>
+    navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   return (
     <View>
       <DataTable style={styles.table}>
@@ -63,7 +57,7 @@ export function StatusTab({
                 <QrIcon />
               </DataTable.Cell>
               <DataTable.Cell
-                onPress={() => setPatient(patient)}
+                onPress={() => goToPatientPage(patient)}
                 style={styles.title}
               >
                 <StatusChip
@@ -72,13 +66,13 @@ export function StatusTab({
                 />
               </DataTable.Cell>
               <DataTable.Cell
-                onPress={() => setPatient(patient)}
+                onPress={() => goToPatientPage(patient)}
                 style={styles.title}
               >
                 {patient?.personal_information?.idf_id}
               </DataTable.Cell>
               <DataTable.Cell
-                onPress={() => setPatient(patient)}
+                onPress={() => goToPatientPage(patient)}
                 style={styles.title}
               >
                 {patient?.personal_information?.full_name}

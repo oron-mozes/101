@@ -1,55 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Divider, Menu } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
-import { useNavigation } from "@react-navigation/native";
-import { ROUTES } from "../../routes";
-import { ICareProvider, ITaagad, StackNavigation } from "../../interfaces";
-import storage, { STORAGE } from "../../../storage";
+import { IProps, RootStackParamList } from "../../interfaces";
+import { colors } from "../../shared-config";
 import { TAB_STATUS } from "../../views/homepage";
+import { RouteProp, useRoute } from "@react-navigation/native";
 
 export default function MainMenu() {
-  const [visible, setVisible] = React.useState(false);
-  const openMenu = () => setVisible(true);
+  const route = useRoute<RouteProp<RootStackParamList>>();
   const translation = useTranslation();
-  const closeMenu = () => setVisible(false);
-  const navigation = useNavigation<StackNavigation>();
-  const [careProviders, setCareProviders] = useState<{
-    [key: string]: ICareProvider;
-  }>({});
-  const [selectedCareProvider, setSelectedCareProviders] =
-    useState<ICareProvider>();
- 
+  const selected = useMemo(
+    () => route.params?.tab || TAB_STATUS.STATUS,
+    [route.params?.tab]
+  );
+  const patient = useMemo(() => route.params?.patient, [route.params?.patient]);
+  const { full_name = "", idf_id = "" } = patient?.personal_information ?? {};
   return (
     <View>
-      <Menu
-        style={styles.item}
-        visible={visible}
-        onDismiss={closeMenu}
-        anchor={
-          <Button onPress={openMenu} textColor="white">
-            {translation("mainMenu")}
-          </Button>
-        }
-      >
-        {Object.values(careProviders).map((careProvider) => (
-          <Menu.Item
-            key={careProvider.idf_id}
-            disabled={careProvider.idf_id === selectedCareProvider?.idf_id}
-            onPress={() => {
-              // storage.save({ key: STORAGE.USER, data: careProvider });
-              navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
-              closeMenu();
-            }}
-            title={`${careProvider.full_name}, ${careProvider.idf_id}`}
-          />
-        ))}
-      </Menu>
+      {selected !== TAB_STATUS.CREATE && (
+        <Text style={[styles.text]}>{translation("mainMenu")}</Text>
+      )}
+      {selected === TAB_STATUS.CREATE && (
+        <Text style={[styles.text]}>{`${full_name} ${idf_id}`}</Text>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   menuButton: {},
-  item: {},
+  text: { color: colors.textInputBG, fontWeight: "bold" },
 });

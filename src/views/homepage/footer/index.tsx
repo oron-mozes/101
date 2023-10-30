@@ -1,23 +1,30 @@
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useMemo } from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-paper";
-import Svg, { ClipPath, Defs, G, Path } from "react-native-svg";
 import { TAB_STATUS } from "..";
 import { useTranslation } from "../../../hooks/useMyTranslation";
+import { RootStackParamList, StackNavigation } from "../../../interfaces";
+import { ROUTES } from "../../../routes";
 import { colors } from "../../../shared-config";
-import { StatusIcon } from "./status-icon";
 import { PatientCareIcon } from "./patient-care-icon";
+import { StatusIcon } from "./status-icon";
 
-export function HomepageFooter({
-  onViewChange,
-  selected,
-}: {
-  selected: TAB_STATUS;
-  onViewChange(view: TAB_STATUS): void;
-}) {
+export function HomepageFooter() {
+  const route = useRoute<RouteProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigation>();
+  const selected = useMemo(
+    () => route.params?.tab ?? TAB_STATUS.STATUS,
+    [route.params?.tab]
+  );
   const translation = useTranslation();
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => onViewChange(TAB_STATUS.SCAN)}>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.SCAN })
+        }
+      >
         <View style={styles.textBox}>
           <StatusIcon active={selected === TAB_STATUS.SCAN} />
           <Text
@@ -30,7 +37,11 @@ export function HomepageFooter({
           </Text>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => onViewChange(TAB_STATUS.CREATE)}>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE })
+        }
+      >
         <View style={styles.textBox}>
           <PatientCareIcon active={selected === TAB_STATUS.CREATE} />
           <Text
@@ -43,7 +54,11 @@ export function HomepageFooter({
           </Text>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => onViewChange(TAB_STATUS.STATUS)}>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS })
+        }
+      >
         <View style={styles.textBox}>
           <PatientCareIcon active={selected === TAB_STATUS.STATUS} />
 
