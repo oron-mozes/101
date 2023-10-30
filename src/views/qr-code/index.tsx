@@ -28,7 +28,6 @@ export default function QrCode({ route }: IProps) {
       ...patient,
       incident_information: {
         ...patient.incident_information,
-        status: STATUS.EVACUATED,
       },
     };
     await storage.save({

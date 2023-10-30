@@ -2,7 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import storage, { STORAGE } from "../../../storage";
-import { IPatientRecord, IProps, StackNavigation } from "../../interfaces";
+import {
+  IPatientRecord,
+  IProps,
+  STATUS,
+  StackNavigation,
+} from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { initialState } from "../care-provider";
 import { HomepageFooter } from "./footer";
@@ -35,6 +40,11 @@ export default function HomeScreen({ route }: IProps) {
   }, [route.params]);
   const [selectedPatient, setPatient] = useState<IPatientRecord>();
 
+  useEffect(() => {
+    if (tab === TAB_STATUS.SCAN) {
+      navigation.navigate(ROUTES.IMPORT_PATIENT);
+    }
+  }, [tab]);
   return (
     <SafeAreaView style={styles.container}>
       {tab === TAB_STATUS.STATUS && (
