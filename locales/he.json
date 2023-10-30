@@ -188,5 +188,6 @@
   "treatment_guide_title": "הנחיות לטיפול",
   "treatment_guide_new": "הוספת הנחיה",
   "scan": "סרוק",
-  "patientTransfer": "העברת פצוע.ה"
+  "patientTransfer": "העברת פצוע.ה",
+  "minutes": " {{time}} דקות"
 }

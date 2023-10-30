@@ -9,8 +9,7 @@ import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import {
   IMeasurementsAction,
-  ITreatment,
-  ITreatmentGuide,
+  ITreatmentGuideMeasurementsInformation,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
@@ -41,17 +40,21 @@ export function Measurements() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update, providers } = context;
-  const treatmentGuide: ITreatment = useMemo(
-    () => mergeData(patient.treatmentGuide, emptyPatient.treatmentGuide),
+  const measurements: ITreatmentGuideMeasurementsInformation = useMemo(
+    () =>
+      mergeData(
+        patient.treatmentGuide.measurements,
+        emptyPatient.treatmentGuide.measurements
+      ),
     [patient.treatmentGuide]
   );
   useEffect(() => {
-    if (treatmentGuide.measurements.actions.length === 0) {
+    if (measurements.actions.length === 0) {
       update({
         treatmentGuide: {
-          ...treatmentGuide,
+          ...patient.treatmentGuide,
           measurements: {
-            ...treatmentGuide.measurements,
+            ...measurements,
             actions: [emptyState, emptyState, emptyState],
           },
         },
@@ -62,10 +65,11 @@ export function Measurements() {
   const addRow = () => {
     update({
       treatmentGuide: {
-        ...treatmentGuide,
+        ...patient.treatmentGuide,
         measurements: {
-          ...treatmentGuide.measurements,
-          actions: [...treatmentGuide.measurements.actions, emptyState],
+          ...measurements,
+
+          actions: [...measurements.actions, emptyState],
         },
       },
     });
@@ -74,26 +78,18 @@ export function Measurements() {
   const updateInIndex = (data: Partial<IMeasurementsAction>, index: number) =>
     update({
       treatmentGuide: {
-        ...treatmentGuide,
-        guides: updateDataInIndex(
-          treatmentGuide.guides,
-          data as ITreatmentGuide,
-          index
-        ),
+        ...patient.treatmentGuide,
+        measurements: {
+          ...measurements,
+          actions: updateDataInIndex(
+            measurements.actions,
+            data as IMeasurementsAction,
+            index
+          ),
+        },
       },
     });
 
-  const removeByIndex = (index: number) => {
-    const newData = removeByIndexHandler(treatmentGuide.guides, index);
-    update({
-      treatmentGuide: {
-        ...treatmentGuide,
-        guides: newData,
-      },
-    });
-  };
-
-  const periodRang = [15, 30, 60, 120];
   const painRang = [...Array(11).keys()];
   return (
     <Card style={styles.card}>
@@ -101,9 +97,28 @@ export function Measurements() {
         <SectionHeader label={translation("treatment_measurements_title")} />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
-        <View style={[styles.innerContent]}>
-          <Text>{translation("treatment_period")}</Text>
+        <View style={[styles.innerContent, { flex: 1 }]}>
+          <DropDown
+            label={translation("treatment_period")}
+            initialValue={measurements.period?.toString()}
+            onSelect={(selected) => {
+              update({
+                treatmentGuide: {
+                  ...patient.treatmentGuide,
+                  measurements: {
+                    ...measurements,
+                    period: convertStringToNumber(selected.id),
+                  },
+                },
+              });
+            }}
+            options={["15", "30", "60", "120"].map((time) => ({
+              id: time,
+              title: translation("minutes", { time }),
+            }))}
+          />
         </View>
+        <View style={{ flex: 1 }}></View>
         <View style={[styles.innerContent, styles.addItemAction]}>
           <Icon size={20} source="plus" color={colors.primary} />
           <Text
@@ -116,7 +131,7 @@ export function Measurements() {
       </Card.Content>
       <Divider />
       <Card.Content style={[styles.innerContent]}>
-        {treatmentGuide.measurements.actions.map((measurement, index) => (
+        {measurements.actions.map((measurement, index) => (
           <View style={styles.column} key={index}>
             <TimePicker
               value={measurement.time}
@@ -126,7 +141,6 @@ export function Measurements() {
               }}
             />
             <DropDown
-              placeholder={translation("select")}
               initialValue={measurement.provider?.idf_id?.toString()}
               onSelect={(value) => {
                 const provider = Object.values(providers).find(
@@ -196,18 +210,14 @@ export function Measurements() {
               }}
             />
             <DropDown
-              placeholder={translation("select")}
-              initialValue={measurement.provider?.idf_id?.toString()}
-              onSelect={(value) => {
-                const provider = Object.values(providers).find(
-                  (p) => p.idf_id.toString() === value.id
-                );
-                updateInIndex({ provider }, index);
+              initialValue={measurement.pain?.toString()}
+              onSelect={(pain) => {
+                updateInIndex({ pain: convertStringToNumber(pain.id) }, index);
               }}
               label={translation("treatment_pain")}
-              options={Object.values(providers).map((provider) => ({
-                id: provider.idf_id.toString(),
-                title: `${provider.full_name}, ${provider.idf_id}`,
+              options={painRang.map((pain) => ({
+                id: pain?.toString(),
+                title: `${pain}`,
               }))}
             />
             <InputField

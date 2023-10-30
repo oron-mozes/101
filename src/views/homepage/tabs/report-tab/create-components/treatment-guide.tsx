@@ -70,16 +70,6 @@ export function TreatmentGuide() {
       },
     });
 
-  const removeByIndex = (index: number) => {
-    const newData = removeByIndexHandler(treatmentGuide.guides, index);
-    update({
-      treatmentGuide: {
-        ...treatmentGuide,
-        guides: newData,
-      },
-    });
-  };
-
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
