@@ -44,7 +44,7 @@ export function InjuryModal({
             <InputField
               label={translation("gunshots")}
               numeric
-              value={status?.gunshots.toString()}
+              value={status?.gunshots?.toString()}
               onChange={(gunshots) => {
                 setStatus({
                   ...status,
@@ -56,7 +56,7 @@ export function InjuryModal({
             <InputField
               label={translation("hits")}
               numeric
-              value={status?.hits.toString()}
+              value={status?.hits?.toString()}
               onChange={(hits) => {
                 setStatus({ ...status, hits: convertStringToNumber(hits) });
               }}
