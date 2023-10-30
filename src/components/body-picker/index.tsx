@@ -15,14 +15,18 @@ export function BodyPicker({
 
   useEffect(() => {
     for (const position in injuries) {
-      const { data = {} } = bodyMapping.get(position as EPosition) ?? {};
+      const { data = {} } =
+        bodyPartsDefinition.get(position as EPosition) ?? {};
 
-      bodyMapping.set(position as EPosition, {
+      bodyPartsDefinition.set(position as EPosition, {
         active: true,
         data: { ...data, ...injuries[position] },
       });
     }
-    setBodyParts(bodyMapping);
+    setBodyParts(bodyPartsDefinition);
+    return function () {
+      setBodyParts(bodyMapping);
+    };
   }, [injuries]);
 
   return (

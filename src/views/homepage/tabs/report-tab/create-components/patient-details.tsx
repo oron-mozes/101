@@ -9,7 +9,7 @@ import Context from "../context";
 import { design } from "./shared-style";
 import { convertStringToNumber, mergeData } from "./utils";
 import { emptyPatient } from "..";
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useLayoutEffect, useMemo } from "react";
 
 export function PatientDetails() {
   const translation = useTranslation();

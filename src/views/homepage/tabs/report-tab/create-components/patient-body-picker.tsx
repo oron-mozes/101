@@ -11,7 +11,7 @@ import { SectionHeader } from "../../../../../form-components/section-header";
 import { design } from "./shared-style";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { InjuryModal } from "../../../../../components/body-picker/injury-modal";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import {
   EHT_POSITION,
   EPosition,
@@ -25,7 +25,6 @@ export function PatientBodyPicker() {
   const [selectedPosition, setPosition] = useState<EPosition | EHT_POSITION>();
 
   const handlePress = (event) => {
-    console.log("?????");
     const { locationX, locationY } = event.nativeEvent;
 
     const position = checkHit(locationX, locationY);
@@ -36,7 +35,7 @@ export function PatientBodyPicker() {
   };
   const context = useContext(Context);
   const { patient, update } = context;
-  const injuries = useMemo(() => patient.injuries || {}, [patient.injuries]);
+  const injuries = patient.injuries || {};
 
   return (
     <>

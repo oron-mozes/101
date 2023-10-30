@@ -29,6 +29,9 @@ function InputFieldHandler({
   const onEndTyping = _.debounce((searchText) => {
     onChange(numeric ? Number(searchText) : searchText);
   }, 500);
+
+
+  
   const inputRef = useRef(null);
   const handleInputPress = () => {
     // Focus the input when it's pressed

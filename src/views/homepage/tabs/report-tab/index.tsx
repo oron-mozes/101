@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import storage, { STORAGE } from "../../../../../storage";
@@ -30,6 +30,7 @@ import { colors } from "../../../../shared-config";
 import { TreatmentGuide } from "./create-components/treatment-guide";
 import { Measurements } from "./create-components/mesurements";
 import { useRoute, RouteProp } from "@react-navigation/native";
+import _ from "lodash";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -117,7 +118,20 @@ export function ReportTab() {
   const [selectedAccordionItemId, setSelectedAccordionItemId] =
     useState<ACCORDION_ITEM>(ACCORDION_ITEM.FIRST_TAB);
   const [providers, setProviders] = useState<ICareProvider[]>();
-  const id = useMemo(() => new Date().getTime().toString(), []);
+
+  const selectedId = useMemo(
+    () => patientRecord?.id ?? new Date().getTime().toString(),
+    []
+  );
+
+  const savePatient = (data) => {
+    data.personal_information?.idf_id &&
+      storage.save({
+        key: STORAGE.PATIENTS_RECORD,
+        id: selectedId,
+        data: data,
+      });
+  };
   useEffect(() => {
     storage
       .load({ key: STORAGE.TAAGAD })
@@ -137,22 +151,16 @@ export function ReportTab() {
           providers,
           patient: patientRecord,
           update: (value) => {
-            const selectedId = patientRecord?.id || id;
-
             const updateData: IPatientRecord = {
               ...patientRecord,
               ...value,
               id: selectedId,
             };
 
-            setPatientRecord(updateData);
-
-            updateData.personal_information?.idf_id &&
-              storage.save({
-                key: STORAGE.PATIENTS_RECORD,
-                id: selectedId,
-                data: updateData,
-              });
+            setPatientRecord(() => {
+              return updateData;
+            });
+            savePatient(updateData);
           },
         }}
       >
@@ -204,7 +212,7 @@ export function ReportTab() {
               <Evacuation />
             </List.Accordion>
             <List.Accordion
-              right={(props) => (
+              right={() => (
                 <List.Icon
                   color="white"
                   icon={
