@@ -18,6 +18,7 @@ import {
   StackNavigation,
 } from "../../interfaces";
 import { ROUTES } from "../../routes";
+import { decode } from "./decode";
 
 export default function QrCode() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -40,7 +41,8 @@ export default function QrCode() {
     goBackHome();
   };
   const goBackHome = () => navigation.navigate(ROUTES.HOME);
-
+  const decodedPatient = decode(patient);
+  console.log(JSON.stringify(patient), decodedPatient);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -58,7 +60,7 @@ export default function QrCode() {
         </View>
         <View style={styles.qrWrapper}>
           <QRCode
-            value={JSON.stringify({ patient })}
+            value={decodedPatient}
             logo={require("./Logo.png")}
             size={220}
           />
