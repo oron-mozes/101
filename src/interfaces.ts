@@ -18,7 +18,44 @@ export interface IOption {
   title: string;
 }
 
-interface IInjury {}
+export enum EPosition {
+  LEFT_LEG = "LEFT_LEG",
+  BACK = "BACK",
+  LEFT_LEG_BACK = "LEFT_LEG_BACK",
+  RIGHT_LEG = "RIGHT_LEG",
+  RIGHT_LEG_BACK = "RIGHT_LEG_BACK",
+  LEFT_ARM = "LEFT_ARM",
+  LEFT_ARM_BACK = "LEFT_ARM_BACK",
+  RIGHT_ARM = "RIGHT_ARM",
+  RIGHT_ARM_BACK = "RIGHT_ARM_BACK",
+  ASS = "ASS",
+  GENITAL = "GENITAL",
+  STOMACH = "STOMACH",
+  CHEST = "CHEST",
+  FOREHEAD = "FOREHEAD",
+  BACK_HEAD = "BACK_HEAD",
+}
+
+export enum EHT_POSITION {
+  LEFT_LEG = "LEFT_LEG",
+  LEFT_LEG_BACK = "LEFT_LEG_BACK",
+  RIGHT_LEG = "RIGHT_LEG",
+  RIGHT_LEG_BACK = "RIGHT_LEG_BACK",
+  LEFT_ARM = "LEFT_ARM",
+  LEFT_ARM_BACK = "LEFT_ARM_BACK",
+  RIGHT_ARM = "RIGHT_ARM",
+  RIGHT_ARM_BACK = "RIGHT_ARM_BACK",
+}
+
+export interface IHT {
+  time: number;
+}
+export interface IInjuryInformation {
+  gunshots?: number;
+  hits?: number;
+  HT?: boolean;
+  HT_time?: number;
+}
 export enum EAirWayTreatment {
   AW = "AW",
   INTUBE = "INTUBE",
@@ -214,7 +251,7 @@ export interface IPatientRecord {
   personal_information: IPersonalInformation;
   incident_information: IIncidentInformation;
   provider: Partial<ICareProvider>;
-  injuries: IInjury[];
+  injuries: { [key in EPosition]?: IInjuryInformation };
   consciousness: ECconsciousness[];
   eSection: EEsectionChips[];
   airway: IAirway;
