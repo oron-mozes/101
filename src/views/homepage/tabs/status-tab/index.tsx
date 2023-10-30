@@ -48,7 +48,7 @@ export function StatusTab() {
               style={[disable ? styles.disableRow : {}]}
             >
               <DataTable.Cell
-                style={styles.title}
+                style={[styles.title]}
                 disabled={disable}
                 onPress={() =>
                   navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
