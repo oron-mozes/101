@@ -104,6 +104,7 @@ export const emptyPatient: IPatientRecord = {
 };
 
 enum ACCORDION_ITEM {
+  CLOSE = "0",
   FIRST_TAB = "1",
   SECOND_TAB = "2",
 }
@@ -145,8 +146,8 @@ export function ReportTab() {
             };
 
             setPatientRecord(updateData);
-            updateData.personal_information?.full_name &&
-              updateData.personal_information?.idf_id &&
+
+            updateData.personal_information?.idf_id &&
               storage.save({
                 key: STORAGE.PATIENTS_RECORD,
                 id: selectedId,
@@ -162,10 +163,24 @@ export function ReportTab() {
           <List.AccordionGroup
             expandedId={selectedAccordionItemId}
             onAccordionPress={(expend) => {
-              setSelectedAccordionItemId(expend as ACCORDION_ITEM);
+              if (selectedAccordionItemId === expend) {
+                setSelectedAccordionItemId(ACCORDION_ITEM.CLOSE);
+              } else {
+                setSelectedAccordionItemId(expend as ACCORDION_ITEM);
+              }
             }}
           >
             <List.Accordion
+              right={(props) => (
+                <List.Icon
+                  color="white"
+                  icon={
+                    selectedAccordionItemId === ACCORDION_ITEM.FIRST_TAB
+                      ? "chevron-up"
+                      : "chevron-down"
+                  }
+                />
+              )}
               title={translation("first-care")}
               style={styles.accordion}
               id={ACCORDION_ITEM.FIRST_TAB}
@@ -189,6 +204,16 @@ export function ReportTab() {
               <Evacuation />
             </List.Accordion>
             <List.Accordion
+              right={(props) => (
+                <List.Icon
+                  color="white"
+                  icon={
+                    selectedAccordionItemId === ACCORDION_ITEM.SECOND_TAB
+                      ? "chevron-up"
+                      : "chevron-down"
+                  }
+                />
+              )}
               titleStyle={{
                 color: colors.textInputBG,
                 textAlign: "right",

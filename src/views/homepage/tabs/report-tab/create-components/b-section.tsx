@@ -11,7 +11,6 @@ import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import {
   EBreathingTreatment,
   IBreathingInformation,
-  TBreathingTreatment,
   TOGGLE,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
@@ -102,7 +101,7 @@ export function BSection() {
           <InputField
             label={translation("breathings")}
             numeric
-            value={breathing.breathingCount.toString()}
+            value={breathing.breathingCount?.toString()}
             onChange={(breathingCount) => {
               update({
                 breathing: {
@@ -114,7 +113,7 @@ export function BSection() {
           />
           <InputField
             numeric
-            value={breathing.saturation.toString()}
+            value={breathing.saturation?.toString()}
             label={translation("saturation")}
             onChange={(saturation) => {
               update({
@@ -139,7 +138,7 @@ export function BSection() {
           return (
             <Card.Content
               style={[styles.innerContent, styles.actionRow]}
-              key={breathingInfo.action}
+              key={`${breathingInfo.action}-${index}`}
             >
               <View style={[styles.element, styles.actionRow]}>
                 <Text
@@ -168,13 +167,12 @@ export function BSection() {
               <View style={styles.element}>
                 <DropDown
                   label={translation("actionTaken")}
-                  placeholder={translation("select")}
                   initialValue={breathingInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
                     value &&
                       updateInIndex(
                         {
-                          action: value.id as TBreathingTreatment,
+                          action: value.id as EBreathingTreatment,
                         },
                         index
                       );

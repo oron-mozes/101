@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { CheckButton } from "./select-button";
 import { IOption } from "../interfaces";
 

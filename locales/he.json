@@ -62,7 +62,7 @@
   "actionResult": "הפעולה הצליחה?",
   "addAction": "הוספת פעולה",
   "actionTime": "שעת פעולה",
-  "AW": "AW",
+  "AW": "פתחי אוויר (AW)",
   "INTUBE": "אינטיוב",
   "CONIOTOMY": "קוניוטו",
   "close": "סגור",
@@ -188,5 +188,5 @@
   "treatment_guide_title": "הנחיות לטיפול",
   "treatment_guide_new": "הוספת הנחיה",
   "scan": "סרוק",
-  "patientTransfer":"העברת פצוע.ה"
+  "patientTransfer": "העברת פצוע.ה"
 }

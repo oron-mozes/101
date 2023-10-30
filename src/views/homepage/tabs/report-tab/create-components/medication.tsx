@@ -113,7 +113,6 @@ export function MedicationsAndFluidSection() {
             <View style={styles.element}>
               <DropDown
                 label={translation("actionTaken")}
-                placeholder={translation("select")}
                 initialValue={measurements.action}
                 onSelect={(value: TAutocompleteDropdownItem) => {
                   value &&

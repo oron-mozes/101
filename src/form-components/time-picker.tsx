@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: inputHeight,
-    margin: gutter,
+    marginBottom: gutter * 2,
   },
   content: {
     flexDirection: "row",

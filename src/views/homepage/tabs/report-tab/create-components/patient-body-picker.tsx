@@ -25,6 +25,7 @@ export function PatientBodyPicker() {
   const [selectedPosition, setPosition] = useState<EPosition | EHT_POSITION>();
 
   const handlePress = (event) => {
+    console.log("?????");
     const { locationX, locationY } = event.nativeEvent;
 
     const position = checkHit(locationX, locationY);

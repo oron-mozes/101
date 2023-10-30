@@ -104,7 +104,7 @@ export function ASection() {
           return (
             <Card.Content
               style={[styles.innerContent, styles.actionRow]}
-              key={airWayInfo.action}
+              key={`${airWayInfo.action}-${index}`}
             >
               <View style={[styles.element, styles.actionRow]}>
                 <Text

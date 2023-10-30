@@ -8,13 +8,11 @@ import { borderSetup, gutter, inputHeight } from "../shared-config";
 export function DropDown({
   label,
   options,
-  placeholder,
   initialValue,
   onSelect,
 }: {
   label: string;
   initialValue?: string;
-  placeholder: string;
   onSelect(value: IOption): void;
   options: IOption[];
 }) {
@@ -24,6 +22,7 @@ export function DropDown({
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
       <Picker
+        style={styles.picker}
         mode="dialog"
         selectedValue={selected}
         onValueChange={(itemValue, itemIndex) => {
@@ -43,7 +42,7 @@ export function DropDown({
 
 const styles = StyleSheet.create({
   picker: {
-    fontSize: 17,
+    marginTop: -11,
   },
   field: {
     ...borderSetup,
@@ -55,5 +54,6 @@ const styles = StyleSheet.create({
     marginRight: 50,
     textAlign: "right",
     fontSize: 12,
+    marginTop: -3,
   },
 });

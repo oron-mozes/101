@@ -1,7 +1,7 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Icon, TextInput } from "react-native-paper";
 import { colors, gutter, inputContainer } from "../shared-config";
-import { memo, useState } from "react";
+import { memo, useRef, useState } from "react";
 import _ from "lodash";
 export interface IInputField {
   onChange(value: string): void;
@@ -29,35 +29,45 @@ function InputFieldHandler({
   const onEndTyping = _.debounce((searchText) => {
     onChange(numeric ? Number(searchText) : searchText);
   }, 500);
+  const inputRef = useRef(null);
+  const handleInputPress = () => {
+    // Focus the input when it's pressed
+    inputRef.current.focus();
+  };
   return (
-    <View style={[styles.container, numberOfLines > 1 ? styles.fixHeight : {}]}>
-      {icon && (
-        <View style={[styles.icon]}>
-          <Icon source={icon} size={20} />
-        </View>
-      )}
-      <TextInput
-        maxLength={maxLength}
-        numberOfLines={numberOfLines}
-        multiline={numberOfLines > 1}
-        style={[styles.text, numberOfLines > 1 ? styles.fixHeight : {}]}
-        keyboardType={numeric ? "numeric" : "default"}
-        disabled={disabled}
-        label={label}
-        value={text}
-        textAlign="right"
-        mode="outlined"
-        textColor={colors.text}
-        onChangeText={(value) => {
-          setText(value);
-          setDebouncedSearch(value);
-          onEndTyping(value);
-          // onChange(numeric ? Number(value) : value);
-        }}
-        outlineColor="transparent"
-        activeOutlineColor={colors.text}
-      />
-    </View>
+    <TouchableWithoutFeedback onPress={handleInputPress}>
+      <View
+        style={[styles.container, numberOfLines > 1 ? styles.fixHeight : {}]}
+      >
+        {icon && (
+          <View style={[styles.icon]}>
+            <Icon source={icon} size={20} />
+          </View>
+        )}
+        <TextInput
+          ref={inputRef}
+          maxLength={maxLength}
+          numberOfLines={numberOfLines}
+          multiline={numberOfLines > 1}
+          style={[styles.text, numberOfLines > 1 ? styles.fixHeight : {}]}
+          keyboardType={numeric ? "numeric" : "default"}
+          disabled={disabled}
+          label={label}
+          value={text}
+          textAlign="right"
+          mode="outlined"
+          textColor={colors.text}
+          onChangeText={(value) => {
+            setText(value);
+            setDebouncedSearch(value);
+            onEndTyping(value);
+            // onChange(numeric ? Number(value) : value);
+          }}
+          outlineColor="transparent"
+          activeOutlineColor={colors.text}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
