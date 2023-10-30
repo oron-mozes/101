@@ -2,11 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import storage, { STORAGE } from "../../../storage";
-import {
-  IPatientRecord,
-  IProps,
-  StackNavigation
-} from "../../interfaces";
+import { IPatientRecord, IProps, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";

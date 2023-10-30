@@ -1,15 +1,14 @@
 {
   "homepageTitle": "עמוד הבית",
   "accountTitle": "פרטים אישיים",
-  "welcomeMessage": "ברוכים הבאים {{name}}",
-  "mainMenu": "רשימת מטופלים בתחנה",
+  "mainMenu": "פצועים בתחנה",
   "personalInformation": "מטופל",
   "personalInformationName": "שם",
   "treatmentStartingTime": "זמן",
   "addPatient": "טיפול בפצוע.ה",
   "patientsStatus": "סטטוס פצועים",
   "full_name": "שם",
-  "idf_id": "מ.א",
+  "idf_id": "מספר מזהה",
   "rank": "דרגה",
   "idfUnit": "שם תחנה",
   "role": "תפקיד",
@@ -19,13 +18,12 @@
   "exportPatient": "ייצא מטופל",
   "ACTIVE": "חזרה לפעילות",
   "URGENT": "פינוי דחוף",
-  "EVACUATED": "פינוי לא דחוף",
+  "TO_EVAC": "פינוי לא דחוף",
   "NEW_PATIENT": "קליטה חדשה",
-  "PENDING": "המתנה",
+  "CLOSED": "לאחר פינוי",
   "yes": "כן",
   "no": "לא",
   "patientName": "שם פצוע.ה",
-
   "avpu": "מצב הכרה AVPU",
   "evacStatus": "סטטוס פינוי",
   "qr": "הפקת קוד QR",
@@ -189,5 +187,6 @@
   "treatment_new": "מדידה נוספת",
   "treatment_guide_title": "הנחיות לטיפול",
   "treatment_guide_new": "הוספת הנחיה",
-  "scan": "סרוק"
+  "scan": "סרוק",
+  "patientTransfer":"העברת פצוע.ה"
 }

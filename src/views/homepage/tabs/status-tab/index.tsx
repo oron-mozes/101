@@ -1,13 +1,19 @@
 import { StyleSheet, View } from "react-native";
 import { DataTable } from "react-native-paper";
-import { QrIcon } from "../../../components/qr-icon/qr";
-import { StatusChip } from "../../../form-components/status-chip";
-import { IPatientRecord, STATUS, StackNavigation } from "../../../interfaces";
-import { ROUTES } from "../../../routes";
+import { QrIcon } from "../../../../components/qr-icon/qr";
+import { StatusChip } from "../../../../form-components/status-chip";
+import {
+  IPatientRecord,
+  STATUS,
+  StackNavigation,
+} from "../../../../interfaces";
+import { ROUTES } from "../../../../routes";
 import { useNavigation } from "@react-navigation/native";
-import { useTranslation } from "../../../hooks/useMyTranslation";
-import { usePatientsRecord } from "../../../hooks/usePatientsRecord";
+import { useTranslation } from "../../../../hooks/useMyTranslation";
+import { usePatientsRecord } from "../../../../hooks/usePatientsRecord";
 import { useEffect } from "react";
+import { colors } from "../../../../shared-config";
+import { sortByPriority } from "./utils";
 
 export function StatusTab({
   setPatient,
@@ -26,29 +32,29 @@ export function StatusTab({
     <View>
       <DataTable style={styles.table}>
         <DataTable.Header style={styles.tableHeader}>
-          <DataTable.Title style={{ justifyContent: "center" }}>
+          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
             {translation("qr")}
           </DataTable.Title>
-          <DataTable.Title style={{ justifyContent: "center" }}>
+          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
             {translation("evacStatus")}
           </DataTable.Title>
-          <DataTable.Title style={{ justifyContent: "center" }}>
+          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
             {translation("idf_id")}
           </DataTable.Title>
-          <DataTable.Title style={{ justifyContent: "center" }}>
+          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
             {translation("patientName")}
           </DataTable.Title>
         </DataTable.Header>
-        {patientsRecord.map((patient) => {
+        {sortByPriority(patientsRecord).map((patient) => {
           const disable: boolean =
-            patient?.evacuation?.status === STATUS.EVACUATED;
+            patient?.evacuation?.status === STATUS.CLOSED;
           return (
             <DataTable.Row
               key={patient.id}
               style={[disable ? styles.disableRow : {}]}
             >
               <DataTable.Cell
-                style={{ justifyContent: "center" }}
+                style={styles.title}
                 disabled={disable}
                 onPress={() =>
                   navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
@@ -58,7 +64,7 @@ export function StatusTab({
               </DataTable.Cell>
               <DataTable.Cell
                 onPress={() => setPatient(patient)}
-                style={{ justifyContent: "center" }}
+                style={styles.title}
               >
                 <StatusChip
                   label={translation(patient?.evacuation?.status ?? "")}
@@ -67,13 +73,13 @@ export function StatusTab({
               </DataTable.Cell>
               <DataTable.Cell
                 onPress={() => setPatient(patient)}
-                style={{ justifyContent: "center" }}
+                style={styles.title}
               >
                 {patient?.personal_information?.idf_id}
               </DataTable.Cell>
               <DataTable.Cell
                 onPress={() => setPatient(patient)}
-                style={{ justifyContent: "center" }}
+                style={styles.title}
               >
                 {patient?.personal_information?.full_name}
               </DataTable.Cell>
@@ -86,9 +92,15 @@ export function StatusTab({
 }
 
 const styles = StyleSheet.create({
+  titleText: {
+    fontWeight: "bold",
+  },
+  title: {
+    justifyContent: "center",
+  },
   disableRow: {
     opacity: 0.6,
   },
   table: { margin: 4, width: "98%" },
-  tableHeader: { backgroundColor: "rgba(229, 241, 255, 1)" },
+  tableHeader: { backgroundColor: colors.surface },
 });

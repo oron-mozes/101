@@ -32,7 +32,7 @@ export const priority = {
     backgroundColor: "rgba(255, 208, 204, 1)",
   },
 
-  [STATUS.EVACUATED]: {
+  [STATUS.TO_EVAC]: {
     borderColor: "rgba(255, 214, 102, 1)",
     backgroundColor: "rgba(255, 241, 102, 1)",
   },
@@ -41,7 +41,7 @@ export const priority = {
     borderColor: "rgba(174, 195, 209, 1)",
     backgroundColor: "rgba(222, 231, 237, 1)",
   },
-  [STATUS.PENDING]: {
+  [STATUS.CLOSED]: {
     borderColor: "rgba(196, 145, 84, 1)",
     backgroundColor: "rgba(242, 230, 217, 1)",
   },

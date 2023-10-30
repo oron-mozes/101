@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useMemo } from "react";
 import {
   SafeAreaView,
@@ -6,7 +7,9 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import { Button, Text } from "react-native-paper";
 import QRCode from "react-native-qrcode-svg";
+import storage, { STORAGE } from "../../../storage";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import {
   IPatientRecord,
@@ -14,10 +17,7 @@ import {
   STATUS,
   StackNavigation,
 } from "../../interfaces";
-import { Button, Text } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
 import { ROUTES } from "../../routes";
-import storage, { STORAGE } from "../../../storage";
 
 export default function QrCode({ route }: IProps) {
   const patient = useMemo(() => route.params.patient, []);
@@ -26,8 +26,9 @@ export default function QrCode({ route }: IProps) {
   const reportEvac = async () => {
     const updatedPatient: IPatientRecord = {
       ...patient,
-      incident_information: {
-        ...patient.incident_information,
+      evacuation: {
+        ...patient.evacuation,
+        status: STATUS.CLOSED,
       },
     };
     await storage.save({

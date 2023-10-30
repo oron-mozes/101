@@ -7,9 +7,9 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Button, Card, DataTable, Text } from "react-native-paper";
+import { Button, Card, DataTable } from "react-native-paper";
 import storage, { STORAGE } from "../../../storage";
-import { QrIcon } from "../../components/qr-icon/qr";
+import { DropDown } from "../../form-components/dropdown";
 import { InputField } from "../../form-components/input-field";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import {
@@ -19,7 +19,6 @@ import {
   StackNavigation,
 } from "../../interfaces";
 import { ROUTES } from "../../routes";
-import { DropDown } from "../../form-components/dropdown";
 import { convertToOptions } from "../homepage/tabs/report-tab/create-components/utils";
 
 export const initialProviderState: ICareProvider = {

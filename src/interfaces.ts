@@ -316,9 +316,9 @@ export type RootStackParamList = Record<
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
 export enum STATUS {
-  URGENT = "URGENT",
-  EVACUATED = "EVACUATED",
-  ACTIVE = "ACTIVE",
   NEW_PATIENT = "NEW_PATIENT",
-  PENDING = "PENDING",
+  URGENT = "URGENT",
+  TO_EVAC = "TO_EVAC",
+  ACTIVE = "ACTIVE",
+  CLOSED = "CLOSED",
 }
