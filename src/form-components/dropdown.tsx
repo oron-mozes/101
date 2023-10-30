@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   field: {
     ...borderSetup,
     height: inputHeight,
-    marginTop: gutter,
+    margin: gutter,
     flex: 1,
   },
   label: {

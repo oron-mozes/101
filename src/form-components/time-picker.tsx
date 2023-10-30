@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
 import {
-  borderRadius,
+  borderSetup,
   offset,
   colors,
   gutter,
@@ -62,7 +62,8 @@ export function TimePicker({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
+    height: inputHeight,
+    margin: gutter,
   },
   content: {
     flexDirection: "row",
@@ -71,9 +72,7 @@ const styles = StyleSheet.create({
     height: inputHeight,
     margin: gutter,
     backgroundColor: colors.textInputBG,
-    borderRadius: borderRadius,
-    borderColor: colors.textInputBorderColor,
-    borderWidth: 1,
+    ...borderSetup,
   },
   offset: {
     ...offset,

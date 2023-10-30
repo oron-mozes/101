@@ -30,74 +30,72 @@ export function PatientDetails() {
         <SectionHeader label={translation("accountTitle")} />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
-        <View style={{ flex: 1 }}>
-          <InputField
-            label={translation("idf_id")}
-            maxLength={7}
-            onChange={(idf_id: number) => {
-              update({
-                personal_information: {
-                  ...personal_information,
-                  idf_id,
-                },
-              });
-            }}
-            numeric
-            value={personal_information?.idf_id?.toString()}
-          />
-          <InputField
-            label={translation("patientName")}
-            onChange={(full_name: string) => {
-              update({
-                personal_information: {
-                  ...personal_information,
-                  full_name,
-                },
-              });
-            }}
-            value={personal_information.full_name}
-          />
-        </View>
-        <View style={{ flex: 1 }}>
-          <DatePicker
-            value={incident_information.date}
-            label={translation("date")}
-            onChange={(date: number) => {
+        <InputField
+          label={translation("idf_id")}
+          maxLength={7}
+          onChange={(idf_id: number) => {
+            update({
+              personal_information: {
+                ...personal_information,
+                idf_id,
+              },
+            });
+          }}
+          numeric
+          value={personal_information?.idf_id?.toString()}
+        />
+        <InputField
+          label={translation("patientName")}
+          onChange={(full_name: string) => {
+            update({
+              personal_information: {
+                ...personal_information,
+                full_name,
+              },
+            });
+          }}
+          value={personal_information.full_name}
+        />
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        <DatePicker
+          value={incident_information.date}
+          label={translation("date")}
+          onChange={(date: number) => {
+            update({
+              incident_information: {
+                ...incident_information,
+                date,
+              },
+            });
+          }}
+        />
+
+        <View style={styles.personalInfo}>
+          <TimePicker
+            value={incident_information.care_time}
+            label={translation("timeOfTreatment")}
+            onChange={(care_time: number) => {
               update({
                 incident_information: {
                   ...incident_information,
-                  date,
+                  care_time,
                 },
               });
             }}
           />
-
-          <View style={styles.personalInfo}>
-            <TimePicker
-              value={incident_information.care_time}
-              label={translation("timeOfTreatment")}
-              onChange={(care_time: number) => {
-                update({
-                  incident_information: {
-                    ...incident_information,
-                    care_time,
-                  },
-                });
-              }}
-            />
-            <TimePicker
-              value={incident_information.injury_time}
-              label={translation("timeOfInjury")}
-              onChange={(injury_time: number) => {
-                update({
-                  incident_information: {
-                    ...incident_information,
-                    injury_time,
-                  },
-                });
-              }}
-            />
-          </View>
+          <TimePicker
+            value={incident_information.injury_time}
+            label={translation("timeOfInjury")}
+            onChange={(injury_time: number) => {
+              update({
+                incident_information: {
+                  ...incident_information,
+                  injury_time,
+                },
+              });
+            }}
+          />
         </View>
       </Card.Content>
     </Card>
@@ -119,5 +117,4 @@ const styles = StyleSheet.create({
     alignContent: "center",
     marginTop: 10,
   },
-
 });

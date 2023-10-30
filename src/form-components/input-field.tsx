@@ -1,6 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { Icon, TextInput } from "react-native-paper";
-import { colors, inputContainer } from "../shared-config";
+import { colors, gutter, inputContainer } from "../shared-config";
 
 export interface IInputField {
   onChange(value: string | number): void;
@@ -58,8 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "right",
     alignItems: "flex-end",
-    marginBottom: 4,
-    width: "100%",
+    marginBottom: gutter,
   },
   icon: {
     marginLeft: 4,

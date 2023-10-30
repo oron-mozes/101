@@ -15,7 +15,7 @@
   "role": "תפקיד",
   "expertise": "התמחות",
   "save": "שמור",
-  "importPatient": "ייבא מטופל",
+  "importPatient": "קליטת פצוע.ה",
   "exportPatient": "ייצא מטופל",
   "ACTIVE": "חזרה לפעילות",
   "URGENT": "פינוי דחוף",
@@ -188,5 +188,6 @@
   "treatment_measurements_title": "לקיחת מדדים",
   "treatment_new": "מדידה נוספת",
   "treatment_guide_title": "הנחיות לטיפול",
+  "treatment_guide_new": "הוספת הנחיה",
   "treatment_guide_new": "הוספת הנחיה"
 }

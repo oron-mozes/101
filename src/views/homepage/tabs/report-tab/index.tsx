@@ -27,6 +27,7 @@ import { List, Text } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { colors } from "../../../../shared-config";
 import { TreatmentGuide } from "./create-components/treatment-guide";
+import { Measurements } from "./create-components/mesurements";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -166,6 +167,10 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
               title={translation("first-care")}
               style={styles.accordion}
               id={ACCORDION_ITEM.FIRST_TAB}
+              titleStyle={{
+                color: colors.textInputBG,
+                textAlign: "right",
+              }}
             >
               <PatientDetails />
               <PatientBodyPicker />
@@ -182,11 +187,16 @@ export function ReportTab({ patient }: { patient?: IPatientRecord }) {
               <Evacuation />
             </List.Accordion>
             <List.Accordion
+              titleStyle={{
+                color: colors.textInputBG,
+                textAlign: "right",
+              }}
               style={styles.accordion}
               title={translation("treatments")}
               id={ACCORDION_ITEM.SECOND_TAB}
             >
               <TreatmentGuide />
+              <Measurements />
             </List.Accordion>
           </List.AccordionGroup>
         </ScrollView>
