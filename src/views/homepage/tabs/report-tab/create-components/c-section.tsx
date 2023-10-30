@@ -132,7 +132,7 @@ export function CSection() {
 
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          value={measurements.puls.toString()}
+          value={measurements.puls?.toString()}
           numeric
           label={translation("puls")}
           onChange={(puls) => {
@@ -147,7 +147,7 @@ export function CSection() {
         {/* <View style={{ flex: 1, flexDirection: "row-reverse" }}> */}
         <InputField
           numeric
-          value={measurements.bloodPressure.diastolic.toString()}
+          value={measurements.bloodPressure.diastolic?.toString()}
           label={translation("bloodPressureDiastolic")}
           onChange={(diastolic) => {
             update({
@@ -162,7 +162,7 @@ export function CSection() {
           }}
         />
         <InputField
-          value={measurements.bloodPressure.systolic.toString()}
+          value={measurements.bloodPressure.systolic?.toString()}
           label={translation("bloodPressureSystolic")}
           numeric
           onChange={(systolic) => {

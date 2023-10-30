@@ -21,6 +21,7 @@ export function useCamera() {
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
     onCodeScanned: (codes) => {
+      console.log({ codes });
       updateScannedInformation(codes);
       // console.log({ codes });
     },
