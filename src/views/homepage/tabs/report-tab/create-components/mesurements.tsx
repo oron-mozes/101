@@ -125,7 +125,7 @@ export function Measurements() {
             style={{ color: colors.primary, fontSize: 17 }}
             onPress={addRow}
           >
-            {translation("treatment_guide_new")}
+            {translation("treatment_new")}
           </Text>
         </View>
       </Card.Content>
