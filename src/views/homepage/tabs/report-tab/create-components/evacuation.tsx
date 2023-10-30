@@ -11,13 +11,16 @@ import { ETransportation, STATUS } from "../../../../../interfaces";
 import Context from "../context";
 import { design } from "./shared-style";
 import { mergeData } from "./utils";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 export function Evacuation() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const evacuation = mergeData(patient?.evacuation, emptyPatient.evacuation);
+  const evacuation = useMemo(
+    () => mergeData(patient?.evacuation, emptyPatient.evacuation),
+    [patient?.evacuation]
+  );
 
   return (
     <Card style={styles.card}>
@@ -37,6 +40,7 @@ export function Evacuation() {
         </View>
         <View style={{ flex: 1 }}>
           <InputField
+            value={evacuation.destination}
             label={translation("destination")}
             onChange={(destination: string) => {
               update({
@@ -76,8 +80,6 @@ export function Evacuation() {
                 evacuation: { ...evacuation, status: item },
               });
             }}
-            // onSelect={toggleValue}
-            // value={item}
           />
         ))}
       </Card.Content>

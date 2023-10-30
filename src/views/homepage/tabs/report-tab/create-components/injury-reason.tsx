@@ -9,15 +9,15 @@ import { EInjuryReason } from "../../../../../interfaces";
 import { InputField } from "../../../../../form-components/input-field";
 import { isSelectedHandler, mergeData, toggleListData } from "./utils";
 import { emptyPatient } from "..";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 export function InjuryReason() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const injuryReason = mergeData(
-    patient?.injuryReason,
-    emptyPatient.injuryReason
+  const injuryReason = useMemo(
+    () => mergeData(patient?.injuryReason, emptyPatient.injuryReason),
+    [patient?.injuryReason]
   );
   const toggleValue = (value: EInjuryReason) => {
     update({

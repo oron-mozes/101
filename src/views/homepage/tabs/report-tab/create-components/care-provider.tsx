@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card } from "react-native-paper";
 import { emptyPatient } from "..";
@@ -24,7 +24,10 @@ export function CareProvider() {
   }, []);
   const context = useContext(Context);
   const { patient, update } = context;
-  const provider = mergeData(patient?.provider ?? {}, emptyPatient.provider);
+  const provider = useMemo(
+    () => mergeData(patient?.provider ?? {}, emptyPatient.provider),
+    [patient?.provider]
+  );
 
   return (
     <Card style={styles.card}>

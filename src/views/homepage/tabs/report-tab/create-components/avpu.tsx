@@ -8,13 +8,16 @@ import { design } from "./shared-style";
 import { ECconsciousness } from "../../../../../interfaces";
 import { toggleListData } from "./utils";
 import { emptyPatient } from "..";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 export function Avpu() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const consciousness = patient?.consciousness || emptyPatient.consciousness;
+  const consciousness = useMemo(
+    () => patient?.consciousness || emptyPatient.consciousness,
+    [patient?.consciousness]
+  );
   const toggleValue = (value: ECconsciousness) => {
     update({
       consciousness: toggleListData(consciousness, value),

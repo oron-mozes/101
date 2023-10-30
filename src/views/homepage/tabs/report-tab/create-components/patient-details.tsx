@@ -7,17 +7,21 @@ import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import Context from "../context";
 import { design } from "./shared-style";
-import { mergeData } from "./utils";
+import { convertStringToNumber, mergeData } from "./utils";
 import { emptyPatient } from "..";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 export function PatientDetails() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const personal_information = mergeData(
-    patient?.personal_information,
-    emptyPatient.personal_information
+  const personal_information = useMemo(
+    () =>
+      mergeData(
+        patient?.personal_information,
+        emptyPatient.personal_information
+      ),
+    [patient?.personal_information]
   );
   const incident_information = mergeData(
     patient?.incident_information,
@@ -33,11 +37,11 @@ export function PatientDetails() {
         <InputField
           label={translation("idf_id")}
           maxLength={7}
-          onChange={(idf_id: number) => {
+          onChange={(idf_id) => {
             update({
               personal_information: {
                 ...personal_information,
-                idf_id,
+                idf_id: convertStringToNumber(idf_id),
               },
             });
           }}

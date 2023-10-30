@@ -13,13 +13,15 @@ import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
+import { TAB_STATUS } from "../homepage";
 
 export default function ReceivePatientScreen() {
   const { device, codeScanner, format } = useCamera();
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
 
-  const goBackHome = () => navigation.navigate(ROUTES.HOME);
+  const goBackHome = () =>
+    navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
   const reportEvac = async () => {
     goBackHome();
   };

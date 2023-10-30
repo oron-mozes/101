@@ -5,11 +5,9 @@ import storage, { STORAGE } from "../../../storage";
 import {
   IPatientRecord,
   IProps,
-  STATUS,
-  StackNavigation,
+  StackNavigation
 } from "../../interfaces";
 import { ROUTES } from "../../routes";
-import { initialState } from "../care-provider";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";
 import { StatusTab } from "./tabs/status-tab";

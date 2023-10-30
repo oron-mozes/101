@@ -1,27 +1,34 @@
 import { StyleSheet, View } from "react-native";
 import { Icon, TextInput } from "react-native-paper";
 import { colors, gutter, inputContainer } from "../shared-config";
-
+import { memo, useState } from "react";
+import _ from "lodash";
 export interface IInputField {
-  onChange(value: string | number): void;
+  onChange(value: string): void;
   label: string;
   disabled?: boolean;
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
   maxLength?: number;
-  value?: string | number;
+  value: string;
 }
-export function InputField({
+function InputFieldHandler({
   label,
   onChange,
   disabled = false,
-  value = "",
+  value,
   numeric = false,
   numberOfLines = 1,
   maxLength,
   icon,
 }: IInputField) {
+  const [text, setText] = useState<string>(value);
+  const [debouncedSearch, setDebouncedSearch] = useState<string>(value);
+
+  const onEndTyping = _.debounce((searchText) => {
+    onChange(numeric ? Number(searchText) : searchText);
+  }, 500);
   return (
     <View style={[styles.container, numberOfLines > 1 ? styles.fixHeight : {}]}>
       {icon && (
@@ -37,11 +44,16 @@ export function InputField({
         keyboardType={numeric ? "numeric" : "default"}
         disabled={disabled}
         label={label}
-        value={value && String(value)}
+        value={text}
         textAlign="right"
         mode="outlined"
         textColor={colors.text}
-        onChangeText={onChange}
+        onChangeText={(value) => {
+          setText(value);
+          setDebouncedSearch(value);
+          onEndTyping(value);
+          // onChange(numeric ? Number(value) : value);
+        }}
         outlineColor="transparent"
         activeOutlineColor={colors.text}
       />
@@ -64,3 +76,5 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
 });
+
+export const InputField = memo(InputFieldHandler);

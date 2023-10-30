@@ -7,6 +7,7 @@ import { InputField } from "../../form-components/input-field";
 import { TimePicker } from "../../form-components/time-picker";
 import { ToggleButton } from "../../form-components/ToggleButton";
 import { useState } from "react";
+import { convertStringToNumber } from "../../views/homepage/tabs/report-tab/create-components/utils";
 
 export function InjuryModal({
   closeHandler,
@@ -43,21 +44,21 @@ export function InjuryModal({
             <InputField
               label={translation("gunshots")}
               numeric
-              value={status?.gunshots}
-              onChange={(gunshots: number) => {
-                gunshots = Boolean(gunshots) ? gunshots : null;
-                console.log({ gunshots });
-                setStatus({ ...status, gunshots });
+              value={status?.gunshots.toString()}
+              onChange={(gunshots) => {
+                setStatus({
+                  ...status,
+                  gunshots: convertStringToNumber(gunshots),
+                });
               }}
             />
 
             <InputField
               label={translation("hits")}
               numeric
-              value={status?.hits}
-              onChange={(hits: number) => {
-                hits = Boolean(hits) ? hits : null;
-                setStatus({ ...status, hits });
+              value={status?.hits.toString()}
+              onChange={(hits) => {
+                setStatus({ ...status, hits: convertStringToNumber(hits) });
               }}
             />
           </View>

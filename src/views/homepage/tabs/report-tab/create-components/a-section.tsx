@@ -23,7 +23,7 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 const emptyState: IAirWayInformation = {
   action: null,
@@ -34,7 +34,10 @@ export function ASection() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const airway = mergeData(patient?.airway, emptyPatient.airway);
+  const airway = useMemo(
+    () => mergeData(patient?.airway, emptyPatient.airway),
+    [patient?.airway]
+  );
   const { actions, fulfill } = airway;
 
   const addRow = () => {

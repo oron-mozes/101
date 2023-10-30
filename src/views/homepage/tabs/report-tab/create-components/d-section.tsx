@@ -27,7 +27,7 @@ import {
   toggleListData,
 } from "./utils";
 import { emptyPatient } from "..";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 const emptyState: IReaction = {
   GCS: null,
@@ -40,7 +40,10 @@ export function DSection() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const reaction = mergeData(patient?.reaction, emptyPatient.reaction);
+  const reaction = useMemo(
+    () => mergeData(patient?.reaction, emptyPatient.reaction),
+    [patient?.reaction]
+  );
   const { general, speech, movement, eyes } = reaction;
 
   const toggleValue = (value) => {

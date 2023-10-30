@@ -25,7 +25,7 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { InputField } from "../../../../../form-components/input-field";
 
 const emptyState: ITreatmentGuide = {
@@ -39,9 +39,9 @@ export function TreatmentGuide() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update, providers } = context;
-  const treatmentGuide: ITreatment = mergeData(
-    patient.treatmentGuide,
-    emptyPatient.treatmentGuide
+  const treatmentGuide: ITreatment = useMemo(
+    () => mergeData(patient.treatmentGuide, emptyPatient.treatmentGuide),
+    [patient.treatmentGuide]
   );
   useEffect(() => {
     if (treatmentGuide.guides.length === 0) {
@@ -86,7 +86,7 @@ export function TreatmentGuide() {
         <SectionHeader label={translation("treatment_guide_title")} />
       </Card.Content>
       {treatmentGuide.guides.map((guide, index) => (
-        <>
+        <View key={index}>
           <Card.Content style={[styles.innerContent]}>
             <InputField
               label={translation("treatment_care_guide")}
@@ -146,7 +146,7 @@ export function TreatmentGuide() {
               />
             </View>
           </Card.Content>
-        </>
+        </View>
       ))}
       <Card.Content style={[styles.innerContent, styles.addItemAction]}>
         <Icon size={20} source="plus" color={colors.primary} />

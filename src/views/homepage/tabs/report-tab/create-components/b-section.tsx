@@ -18,13 +18,14 @@ import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
 import {
+  convertStringToNumber,
   convertToOptions,
   mergeData,
   removeByIndexHandler,
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 const emptyState: IBreathingInformation = {
   action: null,
@@ -35,7 +36,10 @@ export function BSection() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const breathing = mergeData(patient?.breathing, emptyPatient.breathing);
+  const breathing = useMemo(
+    () => mergeData(patient?.breathing, emptyPatient.breathing),
+    [patient?.breathing]
+  );
   const { actions, fulfill } = breathing;
 
   const addRow = () => {
@@ -98,17 +102,27 @@ export function BSection() {
           <InputField
             label={translation("breathings")}
             numeric
-            onChange={(breathingCount: number) => {
+            value={breathing.breathingCount.toString()}
+            onChange={(breathingCount) => {
               update({
-                breathing: { ...breathing, breathingCount },
+                breathing: {
+                  ...breathing,
+                  breathingCount: convertStringToNumber(breathingCount),
+                },
               });
             }}
           />
           <InputField
             numeric
+            value={breathing.saturation.toString()}
             label={translation("saturation")}
-            onChange={(saturation: number) => {
-              update({ breathing: { ...breathing, saturation } });
+            onChange={(saturation) => {
+              update({
+                breathing: {
+                  ...breathing,
+                  saturation: convertStringToNumber(saturation),
+                },
+              });
             }}
           />
         </Card.Content>

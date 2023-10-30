@@ -9,22 +9,22 @@ import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import {
-  EMeasurementsTreatments,
   IMeasurementsInformation,
-  TMeasurementsTreatments,
+  EMeasurementsTreatments,
   TOGGLE,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
 import {
+  convertStringToNumber,
   convertToOptions,
   mergeData,
   removeByIndexHandler,
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 const emptyState: IMeasurementsInformation = {
   action: null,
@@ -35,9 +35,9 @@ export function CSection() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const measurements = mergeData(
-    patient?.measurements,
-    emptyPatient.measurements
+  const measurements = useMemo(
+    () => mergeData(patient?.measurements, emptyPatient.measurements),
+    [patient?.measurements]
   );
 
   const { actions, fulfill } = measurements;
@@ -132,14 +132,14 @@ export function CSection() {
 
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          value={measurements.puls}
+          value={measurements.puls.toString()}
           numeric
           label={translation("puls")}
-          onChange={(puls: number) => {
+          onChange={(puls) => {
             update({
               measurements: {
                 ...measurements,
-                puls,
+                puls: convertStringToNumber(puls),
               },
             });
           }}
@@ -147,31 +147,31 @@ export function CSection() {
         {/* <View style={{ flex: 1, flexDirection: "row-reverse" }}> */}
         <InputField
           numeric
-          value={measurements.bloodPressure.diastolic}
+          value={measurements.bloodPressure.diastolic.toString()}
           label={translation("bloodPressureDiastolic")}
-          onChange={(diastolic: number) => {
+          onChange={(diastolic) => {
             update({
               measurements: {
                 ...measurements,
                 bloodPressure: {
                   ...measurements.bloodPressure,
-                  diastolic,
+                  diastolic: convertStringToNumber(diastolic),
                 },
               },
             });
           }}
         />
         <InputField
-          value={measurements.bloodPressure.systolic}
+          value={measurements.bloodPressure.systolic.toString()}
           label={translation("bloodPressureSystolic")}
           numeric
-          onChange={(systolic: number) => {
+          onChange={(systolic) => {
             update({
               measurements: {
                 ...measurements,
                 bloodPressure: {
                   ...measurements.bloodPressure,
-                  systolic,
+                  systolic: convertStringToNumber(systolic),
                 },
               },
             });
@@ -226,7 +226,7 @@ export function CSection() {
                   value &&
                     updateInIndex(
                       {
-                        action: value.id as TMeasurementsTreatments,
+                        action: value.id as EMeasurementsTreatments,
                       },
                       index
                     );

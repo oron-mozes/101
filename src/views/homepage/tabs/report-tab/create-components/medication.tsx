@@ -15,6 +15,7 @@ import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
 import {
+  convertStringToNumber,
   convertToOptions,
   getDoseByValue,
   mergeData,
@@ -22,7 +23,7 @@ import {
   updateDataInIndex,
   validateLastItem,
 } from "./utils";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 const emptyState: IMedicationsAndFluidInformation = {
   action: null,
@@ -33,9 +34,13 @@ export function MedicationsAndFluidSection() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const medicationsAndFluids = mergeData(
-    patient?.medicationsAndFluids,
-    emptyPatient.medicationsAndFluids
+  const medicationsAndFluids = useMemo(
+    () =>
+      mergeData(
+        patient?.medicationsAndFluids,
+        emptyPatient.medicationsAndFluids
+      ),
+    [patient?.medicationsAndFluids]
   );
 
   const { actions = [] } = medicationsAndFluids;
@@ -91,8 +96,11 @@ export function MedicationsAndFluidSection() {
               <InputField
                 disabled={false}
                 label={translation("dose")}
-                value={measurements.dose}
-                onChange={(value) => {}}
+                numeric
+                value={measurements.dose?.toString()}
+                onChange={(dose) => {
+                  updateInIndex({ dose: convertStringToNumber(dose) }, index);
+                }}
               />
               <TimePicker
                 value={measurements.time}

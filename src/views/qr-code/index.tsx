@@ -38,6 +38,7 @@ export default function QrCode({ route }: IProps) {
     goBackHome();
   };
   const goBackHome = () => navigation.navigate(ROUTES.HOME);
+  console.log({ patient });
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>

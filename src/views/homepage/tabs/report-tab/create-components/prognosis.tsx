@@ -26,7 +26,7 @@ export function Prognosis() {
               prognosis: prognosis,
             });
           }}
-          value={patient?.prognosis ?? ""}
+          value={patient?.prognosis}
           label={translation("prognosis")}
         />
       </Card.Content>

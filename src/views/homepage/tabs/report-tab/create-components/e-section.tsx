@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
 import { emptyPatient } from "..";
@@ -14,7 +14,10 @@ export function ESection() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update } = context;
-  const eSection = patient?.eSection || emptyPatient.eSection;
+  const eSection = useMemo(
+    () => patient?.eSection || emptyPatient.eSection,
+    [patient?.eSection]
+  );
   const toggleValue = (value: EEsectionChips) => {
     update({ eSection: toggleListData(eSection, value) });
   };

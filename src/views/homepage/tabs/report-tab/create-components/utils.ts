@@ -203,3 +203,10 @@ export function checkHit(xPos, yPos) {
     }
   }
 }
+
+export function convertStringToNumber(value: string): number {
+  if (Boolean(value)) {
+    return Number(value);
+  }
+  return null;
+}

@@ -68,7 +68,6 @@ export enum EBreathingTreatment {
   NA = "NA",
   CHEST_TUBE = "CHEST_TUBE",
 }
-export type TBreathingTreatment = "OXIGEN" | "MOUTH" | "NA" | "CHEST_TUBE";
 export enum ECconsciousness {
   AWAKE = "AWAKE",
   VOICE = "VOICE",
@@ -103,7 +102,7 @@ export interface IAirWayInformation {
   successful: boolean;
 }
 export interface IBreathingInformation {
-  action: TBreathingTreatment;
+  action: EBreathingTreatment;
   time: number;
   successful: boolean;
 }
@@ -131,14 +130,9 @@ export enum EMeasurementsTreatments {
   CENTRAL_VAIN = "CENTRAL_VAIN",
   IO = "IO",
 }
-export type TMeasurementsTreatments =
-  | "STOP_BLEEDING"
-  | "PERIPHERAL"
-  | "CENTRAL_VAIN"
-  | "IO";
 
 export interface IMeasurementsInformation {
-  action: TMeasurementsTreatments;
+  action: EMeasurementsTreatments;
   time: number;
   successful: boolean;
 }

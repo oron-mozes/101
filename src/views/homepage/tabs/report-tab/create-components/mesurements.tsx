@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Divider, Icon, Text } from "react-native-paper";
 import { emptyPatient } from "..";
@@ -15,7 +15,12 @@ import {
 import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
-import { mergeData, removeByIndexHandler, updateDataInIndex } from "./utils";
+import {
+  convertStringToNumber,
+  mergeData,
+  removeByIndexHandler,
+  updateDataInIndex,
+} from "./utils";
 
 const emptyState: IMeasurementsAction = {
   time: null,
@@ -36,9 +41,9 @@ export function Measurements() {
   const translation = useTranslation();
   const context = useContext(Context);
   const { patient, update, providers } = context;
-  const treatmentGuide: ITreatment = mergeData(
-    patient.treatmentGuide,
-    emptyPatient.treatmentGuide
+  const treatmentGuide: ITreatment = useMemo(
+    () => mergeData(patient.treatmentGuide, emptyPatient.treatmentGuide),
+    [patient.treatmentGuide]
   );
   useEffect(() => {
     if (treatmentGuide.measurements.actions.length === 0) {
@@ -112,7 +117,7 @@ export function Measurements() {
       <Divider />
       <Card.Content style={[styles.innerContent]}>
         {treatmentGuide.measurements.actions.map((measurement, index) => (
-          <View style={styles.column}>
+          <View style={styles.column} key={index}>
             <TimePicker
               value={measurement.time}
               label={translation("treatment_execution_time")}
@@ -136,51 +141,58 @@ export function Measurements() {
               }))}
             />
             <InputField
+              maxLength={3}
               numeric
               label={translation("treatment_puls")}
-              value={measurement.puls}
-              onChange={(puls: number) => {
-                updateInIndex({ puls }, index);
+              value={measurement.puls?.toString()}
+              onChange={(puls) => {
+                updateInIndex({ puls: convertStringToNumber(puls) }, index);
               }}
             />
             <InputField
               numeric
               label={translation("treatment_systolic")}
-              value={measurement.systolic}
-              onChange={(systolic: number) => {
-                updateInIndex({ systolic }, index);
+              value={measurement.systolic?.toString()}
+              onChange={(systolic) => {
+                updateInIndex(
+                  { systolic: convertStringToNumber(systolic) },
+                  index
+                );
               }}
             />
             <InputField
               numeric
               label={translation("treatment_diastolic")}
-              value={measurement.diastolic}
-              onChange={(diastolic: number) => {
-                updateInIndex({ diastolic }, index);
+              value={measurement.diastolic?.toString()}
+              onChange={(diastolic) => {
+                updateInIndex(
+                  { diastolic: convertStringToNumber(diastolic) },
+                  index
+                );
               }}
             />
             <InputField
               numeric
               label={translation("treatment_breath")}
-              value={measurement.breath}
-              onChange={(breath: number) => {
-                updateInIndex({ breath }, index);
+              value={measurement.breath?.toString()}
+              onChange={(breath) => {
+                updateInIndex({ breath: convertStringToNumber(breath) }, index);
               }}
             />
             <InputField
               numeric
               label={translation("treatment_spo2")}
-              value={measurement.spo2}
-              onChange={(spo2: number) => {
-                updateInIndex({ spo2 }, index);
+              value={measurement.spo2?.toString()}
+              onChange={(spo2) => {
+                updateInIndex({ spo2: convertStringToNumber(spo2) }, index);
               }}
             />
             <InputField
               numeric
               label={translation("treatment_etcos")}
-              value={measurement.etcos}
-              onChange={(etcos: number) => {
-                updateInIndex({ etcos }, index);
+              value={measurement.etcos?.toString()}
+              onChange={(etcos) => {
+                updateInIndex({ etcos: convertStringToNumber(etcos) }, index);
               }}
             />
             <DropDown
@@ -201,33 +213,33 @@ export function Measurements() {
             <InputField
               numeric
               label={translation("treatment_prpo")}
-              value={measurement.prpo}
-              onChange={(prpo: number) => {
-                updateInIndex({ prpo }, index);
+              value={measurement.prpo?.toString()}
+              onChange={(prpo) => {
+                updateInIndex({ prpo: convertStringToNumber(prpo) }, index);
               }}
             />
             <InputField
               numeric
               label={translation("GCS")}
-              value={measurement.GCS}
-              onChange={(GCS: number) => {
-                updateInIndex({ GCS }, index);
+              value={measurement.GCS?.toString()}
+              onChange={(GCS) => {
+                updateInIndex({ GCS: convertStringToNumber(GCS) }, index);
               }}
             />
             <InputField
               numeric
               label={translation("treatment_urine")}
-              value={measurement.urine}
-              onChange={(urine: number) => {
-                updateInIndex({ urine }, index);
+              value={measurement.urine?.toString()}
+              onChange={(urine) => {
+                updateInIndex({ urine: convertStringToNumber(urine) }, index);
               }}
             />
             <InputField
               numeric
               label={translation("treatment_blood")}
-              value={measurement.blood}
-              onChange={(blood: number) => {
-                updateInIndex({ blood }, index);
+              value={measurement.blood?.toString()}
+              onChange={(blood) => {
+                updateInIndex({ blood: convertStringToNumber(blood) }, index);
               }}
             />
           </View>
@@ -240,6 +252,7 @@ export function Measurements() {
 const styles = StyleSheet.create({
   column: {
     flex: 1,
+    flexDirection: "column",
   },
   deleteAction: {
     justifyContent: "center",
