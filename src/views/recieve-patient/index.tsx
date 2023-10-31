@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -7,40 +7,59 @@ import {
   View,
 } from "react-native";
 import { Button, Text } from "react-native-paper";
-import { Camera, CameraDevice } from "react-native-vision-camera";
+import {
+  Camera,
+  CameraDevice,
+  CameraRuntimeError,
+  useCameraDevice,
+  useCodeScanner,
+} from "react-native-vision-camera";
 import { useCamera } from "../../hooks/useCamera";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { TAB_STATUS } from "../homepage";
+import { decode } from "../qr-code/decode-encode";
 
 export default function ReceivePatientScreen() {
-  const { device, codeScanner, format } = useCamera();
+  const { device, codeScanner, format, scannedInformation } = useCamera();
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
+
+  useEffect(() => {
+    if (scannedInformation) {
+      const decodedPatient = decode(
+        JSON.parse(scannedInformation[0].value).decodedPatient
+      );
+      console.log(decodedPatient);
+    }
+  }, [scannedInformation]);
 
   const goBackHome = () =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
   const reportEvac = async () => {
     goBackHome();
   };
+
+  const onError = useCallback((error: CameraRuntimeError) => {
+    console.error(error);
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <StatusBar barStyle="light-content" />
 
-        {device && (
-          <View style={styles.qrWrapper}>
-            <Camera
-              format={format}
-              codeScanner={codeScanner}
-              style={styles.camera}
-              device={device as CameraDevice}
-              isActive={true}
-            />
-          </View>
-        )}
+        <View style={styles.qrWrapper}>
+          <Camera
+            format={format}
+            codeScanner={codeScanner}
+            style={styles.camera}
+            device={device as CameraDevice}
+            isActive={Boolean(device)}
+          />
+        </View>
+
         <View style={styles.buttonsView}>
           <Button
             mode="contained"

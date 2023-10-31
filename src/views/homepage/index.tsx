@@ -2,12 +2,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useMemo } from "react";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import storage, { STORAGE } from "../../../storage";
-import {
-  IPatientRecord,
-  IProps,
-  RootStackParamList,
-  StackNavigation,
-} from "../../interfaces";
+import { RootStackParamList, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";

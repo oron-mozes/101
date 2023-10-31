@@ -74,7 +74,6 @@ export function DSection() {
       <Card.Content style={[styles.innerContent]}>
         <View style={[styles.section]}>
           <DropDown
-            placeholder=""
             initialValue={speech}
             onSelect={(value) => {
               update({
@@ -88,7 +87,6 @@ export function DSection() {
             options={convertToOptions(EReactionSpeech, translation)}
           />
           <DropDown
-            placeholder=""
             initialValue={eyes}
             onSelect={(value) => {
               update({
@@ -104,7 +102,6 @@ export function DSection() {
         </View>
         <View style={[styles.section]}>
           <DropDown
-            placeholder=""
             initialValue={movement}
             onSelect={(value) => {
               update({

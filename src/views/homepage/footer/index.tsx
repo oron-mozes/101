@@ -21,9 +21,7 @@ export function HomepageFooter() {
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={() =>
-          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.SCAN })
-        }
+        onPress={() => navigation.navigate(ROUTES.IMPORT_PATIENT)}
       >
         <View style={styles.textBox}>
           <StatusIcon active={selected === TAB_STATUS.SCAN} />

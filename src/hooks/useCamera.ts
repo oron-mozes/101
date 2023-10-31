@@ -1,13 +1,11 @@
+import { useEffect, useState } from "react";
+import { PermissionsAndroid } from "react-native";
 import {
-  Camera,
   Code,
   useCameraDevice,
   useCameraFormat,
-  useCameraPermission,
   useCodeScanner,
 } from "react-native-vision-camera";
-import { PermissionsAndroid } from "react-native";
-import { useEffect, useState } from "react";
 
 export function useCamera() {
   const device = useCameraDevice("back");
@@ -21,9 +19,7 @@ export function useCamera() {
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
     onCodeScanned: (codes) => {
-      console.log({ codes });
       updateScannedInformation(codes);
-      // console.log({ codes });
     },
   });
   useEffect(() => {
