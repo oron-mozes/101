@@ -11,6 +11,7 @@ export interface IStatusChipProps {
   allowSelect?: boolean;
   selected?: boolean;
   onSelect?(status: string): void;
+  disabled: boolean;
 }
 export function StatusChip({
   allowSelect = false,
@@ -18,6 +19,7 @@ export function StatusChip({
   label,
   status,
   onSelect,
+  disabled,
 }: IStatusChipProps) {
   return (
     <View
@@ -30,7 +32,7 @@ export function StatusChip({
       <Text>{label}</Text>
       {allowSelect && (
         <RadioButtonPaper
-          disabled={false}
+          disabled={disabled}
           onPress={() => {
             onSelect(label);
           }}

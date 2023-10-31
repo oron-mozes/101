@@ -16,7 +16,7 @@ import { useContext, useMemo } from "react";
 export function Evacuation() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const evacuation = useMemo(
     () => mergeData(patient?.evacuation, emptyPatient.evacuation),
     [patient?.evacuation]
@@ -30,6 +30,7 @@ export function Evacuation() {
       <Card.Content style={[styles.innerContent]}>
         <View style={{ width: 120 }}>
           <TimePicker
+            disabled={disabled}
             label={translation("time")}
             onChange={(time: number) => {
               update({
@@ -40,6 +41,7 @@ export function Evacuation() {
         </View>
         <View style={{ flex: 1 }}>
           <InputField
+            disabled={disabled}
             value={evacuation.destination}
             label={translation("destination")}
             onChange={(destination: string) => {
@@ -56,6 +58,7 @@ export function Evacuation() {
       <Card.Content style={styles.innerContent}>
         {Object.values(ETransportation).map((item) => (
           <ToggleButton
+            disabled={disabled}
             key={item}
             label={translation(item)}
             status={evacuation.transportation === item}
@@ -70,6 +73,7 @@ export function Evacuation() {
       <Card.Content style={styles.innerContent}>
         {Object.values(STATUS).map((item) => (
           <StatusChip
+            disabled={disabled}
             key={item}
             label={translation(item)}
             status={item}

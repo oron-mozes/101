@@ -67,6 +67,7 @@ export function InjuryModal({
               <Divider style={{ flex: 1, marginTop: 10, marginBottom: 10 }} />
 
               <ToggleButton
+                disabled={false}
                 status={status?.HT}
                 label={translation("TH")}
                 onSelect={(HT: boolean) => {
@@ -75,6 +76,7 @@ export function InjuryModal({
               />
               {status?.HT && (
                 <TimePicker
+                  disabled={false}
                   value={status.HT_time}
                   label={translation("TH_time")}
                   onChange={(HT_time: number) => {

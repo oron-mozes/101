@@ -13,7 +13,7 @@ import { isSelectedHandler, toggleListData } from "./utils";
 export function ESection() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const eSection = useMemo(
     () => patient?.eSection || emptyPatient.eSection,
     [patient?.eSection]
@@ -31,6 +31,7 @@ export function ESection() {
       <Card.Content style={styles.innerContent}>
         {Object.values(EEsectionChips).map((item) => (
           <ToggleButton
+            disabled={disabled}
             key={item}
             label={translation(item)}
             status={isSelected(item)}

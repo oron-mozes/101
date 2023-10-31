@@ -13,7 +13,7 @@ import { useContext, useMemo } from "react";
 export function Avpu() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const consciousness = useMemo(
     () => patient?.consciousness || emptyPatient.consciousness,
     [patient?.consciousness]
@@ -32,8 +32,9 @@ export function Avpu() {
       <Card.Content style={styles.innerContent}>
         {Object.values(ECconsciousness).map((item) => (
           <ToggleButton
+            disabled={disabled}
             label={translation(item)}
-            onSelect={(selected: boolean) => toggleValue(item)}
+            onSelect={() => toggleValue(item)}
             status={consciousness.indexOf(item) !== -1}
             key={item}
           />

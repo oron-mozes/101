@@ -33,7 +33,7 @@ const emptyState: IAirWayInformation = {
 export function ASection() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const airway = useMemo(
     () => mergeData(patient?.airway, emptyPatient.airway),
     [patient?.airway]
@@ -77,6 +77,7 @@ export function ASection() {
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.airwayView]}>
         <RadioGroup
+          disabled={disabled}
           horizontal
           label={translation("airWayInjury")}
           onSelect={(id: string) => {
@@ -115,6 +116,7 @@ export function ASection() {
                 </Text>
 
                 <RadioGroup
+                  disabled={disabled}
                   label={translation("actionResult")}
                   onSelect={(id: string) => {
                     updateInIndex({ successful: id === TOGGLE.YES }, index);
@@ -123,6 +125,7 @@ export function ASection() {
                   options={convertToOptions(TOGGLE, translation)}
                 />
                 <TimePicker
+                  disabled={disabled}
                   value={airWayInfo.time}
                   label={translation("actionTime")}
                   onChange={(time: number) => {
@@ -133,7 +136,7 @@ export function ASection() {
               <View style={styles.element}>
                 <DropDown
                   label={translation("actionTaken")}
-                  placeholder={translation("select")}
+                  disabled={disabled}
                   initialValue={airWayInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
                     value &&
@@ -154,6 +157,7 @@ export function ASection() {
         <Card.Content style={[styles.innerContent, styles.addItemAction]}>
           <Icon size={20} source="plus" color={colors.primary} />
           <Text
+            disabled={disabled}
             style={{ color: colors.primary, fontSize: 17 }}
             onPress={addRow}
           >

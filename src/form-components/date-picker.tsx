@@ -15,7 +15,9 @@ export function DatePicker({
   label,
   onChange,
   value,
+  disabled,
 }: {
+  disabled: boolean;
   label: string;
   value?: number;
   onChange(value: number): void;
@@ -45,6 +47,7 @@ export function DatePicker({
       )}
       {showTime && (
         <DateTimePicker
+          disabled={disabled}
           value={new Date()}
           mode="date"
           onChange={(data) => {

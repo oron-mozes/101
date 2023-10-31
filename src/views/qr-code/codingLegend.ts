@@ -93,3 +93,5 @@ coding.set("prpo", 77);
 coding.set("urine", 78);
 coding.set("blood", 79);
 coding.set("LEFT_ARM", 80);
+coding.set("id", 82);
+coding.set("unit_name", 81);

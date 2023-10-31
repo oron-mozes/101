@@ -14,12 +14,7 @@ import {
 import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
-import {
-  convertStringToNumber,
-  mergeData,
-  removeByIndexHandler,
-  updateDataInIndex,
-} from "./utils";
+import { convertStringToNumber, mergeData, updateDataInIndex } from "./utils";
 
 const emptyState: IMeasurementsAction = {
   time: null,
@@ -39,7 +34,7 @@ const emptyState: IMeasurementsAction = {
 export function Measurements() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update, providers } = context;
+  const { patient, update, providers, disabled } = context;
   const measurements: ITreatmentGuideMeasurementsInformation = useMemo(
     () =>
       mergeData(
@@ -99,6 +94,7 @@ export function Measurements() {
       <Card.Content style={[styles.innerContent]}>
         <View style={[styles.innerContent, { flex: 1 }]}>
           <DropDown
+            disabled={disabled}
             label={translation("treatment_period")}
             initialValue={measurements.period?.toString()}
             onSelect={(selected) => {
@@ -134,6 +130,7 @@ export function Measurements() {
         {measurements.actions.map((measurement, index) => (
           <View style={styles.column} key={index}>
             <TimePicker
+              disabled={disabled}
               value={measurement.time}
               label={translation("treatment_execution_time")}
               onChange={(time) => {
@@ -141,6 +138,7 @@ export function Measurements() {
               }}
             />
             <DropDown
+              disabled={disabled}
               initialValue={measurement.provider?.idf_id?.toString()}
               onSelect={(value) => {
                 const provider = Object.values(providers).find(
@@ -155,6 +153,7 @@ export function Measurements() {
               }))}
             />
             <InputField
+              disabled={disabled}
               maxLength={3}
               numeric
               label={translation("treatment_puls")}
@@ -164,6 +163,7 @@ export function Measurements() {
               }}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("treatment_systolic")}
               value={measurement.systolic?.toString()}
@@ -175,6 +175,7 @@ export function Measurements() {
               }}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("treatment_diastolic")}
               value={measurement.diastolic?.toString()}
@@ -186,6 +187,7 @@ export function Measurements() {
               }}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("treatment_breath")}
               value={measurement.breath?.toString()}
@@ -194,6 +196,7 @@ export function Measurements() {
               }}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("treatment_spo2")}
               value={measurement.spo2?.toString()}
@@ -202,6 +205,7 @@ export function Measurements() {
               }}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("treatment_etcos")}
               value={measurement.etcos?.toString()}
@@ -210,6 +214,7 @@ export function Measurements() {
               }}
             />
             <DropDown
+              disabled={disabled}
               initialValue={measurement.pain?.toString()}
               onSelect={(pain) => {
                 updateInIndex({ pain: convertStringToNumber(pain.id) }, index);
@@ -221,6 +226,7 @@ export function Measurements() {
               }))}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("treatment_prpo")}
               value={measurement.prpo?.toString()}
@@ -229,6 +235,7 @@ export function Measurements() {
               }}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("GCS")}
               value={measurement.GCS?.toString()}
@@ -237,6 +244,7 @@ export function Measurements() {
               }}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("treatment_urine")}
               value={measurement.urine?.toString()}
@@ -245,6 +253,7 @@ export function Measurements() {
               }}
             />
             <InputField
+              disabled={disabled}
               numeric
               label={translation("treatment_blood")}
               value={measurement.blood?.toString()}

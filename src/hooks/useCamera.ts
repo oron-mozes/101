@@ -9,6 +9,7 @@ import {
 
 export function useCamera() {
   const device = useCameraDevice("back");
+
   const [permission, updatePermission] = useState<string>();
   const [scannedInformation, updateScannedInformation] = useState<Code[]>();
   const format = useCameraFormat(device, [

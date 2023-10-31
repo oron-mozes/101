@@ -10,9 +10,14 @@ export function encode(data) {
   let finalData = [];
   for (const key in data) {
     const value = encode(data[key]);
-    if (value) {
+
+    if (!_.isNull(value)) {
       if (!_.isArray(value)) {
-        finalData.push([[coding.get(key)], value]);
+        if (_.isArray(data)) {
+          finalData.push([[[Number(key)]], value]);
+        } else {
+          finalData.push([[coding.get(key)], value]);
+        }
       } else if (_.isArray(value)) {
         for (const item of value) {
           if (!key.match(/[a-zA-Z]/g)) {
@@ -46,12 +51,15 @@ export const generatePath = (hints: any[]): string => {
     const nestedItem = hints.pop();
     if (_.isArray(nestedItem)) {
       const arrIndex = nestedItem.pop();
+
       path.push(arrIndex);
-      path.push(generatePath(nestedItem));
+      const concatWith = generatePath(nestedItem);
+      Boolean(concatWith) && path.push(concatWith);
     } else {
       path.push(reverseCodingMap.get(nestedItem));
     }
   }
+
   return path.join("/");
 };
 export function decode(encodedData): Partial<IPatientRecord> {

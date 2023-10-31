@@ -33,7 +33,7 @@ const emptyState: IMedicationsAndFluidInformation = {
 export function MedicationsAndFluidSection() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const medicationsAndFluids = useMemo(
     () =>
       mergeData(
@@ -88,13 +88,14 @@ export function MedicationsAndFluidSection() {
           >
             <View style={[styles.element, styles.actionRow]}>
               <Text
+                disabled={disabled}
                 onPress={() => removeByIndex(index)}
                 style={styles.deleteAction}
               >
                 <Icon size={20} source="delete" color={colors.primary} />
               </Text>
               <InputField
-                disabled={false}
+                disabled={disabled}
                 label={translation("dose")}
                 numeric
                 value={measurements.dose?.toString()}
@@ -103,6 +104,7 @@ export function MedicationsAndFluidSection() {
                 }}
               />
               <TimePicker
+                disabled={disabled}
                 value={measurements.time}
                 label={translation("actionTime")}
                 onChange={(time: number) => {
@@ -112,6 +114,7 @@ export function MedicationsAndFluidSection() {
             </View>
             <View style={styles.element}>
               <DropDown
+                disabled={disabled}
                 label={translation("actionTaken")}
                 initialValue={measurements.action}
                 onSelect={(value: TAutocompleteDropdownItem) => {
@@ -134,6 +137,7 @@ export function MedicationsAndFluidSection() {
         <Card.Content style={[styles.innerContent, styles.addItemAction]}>
           <Icon size={20} source="plus" color={colors.primary} />
           <Text
+            disabled={disabled}
             style={{ color: colors.primary, fontSize: 17 }}
             onPress={addRow}
           >

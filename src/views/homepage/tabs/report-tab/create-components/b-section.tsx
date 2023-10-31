@@ -34,7 +34,7 @@ const emptyState: IBreathingInformation = {
 export function BSection() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const breathing = useMemo(
     () => mergeData(patient?.breathing, emptyPatient.breathing),
     [patient?.breathing]
@@ -81,6 +81,7 @@ export function BSection() {
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.breathingView]}>
         <RadioGroup
+          disabled={disabled}
           horizontal
           label={translation("breathingInjury")}
           onSelect={(id: string) => {
@@ -99,6 +100,7 @@ export function BSection() {
       {fulfill && (
         <Card.Content style={[styles.innerContent]}>
           <InputField
+            disabled={disabled}
             label={translation("breathings")}
             numeric
             value={breathing.breathingCount?.toString()}
@@ -112,6 +114,7 @@ export function BSection() {
             }}
           />
           <InputField
+            disabled={disabled}
             numeric
             value={breathing.saturation?.toString()}
             label={translation("saturation")}
@@ -142,6 +145,7 @@ export function BSection() {
             >
               <View style={[styles.element, styles.actionRow]}>
                 <Text
+                  disabled={disabled}
                   onPress={() => removeByIndex(index)}
                   style={styles.deleteAction}
                 >
@@ -149,6 +153,7 @@ export function BSection() {
                 </Text>
 
                 <RadioGroup
+                  disabled={disabled}
                   label={translation("actionResult")}
                   onSelect={(id: string) => {
                     updateInIndex({ successful: id === TOGGLE.YES }, index);
@@ -157,6 +162,7 @@ export function BSection() {
                   options={convertToOptions(TOGGLE, translation)}
                 />
                 <TimePicker
+                  disabled={disabled}
                   value={breathingInfo.time}
                   label={translation("actionTime")}
                   onChange={(time: number) => {
@@ -166,6 +172,7 @@ export function BSection() {
               </View>
               <View style={styles.element}>
                 <DropDown
+                  disabled={disabled}
                   label={translation("actionTaken")}
                   initialValue={breathingInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
@@ -187,6 +194,7 @@ export function BSection() {
         <Card.Content style={[styles.innerContent, styles.addItemAction]}>
           <Icon size={20} source="plus" color={colors.primary} />
           <Text
+            disabled={disabled}
             style={{ color: colors.primary, fontSize: 17 }}
             onPress={addRow}
           >

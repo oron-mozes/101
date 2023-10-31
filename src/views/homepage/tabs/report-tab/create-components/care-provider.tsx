@@ -23,7 +23,7 @@ export function CareProvider() {
       .catch(() => {});
   }, []);
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const provider = useMemo(
     () => mergeData(patient?.provider ?? {}, emptyPatient.provider),
     [patient?.provider]
@@ -38,7 +38,7 @@ export function CareProvider() {
       <Card.Content style={[styles.innerContent]}>
         <View style={{ flex: 1 }}>
           <DropDown
-            placeholder={translation("select")}
+            disabled={disabled}
             label={translation("careProviderName")}
             initialValue={provider.idf_id?.toString()}
             onSelect={(value) => {

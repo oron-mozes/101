@@ -9,6 +9,7 @@ import {
   ICareProvider,
   IPatientRecord,
   RootStackParamList,
+  STATUS,
 } from "../../../../interfaces";
 import Context from "./context";
 import { ASection } from "./create-components/a-section";
@@ -123,9 +124,14 @@ export function ReportTab() {
     () => patientRecord?.id ?? new Date().getTime().toString(),
     []
   );
+  const disabled = useMemo(
+    () => patientRecord.evacuation.status === STATUS.CLOSED,
+    [patientRecord.evacuation.status]
+  );
 
   const savePatient = (data) => {
-    data.personal_information?.idf_id &&
+    patientRecord.evacuation.status !== STATUS.CLOSED &&
+      data.personal_information?.idf_id &&
       storage.save({
         key: STORAGE.PATIENTS_RECORD,
         id: selectedId,
@@ -148,6 +154,7 @@ export function ReportTab() {
     <AutocompleteDropdownContextProvider>
       <Context.Provider
         value={{
+          disabled,
           providers,
           patient: patientRecord,
           update: (value) => {
@@ -179,7 +186,7 @@ export function ReportTab() {
             }}
           >
             <List.Accordion
-              right={(props) => (
+              right={() => (
                 <List.Icon
                   color="white"
                   icon={

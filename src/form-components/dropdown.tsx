@@ -10,7 +10,9 @@ export function DropDown({
   options,
   initialValue,
   onSelect,
+  disabled,
 }: {
+  disabled: boolean;
   label: string;
   initialValue?: string;
   onSelect(value: IOption): void;
@@ -22,6 +24,7 @@ export function DropDown({
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
       <Picker
+        enabled={!disabled}
         style={styles.picker}
         mode="dialog"
         selectedValue={selected}

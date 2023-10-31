@@ -40,16 +40,10 @@ export function StatusTab() {
           </DataTable.Title>
         </DataTable.Header>
         {sortByPriority(patientsRecord).map((patient) => {
-          const disable: boolean =
-            patient?.evacuation?.status === STATUS.CLOSED;
           return (
-            <DataTable.Row
-              key={patient.id}
-              style={[disable ? styles.disableRow : {}]}
-            >
+            <DataTable.Row key={patient.id}>
               <DataTable.Cell
                 style={[styles.title]}
-                disabled={disable}
                 onPress={() =>
                   navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
                 }

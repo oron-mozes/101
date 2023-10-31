@@ -39,7 +39,7 @@ const emptyState: IReaction = {
 export function DSection() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const reaction = useMemo(
     () => mergeData(patient?.reaction, emptyPatient.reaction),
     [patient?.reaction]
@@ -64,6 +64,7 @@ export function DSection() {
       <Card.Content style={[styles.innerContent]}>
         {Object.values(EReactionGeneral).map((item) => (
           <ToggleButton
+            disabled={disabled}
             label={translation(item)}
             status={isSelected(item)}
             onSelect={() => toggleValue(item)}
@@ -74,6 +75,7 @@ export function DSection() {
       <Card.Content style={[styles.innerContent]}>
         <View style={[styles.section]}>
           <DropDown
+            disabled={disabled}
             initialValue={speech}
             onSelect={(value) => {
               update({
@@ -87,6 +89,7 @@ export function DSection() {
             options={convertToOptions(EReactionSpeech, translation)}
           />
           <DropDown
+            disabled={disabled}
             initialValue={eyes}
             onSelect={(value) => {
               update({
@@ -102,6 +105,7 @@ export function DSection() {
         </View>
         <View style={[styles.section]}>
           <DropDown
+            disabled={disabled}
             initialValue={movement}
             onSelect={(value) => {
               update({

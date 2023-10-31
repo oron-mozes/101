@@ -60,7 +60,6 @@ export default function QrCode() {
         </View>
         <View style={styles.qrWrapper}>
           <QRCode
-            
             value={JSON.stringify({ decodedPatient })}
             logo={require("./Logo.png")}
             size={220}

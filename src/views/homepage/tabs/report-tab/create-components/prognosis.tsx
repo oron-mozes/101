@@ -10,7 +10,7 @@ import { useContext } from "react";
 export function Prognosis() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
 
   return (
     <Card style={styles.card}>
@@ -20,6 +20,7 @@ export function Prognosis() {
 
       <Card.Content style={[styles.innerContent]}>
         <InputField
+          disabled={disabled}
           numberOfLines={5}
           onChange={(prognosis: string) => {
             update({

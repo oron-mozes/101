@@ -5,13 +5,13 @@ import { colors, gutter } from "../shared-config";
 export interface IRadioButton {
   onSelect(e: boolean): void;
   label: string;
-  disabled?: boolean;
+  disabled: boolean;
   status?: boolean;
 }
 export function ToggleButton({
   label,
   onSelect,
-  disabled = false,
+  disabled,
   status = false,
 }: IRadioButton) {
   return (

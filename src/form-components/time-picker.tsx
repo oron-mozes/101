@@ -15,7 +15,9 @@ export function TimePicker({
   label,
   onChange,
   value,
+  disabled,
 }: {
+  disabled: boolean;
   label: string;
   value?: number;
   onChange(value: number): void;
@@ -46,6 +48,7 @@ export function TimePicker({
       )}
       {showTime && (
         <DateTimePicker
+          disabled={disabled}
           value={new Date()}
           mode="time"
           is24Hour={true}

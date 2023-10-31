@@ -1,32 +1,17 @@
+import { useContext, useEffect, useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Card, Icon, Text } from "react-native-paper";
 import { emptyPatient } from "..";
 import { DropDown } from "../../../../../form-components/dropdown";
-import { RadioGroup } from "../../../../../form-components/radio-group";
+import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import {
-  EAirWayTreatment,
-  IAirWayInformation,
-  ITreatment,
-  ITreatmentGuide,
-  TAirWayTreatment,
-  TOGGLE,
-} from "../../../../../interfaces";
+import { ITreatment, ITreatmentGuide } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
 import Context from "../context";
 import { design } from "./shared-style";
-import {
-  convertToOptions,
-  mergeData,
-  removeByIndexHandler,
-  updateDataInIndex,
-  validateLastItem,
-} from "./utils";
-import { useContext, useEffect, useMemo } from "react";
-import { InputField } from "../../../../../form-components/input-field";
+import { mergeData, updateDataInIndex } from "./utils";
 
 const emptyState: ITreatmentGuide = {
   care_guide: null,
@@ -38,7 +23,7 @@ const emptyState: ITreatmentGuide = {
 export function TreatmentGuide() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update, providers } = context;
+  const { patient, update, providers, disabled } = context;
   const treatmentGuide: ITreatment = useMemo(
     () => mergeData(patient.treatmentGuide, emptyPatient.treatmentGuide),
     [patient.treatmentGuide]
@@ -79,6 +64,7 @@ export function TreatmentGuide() {
         <View key={index}>
           <Card.Content style={[styles.innerContent]}>
             <InputField
+              disabled={disabled}
               label={translation("treatment_care_guide")}
               value={guide.care_guide}
               onChange={(care_guide: string) => {
@@ -89,6 +75,7 @@ export function TreatmentGuide() {
           <Card.Content style={[styles.innerContent]}>
             <View style={[styles.innerContent, styles.split]}>
               <TimePicker
+                disabled={disabled}
                 value={guide.order_time}
                 label={translation("treatment_order_time")}
                 onChange={(order_time) => {
@@ -96,7 +83,7 @@ export function TreatmentGuide() {
                 }}
               />
               <DropDown
-                placeholder={translation("select")}
+                disabled={disabled}
                 initialValue={guide.provider_issuer?.idf_id?.toString()}
                 onSelect={(value) => {
                   const provider_issuer = Object.values(providers).find(
@@ -113,6 +100,7 @@ export function TreatmentGuide() {
             </View>
             <View style={[styles.innerContent, styles.split]}>
               <TimePicker
+                disabled={disabled}
                 value={guide.execution_time}
                 label={translation("treatment_execution_time")}
                 onChange={(execution_time) => {
@@ -120,7 +108,7 @@ export function TreatmentGuide() {
                 }}
               />
               <DropDown
-                placeholder={translation("select")}
+                disabled={disabled}
                 initialValue={guide.provider_executer?.idf_id?.toString()}
                 onSelect={(value) => {
                   const provider_executer = Object.values(providers).find(
@@ -140,7 +128,11 @@ export function TreatmentGuide() {
       ))}
       <Card.Content style={[styles.innerContent, styles.addItemAction]}>
         <Icon size={20} source="plus" color={colors.primary} />
-        <Text style={{ color: colors.primary, fontSize: 17 }} onPress={addRow}>
+        <Text
+          style={{ color: colors.primary, fontSize: 17 }}
+          disabled={disabled}
+          onPress={addRow}
+        >
           {translation("treatment_guide_new")}
         </Text>
       </Card.Content>

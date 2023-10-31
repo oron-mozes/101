@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import {
+  Alert,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -17,24 +18,17 @@ import {
 import { useCamera } from "../../hooks/useCamera";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "../../hooks/useMyTranslation";
-import { StackNavigation } from "../../interfaces";
+import { STATUS, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { TAB_STATUS } from "../homepage";
 import { decode } from "../qr-code/decode-encode";
+import { RNCamera } from "react-native-camera";
+import storage, { STORAGE } from "../../../storage";
 
 export default function ReceivePatientScreen() {
-  const { device, codeScanner, format, scannedInformation } = useCamera();
+  // const { device, codeScanner, format, scannedInformation } = useCamera();
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
-
-  useEffect(() => {
-    if (scannedInformation) {
-      const decodedPatient = decode(
-        JSON.parse(scannedInformation[0].value).decodedPatient
-      );
-      console.log(decodedPatient);
-    }
-  }, [scannedInformation]);
 
   const goBackHome = () =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
@@ -42,21 +36,32 @@ export default function ReceivePatientScreen() {
     goBackHome();
   };
 
-  const onError = useCallback((error: CameraRuntimeError) => {
-    console.error(error);
-  }, []);
+  const handleBarcodeRead = (event) => {
+    if (event.data) {
+      const decodedPatient = decode(JSON.parse(event.data).decodedPatient);
+      storage.save({
+        key: STORAGE.PATIENTS_RECORD,
+        id: decodedPatient.id,
+        data: {
+          ...decodedPatient,
+          evacuation: {
+            ...decodedPatient.evacuation,
+            status: STATUS.NEW_PATIENT,
+          },
+        },
+      });
+      navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <StatusBar barStyle="light-content" />
-
-        <View style={styles.qrWrapper}>
-          <Camera
-            format={format}
-            codeScanner={codeScanner}
+        <View style={{ flex: 1 }}>
+          <RNCamera
             style={styles.camera}
-            device={device as CameraDevice}
-            isActive={Boolean(device)}
+            onBarCodeRead={handleBarcodeRead}
+            captureAudio={false}
           />
         </View>
 

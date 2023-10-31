@@ -14,7 +14,7 @@ import { useContext, useMemo } from "react";
 export function InjuryReason() {
   const translation = useTranslation();
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const injuryReason = useMemo(
     () => mergeData(patient?.injuryReason, emptyPatient.injuryReason),
     [patient?.injuryReason]
@@ -38,6 +38,7 @@ export function InjuryReason() {
       <Card.Content style={styles.innerContent}>
         {Object.values(EInjuryReason).map((item) => (
           <ToggleButton
+            disabled={disabled}
             key={item}
             label={translation(item)}
             status={isSelected(item)}
@@ -47,6 +48,7 @@ export function InjuryReason() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
+          disabled={disabled}
           onChange={(circumstance: string) => {
             update({
               injuryReason: { ...injuryReason, circumstance },

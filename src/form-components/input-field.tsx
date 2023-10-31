@@ -6,7 +6,7 @@ import _ from "lodash";
 export interface IInputField {
   onChange(value: string): void;
   label: string;
-  disabled?: boolean;
+  disabled: boolean;
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
@@ -16,7 +16,7 @@ export interface IInputField {
 function InputFieldHandler({
   label,
   onChange,
-  disabled = false,
+  disabled,
   value,
   numeric = false,
   numberOfLines = 1,
@@ -30,8 +30,6 @@ function InputFieldHandler({
     onChange(numeric ? Number(searchText) : searchText);
   }, 500);
 
-
-  
   const inputRef = useRef(null);
   const handleInputPress = () => {
     // Focus the input when it's pressed

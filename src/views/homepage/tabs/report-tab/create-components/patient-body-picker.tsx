@@ -1,22 +1,20 @@
+import { useContext, useState } from "react";
 import {
   StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
+  TouchableWithoutFeedback
 } from "react-native";
-import { BodyPicker } from "../../../../../components/body-picker";
-import Context from "../context";
 import { Card } from "react-native-paper";
-import { SectionHeader } from "../../../../../form-components/section-header";
-import { design } from "./shared-style";
-import { useTranslation } from "../../../../../hooks/useMyTranslation";
+import { BodyPicker } from "../../../../../components/body-picker";
 import { InjuryModal } from "../../../../../components/body-picker/injury-modal";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { SectionHeader } from "../../../../../form-components/section-header";
+import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import {
   EHT_POSITION,
   EPosition,
   IInjuryInformation,
 } from "../../../../../interfaces";
+import Context from "../context";
+import { design } from "./shared-style";
 import { checkHit } from "./utils";
 
 export function PatientBodyPicker() {
@@ -34,7 +32,7 @@ export function PatientBodyPicker() {
     }
   };
   const context = useContext(Context);
-  const { patient, update } = context;
+  const { patient, update, disabled } = context;
   const injuries = patient.injuries || {};
 
   return (
