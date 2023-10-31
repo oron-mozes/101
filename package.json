@@ -4,6 +4,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "test": "npx jest",
+    "clean": "expo prebuild --clean",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
