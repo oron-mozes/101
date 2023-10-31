@@ -23,7 +23,7 @@ export function RadioGroup({
       <View style={[styles.horizontal]}>
         {options.map((option) => (
           <CheckButton
-            disabled
+            disabled={disabled}
             key={option.id}
             label={option.title}
             onSelect={() => {

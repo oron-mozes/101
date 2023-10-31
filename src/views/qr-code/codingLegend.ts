@@ -43,10 +43,10 @@ coding.set("STOMACH", 34);
 coding.set("CHEST", 35);
 coding.set("FOREHEAD", 36);
 coding.set("BACK_HEAD", 37);
-coding.set("gunshots", 38);
-coding.set("hits", 39);
-coding.set("HT", 40);
-coding.set("HT_time", 41);
+coding.set("gunshot", 38);
+coding.set("sharpnel", 39);
+coding.set("touniquet", 40);
+coding.set("touniquet_time", 41);
 
 coding.set("fulfill", 42);
 coding.set("action", 43);

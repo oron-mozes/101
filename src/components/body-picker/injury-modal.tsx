@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Divider, Modal, Portal } from "react-native-paper";
+import { Button, Divider, Modal, Portal } from "react-native-paper";
 import { ToggleButton } from "../../form-components/ToggleButton";
 import { InputField } from "../../form-components/input-field";
 import { TimePicker } from "../../form-components/time-picker";
@@ -86,6 +86,14 @@ export function InjuryModal({
           )}
 
           <View style={{ flex: 1 }} />
+          <Button
+            onPress={() => {
+              onChange(data);
+              closeHandler();
+            }}
+          >
+            {translation("continue")}
+          </Button>
         </View>
       </Modal>
     </Portal>
