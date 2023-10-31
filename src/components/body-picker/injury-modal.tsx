@@ -1,33 +1,38 @@
-import { Divider, Modal, Portal, Text } from "react-native-paper";
-import { EHT_POSITION, EPosition, IInjuryInformation } from "../../interfaces";
-import { useTranslation } from "../../hooks/useMyTranslation";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { colors } from "../../shared-config";
+import { Divider, Modal, Portal } from "react-native-paper";
+import { ToggleButton } from "../../form-components/ToggleButton";
 import { InputField } from "../../form-components/input-field";
 import { TimePicker } from "../../form-components/time-picker";
-import { ToggleButton } from "../../form-components/ToggleButton";
-import { useState } from "react";
-import { convertStringToNumber } from "../../views/homepage/tabs/report-tab/create-components/utils";
+import { useTranslation } from "../../hooks/useMyTranslation";
+import { colors } from "../../shared-config";
 
 export function InjuryModal({
   closeHandler,
   onChange,
-  position,
-  data,
 }: {
-  data: IInjuryInformation;
-  position: EPosition | EHT_POSITION;
   onChange(value): void;
   closeHandler(): void;
 }) {
   const translation = useTranslation();
-  const [status, setStatus] = useState<IInjuryInformation>(data);
+  const [data, setData] = useState<{
+    gunshot: number;
+    sharpnel: number;
+    touniquet: boolean;
+    touniquet_time: number;
+  }>({
+    gunshot: null,
+    sharpnel: null,
+    touniquet: null,
+    touniquet_time: null,
+  });
+
   return (
     <Portal>
       <Modal
         visible={true}
         onDismiss={() => {
-          onChange({ position, data: status });
+          onChange(data);
           closeHandler();
         }}
         contentContainerStyle={{
@@ -37,55 +42,49 @@ export function InjuryModal({
         }}
       >
         <View style={styles.content}>
-          <Text variant="headlineSmall" style={{ flex: 1 }}>
-            {translation(position)}
-          </Text>
           <View style={{ flexDirection: "row", flex: 1 }}>
             <InputField
+              disabled={false}
               label={translation("gunshots")}
               numeric
-              value={status?.gunshots?.toString()}
-              onChange={(gunshots) => {
-                setStatus({
-                  ...status,
-                  gunshots: convertStringToNumber(gunshots),
-                });
+              value={data?.gunshot?.toString()}
+              onChange={(gunshot) => {
+                setData({ ...data, gunshot: Number(gunshot) });
               }}
             />
 
             <InputField
+              disabled={false}
               label={translation("hits")}
               numeric
-              value={status?.hits?.toString()}
-              onChange={(hits) => {
-                setStatus({ ...status, hits: convertStringToNumber(hits) });
+              value={data.sharpnel?.toString()}
+              onChange={(sharpnel) => {
+                setData({ ...data, sharpnel: Number(sharpnel) });
               }}
             />
           </View>
-          {EHT_POSITION[position] && (
-            <>
-              <Divider style={{ flex: 1, marginTop: 10, marginBottom: 10 }} />
 
-              <ToggleButton
-                disabled={false}
-                status={status?.HT}
-                label={translation("TH")}
-                onSelect={(HT: boolean) => {
-                  setStatus({ ...status, HT });
-                }}
-              />
-              {status?.HT && (
-                <TimePicker
-                  disabled={false}
-                  value={status.HT_time}
-                  label={translation("TH_time")}
-                  onChange={(HT_time: number) => {
-                    setStatus({ ...status, HT_time });
-                  }}
-                />
-              )}
-            </>
+          <Divider style={{ flex: 1, marginTop: 10, marginBottom: 10 }} />
+
+          <ToggleButton
+            disabled={false}
+            status={data.touniquet}
+            label={translation("TH")}
+            onSelect={(touniquet: boolean) => {
+              setData({ ...data, touniquet });
+            }}
+          />
+          {data?.touniquet && (
+            <TimePicker
+              disabled={false}
+              value={data.touniquet_time}
+              label={translation("TH_time")}
+              onChange={(touniquet_time: number) => {
+                setData({ ...data, touniquet_time });
+              }}
+            />
           )}
+
           <View style={{ flex: 1 }} />
         </View>
       </Modal>

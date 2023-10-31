@@ -1,6 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationProp } from "@react-navigation/native";
-import { InjuryReason } from "./views/homepage/tabs/report-tab/create-components/injury-reason";
 import { TAB_STATUS } from "./views/homepage";
 
 export interface IPersonalInformation {
@@ -51,10 +50,10 @@ export interface IHT {
   time: number;
 }
 export interface IInjuryInformation {
-  gunshots?: number;
-  hits?: number;
-  HT?: boolean;
-  HT_time?: number;
+  gunshot?: number;
+  sharpnel?: number;
+  touniquet?: boolean;
+  touniquet_time?: number;
 }
 export enum EAirWayTreatment {
   AW = "AW",
@@ -271,12 +270,18 @@ export interface ITreatment {
   guides: ITreatmentGuide[];
   measurements: ITreatmentGuideMeasurementsInformation;
 }
+
+export interface IInjury {
+  xPos: number;
+  yPos: number;
+  data: IInjuryInformation;
+}
 export interface IPatientRecord {
   id?: string;
   personal_information: IPersonalInformation;
   incident_information: IIncidentInformation;
   provider: Partial<ICareProvider>;
-  injuries: { [key in EPosition]?: IInjuryInformation };
+  injuries: IInjury[];
   consciousness: ECconsciousness[];
   eSection: EEsectionChips[];
   airway: IAirway;

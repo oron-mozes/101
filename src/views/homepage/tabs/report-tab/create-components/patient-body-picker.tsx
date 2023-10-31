@@ -1,61 +1,42 @@
-import { useContext, useState } from "react";
-import {
-  StyleSheet,
-  TouchableWithoutFeedback
-} from "react-native";
+import { useContext, useMemo, useState } from "react";
+import { StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { Card } from "react-native-paper";
 import { BodyPicker } from "../../../../../components/body-picker";
 import { InjuryModal } from "../../../../../components/body-picker/injury-modal";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import {
-  EHT_POSITION,
-  EPosition,
-  IInjuryInformation,
-} from "../../../../../interfaces";
 import Context from "../context";
 import { design } from "./shared-style";
-import { checkHit } from "./utils";
+import { mergeData } from "./utils";
+import { emptyPatient } from "..";
 
 export function PatientBodyPicker() {
   const translation = useTranslation();
   const [showModal, toggleModal] = useState<boolean>(false);
-  const [selectedPosition, setPosition] = useState<EPosition | EHT_POSITION>();
-
+  const context = useContext(Context);
+  const { patient, update } = context;
+  const injuries = useMemo(() => patient?.injuries ?? [], [patient?.injuries]);
   const handlePress = (event) => {
     const { locationX, locationY } = event.nativeEvent;
+    update({
+      injuries: [...injuries, { xPos: locationX, yPos: locationY, data: null }],
+    });
 
-    const position = checkHit(locationX, locationY);
-    if (position) {
-      setPosition(position);
-      toggleModal(true);
-    }
+    toggleModal(true);
   };
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const injuries = patient.injuries || {};
 
   return (
     <>
       {showModal && (
         <InjuryModal
-          data={injuries[selectedPosition]}
           closeHandler={() => toggleModal(false)}
-          onChange={(positionData: {
-            data: IInjuryInformation;
-            position: EPosition;
-          }) => {
+          onChange={(data) => {
+            let lastHitPoint = injuries.pop();
+            lastHitPoint = { ...lastHitPoint, data };
             update({
-              injuries: {
-                ...injuries,
-                [positionData.position]: {
-                  ...(injuries[positionData.position] ?? {}),
-                  ...positionData.data,
-                },
-              },
+              injuries: [...injuries, lastHitPoint],
             });
           }}
-          position={selectedPosition}
         />
       )}
       <TouchableWithoutFeedback onPress={handlePress}>

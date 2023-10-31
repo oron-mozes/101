@@ -19,4 +19,7 @@ bodyMapping.set(EPosition.RIGHT_LEG_BACK, { active: false, data: {} });
 bodyMapping.set(EPosition.RIGHT_LEG, { active: false, data: {} });
 bodyMapping.set(EPosition.STOMACH, { active: false, data: {} });
 
-
+export function convertToTime(time) {
+  const date = new Date(time);
+  return `${date.getUTCHours()}:${date.getUTCMinutes()}`;
+}

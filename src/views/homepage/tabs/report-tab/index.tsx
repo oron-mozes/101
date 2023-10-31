@@ -44,7 +44,7 @@ export const emptyPatient: IPatientRecord = {
     date: null,
   },
   provider: { full_name: null, idf_id: null },
-  injuries: {},
+  injuries: [],
   eSection: [],
   airway: {
     actions: [],
