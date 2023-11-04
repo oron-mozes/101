@@ -7,8 +7,6 @@ import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import Context from "../context";
 import { design } from "./shared-style";
-import { mergeData } from "./utils";
-import { emptyPatient } from "..";
 
 export function PatientBodyPicker() {
   const translation = useTranslation();

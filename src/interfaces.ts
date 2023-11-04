@@ -299,13 +299,31 @@ export enum ROLE {
   PARAMEDIC = "PARAMEDIC",
   MD = "MD",
 }
+
+export enum RANK {
+  RANK_1 = "RANK_1",
+  RANK_2 = "RANK_2",
+  RANK_3 = "RANK_3",
+  RANK_4 = "RANK_4",
+  RANK_5 = "RANK_5",
+  RANK_6 = "RANK_6",
+  RANK_7 = "RANK_7",
+  RANK_8 = "RANK_8",
+  RANK_9 = "RANK_9",
+  RANK_10 = "RANK_10",
+  RANK_11 = "RANK_11",
+  RANK_12 = "RANK_12",
+  RANK_13 = "RANK_13",
+  RANK_14 = "RANK_14",
+  RANK_15 = "RANK_15",
+  RANK_16 = "RANK_16",
+}
 export interface ICareProvider {
   full_name: string;
   idf_id: number;
-  rank: string;
+  rank: RANK;
   unit_name: string;
   role: ROLE;
-  // expertise: string;
 }
 
 export interface ITaagad {

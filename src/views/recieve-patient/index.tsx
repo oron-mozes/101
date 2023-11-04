@@ -1,51 +1,37 @@
-import React, { useCallback, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React from "react";
 import {
-  Alert,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   View,
 } from "react-native";
-import { Button, Text } from "react-native-paper";
-import {
-  Camera,
-  CameraDevice,
-  CameraRuntimeError,
-  useCameraDevice,
-  useCodeScanner,
-} from "react-native-vision-camera";
-import { useCamera } from "../../hooks/useCamera";
-import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { STATUS, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { TAB_STATUS } from "../homepage";
-import { decode } from "../qr-code/decode-encode";
+import { decompress } from "compress-json";
 import { RNCamera } from "react-native-camera";
 import storage, { STORAGE } from "../../../storage";
 
 export default function ReceivePatientScreen() {
-  // const { device, codeScanner, format, scannedInformation } = useCamera();
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
 
   const goBackHome = () =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
-  const reportEvac = async () => {
-    goBackHome();
-  };
 
   const handleBarcodeRead = (event) => {
     if (event.data) {
-      const decodedPatient = decode(JSON.parse(event.data).decodedPatient);
+      const { patient } = decompress(JSON.parse(event.data));
       storage.save({
         key: STORAGE.PATIENTS_RECORD,
-        id: decodedPatient.id,
+        id: patient.id,
         data: {
-          ...decodedPatient,
+          ...patient,
           evacuation: {
-            ...decodedPatient.evacuation,
+            ...patient.evacuation,
             status: STATUS.NEW_PATIENT,
           },
         },
@@ -63,30 +49,6 @@ export default function ReceivePatientScreen() {
             onBarCodeRead={handleBarcodeRead}
             captureAudio={false}
           />
-        </View>
-
-        <View style={styles.buttonsView}>
-          <Button
-            mode="contained"
-            buttonColor="white"
-            textColor="rgba(0, 107, 229, 1)"
-            style={styles.button}
-            icon="close"
-            contentStyle={{ flexDirection: "row-reverse" }}
-            onPress={goBackHome}
-          >
-            {translation("cancel")}
-          </Button>
-          <Button
-            contentStyle={{ flexDirection: "row-reverse" }}
-            mode="contained"
-            style={styles.button}
-            buttonColor="rgba(0, 107, 229, 1)"
-            icon="check"
-            onPress={reportEvac}
-          >
-            {translation("scan")}
-          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>

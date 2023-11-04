@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card } from "react-native-paper";
 import { emptyPatient } from "..";
@@ -17,17 +17,25 @@ export function PatientDetails() {
   const { patient, update, disabled } = context;
   const personal_information = useMemo(
     () =>
-      mergeData(
-        patient?.personal_information,
-        emptyPatient.personal_information
-      ),
-    [patient?.personal_information]
+      mergeData(patient?.personal_information, {
+        ...emptyPatient.personal_information,
+        full_name: patient.id,
+      }),
+    [patient?.personal_information, patient.id]
   );
+
   const incident_information = mergeData(
     patient?.incident_information,
     emptyPatient.incident_information
   );
-
+  useEffect(() => {
+    if (personal_information.full_name) {
+      console.log("update name", personal_information.full_name);
+      update({
+        personal_information,
+      });
+    }
+  }, []);
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>

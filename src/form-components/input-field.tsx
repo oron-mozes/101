@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Icon, TextInput } from "react-native-paper";
 import { colors, gutter, inputContainer } from "../shared-config";
-import { memo, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import _ from "lodash";
 export interface IInputField {
   onChange(value: string): void;
@@ -24,6 +24,11 @@ function InputFieldHandler({
   icon,
 }: IInputField) {
   const [text, setText] = useState<string>(value);
+  useEffect(() => {
+    if (!value) {
+      setText(value);
+    }
+  }, [value]);
   const [debouncedSearch, setDebouncedSearch] = useState<string>(value);
 
   const onEndTyping = _.debounce((searchText) => {
@@ -54,7 +59,7 @@ function InputFieldHandler({
           keyboardType={numeric ? "numeric" : "default"}
           disabled={disabled}
           label={label}
-          value={text}
+          value={text ?? ""}
           textAlign="right"
           mode="outlined"
           textColor={colors.text}

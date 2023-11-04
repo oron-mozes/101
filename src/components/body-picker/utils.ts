@@ -21,5 +21,5 @@ bodyMapping.set(EPosition.STOMACH, { active: false, data: {} });
 
 export function convertToTime(time) {
   const date = new Date(time);
-  return `${date.getUTCHours()}:${date.getUTCMinutes()}`;
+  return `${date.getUTCHours()}:${`0${date.getUTCMinutes()}`.slice(-2)}`;
 }

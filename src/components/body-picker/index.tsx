@@ -7,33 +7,6 @@ import { Touniquet } from "./touniquet";
 export function BodyPicker({ injuries }: { injuries: IInjury[] }) {
   return (
     <Svg width={582} height={565} viewBox="0 0 582 565" fill="none">
-      {injuries.map((injury) => {
-        return (
-          <>
-            {injury.data?.gunshot && (
-              <Gunshot
-                xPos={injury.xPos}
-                yPos={injury.yPos}
-                text={injury.data.gunshot.toString()}
-              />
-            )}
-            {injury.data?.sharpnel && (
-              <Sharpnel
-                xPos={injury.xPos}
-                yPos={injury.yPos}
-                text={injury.data.sharpnel.toString()}
-              />
-            )}
-            {injury.data?.touniquet && (
-              <Touniquet
-                xPos={injury.xPos}
-                yPos={injury.yPos}
-                text={injury.data.touniquet_time}
-              />
-            )}
-          </>
-        );
-      })}
       <Path
         d="M143.029 1.696c26.863 0 28.45 19.665 28.582 29.584.104 8.197-.369 6.738-.285 8.22 0 0 4.099.095 3.403 6.039-.107 2.784-.696 8.351-2.422 11.483-1.242 2.254-2.505 2.061-2.505 2.061-1.963 6.917-4.933 12.73-9.088 17.424 0 0 .348 26.793 2.525 27.963 6.117 4.738 32.875 8.953 39.326 14.246"
         stroke="#496C83"
@@ -174,6 +147,33 @@ export function BodyPicker({ injuries }: { injuries: IInjury[] }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+      {injuries.map((injury) => {
+        return (
+          <>
+            {injury.data?.gunshot && (
+              <Gunshot
+                xPos={injury.xPos}
+                yPos={injury.yPos}
+                text={injury.data.gunshot.toString()}
+              />
+            )}
+            {injury.data?.sharpnel && (
+              <Sharpnel
+                xPos={injury.xPos}
+                yPos={injury.yPos}
+                text={injury.data.sharpnel.toString()}
+              />
+            )}
+            {injury.data?.touniquet && (
+              <Touniquet
+                xPos={injury.xPos}
+                yPos={injury.yPos}
+                text={injury.data.touniquet_time}
+              />
+            )}
+          </>
+        );
+      })}
     </Svg>
   );
 }

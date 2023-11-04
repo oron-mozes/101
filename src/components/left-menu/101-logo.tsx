@@ -32,8 +32,8 @@ export function Logo101() {
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
       >
-        <View style={{ marginLeft: 10 }}>
-          <Icon size={20} source="cog-outline" color="white" />
+        <View style={{ marginLeft: 20 }}>
+          <Icon size={30} source="cog-outline" color="white" />
         </View>
       </TouchableWithoutFeedback>
     </View>

@@ -7,6 +7,7 @@ import { ROUTES } from "../../routes";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";
 import { StatusTab } from "./tabs/status-tab";
+import { useTaggadStore } from "../../store/taggad.slice";
 
 export enum TAB_STATUS {
   STATUS = "STATUS",
@@ -15,6 +16,7 @@ export enum TAB_STATUS {
 }
 
 export default function HomeScreen() {
+  const { taggad } = useTaggadStore();
   const route = useRoute<RouteProp<RootStackParamList>>();
   const navigation = useNavigation<StackNavigation>();
   const tab = useMemo(
@@ -23,15 +25,19 @@ export default function HomeScreen() {
   );
 
   useEffect(() => {
-    storage
-      .load({
-        key: STORAGE.TAAGAD,
-      })
-      .then(() => {})
-      .catch(() => {
-        navigation.navigate(ROUTES.ACCOUNT);
-      });
-  }, []);
+    // storage
+    //   .load({
+    //     key: STORAGE.TAAGAD,
+    //   })
+    //   .then(() => {})
+    //   .catch(() => {
+    //     navigation.navigate(ROUTES.ACCOUNT);
+    //   });
+
+    if (!taggad.unit_name) {
+      navigation.navigate(ROUTES.ACCOUNT);
+    }
+  }, [route.params?.tab]);
 
   return (
     <SafeAreaView style={styles.container}>

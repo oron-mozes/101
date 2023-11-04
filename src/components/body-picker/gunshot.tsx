@@ -19,7 +19,13 @@ export function Gunshot({
 }) {
   return (
     <>
-      <ForeignObject y={yPos} x={xPos} width={100} height={50} fill="none">
+      <ForeignObject
+        y={yPos - 10}
+        x={xPos - 20}
+        width={100}
+        height={50}
+        fill="#cfcf"
+      >
         <G clipPath="url(#clip0_197_31171)">
           <Rect
             y={3.99951}
@@ -52,7 +58,7 @@ export function Gunshot({
           </ClipPath>
         </Defs>
       </ForeignObject>
-      <Text x={xPos + 10} fill="#fff" y={yPos + 16} fontSize="12">
+      <Text x={xPos - 10} fill="#fff" y={yPos + 6} fontSize="12">
         {text}
       </Text>
     </>

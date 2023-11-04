@@ -20,7 +20,13 @@ export function Touniquet({
 }) {
   return (
     <>
-      <ForeignObject y={yPos} x={xPos} width={100} height={50} fill="none">
+      <ForeignObject
+        y={yPos - 10}
+        x={xPos - 20}
+        width={100}
+        height={50}
+        fill="pink"
+      >
         <G clipPath="url(#clip0_197_31167)">
           <Rect
             y={4.79578}
@@ -52,7 +58,7 @@ export function Touniquet({
           </ClipPath>
         </Defs>
       </ForeignObject>
-      <Text x={xPos + 4} fill="#fff" y={yPos + 16} fontSize="12">
+      <Text x={xPos - 13} fill="#fff" y={yPos + 6} fontSize="12">
         {convertToTime(text)}
       </Text>
     </>

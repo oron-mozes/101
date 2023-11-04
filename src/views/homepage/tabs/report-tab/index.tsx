@@ -119,11 +119,27 @@ export function ReportTab() {
   const [selectedAccordionItemId, setSelectedAccordionItemId] =
     useState<ACCORDION_ITEM>(ACCORDION_ITEM.FIRST_TAB);
   const [providers, setProviders] = useState<ICareProvider[]>();
+  const [taagadName, setTaagdName] = useState<string>();
+  const [patientsRecordsCount, setPatientsRecordsCount] = useState<number>(0);
 
-  const selectedId = useMemo(
-    () => patientRecord?.id ?? new Date().getTime().toString(),
-    []
-  );
+  const selectedId = useMemo(() => {
+    console.log({ taagadName, patientsRecordsCount });
+    if (taagadName !== undefined && patientsRecordsCount !== undefined) {
+      const selected =
+        patientRecord?.id ?? `${taagadName}-${patientsRecordsCount}`;
+
+      setPatientRecord(() => {
+        const updateData: IPatientRecord = {
+          ...patientRecord,
+          id: selected,
+        };
+        return updateData;
+      });
+      return selected;
+    }
+    return patientRecord?.id;
+  }, [taagadName]);
+
   const disabled = useMemo(
     () => patientRecord.evacuation.status === STATUS.CLOSED,
     [patientRecord.evacuation.status]
@@ -131,7 +147,7 @@ export function ReportTab() {
 
   const savePatient = (data) => {
     patientRecord.evacuation.status !== STATUS.CLOSED &&
-      data.personal_information?.idf_id &&
+      data.personal_information?.full_name &&
       storage.save({
         key: STORAGE.PATIENTS_RECORD,
         id: selectedId,
@@ -141,8 +157,19 @@ export function ReportTab() {
   useEffect(() => {
     storage
       .load({ key: STORAGE.TAAGAD })
-      .then((data) => {
-        setProviders(data.care_providers);
+      .then((taagad) => {
+        setProviders(taagad.care_providers);
+        storage
+          .getAllDataForKey(STORAGE.PATIENTS_RECORD)
+          .then((records) => {
+            setTaagdName(taagad.unit_name);
+
+            setPatientsRecordsCount(records.length ?? 0);
+          })
+          .catch((d) => {
+            setTaagdName(taagad.unit_name);
+            setPatientsRecordsCount(0);
+          });
       })
       .catch(() => {});
   }, []);
@@ -150,6 +177,7 @@ export function ReportTab() {
   if (!providers && !patientRecord) {
     return <View></View>;
   }
+
   return (
     <AutocompleteDropdownContextProvider>
       <Context.Provider

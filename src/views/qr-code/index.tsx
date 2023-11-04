@@ -19,7 +19,7 @@ import {
 } from "../../interfaces";
 import { ROUTES } from "../../routes";
 
-import { compress, trimUndefinedRecursively } from "compress-json";
+import { compress, trimUndefinedRecursively, decompress } from "compress-json";
 
 export default function QrCode() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -43,8 +43,8 @@ export default function QrCode() {
   };
   const goBackHome = () => navigation.navigate(ROUTES.HOME);
   trimUndefinedRecursively(patient);
-  const decodedPatient = compress(patient);
-  console.log("!!!!!", decodedPatient);
+  const decodedPatient = compress({ patient });
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -61,12 +61,11 @@ export default function QrCode() {
           </Text>
         </View>
         <View style={styles.qrWrapper}>
-          {/* <QRCode
-            value={JSON.stringify({ decodedPatient })}
+          <QRCode
+            value={JSON.stringify(decodedPatient)}
             logo={require("./Logo.png")}
             size={220}
-          /> */}
-          <QRCodeSVG value={JSON.stringify({ decodedPatient })} />
+          />
         </View>
         <View style={styles.buttonsView}>
           <Button

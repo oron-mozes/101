@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -7,7 +7,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Button, Card, DataTable } from "react-native-paper";
+import { Button, Divider, Text, IconButton } from "react-native-paper";
 import storage, { STORAGE } from "../../../storage";
 import { DropDown } from "../../form-components/dropdown";
 import { InputField } from "../../form-components/input-field";
@@ -15,11 +15,15 @@ import { useTranslation } from "../../hooks/useMyTranslation";
 import {
   ICareProvider,
   ITaagad,
+  RANK,
   ROLE,
   StackNavigation,
 } from "../../interfaces";
 import { ROUTES } from "../../routes";
+import { colors } from "../../shared-config";
 import { convertToOptions } from "../homepage/tabs/report-tab/create-components/utils";
+import { BluLogo } from "./blue-logo";
+import { useTaggadStore } from "../../store/taggad.slice";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,
@@ -27,160 +31,175 @@ export const initialProviderState: ICareProvider = {
   rank: null,
   unit_name: null,
   role: null,
-  // expertise: null,
 };
 
 export default function TaagadScreen() {
-  const [taagadDetails, updateTaagadDetails] = useState<ITaagad>({
-    unit_name: "",
-    care_providers: {},
-  });
-
-  useEffect(() => {
-    storage
-      .load({ key: STORAGE.TAAGAD })
-      .then((data) => {
-        data && updateTaagadDetails(data);
-      })
-      .catch(() => {});
-  }, []);
+  const {
+    addProvider,
+    taggad,
+    removeProvider,
+    updateTaagadName,
+    loadInitialState,
+  } = useTaggadStore();
 
   const translation = useTranslation();
   const navigation = useNavigation<StackNavigation>();
-  const saveNewProvider = () => {
-    updateTaagadDetails({
-      ...taagadDetails,
-      care_providers: {
-        ...taagadDetails.care_providers,
-        [newCareProvider.idf_id]: newCareProvider,
-      },
-    });
-    toggleProviderForm(false);
+  const [newCareProvider, updateCareProvider] = useState<ICareProvider>({
+    ...initialProviderState,
+  });
+  const [taggadName, setTaggdName] = useState<string>();
+
+  const saveNewProvider = async () => {
+    await addProvider(newCareProvider);
+    updateCareProvider({ ...initialProviderState });
   };
   const isFormValid = () => {
     return (
-      Object.values(taagadDetails.care_providers).length !== 0 &&
-      taagadDetails.unit_name.length !== 0
+      Object.values(taggad.care_providers).length !== 0 &&
+      taggad.unit_name.length !== 0
     );
   };
-  const [showNewProviderForm, toggleProviderForm] = useState<boolean>(false);
-  const [newCareProvider, updateCareProvider] =
-    useState<ICareProvider>(initialProviderState);
-  const isCareProviderValid = () => {
+
+  const isCareProviderValid = useCallback(() => {
     return Object.values(newCareProvider).some((prop) => !prop);
-  };
+  }, [newCareProvider]);
+
   const saveCareProviderInfo = (data: Partial<ICareProvider>) => {
-    updateCareProvider({
+    const merged = {
       ...newCareProvider,
       ...data,
-      unit_name: taagadDetails.unit_name,
-    });
+      unit_name: taggad.unit_name,
+    };
+
+    updateCareProvider(merged);
   };
 
-  useEffect(() => {
-    if (
-      !showNewProviderForm &&
-      JSON.stringify(newCareProvider) !== JSON.stringify(initialProviderState)
-    ) {
-      storage.save({ key: STORAGE.TAAGAD, data: taagadDetails });
-
-      updateCareProvider(initialProviderState);
-    }
-  }, [showNewProviderForm, newCareProvider]);
+  const DDOptions = {
+    role: convertToOptions(ROLE, translation),
+    rank: convertToOptions(RANK, translation),
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <InputField
-          label={translation("idfUnit")}
-          value={taagadDetails.unit_name}
-          onChange={(unit_name: string) => {
-            updateTaagadDetails({ ...taagadDetails, unit_name });
-          }}
-        />
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={{
+          alignItems: "center",
+          marginTop: 30,
+        }}
+      >
+        <BluLogo />
+        <Text
+          variant="headlineSmall"
+          style={{ fontWeight: "bold", marginTop: 30, marginBottom: 30 }}
+        >
+          {translation("station")}
+        </Text>
 
-        {Boolean(taagadDetails.unit_name) && (
-          <DataTable style={styles.table}>
-            <DataTable.Header style={styles.tableHeader}>
-              {/* <DataTable.Title>{translation("expertise")}</DataTable.Title> */}
-              <DataTable.Title>{translation("role")}</DataTable.Title>
-              <DataTable.Title>{translation("rank")}</DataTable.Title>
-              <DataTable.Title>{translation("idf_id")}</DataTable.Title>
-              <DataTable.Title>{translation("full_name")}</DataTable.Title>
-            </DataTable.Header>
-            {Object.values(taagadDetails.care_providers).map((careProvider) => {
-              return (
-                <DataTable.Row key={careProvider.idf_id}>
-                  {/* <DataTable.Cell>{careProvider.expertise}</DataTable.Cell> */}
-                  <DataTable.Cell>{careProvider.role}</DataTable.Cell>
-                  <DataTable.Cell>{careProvider.rank}</DataTable.Cell>
-                  <DataTable.Cell>{careProvider.idf_id}</DataTable.Cell>
-                  <DataTable.Cell>{careProvider.full_name}</DataTable.Cell>
-                </DataTable.Row>
-              );
-            })}
-            <DataTable.Row
-              style={{
-                borderBottomColor: "transparent",
-                marginTop: 10,
-                alignItems: "center",
+        {Boolean(taggad.unit_name) ? (
+          <Text variant="headlineMedium" style={{ fontWeight: "bold" }}>
+            {taggad.unit_name}
+          </Text>
+        ) : (
+          <>
+            <InputField
+              disabled={Boolean(taggad.unit_name)}
+              label={translation("idfUnit")}
+              value={taggadName}
+              onChange={(unit_name: string) => {
+                setTaggdName(unit_name);
+              }}
+            />
+            <Button
+              onPress={() => {
+                updateTaagadName(taggadName);
               }}
             >
-              <Button mode="contained" onPress={() => toggleProviderForm(true)}>
-                {translation("addCareProvider")}
-              </Button>
-            </DataTable.Row>
-          </DataTable>
+              {translation("continue")}
+            </Button>
+          </>
         )}
+        <Divider style={{ marginTop: 10, marginBottom: 10, width: "100%" }} />
 
-        {showNewProviderForm && (
-          <View>
-            <Card style={styles.form} mode="outlined">
-              <Card.Content>
-                {["full_name", "idf_id", "rank"].map((item) => (
+        {Boolean(taggad.unit_name) &&
+          Object.values(taggad.care_providers).map((careProvider, index) => {
+            return (
+              <View style={styles.fields} key={index}>
+                {["full_name", "idf_id"].map((item) => (
                   <InputField
+                    key={item}
+                    disabled={true}
                     maxLength={item === "idf_id" ? 7 : null}
                     numeric={item === "idf_id"}
                     label={translation(item)}
-                    onChange={(value: string) => {
-                      saveCareProviderInfo({ [item]: value });
-                    }}
-                    value={newCareProvider[item]}
+                    onChange={(value) => {}}
+                    value={
+                      item === "idf_id"
+                        ? careProvider[item]?.toString()
+                        : careProvider[item]
+                    }
                   />
                 ))}
-                <DropDown
-                  placeholder={translation("select")}
-                  label={translation("role")}
-                  options={convertToOptions(ROLE, translation)}
-                  initialValue={newCareProvider.role}
-                  onSelect={(role) => {
-                    saveCareProviderInfo({ role: role.id as ROLE });
-                  }}
+                {["rank", "role"].map((item) => (
+                  <DropDown
+                    key={item}
+                    disabled={true}
+                    label={translation(item)}
+                    options={DDOptions[item]}
+                    initialValue={careProvider[item]}
+                    onSelect={(selected) => {}}
+                  />
+                ))}
+                <IconButton
+                  icon="trash-can-outline"
+                  iconColor={colors.primary}
+                  size={30}
+                  onPress={() => removeProvider(careProvider.idf_id)}
                 />
-              </Card.Content>
-              <Card.Actions>
-                <Button
-                  mode="outlined"
-                  onPress={() => {
-                    updateCareProvider(initialProviderState);
-                    toggleProviderForm(false);
-                  }}
-                >
-                  {translation("cancel")}
-                </Button>
-                <Button
-                  disabled={isCareProviderValid()}
-                  onPress={saveNewProvider}
-                >
-                  {translation("save")}
-                </Button>
-              </Card.Actions>
-            </Card>
-          </View>
-        )}
+              </View>
+            );
+          })}
+
+        <View style={styles.fields}>
+          {["full_name", "idf_id"].map((item) => (
+            <InputField
+              key={item}
+              disabled={false}
+              maxLength={item === "idf_id" ? 7 : null}
+              numeric={item === "idf_id"}
+              label={translation(item)}
+              onChange={(value: string) => {
+                saveCareProviderInfo({ [item]: value });
+              }}
+              value={newCareProvider[item]}
+            />
+          ))}
+          {["rank", "role"].map((item) => (
+            <DropDown
+              key={item}
+              disabled={false}
+              label={translation(item)}
+              options={DDOptions[item]}
+              initialValue={newCareProvider[item]}
+              onSelect={(selected) => {
+                saveCareProviderInfo({ [item]: selected.id });
+              }}
+            />
+          ))}
+
+          <IconButton
+            disabled={isCareProviderValid()}
+            icon="note-plus"
+            iconColor={colors.primary}
+            size={30}
+            onPress={saveNewProvider}
+          />
+        </View>
+
         <Button
           mode="contained"
           disabled={!isFormValid()}
+          style={{ marginTop: 30 }}
           onPress={() => {
             navigation.navigate(ROUTES.HOME);
           }}
@@ -188,11 +207,18 @@ export default function TaagadScreen() {
           {translation("continue")}
         </Button>
         <Button
-          mode="contained"
-          disabled={!isFormValid()}
+          mode="outlined"
+          // disabled={!isFormValid()}
+          textColor="#fff"
           style={{ backgroundColor: "red", marginTop: 100 }}
-          onPress={() => {
+          onPress={async () => {
             storage.clearMap();
+            await Promise.all([
+              storage.remove({ key: STORAGE.TAAGAD }),
+              storage.remove({ key: STORAGE.PATIENTS_RECORD }),
+            ]);
+            await loadInitialState();
+            navigation.navigate(ROUTES.HOME);
           }}
         >
           CAUTION!! DELETE ALL
@@ -203,11 +229,15 @@ export default function TaagadScreen() {
 }
 
 const styles = StyleSheet.create({
+  fields: {
+    flexDirection: "row-reverse",
+  },
   container: {
     direction: "rtl",
     flex: 1,
     paddingTop: StatusBar.currentHeight,
     width: "100%",
+    backgroundColor: colors.surface,
   },
   scrollView: {
     marginHorizontal: 20,
