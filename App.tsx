@@ -13,7 +13,7 @@ import HomeScreen from "./src/views/homepage";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
-import { useTaggadStore } from "./src/store/taggad.slice";
+import { useTaggadStore } from "./src/store/taggad.store";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const theme = {

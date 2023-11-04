@@ -23,7 +23,7 @@ import { ROUTES } from "../../routes";
 import { colors } from "../../shared-config";
 import { convertToOptions } from "../homepage/tabs/report-tab/create-components/utils";
 import { BluLogo } from "./blue-logo";
-import { useTaggadStore } from "../../store/taggad.slice";
+import { useTaggadStore } from "../../store/taggad.store";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,

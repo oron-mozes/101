@@ -7,7 +7,7 @@ import { ROUTES } from "../../routes";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";
 import { StatusTab } from "./tabs/status-tab";
-import { useTaggadStore } from "../../store/taggad.slice";
+import { useTaggadStore } from "../../store/taggad.store";
 
 export enum TAB_STATUS {
   STATUS = "STATUS",
