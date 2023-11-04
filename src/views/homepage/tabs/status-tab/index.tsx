@@ -1,5 +1,4 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { DataTable } from "react-native-paper";
 import { TAB_STATUS } from "../..";
@@ -7,19 +6,16 @@ import { QrIcon } from "../../../../components/qr-icon/qr";
 import { StatusChip } from "../../../../form-components/status-chip";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { usePatientsRecord } from "../../../../hooks/usePatientsRecord";
-import { STATUS, StackNavigation } from "../../../../interfaces";
+import { StackNavigation } from "../../../../interfaces";
 import { ROUTES } from "../../../../routes";
 import { colors } from "../../../../shared-config";
 import { sortByPriority } from "./utils";
 
 export function StatusTab() {
+  const { patientsRecord } = usePatientsRecord();
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
-  const { patientsRecord, loadRecords } = usePatientsRecord();
-  useEffect(() => {
-    loadRecords();
-    return navigation.addListener("focus", loadRecords);
-  }, []);
+
   const goToPatientPage = (patient) =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   return (
@@ -57,6 +53,7 @@ export function StatusTab() {
                 <StatusChip
                   label={translation(patient?.evacuation?.status ?? "")}
                   status={patient?.evacuation?.status}
+                  disabled={false}
                 />
               </DataTable.Cell>
               <DataTable.Cell
