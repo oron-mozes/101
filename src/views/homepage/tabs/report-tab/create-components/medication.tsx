@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Card, Icon, Text } from "react-native-paper";
-import { emptyPatient } from "..";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
@@ -12,66 +11,36 @@ import {
   IMedicationsAndFluidInformation,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
 import {
   convertStringToNumber,
   convertToOptions,
   getDoseByValue,
-  mergeData,
-  removeByIndexHandler,
-  updateDataInIndex,
   validateLastItem,
 } from "./utils";
-import { useContext, useMemo } from "react";
 
 const emptyState: IMedicationsAndFluidInformation = {
   action: null,
   time: null,
   dose: null,
+  id: null,
 };
 export function MedicationsAndFluidSection() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const medicationsAndFluids = useMemo(
-    () =>
-      mergeData(
-        patient?.medicationsAndFluids,
-        emptyPatient.medicationsAndFluids
-      ),
-    [patient?.medicationsAndFluids]
+  const medicationsAndFluids = usePatientRecordsStore(
+    (state) => state.activePatient.medicationsAndFluids
+  );
+  const handlers = usePatientRecordsStore(
+    (state) => state.medicationsAndFluids_handlers
+  );
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
   );
 
   const { actions = [] } = medicationsAndFluids;
   const addRow = () => {
-    update({
-      medicationsAndFluids: {
-        actions: [...actions, emptyState],
-      },
-    });
-  };
-
-  const updateInIndex = (
-    data: Partial<IMedicationsAndFluidInformation>,
-    index: number
-  ) =>
-    update({
-      medicationsAndFluids: {
-        actions: updateDataInIndex(
-          actions,
-          data as IMedicationsAndFluidInformation,
-          index
-        ),
-      },
-    });
-
-  const removeByIndex = (index: number) => {
-    update({
-      medicationsAndFluids: {
-        actions: removeByIndexHandler(actions, index),
-      },
-    });
+    handlers.addAction(emptyState);
   };
 
   return (
@@ -89,7 +58,7 @@ export function MedicationsAndFluidSection() {
             <View style={[styles.element, styles.actionRow]}>
               <Text
                 disabled={disabled}
-                onPress={() => removeByIndex(index)}
+                onPress={() => handlers.removeAction(index)}
                 style={styles.deleteAction}
               >
                 <Icon size={20} source="delete" color={colors.primary} />
@@ -100,7 +69,10 @@ export function MedicationsAndFluidSection() {
                 numeric
                 value={measurements.dose?.toString()}
                 onChange={(dose) => {
-                  updateInIndex({ dose: convertStringToNumber(dose) }, index);
+                  handlers.updateAtIndex(
+                    { dose: convertStringToNumber(dose) },
+                    index
+                  );
                 }}
               />
               <TimePicker
@@ -108,7 +80,7 @@ export function MedicationsAndFluidSection() {
                 value={measurements.time}
                 label={translation("actionTime")}
                 onChange={(time: number) => {
-                  updateInIndex({ time }, index);
+                  handlers.updateAtIndex({ time }, index);
                 }}
               />
             </View>
@@ -119,7 +91,7 @@ export function MedicationsAndFluidSection() {
                 initialValue={measurements.action}
                 onSelect={(value: TAutocompleteDropdownItem) => {
                   value &&
-                    updateInIndex(
+                    handlers.updateAtIndex(
                       {
                         action: value.id as EMedications,
                         dose: getDoseByValue(value.id),

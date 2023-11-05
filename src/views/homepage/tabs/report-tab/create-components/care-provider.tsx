@@ -1,32 +1,21 @@
-import { useContext, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card } from "react-native-paper";
-import { emptyPatient } from "..";
-import storage, { STORAGE } from "../../../../../../storage";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import { ICareProvider, ITaagad } from "../../../../../interfaces";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
+import { useTaggadStore } from "../../../../../store/taggad.store";
 import { design } from "./shared-style";
-import { mergeData } from "./utils";
 
 export function CareProvider() {
   const translation = useTranslation();
-  const [providers, setProviders] = useState<{ [key: string]: ICareProvider }>(
-    {}
+  const careProviders = useTaggadStore((state) => state.taggad.care_providers);
+  const provider = usePatientRecordsStore(
+    (state) => state.activePatient.provider
   );
-  useEffect(() => {
-    storage
-      .load({ key: STORAGE.TAAGAD })
-      .then((data: ITaagad) => setProviders(data.care_providers))
-      .catch(() => {});
-  }, []);
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const provider = useMemo(
-    () => mergeData(patient?.provider ?? {}, emptyPatient.provider),
-    [patient?.provider]
+  const handlers = usePatientRecordsStore((state) => state.provider_handlers);
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
   );
 
   return (
@@ -42,14 +31,12 @@ export function CareProvider() {
             label={translation("careProviderName")}
             initialValue={provider.idf_id?.toString()}
             onSelect={(value) => {
-              const setProvider = Object.values(providers).find(
+              const setProvider = Object.values(careProviders).find(
                 (p) => p.idf_id.toString() === value.id
               );
-              update({
-                provider: setProvider,
-              });
+              handlers.addProvider(setProvider);
             }}
-            options={Object.values(providers).map((provider) => ({
+            options={Object.values(careProviders).map((provider) => ({
               id: provider.idf_id.toString(),
               title: `${provider.full_name}, ${provider.idf_id}`,
             }))}

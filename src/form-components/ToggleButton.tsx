@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { RadioButton as RadioButtonPaper, Text } from "react-native-paper";
 import { textColor } from "./shared-style";
 import { colors, gutter } from "../shared-config";
@@ -15,7 +15,7 @@ export function ToggleButton({
   status = false,
 }: IRadioButton) {
   return (
-    <TouchableWithoutFeedback onPress={() => onSelect(!status)}>
+    <TouchableOpacity onPress={() => onSelect(!status)}>
       <View style={styles.container}>
         <Text
           style={[styles.text, disabled ? styles.disabled : {}]}
@@ -30,7 +30,7 @@ export function ToggleButton({
           status={status ? "checked" : "unchecked"}
         />
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 }
 

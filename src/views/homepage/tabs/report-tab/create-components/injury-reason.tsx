@@ -1,32 +1,25 @@
 import { StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
 import { ToggleButton } from "../../../../../form-components/ToggleButton";
+import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import Context from "../context";
-import { design } from "./shared-style";
 import { EInjuryReason } from "../../../../../interfaces";
-import { InputField } from "../../../../../form-components/input-field";
-import { isSelectedHandler, mergeData, toggleListData } from "./utils";
-import { emptyPatient } from "..";
-import { useContext, useMemo } from "react";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
+import { design } from "./shared-style";
+import { isSelectedHandler } from "./utils";
 
 export function InjuryReason() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const injuryReason = useMemo(
-    () => mergeData(patient?.injuryReason, emptyPatient.injuryReason),
-    [patient?.injuryReason]
+  const injuryReason = usePatientRecordsStore(
+    (state) => state.activePatient.injuryReason
   );
-  const toggleValue = (value: EInjuryReason) => {
-    update({
-      injuryReason: {
-        ...injuryReason,
-        reasons: toggleListData(injuryReason.reasons, value),
-      },
-    });
-  };
+  const handlers = usePatientRecordsStore(
+    (state) => state.injuryReason_handlers
+  );
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
+  );
 
   const isSelected = isSelectedHandler(injuryReason?.reasons ?? []);
 
@@ -42,7 +35,7 @@ export function InjuryReason() {
             key={item}
             label={translation(item)}
             status={isSelected(item)}
-            onSelect={() => toggleValue(item)}
+            onSelect={() => handlers.toggleReason(item)}
           />
         ))}
       </Card.Content>
@@ -50,9 +43,7 @@ export function InjuryReason() {
         <InputField
           disabled={disabled}
           onChange={(circumstance: string) => {
-            update({
-              injuryReason: { ...injuryReason, circumstance },
-            });
+            handlers.setCircumstance(circumstance);
           }}
           value={injuryReason?.circumstance}
           label={translation("circumstance")}

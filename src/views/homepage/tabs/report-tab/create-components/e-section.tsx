@@ -1,27 +1,19 @@
-import { useContext, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
-import { emptyPatient } from "..";
 import { ToggleButton } from "../../../../../form-components/ToggleButton";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { EEsectionChips } from "../../../../../interfaces";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
-import { isSelectedHandler, toggleListData } from "./utils";
+import { isSelectedHandler } from "./utils";
 
 export function ESection() {
+  const list = usePatientRecordsStore((state) => state.activePatient.eSection);
+  const handlers = usePatientRecordsStore((state) => state.esection_handlers);
+
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const eSection = useMemo(
-    () => patient?.eSection || emptyPatient.eSection,
-    [patient?.eSection]
-  );
-  const toggleValue = (value: EEsectionChips) => {
-    update({ eSection: toggleListData(eSection, value) });
-  };
-  const isSelected = isSelectedHandler(eSection);
+  const isSelected = isSelectedHandler(list);
 
   return (
     <Card style={styles.card}>
@@ -31,11 +23,11 @@ export function ESection() {
       <Card.Content style={styles.innerContent}>
         {Object.values(EEsectionChips).map((item) => (
           <ToggleButton
-            disabled={disabled}
+            disabled={false}
             key={item}
             label={translation(item)}
             status={isSelected(item)}
-            onSelect={() => toggleValue(item)}
+            onSelect={() => handlers.toggleSelection(item)}
           />
         ))}
       </Card.Content>

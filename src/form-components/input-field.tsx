@@ -1,8 +1,19 @@
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
-import { Icon, TextInput } from "react-native-paper";
-import { colors, gutter, inputContainer } from "../shared-config";
-import { memo, useEffect, useRef, useState } from "react";
-import _ from "lodash";
+import { memo, useRef } from "react";
+import {
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  TextInput,
+} from "react-native";
+import { Icon, Text } from "react-native-paper";
+import {
+  borderSetup,
+  offset,
+  gutter,
+  inputContainer,
+  inputHeight,
+  colors,
+} from "../shared-config";
 export interface IInputField {
   onChange(value: string): void;
   label: string;
@@ -23,21 +34,8 @@ function InputFieldHandler({
   maxLength,
   icon,
 }: IInputField) {
-  const [text, setText] = useState<string>(value);
-  useEffect(() => {
-    if (!value) {
-      setText(value);
-    }
-  }, [value]);
-  const [debouncedSearch, setDebouncedSearch] = useState<string>(value);
-
-  const onEndTyping = _.debounce((searchText) => {
-    onChange(numeric ? Number(searchText) : searchText);
-  }, 500);
-
   const inputRef = useRef(null);
   const handleInputPress = () => {
-    // Focus the input when it's pressed
     inputRef.current.focus();
   };
   return (
@@ -50,43 +48,74 @@ function InputFieldHandler({
             <Icon source={icon} size={20} />
           </View>
         )}
-        <TextInput
-          ref={inputRef}
-          maxLength={maxLength}
-          numberOfLines={numberOfLines}
-          multiline={numberOfLines > 1}
-          style={[styles.text, numberOfLines > 1 ? styles.fixHeight : {}]}
-          keyboardType={numeric ? "numeric" : "default"}
-          disabled={disabled}
-          label={label}
-          value={text ?? ""}
-          textAlign="right"
-          mode="outlined"
-          textColor={colors.text}
-          onChangeText={(value) => {
-            setText(value);
-            setDebouncedSearch(value);
-            onEndTyping(value);
-            // onChange(numeric ? Number(value) : value);
-          }}
-          outlineColor="transparent"
-          activeOutlineColor={colors.text}
-        />
+        <View
+          style={[
+            styles.content,
+            numberOfLines > 1 ? styles.fixHeightLabel : {},
+          ]}
+        >
+          <Text onPress={handleInputPress} style={styles.offset}>
+            {label}
+          </Text>
+          <TextInput
+            ref={inputRef}
+            maxLength={maxLength}
+            numberOfLines={numberOfLines}
+            multiline={numberOfLines > 1}
+            style={[styles.text, numberOfLines > 1 ? styles.fixHeightText : {}]}
+            keyboardType={numeric ? "numeric" : "default"}
+            // disabled={disabled}
+            // label={label}
+            value={value}
+            textAlign="right"
+            // mode="outlined"
+            // textColor={colors.text}
+            onChangeText={(value) => {
+              onChange(value);
+            }}
+            // outlineColor="transparent"
+            // activeOutlineColor={colors.text}
+          />
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  fixHeight: {
-    height: 100,
+  fixHeightText: {
+    marginTop: 10,
+    marginBottom: -80,
+
+    height: 150,
   },
-  container: inputContainer,
+  fixHeightLabel: { marginTop: -85 },
+  content: {
+    flexDirection: "column",
+    justifyContent: "space-around",
+    height: inputHeight - 10,
+    backgroundColor: colors.textInputBG,
+    width: "100%",
+  },
+  offset: {
+    ...offset,
+    marginBottom: 0,
+    width: "100%",
+    marginLeft: -20,
+    marginTop: -5,
+  },
+  fixHeight: {
+    height: 150,
+  },
+  container: {
+    ...inputContainer,
+  },
   text: {
     flex: 1,
     textAlign: "right",
     alignItems: "flex-end",
     marginBottom: gutter,
+    marginRight: gutter,
   },
   icon: {
     marginLeft: 4,

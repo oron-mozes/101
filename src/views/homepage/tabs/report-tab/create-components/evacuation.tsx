@@ -1,6 +1,5 @@
 import { StyleSheet, View } from "react-native";
 import { Card } from "react-native-paper";
-import { emptyPatient } from "..";
 import { ToggleButton } from "../../../../../form-components/ToggleButton";
 import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
@@ -8,18 +7,18 @@ import { StatusChip } from "../../../../../form-components/status-chip";
 import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { ETransportation, STATUS } from "../../../../../interfaces";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
-import { mergeData } from "./utils";
-import { useContext, useMemo } from "react";
 
 export function Evacuation() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const evacuation = useMemo(
-    () => mergeData(patient?.evacuation, emptyPatient.evacuation),
-    [patient?.evacuation]
+  const evacuation = usePatientRecordsStore(
+    (state) => state.activePatient.evacuation
+  );
+  const handlers = usePatientRecordsStore((state) => state.evacuation_handlers);
+
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
   );
 
   return (
@@ -33,9 +32,7 @@ export function Evacuation() {
             disabled={disabled}
             label={translation("time")}
             onChange={(time: number) => {
-              update({
-                evacuation: { ...evacuation, time },
-              });
+              handlers.setTime(time);
             }}
           />
         </View>
@@ -45,9 +42,7 @@ export function Evacuation() {
             value={evacuation.destination}
             label={translation("destination")}
             onChange={(destination: string) => {
-              update({
-                evacuation: { ...evacuation, destination },
-              });
+              handlers.setDestination(destination);
             }}
           />
         </View>
@@ -62,11 +57,7 @@ export function Evacuation() {
             key={item}
             label={translation(item)}
             status={evacuation.transportation === item}
-            onSelect={() =>
-              update({
-                evacuation: { ...evacuation, transportation: item },
-              })
-            }
+            onSelect={() => handlers.setTransportation(item)}
           />
         ))}
       </Card.Content>
@@ -80,9 +71,7 @@ export function Evacuation() {
             allowSelect
             selected={evacuation.status === item}
             onSelect={() => {
-              update({
-                evacuation: { ...evacuation, status: item },
-              });
+              handlers.setStatus(item);
             }}
           />
         ))}

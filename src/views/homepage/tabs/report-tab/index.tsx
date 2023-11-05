@@ -1,17 +1,19 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
+import { useRoute, RouteProp } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { ScrollView, StatusBar, StyleSheet } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import storage, { STORAGE } from "../../../../../storage";
+import { List } from "react-native-paper";
+import { useTranslation } from "../../../../hooks/useMyTranslation";
 import {
   EReactionEyes,
   EReactionMovement,
   EReactionSpeech,
-  ICareProvider,
   IPatientRecord,
   RootStackParamList,
-  STATUS,
 } from "../../../../interfaces";
-import Context from "./context";
+import { colors } from "../../../../shared-config";
+import { usePatientRecordsStore } from "../../../../store/patients.record.store";
+import { useTaggadStore } from "../../../../store/taggad.store";
 import { ASection } from "./create-components/a-section";
 import { Avpu } from "./create-components/avpu";
 import { BSection } from "./create-components/b-section";
@@ -22,19 +24,15 @@ import { ESection } from "./create-components/e-section";
 import { Evacuation } from "./create-components/evacuation";
 import { InjuryReason } from "./create-components/injury-reason";
 import { MedicationsAndFluidSection } from "./create-components/medication";
+import { Measurements } from "./create-components/mesurements";
 import { PatientBodyPicker } from "./create-components/patient-body-picker";
 import { PatientDetails } from "./create-components/patient-details";
 import { Prognosis } from "./create-components/prognosis";
-import { List, Text } from "react-native-paper";
-import { useTranslation } from "../../../../hooks/useMyTranslation";
-import { colors } from "../../../../shared-config";
 import { TreatmentGuide } from "./create-components/treatment-guide";
-import { Measurements } from "./create-components/mesurements";
-import { useRoute, RouteProp } from "@react-navigation/native";
-import _ from "lodash";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
+    patientId: null,
     full_name: null,
     idf_id: null,
   },
@@ -83,6 +81,7 @@ export const emptyPatient: IPatientRecord = {
   medicationsAndFluids: {
     actions: [
       {
+        id: null,
         action: null,
         dose: null,
         time: null,
@@ -112,165 +111,119 @@ enum ACCORDION_ITEM {
 }
 export function ReportTab() {
   const route = useRoute<RouteProp<RootStackParamList>>();
-  const translation = useTranslation();
-  const [patientRecord, setPatientRecord] = useState<IPatientRecord>(
-    route.params?.patient || emptyPatient
+  const id = usePatientRecordsStore((state) => state.activePatient.id);
+  const full_name = usePatientRecordsStore(
+    (state) => state.activePatient.personal_information.full_name
   );
+  const handlers = usePatientRecordsStore(
+    (state) => state.personal_information_handlers
+  );
+
+  const patients = usePatientRecordsStore((state) => state.patients);
+  const updatePartialPatient = usePatientRecordsStore(
+    (state) => state.updatePartialPatient
+  );
+  const savePatient = usePatientRecordsStore((state) => state.savePatient);
+  const setActivePatient = usePatientRecordsStore(
+    (state) => state.setActivePatient
+  );
+  const taggad = useTaggadStore((state) => state.taggad);
+  const translation = useTranslation();
+
   const [selectedAccordionItemId, setSelectedAccordionItemId] =
     useState<ACCORDION_ITEM>(ACCORDION_ITEM.FIRST_TAB);
-  const [providers, setProviders] = useState<ICareProvider[]>();
-  const [taagadName, setTaagdName] = useState<string>();
-  const [patientsRecordsCount, setPatientsRecordsCount] = useState<number>(0);
 
-  const selectedId = useMemo(() => {
-    console.log({ taagadName, patientsRecordsCount });
-    if (taagadName !== undefined && patientsRecordsCount !== undefined) {
-      const selected =
-        patientRecord?.id ?? `${taagadName}-${patientsRecordsCount}`;
-
-      setPatientRecord(() => {
-        const updateData: IPatientRecord = {
-          ...patientRecord,
-          id: selected,
-        };
-        return updateData;
-      });
-      return selected;
-    }
-    return patientRecord?.id;
-  }, [taagadName]);
-
-  const disabled = useMemo(
-    () => patientRecord.evacuation.status === STATUS.CLOSED,
-    [patientRecord.evacuation.status]
-  );
-
-  const savePatient = (data) => {
-    patientRecord.evacuation.status !== STATUS.CLOSED &&
-      data.personal_information?.full_name &&
-      storage.save({
-        key: STORAGE.PATIENTS_RECORD,
-        id: selectedId,
-        data: data,
-      });
-  };
   useEffect(() => {
-    storage
-      .load({ key: STORAGE.TAAGAD })
-      .then((taagad) => {
-        setProviders(taagad.care_providers);
-        storage
-          .getAllDataForKey(STORAGE.PATIENTS_RECORD)
-          .then((records) => {
-            setTaagdName(taagad.unit_name);
+    const fallback = `${taggad.unit_name}-${patients.length}`
+      .split(" ")
+      .join(".");
 
-            setPatientsRecordsCount(records.length ?? 0);
-          })
-          .catch((d) => {
-            setTaagdName(taagad.unit_name);
-            setPatientsRecordsCount(0);
-          });
-      })
-      .catch(() => {});
-  }, []);
+    updatePartialPatient({
+      id: id ?? fallback,
+    });
+    if (handlers) {
+      handlers.setFullName(full_name ?? fallback);
+      handlers.setPatientId(id ?? fallback);
+    }
 
-  if (!providers && !patientRecord) {
-    return <View></View>;
-  }
+    if (route?.params.patient) {
+      setActivePatient(route.params.patient);
+    }
+    return () => {
+      savePatient();
+    };
+  }, [handlers]);
 
   return (
     <AutocompleteDropdownContextProvider>
-      <Context.Provider
-        value={{
-          disabled,
-          providers,
-          patient: patientRecord,
-          update: (value) => {
-            const updateData: IPatientRecord = {
-              ...patientRecord,
-              ...value,
-              id: selectedId,
-            };
-
-            setPatientRecord(() => {
-              return updateData;
-            });
-            savePatient(updateData);
-          },
-        }}
-      >
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          style={styles.container}
+      <ScrollView keyboardShouldPersistTaps="handled" style={styles.container}>
+        <List.AccordionGroup
+          expandedId={selectedAccordionItemId}
+          onAccordionPress={(expend) => {
+            if (selectedAccordionItemId === expend) {
+              setSelectedAccordionItemId(ACCORDION_ITEM.CLOSE);
+            } else {
+              setSelectedAccordionItemId(expend as ACCORDION_ITEM);
+            }
+          }}
         >
-          <List.AccordionGroup
-            expandedId={selectedAccordionItemId}
-            onAccordionPress={(expend) => {
-              if (selectedAccordionItemId === expend) {
-                setSelectedAccordionItemId(ACCORDION_ITEM.CLOSE);
-              } else {
-                setSelectedAccordionItemId(expend as ACCORDION_ITEM);
-              }
+          <List.Accordion
+            right={() => (
+              <List.Icon
+                color="white"
+                icon={
+                  selectedAccordionItemId === ACCORDION_ITEM.FIRST_TAB
+                    ? "chevron-up"
+                    : "chevron-down"
+                }
+              />
+            )}
+            title={translation("first-care")}
+            style={styles.accordion}
+            id={ACCORDION_ITEM.FIRST_TAB}
+            titleStyle={{
+              color: colors.textInputBG,
+              textAlign: "right",
             }}
           >
-            <List.Accordion
-              right={() => (
-                <List.Icon
-                  color="white"
-                  icon={
-                    selectedAccordionItemId === ACCORDION_ITEM.FIRST_TAB
-                      ? "chevron-up"
-                      : "chevron-down"
-                  }
-                />
-              )}
-              title={translation("first-care")}
-              style={styles.accordion}
-              id={ACCORDION_ITEM.FIRST_TAB}
-              titleStyle={{
-                color: colors.textInputBG,
-                textAlign: "right",
-              }}
-            >
-              <PatientDetails />
-              <PatientBodyPicker />
-              <Avpu />
-              <ASection />
-              <BSection />
-              <CSection />
-              <DSection />
-              <ESection />
-              <MedicationsAndFluidSection />
-              <InjuryReason />
-              <Prognosis />
-              <CareProvider />
-              <Evacuation />
-            </List.Accordion>
-            <List.Accordion
-              right={() => (
-                <List.Icon
-                  color="white"
-                  icon={
-                    selectedAccordionItemId === ACCORDION_ITEM.SECOND_TAB
-                      ? "chevron-up"
-                      : "chevron-down"
-                  }
-                />
-              )}
-              titleStyle={{
-                color: colors.textInputBG,
-                textAlign: "right",
-              }}
-              style={styles.accordion}
-              title={translation("treatments")}
-              id={ACCORDION_ITEM.SECOND_TAB}
-            >
-              <TreatmentGuide />
-              <Measurements />
-            </List.Accordion>
-          </List.AccordionGroup>
-        </ScrollView>
-      </Context.Provider>
+            <PatientDetails />
+            <InjuryReason />
+            <PatientBodyPicker />
+            <Avpu />
+            <ASection />
+            <BSection />
+            <CSection />
+            <DSection />
+            <ESection />
+            <MedicationsAndFluidSection />
+            <Prognosis />
+            <CareProvider />
+            <Evacuation />
+          </List.Accordion>
+          <List.Accordion
+            right={() => (
+              <List.Icon
+                color="white"
+                icon={
+                  selectedAccordionItemId === ACCORDION_ITEM.SECOND_TAB
+                    ? "chevron-up"
+                    : "chevron-down"
+                }
+              />
+            )}
+            titleStyle={{
+              color: colors.textInputBG,
+              textAlign: "right",
+            }}
+            style={styles.accordion}
+            title={translation("treatments")}
+            id={ACCORDION_ITEM.SECOND_TAB}
+          >
+            <TreatmentGuide />
+            <Measurements />
+          </List.Accordion>
+        </List.AccordionGroup>
+      </ScrollView>
     </AutocompleteDropdownContextProvider>
   );
 }

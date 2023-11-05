@@ -1,12 +1,13 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { NavigationProp } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { TAB_STATUS } from "./views/homepage";
 
 export interface IPersonalInformation {
   full_name: string;
   idf_id: number;
+  patientId: string;
 }
-interface IIncidentInformation {
+export interface IIncidentInformation {
   injury_time: number;
   care_time: number;
   date: number;
@@ -99,6 +100,7 @@ export interface IAirWayInformation {
   action: TAirWayTreatment;
   time: number;
   successful: boolean;
+  id: number;
 }
 export interface IBreathingInformation {
   action: EBreathingTreatment;
@@ -215,6 +217,7 @@ export interface IMedicationsAndFluidInformation {
   action: EMedications;
   dose: number;
   time: number;
+  id: number;
 }
 export interface IMedicationsAndFluid {
   actions: IMedicationsAndFluidInformation[];
@@ -230,7 +233,7 @@ export enum ETransportation {
   VEHICLE = "VEHICLE",
   CHOPPER = "CHOPPER",
   NAVEL = "NAVEL",
-  SPECIAL_CARE = "SPECIAL_CARE",
+  // SPECIAL_CARE = "SPECIAL_CARE",
 }
 export interface IEvacuationInformation {
   time: number;
@@ -240,6 +243,7 @@ export interface IEvacuationInformation {
 }
 
 export interface IMeasurementsAction {
+  id: number;
   time: number;
   provider: ICareProvider;
   puls: number;
@@ -259,6 +263,7 @@ export interface ITreatmentGuideMeasurementsInformation {
   actions: IMeasurementsAction[];
 }
 export interface ITreatmentGuide {
+  id: number;
   care_guide: string;
   order_time: number;
   execution_time: number;
@@ -275,6 +280,7 @@ export interface IInjury {
   xPos: number;
   yPos: number;
   data: IInjuryInformation;
+  id: number;
 }
 export interface IPatientRecord {
   id?: string;
@@ -339,7 +345,7 @@ export type RootStackParamList = Record<
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
 export enum STATUS {
-  NEW_PATIENT = "NEW_PATIENT",
+  // NEW_PATIENT = "NEW_PATIENT",
   URGENT = "URGENT",
   TO_EVAC = "TO_EVAC",
   ACTIVE = "ACTIVE",

@@ -15,6 +15,7 @@ import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
 import { useTaggadStore } from "./src/store/taggad.store";
 import { usePatientRecordsStore } from "./src/store/patients.record.store";
+import storage, { STORAGE } from "./storage";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const theme = {
@@ -31,6 +32,8 @@ export default function App() {
   const { loadInitialState } = useTaggadStore();
   const { loadPatientsState } = usePatientRecordsStore();
   const [appReady, toggleReady] = useState<boolean>(false);
+  
+  // storage.remove({ key: STORAGE.PATIENTS_RECORD });
   useEffect(() => {
     if (!hasPermission) {
       requestPermission();

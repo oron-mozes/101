@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -7,23 +7,17 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Button, Divider, Text, IconButton } from "react-native-paper";
+import { Button, Divider, IconButton, Text } from "react-native-paper";
 import storage, { STORAGE } from "../../../storage";
 import { DropDown } from "../../form-components/dropdown";
 import { InputField } from "../../form-components/input-field";
 import { useTranslation } from "../../hooks/useMyTranslation";
-import {
-  ICareProvider,
-  ITaagad,
-  RANK,
-  ROLE,
-  StackNavigation,
-} from "../../interfaces";
+import { ICareProvider, RANK, ROLE, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { colors } from "../../shared-config";
+import { useTaggadStore } from "../../store/taggad.store";
 import { convertToOptions } from "../homepage/tabs/report-tab/create-components/utils";
 import { BluLogo } from "./blue-logo";
-import { useTaggadStore } from "../../store/taggad.store";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,
@@ -214,7 +208,7 @@ export default function TaagadScreen() {
           onPress={async () => {
             storage.clearMap();
             await Promise.all([
-              storage.remove({ key: STORAGE.TAAGAD }),
+              // storage.remove({ key: STORAGE.TAAGAD }),
               storage.remove({ key: STORAGE.PATIENTS_RECORD }),
             ]);
             await loadInitialState();

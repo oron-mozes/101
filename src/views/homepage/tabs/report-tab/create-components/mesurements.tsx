@@ -1,22 +1,20 @@
-import { useContext, useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Divider, Icon, Text } from "react-native-paper";
-import { emptyPatient } from "..";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import {
-  IMeasurementsAction,
-  ITreatmentGuideMeasurementsInformation,
-} from "../../../../../interfaces";
+import { IMeasurementsAction } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
+import { useTaggadStore } from "../../../../../store/taggad.store";
 import { design } from "./shared-style";
-import { convertStringToNumber, mergeData, updateDataInIndex } from "./utils";
+import { convertStringToNumber } from "./utils";
 
 const emptyState: IMeasurementsAction = {
+  id: null,
   time: null,
   provider: null,
   puls: null,
@@ -33,57 +31,26 @@ const emptyState: IMeasurementsAction = {
 };
 export function Measurements() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, providers, disabled } = context;
-  const measurements: ITreatmentGuideMeasurementsInformation = useMemo(
-    () =>
-      mergeData(
-        patient.treatmentGuide.measurements,
-        emptyPatient.treatmentGuide.measurements
-      ),
-    [patient.treatmentGuide]
+  const { measurements } = usePatientRecordsStore(
+    (state) => state.activePatient.treatmentGuide
   );
+  const providers = useTaggadStore((state) => state.taggad.care_providers);
+  const handlers = usePatientRecordsStore(
+    (state) => state.treatmentGuide_handlers
+  );
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
+  );
+
   useEffect(() => {
     if (measurements.actions.length === 0) {
-      update({
-        treatmentGuide: {
-          ...patient.treatmentGuide,
-          measurements: {
-            ...measurements,
-            actions: [emptyState, emptyState, emptyState],
-          },
-        },
-      });
+      addRow();
     }
   }, []);
 
   const addRow = () => {
-    update({
-      treatmentGuide: {
-        ...patient.treatmentGuide,
-        measurements: {
-          ...measurements,
-
-          actions: [...measurements.actions, emptyState],
-        },
-      },
-    });
+    handlers.addMeasurementsAction(emptyState);
   };
-
-  const updateInIndex = (data: Partial<IMeasurementsAction>, index: number) =>
-    update({
-      treatmentGuide: {
-        ...patient.treatmentGuide,
-        measurements: {
-          ...measurements,
-          actions: updateDataInIndex(
-            measurements.actions,
-            data as IMeasurementsAction,
-            index
-          ),
-        },
-      },
-    });
 
   const painRang = [...Array(11).keys()];
   return (
@@ -98,15 +65,7 @@ export function Measurements() {
             label={translation("treatment_period")}
             initialValue={measurements.period?.toString()}
             onSelect={(selected) => {
-              update({
-                treatmentGuide: {
-                  ...patient.treatmentGuide,
-                  measurements: {
-                    ...measurements,
-                    period: convertStringToNumber(selected.id),
-                  },
-                },
-              });
+              handlers.setPeriod(convertStringToNumber(selected.id));
             }}
             options={["15", "30", "60", "120"].map((time) => ({
               id: time,
@@ -134,7 +93,7 @@ export function Measurements() {
               value={measurement.time}
               label={translation("treatment_execution_time")}
               onChange={(time) => {
-                updateInIndex({ time }, index);
+                handlers.updateAtIndex({ time }, index);
               }}
             />
             <DropDown
@@ -144,7 +103,7 @@ export function Measurements() {
                 const provider = Object.values(providers).find(
                   (p) => p.idf_id.toString() === value.id
                 );
-                updateInIndex({ provider }, index);
+                handlers.updateAtIndex({ provider }, index);
               }}
               label={translation("treatment_provider")}
               options={Object.values(providers).map((provider) => ({
@@ -159,7 +118,10 @@ export function Measurements() {
               label={translation("treatment_puls")}
               value={measurement.puls?.toString()}
               onChange={(puls) => {
-                updateInIndex({ puls: convertStringToNumber(puls) }, index);
+                handlers.updateAtIndex(
+                  { puls: convertStringToNumber(puls) },
+                  index
+                );
               }}
             />
             <InputField
@@ -168,7 +130,7 @@ export function Measurements() {
               label={translation("treatment_systolic")}
               value={measurement.systolic?.toString()}
               onChange={(systolic) => {
-                updateInIndex(
+                handlers.updateAtIndex(
                   { systolic: convertStringToNumber(systolic) },
                   index
                 );
@@ -180,7 +142,7 @@ export function Measurements() {
               label={translation("treatment_diastolic")}
               value={measurement.diastolic?.toString()}
               onChange={(diastolic) => {
-                updateInIndex(
+                handlers.updateAtIndex(
                   { diastolic: convertStringToNumber(diastolic) },
                   index
                 );
@@ -192,7 +154,10 @@ export function Measurements() {
               label={translation("treatment_breath")}
               value={measurement.breath?.toString()}
               onChange={(breath) => {
-                updateInIndex({ breath: convertStringToNumber(breath) }, index);
+                handlers.updateAtIndex(
+                  { breath: convertStringToNumber(breath) },
+                  index
+                );
               }}
             />
             <InputField
@@ -201,7 +166,10 @@ export function Measurements() {
               label={translation("treatment_spo2")}
               value={measurement.spo2?.toString()}
               onChange={(spo2) => {
-                updateInIndex({ spo2: convertStringToNumber(spo2) }, index);
+                handlers.updateAtIndex(
+                  { spo2: convertStringToNumber(spo2) },
+                  index
+                );
               }}
             />
             <InputField
@@ -210,14 +178,20 @@ export function Measurements() {
               label={translation("treatment_etcos")}
               value={measurement.etcos?.toString()}
               onChange={(etcos) => {
-                updateInIndex({ etcos: convertStringToNumber(etcos) }, index);
+                handlers.updateAtIndex(
+                  { etcos: convertStringToNumber(etcos) },
+                  index
+                );
               }}
             />
             <DropDown
               disabled={disabled}
               initialValue={measurement.pain?.toString()}
               onSelect={(pain) => {
-                updateInIndex({ pain: convertStringToNumber(pain.id) }, index);
+                handlers.updateAtIndex(
+                  { pain: convertStringToNumber(pain.id) },
+                  index
+                );
               }}
               label={translation("treatment_pain")}
               options={painRang.map((pain) => ({
@@ -231,7 +205,10 @@ export function Measurements() {
               label={translation("treatment_prpo")}
               value={measurement.prpo?.toString()}
               onChange={(prpo) => {
-                updateInIndex({ prpo: convertStringToNumber(prpo) }, index);
+                handlers.updateAtIndex(
+                  { prpo: convertStringToNumber(prpo) },
+                  index
+                );
               }}
             />
             <InputField
@@ -240,7 +217,10 @@ export function Measurements() {
               label={translation("GCS")}
               value={measurement.GCS?.toString()}
               onChange={(GCS) => {
-                updateInIndex({ GCS: convertStringToNumber(GCS) }, index);
+                handlers.updateAtIndex(
+                  { GCS: convertStringToNumber(GCS) },
+                  index
+                );
               }}
             />
             <InputField
@@ -249,7 +229,10 @@ export function Measurements() {
               label={translation("treatment_urine")}
               value={measurement.urine?.toString()}
               onChange={(urine) => {
-                updateInIndex({ urine: convertStringToNumber(urine) }, index);
+                handlers.updateAtIndex(
+                  { urine: convertStringToNumber(urine) },
+                  index
+                );
               }}
             />
             <InputField
@@ -258,7 +241,10 @@ export function Measurements() {
               label={translation("treatment_blood")}
               value={measurement.blood?.toString()}
               onChange={(blood) => {
-                updateInIndex({ blood: convertStringToNumber(blood) }, index);
+                handlers.updateAtIndex(
+                  { blood: convertStringToNumber(blood) },
+                  index
+                );
               }}
             />
           </View>

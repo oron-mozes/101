@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Card, Icon, Text } from "react-native-paper";
-import { emptyPatient } from "..";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { InputField } from "../../../../../form-components/input-field";
 import { RadioGroup } from "../../../../../form-components/radio-group";
@@ -9,22 +8,14 @@ import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import {
-  IMeasurementsInformation,
   EMeasurementsTreatments,
+  IMeasurementsInformation,
   TOGGLE,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
-import {
-  convertStringToNumber,
-  convertToOptions,
-  mergeData,
-  removeByIndexHandler,
-  updateDataInIndex,
-  validateLastItem,
-} from "./utils";
-import { useContext, useMemo } from "react";
+import { convertToOptions, validateLastItem } from "./utils";
 
 const emptyState: IMeasurementsInformation = {
   action: null,
@@ -33,54 +24,23 @@ const emptyState: IMeasurementsInformation = {
 };
 export function CSection() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const measurements = useMemo(
-    () => mergeData(patient?.measurements, emptyPatient.measurements),
-    [patient?.measurements]
+
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
+  );
+  const { actions, fulfill, shock, palpated, puls, bloodPressure } =
+    usePatientRecordsStore((state) => state.activePatient.measurements);
+  const handlers = usePatientRecordsStore(
+    (state) => state.measurements_handlers
   );
 
-  const { actions, fulfill } = measurements;
-
   const addRow = () => {
-    update({
-      measurements: {
-        ...measurements,
-        actions: [...actions, emptyState],
-      },
-    });
+    handlers.addAction(emptyState);
   };
 
   if (fulfill && !Boolean(actions?.length)) {
     addRow();
   }
-
-  const updateInIndex = (
-    data: Partial<IMeasurementsInformation>,
-    index: number
-  ) =>
-    update({
-      measurements: {
-        ...measurements,
-        actions: updateDataInIndex(
-          actions,
-          data as IMeasurementsInformation,
-          index
-        ),
-      },
-    });
-
-  const removeByIndex = (index: number) => {
-    const newData = removeByIndexHandler(actions, index);
-
-    update({
-      measurements: {
-        ...measurements,
-        actions: newData,
-        fulfill: newData.length !== 0,
-      },
-    });
-  };
 
   return (
     <Card style={styles.card}>
@@ -93,20 +53,9 @@ export function CSection() {
           horizontal
           label={translation("shock")}
           onSelect={(id: string) => {
-            update({
-              measurements: {
-                ...measurements,
-                shock: id === TOGGLE.YES,
-              },
-            });
+            handlers.toggleShock(id === TOGGLE.YES);
           }}
-          selected={
-            measurements.shock !== null
-              ? measurements.shock
-                ? TOGGLE.YES
-                : TOGGLE.NO
-              : null
-          }
+          selected={shock !== null ? (shock ? TOGGLE.YES : TOGGLE.NO) : null}
           options={convertToOptions(TOGGLE, translation)}
         />
         <RadioGroup
@@ -114,19 +63,10 @@ export function CSection() {
           horizontal
           label={translation("palpated")}
           onSelect={(id: string) => {
-            update({
-              measurements: {
-                ...measurements,
-                palpated: id === TOGGLE.YES,
-              },
-            });
+            handlers.togglePalpated(id === TOGGLE.YES);
           }}
           selected={
-            measurements.palpated !== null
-              ? measurements.palpated
-                ? TOGGLE.YES
-                : TOGGLE.NO
-              : null
+            palpated !== null ? (palpated ? TOGGLE.YES : TOGGLE.NO) : null
           }
           options={convertToOptions(TOGGLE, translation)}
         />
@@ -135,51 +75,30 @@ export function CSection() {
       <Card.Content style={[styles.innerContent]}>
         <InputField
           disabled={disabled}
-          value={measurements.puls?.toString()}
+          value={puls?.toString()}
           numeric
           label={translation("puls")}
           onChange={(puls) => {
-            update({
-              measurements: {
-                ...measurements,
-                puls: convertStringToNumber(puls),
-              },
-            });
+            handlers.setPuls(Number(puls));
           }}
         />
 
         <InputField
           disabled={disabled}
           numeric
-          value={measurements.bloodPressure.diastolic?.toString()}
+          value={bloodPressure.diastolic?.toString()}
           label={translation("bloodPressureDiastolic")}
           onChange={(diastolic) => {
-            update({
-              measurements: {
-                ...measurements,
-                bloodPressure: {
-                  ...measurements.bloodPressure,
-                  diastolic: convertStringToNumber(diastolic),
-                },
-              },
-            });
+            handlers.setDiastolic(Number(diastolic));
           }}
         />
         <InputField
           disabled={disabled}
-          value={measurements.bloodPressure.systolic?.toString()}
+          value={bloodPressure.systolic?.toString()}
           label={translation("bloodPressureSystolic")}
           numeric
           onChange={(systolic) => {
-            update({
-              measurements: {
-                ...measurements,
-                bloodPressure: {
-                  ...measurements.bloodPressure,
-                  systolic: convertStringToNumber(systolic),
-                },
-              },
-            });
+            handlers.setSystolic(Number(systolic));
           }}
         />
       </Card.Content>
@@ -200,7 +119,7 @@ export function CSection() {
             <View style={[styles.element, styles.actionRow]}>
               <Text
                 disabled={disabled}
-                onPress={() => removeByIndex(index)}
+                onPress={() => handlers.removeAction(index)}
                 style={styles.deleteAction}
               >
                 <Icon size={20} source="delete" color={colors.primary} />
@@ -210,7 +129,10 @@ export function CSection() {
                 disabled={disabled}
                 label={translation("actionResult")}
                 onSelect={(id: string) => {
-                  updateInIndex({ successful: id === TOGGLE.YES }, index);
+                  handlers.updateAtIndex(
+                    { successful: id === TOGGLE.YES },
+                    index
+                  );
                 }}
                 selected={isSuccessful}
                 options={convertToOptions(TOGGLE, translation)}
@@ -220,7 +142,7 @@ export function CSection() {
                 value={measurements.time}
                 label={translation("actionTime")}
                 onChange={(time: number) => {
-                  updateInIndex({ time }, index);
+                  handlers.updateAtIndex({ time }, index);
                 }}
               />
             </View>
@@ -231,7 +153,7 @@ export function CSection() {
                 initialValue={measurements.action}
                 onSelect={(value: TAutocompleteDropdownItem) => {
                   value &&
-                    updateInIndex(
+                    handlers.updateAtIndex(
                       {
                         action: value.id as EMeasurementsTreatments,
                       },

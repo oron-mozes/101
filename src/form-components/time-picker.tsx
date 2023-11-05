@@ -1,6 +1,6 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
 import {
   borderSetup,
@@ -14,7 +14,7 @@ import date from "date-and-time";
 export function TimePicker({
   label,
   onChange,
-  value,
+  value = new Date().getTime(),
   disabled,
 }: {
   disabled: boolean;
@@ -24,41 +24,46 @@ export function TimePicker({
 }) {
   const [showTime, toggleTime] = useState<boolean>(false);
 
-  const [time, setTime] = useState<number>(value || new Date().getTime());
   useEffect(() => {
-    onChange(time);
-  }, [time]);
+    onChange(value);
+  }, []);
   return (
-    <View style={[styles.container]}>
+    <TouchableOpacity
+      onPress={() => toggleTime(true)}
+      style={[styles.container]}
+    >
       <View style={[styles.content]}>
         <Icon source="clock-outline" size={20} />
         <View>
-          {!time && <Text onPress={() => toggleTime(true)}>{label}</Text>}
-          {time && (
+          {!value && <Text onPress={() => toggleTime(true)}>{label}</Text>}
+          {value && (
             <Text onPress={() => toggleTime(true)} style={styles.time}>
-              {date.format(new Date(time), "HH:mm")}
+              {date.format(new Date(value), "HH:mm")}
             </Text>
           )}
         </View>
       </View>
-      {time && (
+      {value && (
         <Text onPress={() => toggleTime(true)} style={styles.offset}>
           {label}
         </Text>
       )}
       {showTime && (
         <DateTimePicker
+          display="spinner"
           disabled={disabled}
-          value={new Date()}
+          value={new Date(value)}
           mode="time"
           is24Hour={true}
           onChange={(data) => {
             toggleTime(false);
-            setTime(data.nativeEvent.timestamp);
+            if (data.nativeEvent.timestamp < new Date().getTime()) {
+              onChange(data.nativeEvent.timestamp);
+            }
           }}
         />
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 

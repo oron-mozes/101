@@ -1,19 +1,19 @@
-import { useContext, useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Icon, Text } from "react-native-paper";
-import { emptyPatient } from "..";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import { ITreatment, ITreatmentGuide } from "../../../../../interfaces";
+import { ITreatmentGuide } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
+import { useTaggadStore } from "../../../../../store/taggad.store";
 import { design } from "./shared-style";
-import { mergeData, updateDataInIndex } from "./utils";
 
 const emptyState: ITreatmentGuide = {
+  id: null,
   care_guide: null,
   order_time: null,
   execution_time: null,
@@ -22,74 +22,59 @@ const emptyState: ITreatmentGuide = {
 };
 export function TreatmentGuide() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, providers, disabled } = context;
-  const treatmentGuide: ITreatment = useMemo(
-    () => mergeData(patient.treatmentGuide, emptyPatient.treatmentGuide),
-    [patient.treatmentGuide]
+  const providers = useTaggadStore((state) => state.taggad.care_providers);
+  const guides = usePatientRecordsStore(
+    (state) => state.activePatient.treatmentGuide.guides
   );
+  const handlers = usePatientRecordsStore(
+    (state) => state.activePatient.treatmentGuide.handlers
+  );
+
   useEffect(() => {
-    if (treatmentGuide.guides.length === 0) {
-      update({ treatmentGuide: { ...treatmentGuide, guides: [emptyState] } });
+    if (guides.length === 0) {
+      addRow();
     }
   }, []);
 
   const addRow = () => {
-    update({
-      treatmentGuide: {
-        ...treatmentGuide,
-        guides: [...treatmentGuide.guides, emptyState],
-      },
-    });
+    handlers.addGuide(emptyState);
   };
-
-  const updateInIndex = (data: Partial<ITreatmentGuide>, index: number) =>
-    update({
-      treatmentGuide: {
-        ...treatmentGuide,
-        guides: updateDataInIndex(
-          treatmentGuide.guides,
-          data as ITreatmentGuide,
-          index
-        ),
-      },
-    });
 
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
         <SectionHeader label={translation("treatment_guide_title")} />
       </Card.Content>
-      {treatmentGuide.guides.map((guide, index) => (
+      {guides.map((guide, index) => (
         <View key={index}>
           <Card.Content style={[styles.innerContent]}>
             <InputField
-              disabled={disabled}
+              disabled={false}
               label={translation("treatment_care_guide")}
               value={guide.care_guide}
               onChange={(care_guide: string) => {
-                updateInIndex({ care_guide }, index);
+                handlers.updateGuideAtIndex({ care_guide }, index);
               }}
             />
           </Card.Content>
           <Card.Content style={[styles.innerContent]}>
             <View style={[styles.innerContent, styles.split]}>
               <TimePicker
-                disabled={disabled}
+                disabled={false}
                 value={guide.order_time}
                 label={translation("treatment_order_time")}
                 onChange={(order_time) => {
-                  updateInIndex({ order_time }, index);
+                  handlers.updateGuideAtIndex({ order_time }, index);
                 }}
               />
               <DropDown
-                disabled={disabled}
+                disabled={false}
                 initialValue={guide.provider_issuer?.idf_id?.toString()}
                 onSelect={(value) => {
                   const provider_issuer = Object.values(providers).find(
                     (p) => p.idf_id.toString() === value.id
                   );
-                  updateInIndex({ provider_issuer }, index);
+                  handlers.updateGuideAtIndex({ provider_issuer }, index);
                 }}
                 label={translation("treatment_provider_issuer")}
                 options={Object.values(providers).map((provider) => ({
@@ -100,21 +85,21 @@ export function TreatmentGuide() {
             </View>
             <View style={[styles.innerContent, styles.split]}>
               <TimePicker
-                disabled={disabled}
+                disabled={false}
                 value={guide.execution_time}
                 label={translation("treatment_execution_time")}
                 onChange={(execution_time) => {
-                  updateInIndex({ execution_time }, index);
+                  handlers.updateGuideAtIndex({ execution_time }, index);
                 }}
               />
               <DropDown
-                disabled={disabled}
+                disabled={false}
                 initialValue={guide.provider_executer?.idf_id?.toString()}
                 onSelect={(value) => {
                   const provider_executer = Object.values(providers).find(
                     (p) => p.idf_id.toString() === value.id
                   );
-                  updateInIndex({ provider_executer }, index);
+                  handlers.updateGuideAtIndex({ provider_executer }, index);
                 }}
                 label={translation("treatment_provider_executer")}
                 options={Object.values(providers).map((provider) => ({
@@ -130,7 +115,7 @@ export function TreatmentGuide() {
         <Icon size={20} source="plus" color={colors.primary} />
         <Text
           style={{ color: colors.primary, fontSize: 17 }}
-          disabled={disabled}
+          disabled={false}
           onPress={addRow}
         >
           {translation("treatment_guide_new")}

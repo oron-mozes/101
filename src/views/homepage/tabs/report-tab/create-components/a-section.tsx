@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Card, Icon, Text } from "react-native-paper";
-import { emptyPatient } from "..";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { RadioGroup } from "../../../../../form-components/radio-group";
 import { SectionHeader } from "../../../../../form-components/section-header";
@@ -14,59 +13,32 @@ import {
   TOGGLE,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
-import {
-  convertToOptions,
-  mergeData,
-  removeByIndexHandler,
-  updateDataInIndex,
-  validateLastItem,
-} from "./utils";
-import { useContext, useMemo } from "react";
+import { convertToOptions, validateLastItem } from "./utils";
 
-const emptyState: IAirWayInformation = {
-  action: null,
-  time: null,
-  successful: null,
-};
 export function ASection() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const airway = useMemo(
-    () => mergeData(patient?.airway, emptyPatient.airway),
-    [patient?.airway]
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
   );
-  const { actions, fulfill } = airway;
+
+  const handlers = usePatientRecordsStore(
+    (state) => state.airway_handlers
+  );
+  const actions = usePatientRecordsStore(
+    (state) => state.activePatient.airway.actions ?? []
+  );
+  const fulfill = usePatientRecordsStore(
+    (state) => state.activePatient.airway.fulfill
+  );
 
   const addRow = () => {
-    update({
-      airway: { ...airway, actions: [...actions, emptyState] },
-    });
-  };
-
-  if (fulfill && !Boolean(actions?.length)) {
-    addRow();
-  }
-
-  const updateInIndex = (data: Partial<IAirWayInformation>, index: number) => {
-    update({
-      airway: {
-        ...airway,
-        actions: updateDataInIndex(actions, data as IAirWayInformation, index),
-      },
-    });
-  };
-
-  const removeByIndex = (index: number) => {
-    const newData = removeByIndexHandler(actions, index);
-    update({
-      airway: {
-        ...airway,
-        actions: newData,
-        fulfill: newData.length !== 0,
-      },
+    handlers.addAction({
+      action: null,
+      time: new Date().getTime(),
+      id: new Date().getTime(),
+      successful: null,
     });
   };
 
@@ -81,11 +53,7 @@ export function ASection() {
           horizontal
           label={translation("airWayInjury")}
           onSelect={(id: string) => {
-            if (id === TOGGLE.YES) {
-              update({ airway: { ...airway, fulfill: true } });
-            } else {
-              update({ airway: { ...airway, fulfill: false } });
-            }
+            handlers.toggleFulfill(id === TOGGLE.YES);
           }}
           selected={
             fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
@@ -109,7 +77,7 @@ export function ASection() {
             >
               <View style={[styles.element, styles.actionRow]}>
                 <Text
-                  onPress={() => removeByIndex(index)}
+                  onPress={() => handlers.removeAction(index)}
                   style={styles.deleteAction}
                 >
                   <Icon size={20} source="delete" color={colors.primary} />
@@ -119,7 +87,10 @@ export function ASection() {
                   disabled={disabled}
                   label={translation("actionResult")}
                   onSelect={(id: string) => {
-                    updateInIndex({ successful: id === TOGGLE.YES }, index);
+                    handlers.updateAtIndex(
+                      { successful: id === TOGGLE.YES },
+                      index
+                    );
                   }}
                   selected={isSuccessful}
                   options={convertToOptions(TOGGLE, translation)}
@@ -129,7 +100,7 @@ export function ASection() {
                   value={airWayInfo.time}
                   label={translation("actionTime")}
                   onChange={(time: number) => {
-                    updateInIndex({ time }, index);
+                    handlers.updateAtIndex({ time }, index);
                   }}
                 />
               </View>
@@ -140,7 +111,7 @@ export function ASection() {
                   initialValue={airWayInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
                     value &&
-                      updateInIndex(
+                      handlers.updateAtIndex(
                         {
                           action: value.id as TAirWayTreatment,
                         },

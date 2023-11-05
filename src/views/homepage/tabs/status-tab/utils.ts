@@ -8,7 +8,7 @@ priority.set(STATUS.ACTIVE, 3);
 priority.set(STATUS.CLOSED, 4);
 
 export function sortByPriority(data: IPatientRecord[]): IPatientRecord[] {
-  return data.sort(
+  return data?.sort(
     (recordA: IPatientRecord, recordB: IPatientRecord) =>
       priority.get(recordA.evacuation.status) -
       priority.get(recordB.evacuation.status)

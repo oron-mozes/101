@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Card, Icon, Text } from "react-native-paper";
-import { emptyPatient } from "..";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { InputField } from "../../../../../form-components/input-field";
 import { RadioGroup } from "../../../../../form-components/radio-group";
@@ -14,17 +13,9 @@ import {
   TOGGLE,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
-import {
-  convertStringToNumber,
-  convertToOptions,
-  mergeData,
-  removeByIndexHandler,
-  updateDataInIndex,
-  validateLastItem,
-} from "./utils";
-import { useContext, useMemo } from "react";
+import { convertToOptions, validateLastItem } from "./utils";
 
 const emptyState: IBreathingInformation = {
   action: null,
@@ -33,46 +24,26 @@ const emptyState: IBreathingInformation = {
 };
 export function BSection() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const breathing = useMemo(
-    () => mergeData(patient?.breathing, emptyPatient.breathing),
-    [patient?.breathing]
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
   );
-  const { actions, fulfill } = breathing;
+
+  const { saturation, breathingCount, fulfill } = usePatientRecordsStore(
+    (state) => state.activePatient.breathing
+  );
+
+  const actions = usePatientRecordsStore(
+    (state) => state.activePatient.breathing.actions ?? []
+  );
+  const handlers = usePatientRecordsStore((state) => state.breathing_handlers);
 
   const addRow = () => {
-    update({
-      breathing: { ...breathing, actions: [...actions, emptyState] },
-    });
+    handlers.addAction(emptyState);
   };
 
   if (fulfill && !Boolean(actions?.length)) {
     addRow();
   }
-
-  const updateInIndex = (data: Partial<IBreathingInformation>, index: number) =>
-    update({
-      breathing: {
-        ...breathing,
-        actions: updateDataInIndex(
-          actions,
-          data as IBreathingInformation,
-          index
-        ),
-      },
-    });
-
-  const removeByIndex = (index: number) => {
-    const newData = removeByIndexHandler(actions, index);
-    update({
-      breathing: {
-        ...breathing,
-        actions: newData,
-        fulfill: newData.length !== 0,
-      },
-    });
-  };
 
   return (
     <Card style={styles.card}>
@@ -85,11 +56,7 @@ export function BSection() {
           horizontal
           label={translation("breathingInjury")}
           onSelect={(id: string) => {
-            if (id === TOGGLE.YES) {
-              update({ breathing: { ...breathing, fulfill: true } });
-            } else {
-              update({ breathing: { ...breathing, fulfill: false } });
-            }
+            handlers.toggleFulfill(id === TOGGLE.YES);
           }}
           selected={
             fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
@@ -103,28 +70,18 @@ export function BSection() {
             disabled={disabled}
             label={translation("breathings")}
             numeric
-            value={breathing.breathingCount?.toString()}
+            value={breathingCount?.toString()}
             onChange={(breathingCount) => {
-              update({
-                breathing: {
-                  ...breathing,
-                  breathingCount: convertStringToNumber(breathingCount),
-                },
-              });
+              handlers.setBreathingCount(Number(breathingCount));
             }}
           />
           <InputField
             disabled={disabled}
             numeric
-            value={breathing.saturation?.toString()}
+            value={saturation?.toString()}
             label={translation("saturation")}
             onChange={(saturation) => {
-              update({
-                breathing: {
-                  ...breathing,
-                  saturation: convertStringToNumber(saturation),
-                },
-              });
+              handlers.setSaturation(Number(saturation));
             }}
           />
         </Card.Content>
@@ -146,7 +103,7 @@ export function BSection() {
               <View style={[styles.element, styles.actionRow]}>
                 <Text
                   disabled={disabled}
-                  onPress={() => removeByIndex(index)}
+                  onPress={() => handlers.removeAction(index)}
                   style={styles.deleteAction}
                 >
                   <Icon size={20} source="delete" color={colors.primary} />
@@ -156,7 +113,10 @@ export function BSection() {
                   disabled={disabled}
                   label={translation("actionResult")}
                   onSelect={(id: string) => {
-                    updateInIndex({ successful: id === TOGGLE.YES }, index);
+                    handlers.updateAtIndex(
+                      { successful: id === TOGGLE.YES },
+                      index
+                    );
                   }}
                   selected={isSuccessful}
                   options={convertToOptions(TOGGLE, translation)}
@@ -166,7 +126,7 @@ export function BSection() {
                   value={breathingInfo.time}
                   label={translation("actionTime")}
                   onChange={(time: number) => {
-                    updateInIndex({ time }, index);
+                    handlers.updateAtIndex({ time }, index);
                   }}
                 />
               </View>
@@ -177,7 +137,7 @@ export function BSection() {
                   initialValue={breathingInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
                     value &&
-                      updateInIndex(
+                      handlers.updateAtIndex(
                         {
                           action: value.id as EBreathingTreatment,
                         },

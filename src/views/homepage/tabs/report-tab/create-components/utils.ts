@@ -71,6 +71,7 @@ export function mergeData<T>(dataA: T, dataB: T): T {
 }
 
 export function toggleListData(data, value) {
+  console.log({ data });
   const hasValue = data.find((c) => c === value);
   let newList = data;
   if (hasValue) {

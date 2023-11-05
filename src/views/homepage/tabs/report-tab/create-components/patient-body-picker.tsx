@@ -1,24 +1,29 @@
-import { useContext, useMemo, useState } from "react";
+import { useState } from "react";
 import { StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { Card } from "react-native-paper";
 import { BodyPicker } from "../../../../../components/body-picker";
 import { InjuryModal } from "../../../../../components/body-picker/injury-modal";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
 
 export function PatientBodyPicker() {
   const translation = useTranslation();
+  const injuries = usePatientRecordsStore((state) => {
+    return state.activePatient.injuries ?? [];
+  });
+
+  // const handlers = usePatientRecordsStore((state) => state.injuries_handlers);
   const [showModal, toggleModal] = useState<boolean>(false);
-  const context = useContext(Context);
-  const { patient, update } = context;
-  const injuries = useMemo(() => patient?.injuries ?? [], [patient?.injuries]);
+
   const handlePress = (event) => {
     const { locationX, locationY } = event.nativeEvent;
-    update({
-      injuries: [...injuries, { xPos: locationX, yPos: locationY, data: null }],
-    });
+    // handlers.addInjury({
+    //   xPos: locationX,
+    //   yPos: locationY,
+    //   data: null,
+    // });
 
     toggleModal(true);
   };
@@ -29,11 +34,7 @@ export function PatientBodyPicker() {
         <InjuryModal
           closeHandler={() => toggleModal(false)}
           onChange={(data) => {
-            let lastHitPoint = injuries.pop();
-            lastHitPoint = { ...lastHitPoint, data };
-            update({
-              injuries: [...injuries, lastHitPoint],
-            });
+            // handlers.updateAtIndex(data, injuries.length - 1);
           }}
         />
       )}

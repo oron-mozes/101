@@ -5,19 +5,24 @@ import { TAB_STATUS } from "../..";
 import { QrIcon } from "../../../../components/qr-icon/qr";
 import { StatusChip } from "../../../../form-components/status-chip";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
-import { usePatientsRecord } from "../../../../hooks/usePatientsRecord";
 import { StackNavigation } from "../../../../interfaces";
 import { ROUTES } from "../../../../routes";
 import { colors } from "../../../../shared-config";
 import { sortByPriority } from "./utils";
+import { usePatientRecordsStore } from "../../../../store/patients.record.store";
+import { useEffect } from "react";
 
 export function StatusTab() {
-  const { patientsRecord } = usePatientsRecord();
   const navigation = useNavigation<StackNavigation>();
+  const patients = usePatientRecordsStore((state) => state.patients);
+
   const translation = useTranslation();
 
   const goToPatientPage = (patient) =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
+  useEffect(() => {
+    return () => {};
+  }, []);
   return (
     <View>
       <DataTable style={styles.table}>
@@ -35,9 +40,9 @@ export function StatusTab() {
             {translation("patientName")}
           </DataTable.Title>
         </DataTable.Header>
-        {sortByPriority(patientsRecord).map((patient) => {
+        {sortByPriority(patients).map((patient, index) => {
           return (
-            <DataTable.Row key={patient.id}>
+            <DataTable.Row key={index}>
               <DataTable.Cell
                 style={[styles.title]}
                 onPress={() =>

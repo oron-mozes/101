@@ -35,7 +35,6 @@ export const useTaggadStore = create<{
       }
     },
     async addProvider(newCareProvider: ICareProvider) {
-      console.log({ newCareProvider });
       const currentData = get().taggad;
       currentData.care_providers = {
         ...currentData.care_providers,

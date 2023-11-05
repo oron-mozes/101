@@ -1,6 +1,12 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  TouchableHighlight,
+  View,
+} from "react-native";
 import { Icon, Text } from "react-native-paper";
 import {
   borderRadius,
@@ -28,7 +34,10 @@ export function DatePicker({
     onChange(time);
   }, [time]);
   return (
-    <View style={[styles.container]}>
+    <TouchableOpacity
+      onPress={() => toggleTime(true)}
+      style={[styles.container]}
+    >
       <View style={[styles.content]}>
         <Icon source="calendar" size={20} />
         <View>
@@ -56,7 +65,7 @@ export function DatePicker({
           }}
         />
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 

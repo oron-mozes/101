@@ -3,14 +3,18 @@ import { Card } from "react-native-paper";
 import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
-import { useContext } from "react";
 
 export function Prognosis() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
+  const prognosis = usePatientRecordsStore(
+    (state) => state.activePatient.prognosis
+  );
+  const update = usePatientRecordsStore((state) => state.updatePartialPatient);
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
+  );
 
   return (
     <Card style={styles.card}>
@@ -22,12 +26,12 @@ export function Prognosis() {
         <InputField
           disabled={disabled}
           numberOfLines={5}
-          onChange={(prognosis: string) => {
+          onChange={(value: string) => {
             update({
-              prognosis: prognosis,
+              prognosis: value,
             });
           }}
-          value={patient?.prognosis}
+          value={prognosis}
           label={translation("prognosis")}
         />
       </Card.Content>

@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-paper";
+import { ToggleButton } from "../../../../../form-components/ToggleButton";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
@@ -16,18 +18,9 @@ import {
   inputContainer,
   inputHeight,
 } from "../../../../../shared-config";
-import Context from "../context";
+import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
-import { ToggleButton } from "../../../../../form-components/ToggleButton";
-import {
-  calcGCS,
-  convertToOptions,
-  isSelectedHandler,
-  mergeData,
-  toggleListData,
-} from "./utils";
-import { emptyPatient } from "..";
-import { useContext, useMemo } from "react";
+import { calcGCS, convertToOptions, isSelectedHandler } from "./utils";
 
 const emptyState: IReaction = {
   GCS: null,
@@ -38,22 +31,18 @@ const emptyState: IReaction = {
 };
 export function DSection() {
   const translation = useTranslation();
-  const context = useContext(Context);
-  const { patient, update, disabled } = context;
-  const reaction = useMemo(
-    () => mergeData(patient?.reaction, emptyPatient.reaction),
-    [patient?.reaction]
+  const { general, speech, movement, eyes, GCS } = usePatientRecordsStore(
+    (state) => state.activePatient.reaction
   );
-  const { general, speech, movement, eyes } = reaction;
-
-  const toggleValue = (value) => {
-    update({
-      reaction: {
-        ...patient.reaction,
-        general: toggleListData(general, value),
-      },
-    });
-  };
+  const handlers = usePatientRecordsStore(
+    (state) => state.reaction_handlers
+  );
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
+  );
+  useEffect(() => {
+    handlers.setGCS(calcGCS({ eyes, movement, speech }));
+  }, [eyes, movement, speech]);
   const isSelected = isSelectedHandler(general);
 
   return (
@@ -67,7 +56,7 @@ export function DSection() {
             disabled={disabled}
             label={translation(item)}
             status={isSelected(item)}
-            onSelect={() => toggleValue(item)}
+            onSelect={() => handlers.toggleGeneral(item)}
             key={item}
           />
         ))}
@@ -78,12 +67,7 @@ export function DSection() {
             disabled={disabled}
             initialValue={speech}
             onSelect={(value) => {
-              update({
-                reaction: {
-                  ...patient.reaction,
-                  speech: value.id as EReactionSpeech,
-                },
-              });
+              handlers.setSpeech(value.id as EReactionSpeech);
             }}
             label={translation("speech")}
             options={convertToOptions(EReactionSpeech, translation)}
@@ -92,12 +76,7 @@ export function DSection() {
             disabled={disabled}
             initialValue={eyes}
             onSelect={(value) => {
-              update({
-                reaction: {
-                  ...patient.reaction,
-                  eyes: value.id as EReactionEyes,
-                },
-              });
+              handlers.setEyes(value.id as EReactionEyes);
             }}
             label={translation("eys")}
             options={convertToOptions(EReactionEyes, translation)}
@@ -108,21 +87,14 @@ export function DSection() {
             disabled={disabled}
             initialValue={movement}
             onSelect={(value) => {
-              update({
-                reaction: {
-                  ...patient.reaction,
-                  movement: value.id as EReactionMovement,
-                },
-              });
+              handlers.setMovement(value.id as EReactionMovement);
             }}
             label={translation("movement")}
             options={convertToOptions(EReactionMovement, translation)}
           />
           <View style={[styles.section, styles.GCS]}>
             <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>
-            <Text style={[styles.fakeInput]}>
-              {calcGCS({ eyes, movement, speech })}
-            </Text>
+            <Text style={[styles.fakeInput]}>{GCS}</Text>
           </View>
         </View>
       </Card.Content>
