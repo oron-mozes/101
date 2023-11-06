@@ -11,7 +11,7 @@ import {
   IPatientRecord,
   RootStackParamList,
 } from "../../../../interfaces";
-import { colors } from "../../../../shared-config";
+import { colors, gutter, borderSetup } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useTaggadStore } from "../../../../store/taggad.store";
 import { ASection } from "./create-components/a-section";
@@ -170,7 +170,8 @@ export function ReportTab() {
           <List.Accordion
             right={() => (
               <List.Icon
-                color="white"
+                color={colors.text}
+                style={{ marginTop: -5 }}
                 icon={
                   selectedAccordionItemId === ACCORDION_ITEM.FIRST_TAB
                     ? "chevron-up"
@@ -182,7 +183,7 @@ export function ReportTab() {
             style={styles.accordion}
             id={ACCORDION_ITEM.FIRST_TAB}
             titleStyle={{
-              color: colors.textInputBG,
+              color: colors.text,
               textAlign: "right",
             }}
           >
@@ -203,7 +204,8 @@ export function ReportTab() {
           <List.Accordion
             right={() => (
               <List.Icon
-                color="white"
+                color={colors.text}
+                style={{ marginTop: -5 }}
                 icon={
                   selectedAccordionItemId === ACCORDION_ITEM.SECOND_TAB
                     ? "chevron-up"
@@ -212,7 +214,7 @@ export function ReportTab() {
               />
             )}
             titleStyle={{
-              color: colors.textInputBG,
+              color: colors.text,
               textAlign: "right",
             }}
             style={styles.accordion}
@@ -230,12 +232,18 @@ export function ReportTab() {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
     padding: 0,
     margin: 0,
     marginTop: -StatusBar.currentHeight,
   },
   accordion: {
     backgroundColor: colors.accordion,
-    color: colors.textInputBG,
+    color: colors.text,
+    margin: gutter * 2,
+    ...borderSetup,
+    borderColor: colors.primary,
+    height: 55,
+    elevation: 5,
   },
 });

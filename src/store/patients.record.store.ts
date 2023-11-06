@@ -101,8 +101,7 @@ export const usePatientRecordsStore = create<{
     toggleShock(shock: boolean): void;
     togglePalpated(palpated: boolean): void;
     setPuls(puls: number): void;
-    setDiastolic(diastolic: number): void;
-    setSystolic(systolic: number): void;
+    setBloodPressure(bloodPressure: string): void;
     addAction(action: IMeasurementsInformation): void;
     removeAction(id: number): void;
     updateAtIndex(data: Partial<IMeasurementsInformation>, index: number): void;
@@ -209,7 +208,7 @@ export const usePatientRecordsStore = create<{
       injuries: [],
       measurements: {
         fulfill: false,
-        bloodPressure: { diastolic: null, systolic: null },
+        bloodPressure: null,
         actions: [],
         shock: null,
         palpated: null,
@@ -512,40 +511,23 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      setDiastolic(diastolic: number) {
+      setBloodPressure(bloodPressure: string) {
         const current = state.getState();
         current.updatePartialPatient({
           measurements: {
             ...current.activePatient.measurements,
-            bloodPressure: {
-              ...current.activePatient.measurements.bloodPressure,
-              diastolic,
-            },
+            bloodPressure,
           },
         });
       },
-      setSystolic(systolic: number) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          measurements: {
-            ...current.activePatient.measurements,
-            bloodPressure: {
-              ...current.activePatient.measurements.bloodPressure,
-              systolic,
-            },
-          },
-        });
-      },
+
       addAction(action: IMeasurementsInformation) {
         const current = state.getState();
-        const id = new Date().getTime();
+
         current.updatePartialPatient({
           measurements: {
             ...current.activePatient.measurements,
-            actions: current.activePatient.measurements.actions.push({
-              ...action,
-              id,
-            }),
+            actions: [...current.activePatient.measurements.actions, action],
           },
         });
       },
@@ -555,11 +537,13 @@ export const usePatientRecordsStore = create<{
         current.updatePartialPatient({
           measurements: {
             ...current.activePatient.measurements,
-            actions: updateDataInIndex(
-              current.activePatient.measurements.actions,
-              data,
-              index
-            ),
+            actions: [
+              ...updateDataInIndex(
+                current.activePatient.measurements.actions,
+                data,
+                index
+              ),
+            ],
           },
         });
       },
@@ -747,14 +731,11 @@ export const usePatientRecordsStore = create<{
       },
       addAction(action: IAirWayInformation) {
         const current = state.getState();
-        const id = new Date().getTime();
+
         current.updatePartialPatient({
           airway: {
             ...current.activePatient.airway,
-            actions: current.activePatient.airway.actions.push({
-              ...action,
-              id,
-            }),
+            actions: [...current.activePatient.airway.actions, action],
           },
         });
       },
@@ -776,11 +757,13 @@ export const usePatientRecordsStore = create<{
         current.updatePartialPatient({
           airway: {
             ...current.activePatient.airway,
-            actions: updateDataInIndex(
-              current.activePatient.airway.actions,
-              data,
-              index
-            ),
+            actions: [
+              ...updateDataInIndex(
+                current.activePatient.airway.actions,
+                data,
+                index
+              ),
+            ],
           },
         });
       },
@@ -821,14 +804,11 @@ export const usePatientRecordsStore = create<{
       },
       addAction(action: IBreathingInformation) {
         const current = state.getState();
-        const id = new Date().getTime();
+
         current.updatePartialPatient({
           breathing: {
             ...current.activePatient.breathing,
-            actions: current.activePatient.breathing.actions.push({
-              ...action,
-              id,
-            }),
+            actions: [...current.activePatient.breathing.actions, action],
           },
         });
       },
@@ -973,7 +953,6 @@ export const usePatientRecordsStore = create<{
         if (_.isArray(active[key])) {
           final[key] = active[key];
         } else {
-          active[key] && delete active[key].handlers;
           final[key] = _.omitBy(active[key], _.isNil);
         }
       }

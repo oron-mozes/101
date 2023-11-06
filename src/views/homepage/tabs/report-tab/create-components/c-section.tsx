@@ -16,6 +16,8 @@ import { colors, gutter } from "../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
 import { convertToOptions, validateLastItem } from "./utils";
+import { useEffect } from "react";
+import { BloodPressureInputFieldHandler } from "../../../../../form-components/blood-pressure-input-field";
 
 const emptyState: IMeasurementsInformation = {
   action: null,
@@ -28,20 +30,33 @@ export function CSection() {
   const disabled = usePatientRecordsStore(
     (state) => state.activePatient.disabled
   );
-  const { actions, fulfill, shock, palpated, puls, bloodPressure } =
-    usePatientRecordsStore((state) => state.activePatient.measurements);
+  const shock = usePatientRecordsStore(
+    (state) => state.activePatient.measurements.shock
+  );
+  const palpated = usePatientRecordsStore(
+    (state) => state.activePatient.measurements.palpated
+  );
+  const puls = usePatientRecordsStore(
+    (state) => state.activePatient.measurements.puls
+  );
+  const bloodPressure = usePatientRecordsStore(
+    (state) => state.activePatient.measurements.bloodPressure
+  );
+  const actions = usePatientRecordsStore(
+    (state) => state.activePatient.measurements.actions
+  );
+
   const handlers = usePatientRecordsStore(
     (state) => state.measurements_handlers
   );
 
   const addRow = () => {
-    handlers.addAction(emptyState);
+    handlers.addAction({ ...emptyState, time: new Date().getTime() });
   };
 
-  if (fulfill && !Boolean(actions?.length)) {
-    addRow();
-  }
-
+  useEffect(() => {
+    actions.length === 0 && addRow();
+  }, [actions]);
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
@@ -83,7 +98,15 @@ export function CSection() {
           }}
         />
 
-        <InputField
+        <BloodPressureInputFieldHandler
+          disabled={disabled}
+          value={bloodPressure}
+          label={translation("bloodPressureDiastolic")}
+          onChange={(value) => {
+            handlers.setBloodPressure(value);
+          }}
+        />
+        {/* <InputField
           disabled={disabled}
           numeric
           value={bloodPressure.diastolic?.toString()}
@@ -100,7 +123,7 @@ export function CSection() {
           onChange={(systolic) => {
             handlers.setSystolic(Number(systolic));
           }}
-        />
+        /> */}
       </Card.Content>
 
       {actions?.map((measurements: IMeasurementsInformation, index) => {

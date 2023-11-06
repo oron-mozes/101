@@ -56,7 +56,7 @@ export function PatientDetails() {
       <Card.Content style={[styles.innerContent]}>
         <DatePicker
           disabled={disabled}
-          value={incident_information.date}
+          value={incident_information.date ?? new Date().getTime()}
           label={translation("date")}
           onChange={(date: number) => {
             incidentHandlers.setDate(date);
@@ -66,7 +66,7 @@ export function PatientDetails() {
         <View style={styles.personalInfo}>
           <TimePicker
             disabled={disabled}
-            value={incident_information.care_time}
+            value={incident_information.care_time ?? new Date().getTime()}
             label={translation("timeOfTreatment")}
             onChange={(care_time: number) => {
               incidentHandlers.setCareTime(care_time);
@@ -74,7 +74,7 @@ export function PatientDetails() {
           />
           <TimePicker
             disabled={disabled}
-            value={incident_information.injury_time}
+            value={incident_information.injury_time ?? new Date().getTime()}
             label={translation("timeOfInjury")}
             onChange={(injury_time: number) => {
               incidentHandlers.setTime(injury_time);

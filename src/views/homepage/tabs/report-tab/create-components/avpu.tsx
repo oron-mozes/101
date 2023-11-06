@@ -12,7 +12,7 @@ export function Avpu() {
   const consciousness = usePatientRecordsStore(
     (state) => state.activePatient.consciousness ?? []
   );
-  console.log(consciousness);
+  
   const handlers = usePatientRecordsStore(
     (state) => state.consciousness_handlers
   );

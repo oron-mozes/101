@@ -24,6 +24,7 @@ export const theme = {
   colors: {
     ...DefaultTheme.colors,
     ...colors,
+    background: "white",
   },
 };
 
@@ -32,7 +33,7 @@ export default function App() {
   const { loadInitialState } = useTaggadStore();
   const { loadPatientsState } = usePatientRecordsStore();
   const [appReady, toggleReady] = useState<boolean>(false);
-  
+
   // storage.remove({ key: STORAGE.PATIENTS_RECORD });
   useEffect(() => {
     if (!hasPermission) {

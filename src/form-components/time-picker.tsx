@@ -23,7 +23,7 @@ export function TimePicker({
   onChange(value: number): void;
 }) {
   const [showTime, toggleTime] = useState<boolean>(false);
-
+  
   useEffect(() => {
     onChange(value);
   }, []);
@@ -38,7 +38,10 @@ export function TimePicker({
           {!value && <Text onPress={() => toggleTime(true)}>{label}</Text>}
           {value && (
             <Text onPress={() => toggleTime(true)} style={styles.time}>
-              {date.format(new Date(value), "HH:mm")}
+              {date.format(
+                new Date(value === 0 ? new Date().getTime() : value),
+                "HH:mm"
+              )}
             </Text>
           )}
         </View>
@@ -57,7 +60,11 @@ export function TimePicker({
           is24Hour={true}
           onChange={(data) => {
             toggleTime(false);
-            if (data.nativeEvent.timestamp < new Date().getTime()) {
+
+            if (
+              data.nativeEvent.timestamp !== 0 &&
+              data.nativeEvent.timestamp < new Date().getTime()
+            ) {
               onChange(data.nativeEvent.timestamp);
             }
           }}

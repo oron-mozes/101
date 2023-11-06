@@ -139,14 +139,11 @@ export interface IMeasurementsInformation {
 }
 export interface IMeasurements {
   actions: IMeasurementsInformation[];
-  fulfill: boolean;
+
   shock: boolean;
   palpated: boolean;
   puls: number;
-  bloodPressure: {
-    diastolic: number;
-    systolic: number;
-  };
+  bloodPressure: string;
 }
 
 export enum EReactionGeneral {

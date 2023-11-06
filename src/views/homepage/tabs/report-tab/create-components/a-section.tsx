@@ -16,6 +16,7 @@ import { colors, gutter } from "../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
 import { convertToOptions, validateLastItem } from "./utils";
+import { useEffect } from "react";
 
 export function ASection() {
   const translation = useTranslation();
@@ -23,12 +24,11 @@ export function ASection() {
     (state) => state.activePatient.disabled
   );
 
-  const handlers = usePatientRecordsStore(
-    (state) => state.airway_handlers
-  );
+  const handlers = usePatientRecordsStore((state) => state.airway_handlers);
   const actions = usePatientRecordsStore(
     (state) => state.activePatient.airway.actions ?? []
   );
+  
   const fulfill = usePatientRecordsStore(
     (state) => state.activePatient.airway.fulfill
   );
@@ -41,6 +41,9 @@ export function ASection() {
       successful: null,
     });
   };
+  useEffect(() => {
+    fulfill && actions.length === 0 && addRow();
+  }, [fulfill]);
 
   return (
     <Card style={styles.card}>
@@ -49,7 +52,7 @@ export function ASection() {
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.airwayView]}>
         <RadioGroup
-          disabled={disabled}
+          disabled={disabled || actions.length !== 0}
           horizontal
           label={translation("airWayInjury")}
           onSelect={(id: string) => {
@@ -80,7 +83,11 @@ export function ASection() {
                   onPress={() => handlers.removeAction(index)}
                   style={styles.deleteAction}
                 >
-                  <Icon size={20} source="delete" color={colors.primary} />
+                  <Icon
+                    size={20}
+                    source="delete-outline"
+                    color={colors.primary}
+                  />
                 </Text>
 
                 <RadioGroup
