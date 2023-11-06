@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { useEffect, useRef } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Card, Divider, Icon, Text } from "react-native-paper";
 import { DropDown } from "../../../../../../form-components/dropdown";
 import { SectionHeader } from "../../../../../../form-components/section-header";
@@ -11,14 +11,16 @@ import { useTaggadStore } from "../../../../../../store/taggad.store";
 import { design } from "../shared-style";
 import { convertStringToNumber } from "../utils";
 import { MeasurementForm } from "./measurments-form";
+import { Dimensions } from "react-native";
+
+export const columnWidth = 30;
 
 const emptyState: IMeasurementsAction = {
   id: null,
   time: null,
   provider: null,
   puls: null,
-  systolic: null,
-  diastolic: null,
+  bloodPressure: null,
   breath: null,
   spo2: null,
   etcos: null,
@@ -29,6 +31,9 @@ const emptyState: IMeasurementsAction = {
   blood: null,
 };
 export function Measurements() {
+  const screenWidth = Dimensions.get("window").width;
+  const scrollViewRef = useRef(null);
+
   const translation = useTranslation();
   const period = usePatientRecordsStore(
     (state) => state.activePatient.treatmentGuide.measurements.period
@@ -36,7 +41,11 @@ export function Measurements() {
   const actions = usePatientRecordsStore((state) => {
     return state.activePatient.treatmentGuide.measurements.actions ?? [];
   });
-
+  const scrollWidth =
+    ((screenWidth * columnWidth) / 100) * Math.max(actions.length, 3);
+  useEffect(() => {
+    scrollViewRef.current.scrollTo({ x: -scrollWidth, animated: true });
+  }, [scrollWidth]);
   const handlers = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers
   );
@@ -65,7 +74,7 @@ export function Measurements() {
       <Card.Content style={[styles.innerContent]}>
         <View style={[styles.innerContent, { flex: 1 }]}>
           <DropDown
-            disabled={disabled}
+            editable={disabled}
             label={translation("treatment_period")}
             initialValue={period?.toString()}
             onSelect={(selected) => {
@@ -90,34 +99,47 @@ export function Measurements() {
       </Card.Content>
       <Divider />
       <Card.Content style={[styles.innerContent]}>
-        {actions.map((measurement, index) => (
-          <MeasurementForm
-            editable={true}
-            index={index}
-            measurement={measurement}
-            key={measurement.id}
-          />
-        ))}
-        <View style={{ flex: 1 }}>
-          <MeasurementForm
-            editable={false}
-            index={-1}
-            measurement={{
-              ...emptyState,
-              time: new Date().getTime(),
-            }}
-          />
-        </View>
-        <View style={{ flex: 1 }}>
-          <MeasurementForm
-            editable={false}
-            index={-1}
-            measurement={{
-              ...emptyState,
-              time: new Date().getTime(),
-            }}
-          />
-        </View>
+        <ScrollView
+          horizontal={true}
+          style={{ width: scrollWidth }}
+          ref={scrollViewRef}
+        >
+          {actions.map((measurement, index) => (
+            <MeasurementForm
+              onComplete={addRow}
+              editable={index === actions.length - 1}
+              index={index}
+              measurement={measurement}
+              key={measurement.id + index}
+            />
+          ))}
+          {actions.length < 2 && (
+            <View style={{ flex: 1 }}>
+              <MeasurementForm
+                onComplete={() => {}}
+                editable={false}
+                index={-1}
+                measurement={{
+                  ...emptyState,
+                  time: new Date().getTime(),
+                }}
+              />
+            </View>
+          )}
+          {actions.length < 3 && (
+            <View style={{ flex: 1 }}>
+              <MeasurementForm
+                onComplete={() => {}}
+                editable={false}
+                index={-1}
+                measurement={{
+                  ...emptyState,
+                  time: new Date().getTime(),
+                }}
+              />
+            </View>
+          )}
+        </ScrollView>
       </Card.Content>
     </Card>
   );

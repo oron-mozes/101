@@ -26,7 +26,9 @@ export function TreatmentGuide() {
   const guides = usePatientRecordsStore(
     (state) => state.activePatient.treatmentGuide.guides ?? []
   );
-
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
+  );
   const handlers = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers
   );
@@ -54,7 +56,7 @@ export function TreatmentGuide() {
         <View key={index}>
           <Card.Content style={[styles.innerContent]}>
             <InputField
-              disabled={false}
+              editable={disabled}
               label={translation("treatment_care_guide")}
               value={guide.care_guide}
               onChange={(care_guide: string) => {

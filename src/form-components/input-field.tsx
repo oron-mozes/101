@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     alignItems: "flex-start",
     marginBottom: gutter,
-    marginRight: gutter,
+    marginLeft: gutter,
   },
   icon: {
     marginLeft: 4,

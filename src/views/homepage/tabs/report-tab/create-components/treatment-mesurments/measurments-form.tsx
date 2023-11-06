@@ -12,19 +12,24 @@ import { useTaggadStore } from "../../../../../../store/taggad.store";
 import { Button } from "react-native-paper";
 import { useEffect, useState } from "react";
 import { BloodPressureInputFieldHandler } from "../../../../../../form-components/blood-pressure-input-field";
+import { Dimensions } from "react-native";
+import { columnWidth } from "./";
 
 export function MeasurementForm({
   measurement,
   index,
   editable,
+  onComplete,
 }: {
+  onComplete(): void;
   editable: boolean;
   index: number;
   measurement: IMeasurementsAction;
 }) {
+  const screenWidth = Dimensions.get("window").width;
+  const widthInVw = (screenWidth * columnWidth) / 100;
   const [lockEdit, toggleEdit] = useState<boolean>(editable);
   const translation = useTranslation();
-
   const handlers = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers
   );
@@ -34,12 +39,16 @@ export function MeasurementForm({
   const providers = useTaggadStore((state) => state.taggad.care_providers);
   const painRang = [...Array(11).keys()];
   useEffect(() => {
-    if (disabled) {
-      toggleEdit(disabled);
-    }
-  }, [disabled]);
+    toggleEdit(!disabled && editable);
+  }, [disabled, editable]);
   return (
-    <View style={[styles.column, editable ? {} : styles.disabled]}>
+    <View
+      style={[
+        styles.column,
+        editable ? {} : styles.disabled,
+        { width: widthInVw },
+      ]}
+    >
       <TimePicker
         editable={lockEdit}
         value={measurement.time}
@@ -189,6 +198,7 @@ export function MeasurementForm({
         disabled={!lockEdit}
         mode="contained"
         style={{ margin: 3 }}
+        onPress={onComplete}
       >
         {translation("done")}
       </Button>
@@ -202,6 +212,7 @@ const styles = StyleSheet.create({
   column: {
     flex: 1,
     flexDirection: "column",
+    width: "33%",
   },
   deleteAction: {
     justifyContent: "center",
