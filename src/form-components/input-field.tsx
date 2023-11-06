@@ -17,17 +17,17 @@ import {
 export interface IInputField {
   onChange(value: string): void;
   label: string;
-  disabled: boolean;
+  editable: boolean;
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
   maxLength?: number;
   value: string;
 }
-function InputFieldHandler({
+export function InputField({
   label,
   onChange,
-  disabled,
+  editable,
   value,
   numeric = false,
   numberOfLines = 1,
@@ -36,7 +36,7 @@ function InputFieldHandler({
 }: IInputField) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
-    inputRef.current.focus();
+    editable && inputRef.current.focus();
   };
   return (
     <TouchableWithoutFeedback onPress={handleInputPress}>
@@ -64,17 +64,12 @@ function InputFieldHandler({
             multiline={numberOfLines > 1}
             style={[styles.text, numberOfLines > 1 ? styles.fixHeightText : {}]}
             keyboardType={numeric ? "numeric" : "default"}
-            // disabled={disabled}
-            // label={label}
+            editable={editable}
             value={value}
             textAlign="right"
-            // mode="outlined"
-            // textColor={colors.text}
             onChangeText={(value) => {
               onChange(value);
             }}
-            // outlineColor="transparent"
-            // activeOutlineColor={colors.text}
           />
         </View>
       </View>
@@ -101,7 +96,7 @@ const styles = StyleSheet.create({
     ...offset,
     marginBottom: 0,
     width: "100%",
-    marginLeft: -20,
+    // marginLeft: -20,
     marginTop: -5,
   },
   fixHeight: {
@@ -113,7 +108,7 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     textAlign: "right",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
     marginBottom: gutter,
     marginRight: gutter,
   },
@@ -121,5 +116,3 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
 });
-
-export const InputField = memo(InputFieldHandler);

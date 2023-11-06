@@ -26,9 +26,9 @@ export const borderSetup = {
 };
 
 export const offset: TextStyle = {
-  textAlign: "right",
+  textAlign: "left",
   marginTop: -(inputHeight + 5),
-  marginRight: 25,
+  marginLeft: 10,
   fontSize: 12,
 };
 

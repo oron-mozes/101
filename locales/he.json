@@ -172,8 +172,7 @@
   "treatment_etcos": "קפנומטריה",
   "treatment_spo2": "SpO2",
   "treatment_breath": "נשימות לדקה",
-  "treatment_diastolic": "ל.דם דיאסטולי",
-  "treatment_systolic": "ל.דם סיסטולי",
+  "treatment_bloodPressure": "ל.דם דיאסטולי/ סיסטולי",
   "treatment_puls": "דופק",
   "treatment_provider": "שם המבצע.ת",
   "treatment_time": "שעת ביצוע",
@@ -212,6 +211,6 @@
   "ANASTASIA": "הרדמה",
   "type": "סוג",
   "saveAndContinue": "שמירה וסגירה",
-  "takenMedication": "נוזלים ותרופות שניתנו"
-  
+  "takenMedication": "נוזלים ותרופות שניתנו",
+  "done": "סיום"
 }

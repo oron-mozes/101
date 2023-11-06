@@ -10,4 +10,7 @@ export const design = {
     borderWidth: 1,
   },
   content: { paddingTop: 0, paddingLeft: 0, paddingRight: 0 },
+  disabled: {
+    opacity: 0.5,
+  },
 };

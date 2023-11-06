@@ -1,8 +1,8 @@
-import { useRoute, RouteProp } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StatusBar, StyleSheet } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { List, Text } from "react-native-paper";
+import { List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import {
   EReactionEyes,
@@ -11,7 +11,7 @@ import {
   IPatientRecord,
   RootStackParamList,
 } from "../../../../interfaces";
-import { colors, gutter, borderSetup } from "../../../../shared-config";
+import { borderSetup, colors, gutter } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useTaggadStore } from "../../../../store/taggad.store";
 import { ASection } from "./create-components/a-section";
@@ -24,11 +24,11 @@ import { ESection } from "./create-components/e-section";
 import { Evacuation } from "./create-components/evacuation";
 import { InjuryReason } from "./create-components/injury-reason";
 import { MedicationsAndFluidSection } from "./create-components/medication";
-import { Measurements } from "./create-components/mesurements";
 import { PatientBodyPicker } from "./create-components/patient-body-picker";
 import { PatientDetails } from "./create-components/patient-details";
 import { Prognosis } from "./create-components/prognosis";
 import { TreatmentGuide } from "./create-components/treatment-guide";
+import { Measurements } from "./create-components/treatment-mesurments";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -61,15 +61,11 @@ export const emptyPatient: IPatientRecord = {
   },
   prognosis: null,
   measurements: {
-    fulfill: null,
     shock: null,
     actions: [],
     palpated: null,
     puls: null,
-    bloodPressure: {
-      diastolic: null,
-      systolic: null,
-    },
+    bloodPressure: null,
   },
   reaction: {
     general: [],
@@ -85,6 +81,8 @@ export const emptyPatient: IPatientRecord = {
         action: null,
         dose: null,
         time: null,
+        type: null,
+        treatment: null,
       },
     ],
   },
@@ -221,9 +219,8 @@ export function ReportTab() {
             title={translation("treatments")}
             id={ACCORDION_ITEM.SECOND_TAB}
           >
-            {/* <TreatmentGuide />
-            <Measurements /> */}
-            <Text>in progress</Text>
+            <TreatmentGuide />
+            <Measurements />
           </List.Accordion>
         </List.AccordionGroup>
       </ScrollView>

@@ -11,6 +11,13 @@ export function Logo101() {
   const navigation = useNavigation<StackNavigation>();
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
+      >
+        <View style={{ marginRight: 20 }}>
+          <Icon size={30} source="cog-outline" color="white" />
+        </View>
+      </TouchableWithoutFeedback>
       <Svg
         onPress={() =>
           navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS })
@@ -29,13 +36,6 @@ export function Logo101() {
           fill="#fff"
         />
       </Svg>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
-      >
-        <View style={{ marginLeft: 20 }}>
-          <Icon size={30} source="cog-outline" color="white" />
-        </View>
-      </TouchableWithoutFeedback>
     </View>
   );
 }

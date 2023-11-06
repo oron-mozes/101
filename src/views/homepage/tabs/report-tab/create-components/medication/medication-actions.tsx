@@ -18,7 +18,7 @@ export function MedicationActions() {
   return (
     <>
       {actions.map((action) => (
-        <View>
+        <View key={action.id}>
           <Card.Content style={[styles.innerContent, styles.section]}>
             <Text style={styles.title}>{translation("takenMedication")}</Text>
             <View style={[styles.innerContent]}>

@@ -24,10 +24,11 @@ export function TreatmentGuide() {
   const translation = useTranslation();
   const providers = useTaggadStore((state) => state.taggad.care_providers);
   const guides = usePatientRecordsStore(
-    (state) => state.activePatient.treatmentGuide.guides
+    (state) => state.activePatient.treatmentGuide.guides ?? []
   );
+
   const handlers = usePatientRecordsStore(
-    (state) => state.activePatient.treatmentGuide.handlers
+    (state) => state.treatmentGuide_handlers
   );
 
   useEffect(() => {
@@ -37,7 +38,11 @@ export function TreatmentGuide() {
   }, []);
 
   const addRow = () => {
-    handlers.addGuide(emptyState);
+    handlers.addGuide({
+      ...emptyState,
+      execution_time: new Date().getTime(),
+      order_time: new Date().getTime(),
+    });
   };
 
   return (

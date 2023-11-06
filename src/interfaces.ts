@@ -323,8 +323,7 @@ export interface IMeasurementsAction {
   time: number;
   provider: ICareProvider;
   puls: number;
-  systolic: number;
-  diastolic: number;
+  bloodPressure: string;
   breath: number;
   spo2: number;
   etcos: number;

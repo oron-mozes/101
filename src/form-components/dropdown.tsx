@@ -3,16 +3,16 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { useTranslation } from "../hooks/useMyTranslation";
 import { IOption } from "../interfaces";
-import { borderSetup, gutter, inputHeight } from "../shared-config";
+import { borderSetup, gutter, inputHeight, offset } from "../shared-config";
 
 export function DropDown({
   label,
   options,
   initialValue,
   onSelect,
-  disabled,
+  editable,
 }: {
-  disabled: boolean;
+  editable: boolean;
   label: string;
   initialValue?: string;
   onSelect(value: IOption): void;
@@ -24,7 +24,7 @@ export function DropDown({
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
       <Picker
-        enabled={!disabled}
+        enabled={editable}
         style={styles.picker}
         mode="dialog"
         selectedValue={selected}
@@ -54,8 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   label: {
-    marginRight: 50,
-    textAlign: "right",
+    ...offset,
     fontSize: 12,
     marginTop: -3,
   },

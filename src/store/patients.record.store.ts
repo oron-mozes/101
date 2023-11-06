@@ -244,20 +244,16 @@ export const usePatientRecordsStore = create<{
     treatmentGuide_handlers: {
       setInitial(data: ITreatment) {
         const current = state.getState();
-        current.updatePartialPatient({
-          treatmentGuide: { ...current.activePatient.treatmentGuide, ...data },
-        });
+        // current.updatePartialPatient({
+        //   treatmentGuide: { ...current.activePatient.treatmentGuide, ...data },
+        // });
       },
       addGuide(guide: ITreatmentGuide) {
         const current = state.getState();
-        const id = new Date().getTime();
         current.updatePartialPatient({
           treatmentGuide: {
             ...current.activePatient.treatmentGuide,
-            guides: current.activePatient.treatmentGuide.guides.push({
-              ...guide,
-              id,
-            }),
+            guides: [...current.activePatient.treatmentGuide.guides, guide],
           },
         });
       },
@@ -275,21 +271,22 @@ export const usePatientRecordsStore = create<{
       },
       addMeasurementsAction(action: IMeasurementsAction) {
         const current = state.getState();
-        const id = new Date().getTime();
         current.updatePartialPatient({
           treatmentGuide: {
             ...current.activePatient.treatmentGuide,
-            measurements:
-              current.activePatient.treatmentGuide.measurements.actions.push({
-                ...action,
-                id,
-              }),
+            measurements: {
+              ...current.activePatient.treatmentGuide.measurements,
+              actions: [
+                ...(current.activePatient.treatmentGuide.measurements.actions ??
+                  []),
+                action,
+              ],
+            },
           },
         });
       },
       setPeriod(period: number) {
         const current = state.getState();
-
         current.updatePartialPatient({
           treatmentGuide: {
             ...current.activePatient.treatmentGuide,
@@ -302,7 +299,6 @@ export const usePatientRecordsStore = create<{
       },
       removeMeasurementAction(id: number) {
         const current = state.getState();
-
         current.updatePartialPatient({
           treatmentGuide: {
             ...current.activePatient.treatmentGuide,
@@ -315,27 +311,36 @@ export const usePatientRecordsStore = create<{
       },
       updateAtIndex(data: Partial<IMeasurementsAction>, index: number) {
         const current = state.getState();
+
         current.updatePartialPatient({
           treatmentGuide: {
             ...current.activePatient.treatmentGuide,
-            measurements: updateDataInIndex(
-              current.activePatient.treatmentGuide.measurements.actions,
-              data,
-              index
-            ),
+            measurements: {
+              ...current.activePatient.treatmentGuide.measurements,
+              actions: [
+                ...updateDataInIndex(
+                  current.activePatient.treatmentGuide.measurements.actions,
+                  data,
+                  index
+                ),
+              ],
+            },
           },
         });
       },
       updateGuideAtIndex(data: Partial<ITreatmentGuide>, index: number) {
         const current = state.getState();
+
         current.updatePartialPatient({
           treatmentGuide: {
             ...current.activePatient.treatmentGuide,
-            guides: updateDataInIndex(
-              current.activePatient.treatmentGuide.guides,
-              data,
-              index
-            ),
+            guides: [
+              ...updateDataInIndex(
+                current.activePatient.treatmentGuide.guides,
+                data,
+                index
+              ),
+            ],
           },
         });
       },

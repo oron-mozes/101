@@ -15,9 +15,9 @@ export function TimePicker({
   label,
   onChange,
   value = new Date().getTime(),
-  disabled,
+  editable,
 }: {
-  disabled: boolean;
+  editable: boolean;
   label: string;
   value?: number;
   onChange(value: number): void;
@@ -29,18 +29,18 @@ export function TimePicker({
   }, []);
   return (
     <TouchableOpacity
-      onPress={() => !disabled && toggleTime(true)}
+      onPress={() => editable && toggleTime(true)}
       style={[styles.container]}
     >
       <View style={[styles.content]}>
         <Icon source="clock-outline" size={20} />
         <View>
           {!value && (
-            <Text onPress={() => !disabled && toggleTime(true)}>{label}</Text>
+            <Text onPress={() => editable && toggleTime(true)}>{label}</Text>
           )}
           {value && (
             <Text
-              onPress={() => !disabled && toggleTime(true)}
+              onPress={() => editable && toggleTime(true)}
               style={styles.time}
             >
               {date.format(
@@ -59,7 +59,7 @@ export function TimePicker({
       {showTime && (
         <DateTimePicker
           display="spinner"
-          disabled={disabled}
+          disabled={!editable}
           value={new Date(value)}
           mode="time"
           is24Hour={true}

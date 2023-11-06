@@ -17,7 +17,7 @@ import {
 export interface IInputField {
   onChange(value: string): void;
   label: string;
-  disabled: boolean;
+  editable: boolean;
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
@@ -27,12 +27,12 @@ export interface IInputField {
 export function BloodPressureInputFieldHandler({
   label,
   onChange,
-  disabled,
+  editable,
   value,
 }: IInputField) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
-    inputRef.current.focus();
+    editable && inputRef.current.focus();
   };
 
   return (
@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
     ...offset,
     marginBottom: 0,
     width: "100%",
-    marginLeft: -20,
     marginTop: -5,
   },
   fixHeight: {

@@ -28,28 +28,33 @@ export function StatusTab() {
       <DataTable style={styles.table}>
         <DataTable.Header style={styles.tableHeader}>
           <DataTable.Title style={styles.title} textStyle={styles.titleText}>
-            {translation("qr")}
-          </DataTable.Title>
-          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
-            {translation("evacStatus")}
+            {translation("patientName")}
           </DataTable.Title>
           <DataTable.Title style={styles.title} textStyle={styles.titleText}>
             {translation("idf_id")}
           </DataTable.Title>
           <DataTable.Title style={styles.title} textStyle={styles.titleText}>
-            {translation("patientName")}
+            {translation("evacStatus")}
+          </DataTable.Title>
+          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
+            {translation("qr")}
           </DataTable.Title>
         </DataTable.Header>
         {sortByPriority(patients).map((patient, index) => {
           return (
             <DataTable.Row key={index}>
               <DataTable.Cell
-                style={[styles.title]}
-                onPress={() =>
-                  navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
-                }
+                onPress={() => goToPatientPage(patient)}
+                style={styles.title}
               >
-                <QrIcon />
+                {patient?.personal_information?.full_name}
+              </DataTable.Cell>
+
+              <DataTable.Cell
+                onPress={() => goToPatientPage(patient)}
+                style={styles.title}
+              >
+                {patient?.personal_information?.idf_id}
               </DataTable.Cell>
               <DataTable.Cell
                 onPress={() => goToPatientPage(patient)}
@@ -62,16 +67,12 @@ export function StatusTab() {
                 />
               </DataTable.Cell>
               <DataTable.Cell
-                onPress={() => goToPatientPage(patient)}
-                style={styles.title}
+                style={[styles.title]}
+                onPress={() =>
+                  navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
+                }
               >
-                {patient?.personal_information?.idf_id}
-              </DataTable.Cell>
-              <DataTable.Cell
-                onPress={() => goToPatientPage(patient)}
-                style={styles.title}
-              >
-                {patient?.personal_information?.full_name}
+                <QrIcon />
               </DataTable.Cell>
             </DataTable.Row>
           );
