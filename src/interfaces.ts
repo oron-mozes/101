@@ -51,8 +51,10 @@ export interface IHT {
   time: number;
 }
 export interface IInjuryInformation {
-  gunshot?: number;
-  sharpnel?: number;
+  gunshot?: boolean;
+  hits?: boolean;
+  burn?: boolean;
+  cut?: boolean;
   touniquet?: boolean;
   touniquet_time?: number;
 }
@@ -315,6 +317,7 @@ export interface IEvacuationInformation {
   time: number;
   destination: string;
   transportation: ETransportation;
+  special_care: boolean;
   status: STATUS;
 }
 

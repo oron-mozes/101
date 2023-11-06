@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { Card } from "react-native-paper";
+import { Card, Checkbox, Text } from "react-native-paper";
 import { ToggleButton } from "../../../../../form-components/ToggleButton";
 import { InputField } from "../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../form-components/section-header";
@@ -15,6 +15,18 @@ export function Evacuation() {
   const evacuation = usePatientRecordsStore(
     (state) => state.activePatient.evacuation
   );
+  const destination = usePatientRecordsStore(
+    (state) => state.activePatient.evacuation.destination
+  );
+  const time = usePatientRecordsStore(
+    (state) => state.activePatient.evacuation.time
+  );
+  const transportation = usePatientRecordsStore(
+    (state) => state.activePatient.evacuation.transportation
+  );
+  const special_care = usePatientRecordsStore(
+    (state) => state.activePatient.evacuation.special_care
+  );
   const handlers = usePatientRecordsStore((state) => state.evacuation_handlers);
 
   const disabled = usePatientRecordsStore(
@@ -27,22 +39,23 @@ export function Evacuation() {
         <SectionHeader label={translation("evacuate")} />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
-        <View style={{ width: 120 }}>
-          <TimePicker
-            disabled={disabled}
-            label={translation("time")}
-            onChange={(time: number) => {
-              handlers.setTime(time);
-            }}
-          />
-        </View>
         <View style={{ flex: 1 }}>
           <InputField
-            disabled={disabled}
-            value={evacuation.destination}
+            editable={disabled}
+            value={destination}
             label={translation("destination")}
             onChange={(destination: string) => {
               handlers.setDestination(destination);
+            }}
+          />
+        </View>
+        <View style={{ width: 120 }}>
+          <TimePicker
+            editable={disabled}
+            value={time}
+            label={translation("time")}
+            onChange={(time: number) => {
+              handlers.setTime(time);
             }}
           />
         </View>
@@ -56,10 +69,17 @@ export function Evacuation() {
             disabled={disabled}
             key={item}
             label={translation(item)}
-            status={evacuation.transportation === item}
+            status={transportation === item}
             onSelect={() => handlers.setTransportation(item)}
           />
         ))}
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Checkbox
+            status={special_care ? "checked" : "unchecked"}
+            onPress={() => handlers.setSpecialCare(!special_care)}
+          />
+          <Text>{translation("SPECIAL_CARE")}</Text>
+        </View>
       </Card.Content>
       <Card.Content style={styles.innerContent}>
         {Object.values(STATUS).map((item) => (
@@ -91,7 +111,7 @@ const styles = StyleSheet.create({
   },
   content: { ...design.content },
   innerContent: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "flex-start",
     alignContent: "center",

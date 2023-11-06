@@ -107,7 +107,7 @@ export function NewMedication({ onClose }: { onClose(): void }) {
                 ))}
               </View>
               <TimePicker
-                disabled={disabled}
+                editable={disabled}
                 value={newMedication.time}
                 label={translation("actionTime")}
                 onChange={(time: number) => {
@@ -225,16 +225,16 @@ const styles = StyleSheet.create({
   },
   content: { ...design.content },
   innerContent: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     justifyContent: "center",
     alignContent: "center",
     marginTop: 10,
   },
   title: {
-    textAlign: "right",
+    textAlign: "left",
   },
   options: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
   },
   section: { flexDirection: "column" },
   action: {

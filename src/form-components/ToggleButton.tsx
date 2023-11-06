@@ -17,18 +17,18 @@ export function ToggleButton({
   return (
     <TouchableOpacity onPress={() => onSelect(!status)}>
       <View style={styles.container}>
-        <Text
-          style={[styles.text, disabled ? styles.disabled : {}]}
-          disabled={disabled}
-        >
-          {label}
-        </Text>
         <RadioButtonPaper
           disabled={disabled}
           onPress={() => onSelect(!status)}
           value={""}
           status={status ? "checked" : "unchecked"}
         />
+        <Text
+          style={[styles.text, disabled ? styles.disabled : {}]}
+          disabled={disabled}
+        >
+          {label}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingLeft: 10,
-    paddingRight: 5,
+    paddingRight: 10,
+    paddingLeft: 5,
     height: 40,
     marginLeft: gutter,
     marginBottom: gutter,

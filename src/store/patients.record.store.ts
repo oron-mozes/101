@@ -130,6 +130,7 @@ export const usePatientRecordsStore = create<{
     setTime(time: number): void;
     setDestination(destination: string): void;
     setTransportation(transportation: ETransportation): void;
+    setSpecialCare(special_care: boolean): void;
     setStatus(status: STATUS): void;
     setInitial(data: IEvacuationInformation): void;
   };
@@ -618,12 +619,15 @@ export const usePatientRecordsStore = create<{
         const current = state.getState();
         const id = new Date().getTime();
         current.updatePartialPatient({
-          injuries: current.activePatient.injuries.push({
-            id,
-            xPos,
-            yPos,
-            data,
-          }),
+          injuries: [
+            ...current.activePatient.injuries,
+            {
+              id,
+              xPos,
+              yPos,
+              data,
+            },
+          ],
         });
       },
       removeInjury(id: number) {
@@ -889,6 +893,16 @@ export const usePatientRecordsStore = create<{
           evacuation: {
             ...current.activePatient.evacuation,
             time,
+          },
+        });
+      },
+      setSpecialCare(special_care: boolean) {
+        const current = state.getState();
+
+        current.updatePartialPatient({
+          evacuation: {
+            ...current.activePatient.evacuation,
+            special_care,
           },
         });
       },

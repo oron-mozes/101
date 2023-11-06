@@ -28,7 +28,7 @@ export function ASection() {
   const actions = usePatientRecordsStore(
     (state) => state.activePatient.airway.actions ?? []
   );
-  
+
   const fulfill = usePatientRecordsStore(
     (state) => state.activePatient.airway.fulfill
   );
@@ -78,43 +78,10 @@ export function ASection() {
               style={[styles.innerContent, styles.actionRow]}
               key={`${airWayInfo.action}-${index}`}
             >
-              <View style={[styles.element, styles.actionRow]}>
-                <Text
-                  onPress={() => handlers.removeAction(index)}
-                  style={styles.deleteAction}
-                >
-                  <Icon
-                    size={20}
-                    source="delete-outline"
-                    color={colors.primary}
-                  />
-                </Text>
-
-                <RadioGroup
-                  disabled={disabled}
-                  label={translation("actionResult")}
-                  onSelect={(id: string) => {
-                    handlers.updateAtIndex(
-                      { successful: id === TOGGLE.YES },
-                      index
-                    );
-                  }}
-                  selected={isSuccessful}
-                  options={convertToOptions(TOGGLE, translation)}
-                />
-                <TimePicker
-                  disabled={disabled}
-                  value={airWayInfo.time}
-                  label={translation("actionTime")}
-                  onChange={(time: number) => {
-                    handlers.updateAtIndex({ time }, index);
-                  }}
-                />
-              </View>
               <View style={styles.element}>
                 <DropDown
                   label={translation("actionTaken")}
-                  disabled={disabled}
+                  editable={disabled}
                   initialValue={airWayInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
                     value &&
@@ -127,6 +94,38 @@ export function ASection() {
                   }}
                   options={convertToOptions(EAirWayTreatment, translation)}
                 />
+              </View>
+              <View style={[styles.element, styles.actionRow]}>
+                <TimePicker
+                  editable={disabled}
+                  value={airWayInfo.time}
+                  label={translation("actionTime")}
+                  onChange={(time: number) => {
+                    handlers.updateAtIndex({ time }, index);
+                  }}
+                />
+                <RadioGroup
+                  disabled={disabled}
+                  label={translation("actionResult")}
+                  onSelect={(id: string) => {
+                    handlers.updateAtIndex(
+                      { successful: id === TOGGLE.YES },
+                      index
+                    );
+                  }}
+                  selected={isSuccessful}
+                  options={convertToOptions(TOGGLE, translation)}
+                />
+                <Text
+                  onPress={() => handlers.removeAction(index)}
+                  style={styles.deleteAction}
+                >
+                  <Icon
+                    size={20}
+                    source="delete-outline"
+                    color={colors.primary}
+                  />
+                </Text>
               </View>
             </Card.Content>
           );
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
   },
   content: { ...design.content },
   innerContent: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     justifyContent: "center",
     alignContent: "center",
     marginTop: 10,

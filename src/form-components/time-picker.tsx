@@ -33,7 +33,6 @@ export function TimePicker({
       style={[styles.container]}
     >
       <View style={[styles.content]}>
-        <Icon source="clock-outline" size={20} />
         <View>
           {!value && (
             <Text onPress={() => editable && toggleTime(true)}>{label}</Text>
@@ -50,6 +49,7 @@ export function TimePicker({
             </Text>
           )}
         </View>
+        <Icon source="clock-outline" size={20} />
       </View>
       {value && (
         <Text onPress={() => toggleTime(true)} style={styles.offset}>

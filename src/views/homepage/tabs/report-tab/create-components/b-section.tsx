@@ -68,7 +68,7 @@ export function BSection() {
       {fulfill && (
         <Card.Content style={[styles.innerContent]}>
           <InputField
-            disabled={disabled}
+            editable={disabled}
             label={translation("breathings")}
             numeric
             value={breathingCount?.toString()}
@@ -77,7 +77,7 @@ export function BSection() {
             }}
           />
           <InputField
-            disabled={disabled}
+            editable={disabled}
             numeric
             value={saturation?.toString()}
             label={translation("saturation")}
@@ -101,43 +101,9 @@ export function BSection() {
               style={[styles.innerContent, styles.actionRow]}
               key={`${breathingInfo.action}-${index}`}
             >
-              <View style={[styles.element, styles.actionRow]}>
-                <Text
-                  disabled={disabled}
-                  onPress={() => handlers.removeAction(index)}
-                  style={styles.deleteAction}
-                >
-                  <Icon
-                    size={20}
-                    source="delete-outline"
-                    color={colors.primary}
-                  />
-                </Text>
-
-                <RadioGroup
-                  disabled={disabled}
-                  label={translation("actionResult")}
-                  onSelect={(id: string) => {
-                    handlers.updateAtIndex(
-                      { successful: id === TOGGLE.YES },
-                      index
-                    );
-                  }}
-                  selected={isSuccessful}
-                  options={convertToOptions(TOGGLE, translation)}
-                />
-                <TimePicker
-                  disabled={disabled}
-                  value={breathingInfo.time}
-                  label={translation("actionTime")}
-                  onChange={(time: number) => {
-                    handlers.updateAtIndex({ time }, index);
-                  }}
-                />
-              </View>
               <View style={styles.element}>
                 <DropDown
-                  disabled={disabled}
+                  editable={disabled}
                   label={translation("actionTaken")}
                   initialValue={breathingInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
@@ -151,6 +117,40 @@ export function BSection() {
                   }}
                   options={convertToOptions(EBreathingTreatment, translation)}
                 />
+              </View>
+              <View style={[styles.element, styles.actionRow]}>
+                <TimePicker
+                  editable={disabled}
+                  value={breathingInfo.time}
+                  label={translation("actionTime")}
+                  onChange={(time: number) => {
+                    handlers.updateAtIndex({ time }, index);
+                  }}
+                />
+                <RadioGroup
+                  disabled={disabled}
+                  label={translation("actionResult")}
+                  onSelect={(id: string) => {
+                    handlers.updateAtIndex(
+                      { successful: id === TOGGLE.YES },
+                      index
+                    );
+                  }}
+                  selected={isSuccessful}
+                  options={convertToOptions(TOGGLE, translation)}
+                />
+
+                <Text
+                  disabled={disabled}
+                  onPress={() => handlers.removeAction(index)}
+                  style={styles.deleteAction}
+                >
+                  <Icon
+                    size={20}
+                    source="delete-outline"
+                    color={colors.primary}
+                  />
+                </Text>
               </View>
             </Card.Content>
           );

@@ -89,16 +89,16 @@ const styles = StyleSheet.create({
   },
 
   innerContent: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     justifyContent: "center",
     alignContent: "center",
     marginTop: 10,
   },
   title: {
-    textAlign: "right",
+    textAlign: "left",
   },
   options: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
   },
   section: { flexDirection: "column" },
   action: {

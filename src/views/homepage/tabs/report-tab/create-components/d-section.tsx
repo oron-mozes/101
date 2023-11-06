@@ -159,15 +159,15 @@ const styles = StyleSheet.create({
   },
   content: { ...design.content },
   innerContent: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     justifyContent: "flex-start",
     alignContent: "center",
     marginTop: 10,
   },
   title: {
-    textAlign: "right",
+    textAlign: "left",
   },
   options: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
   },
 });

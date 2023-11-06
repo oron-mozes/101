@@ -161,8 +161,10 @@
   "STOMACH": "בטן",
   "TH": "חוסם עורקים",
   "TH_time": "שעת חוסם עורקים",
-  "gunshots": "פצע ירי",
-  "hits": "רסיסים",
+  "gunshots": "חודרת",
+  "hits": "קהה",
+  "cut": "קטיעה",
+  "burn": "כויה",
   "first-care": "טופס טיפול ראשוני",
   "treatments": "מעקב טיפול ומדדים",
   "treatment_blood": "דם בנקז (cc לשעה)",
@@ -212,5 +214,6 @@
   "type": "סוג",
   "saveAndContinue": "שמירה וסגירה",
   "takenMedication": "נוזלים ותרופות שניתנו",
-  "done": "סיום"
+  "done": "סיום",
+  "injuryType": "סוג פציעה"
 }

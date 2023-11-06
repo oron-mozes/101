@@ -39,7 +39,7 @@ export function RadioGroup({
 
 const styles = StyleSheet.create({
   horizontal: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     alignItems: "center",
     flex: 1,
   },

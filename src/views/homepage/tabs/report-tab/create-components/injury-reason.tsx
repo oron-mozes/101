@@ -41,7 +41,7 @@ export function InjuryReason() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          disabled={disabled}
+          editable={disabled}
           onChange={(circumstance: string) => {
             handlers.setCircumstance(circumstance);
           }}
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   content: { ...design.content },
   innerContent: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "flex-start",
     alignContent: "center",
