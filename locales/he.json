@@ -206,5 +206,12 @@
   "RANK_13": "סרן",
   "RANK_14": "רס״ן",
   "RANK_15": "סא״ל",
-  "RANK_16": "אל״מ"
+  "RANK_16": "אל״מ",
+  "ANTIBIOTIC": "אנטיביוטיקה",
+  "FLUIDS": "נוזלים",
+  "ANASTASIA": "הרדמה",
+  "type": "סוג",
+  "saveAndContinue": "שמירה וסגירה",
+  "takenMedication": "נוזלים ותרופות שניתנו"
+  
 }

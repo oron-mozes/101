@@ -427,14 +427,14 @@ export const usePatientRecordsStore = create<{
       },
       addAction(action: IMedicationsAndFluidInformation) {
         const current = state.getState();
-        const id = new Date().getTime();
+
         current.updatePartialPatient({
           medicationsAndFluids: {
             ...current.activePatient.medicationsAndFluids,
-            actions: current.activePatient.medicationsAndFluids.actions.push({
-              ...action,
-              id,
-            }),
+            actions: [
+              ...current.activePatient.medicationsAndFluids.actions,
+              action,
+            ],
           },
         });
       },

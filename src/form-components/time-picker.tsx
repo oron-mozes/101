@@ -23,21 +23,26 @@ export function TimePicker({
   onChange(value: number): void;
 }) {
   const [showTime, toggleTime] = useState<boolean>(false);
-  
+
   useEffect(() => {
     onChange(value);
   }, []);
   return (
     <TouchableOpacity
-      onPress={() => toggleTime(true)}
+      onPress={() => !disabled && toggleTime(true)}
       style={[styles.container]}
     >
       <View style={[styles.content]}>
         <Icon source="clock-outline" size={20} />
         <View>
-          {!value && <Text onPress={() => toggleTime(true)}>{label}</Text>}
+          {!value && (
+            <Text onPress={() => !disabled && toggleTime(true)}>{label}</Text>
+          )}
           {value && (
-            <Text onPress={() => toggleTime(true)} style={styles.time}>
+            <Text
+              onPress={() => !disabled && toggleTime(true)}
+              style={styles.time}
+            >
               {date.format(
                 new Date(value === 0 ? new Date().getTime() : value),
                 "HH:mm"

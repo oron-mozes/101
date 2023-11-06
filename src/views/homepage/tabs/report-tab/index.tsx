@@ -2,7 +2,7 @@ import { useRoute, RouteProp } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ScrollView, StatusBar, StyleSheet } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { List } from "react-native-paper";
+import { List, Text } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import {
   EReactionEyes,
@@ -221,8 +221,9 @@ export function ReportTab() {
             title={translation("treatments")}
             id={ACCORDION_ITEM.SECOND_TAB}
           >
-            <TreatmentGuide />
-            <Measurements />
+            {/* <TreatmentGuide />
+            <Measurements /> */}
+            <Text>in progress</Text>
           </List.Accordion>
         </List.AccordionGroup>
       </ScrollView>

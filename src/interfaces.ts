@@ -192,6 +192,29 @@ export enum EFluid {
   HARTMAN_500 = "HARTMAN_500",
   HARTMAN = "HARTMAN",
 }
+export enum EMEDICATION {
+  KETAMINE = "KETAMINE",
+  DORMICUM = "DORMICUM",
+  ACTIQ = "ACTIQ",
+}
+
+export enum E_ANASTASIA_KATAMIN_DOSE {
+  D25MG = "D25MG",
+  D50MG = "D50MG",
+  D250MG = "D250MG",
+  D500MG = "D500MG",
+}
+export enum E_ANASTASIA_DORMICUM_DOSE {
+  D1_5 = "D1_5MG",
+  D5MG = "D5MG",
+}
+export enum E_ANASTASIA_ACTIQ_DOSE {
+  D800MG = "D800MG",
+}
+export enum E_HEXAKAPRON_DOSE {
+  D1MG = "D1MG",
+}
+
 export enum EMedications {
   HEXAKAPRON = "HEXAKAPRON",
   HEXAKAPRON_1 = "HEXAKAPRON_1",
@@ -208,11 +231,67 @@ export enum EMedications {
   ACTIQ = "ACTIQ",
   ACTIQ_800 = "ACTIQ_800",
 }
+
+export enum MEDICATION_TREATMENT {
+  FLUIDS = "FLUIDS",
+  ANTIBIOTIC = "ANTIBIOTIC",
+  ANASTASIA = "ANASTASIA",
+  HEXAKAPRON = "HEXAKAPRON",
+}
+
+export enum E_FLUID_TREATMENT {
+  BLOOD = "BLOOD",
+  PLASMA = "PLASMA",
+  HARTMAN = "HARTMAN",
+}
+
+export enum E_ANTIBIOTIC_TREATMENT {
+  FLAGYL = "FLAGYL",
+  CETRIAXONE = "CETRIAXONE",
+}
+
+export enum E_ANASTASIA_TREATMENT {
+  KETAMINE = "KETAMINE",
+  DORMICUM = "DORMICUM",
+  ACTIQ = "ACTIQ",
+}
+
+export enum E_FLUID_HARTMAN_DOSE {
+  D500MG = "D500MG",
+}
+export enum E_FLUID_PLASMA_DOSE {
+  D1 = "D1",
+}
+export enum E_FLUID_BLOOD_DOSE {
+  D1 = "D1",
+}
+export enum E_ANTIBIOTIC_CETRIAXONE_DOSE {
+  D1 = "D1",
+}
+export enum E_ANTIBIOTIC_FLAGYL_DOSE {
+  D500MG = "D500MG",
+}
+export enum E_ANTIBIOTIC_DOSE {
+  D1MG = "D1MG",
+  D500MG = "D500MG",
+}
+
 export type TFluid = "";
 export type TMedications = "";
 export interface IMedicationsAndFluidInformation {
+  treatment: MEDICATION_TREATMENT;
+  type: E_FLUID_TREATMENT | E_ANTIBIOTIC_TREATMENT | E_ANASTASIA_TREATMENT;
   action: EMedications;
-  dose: number;
+  dose:
+    | E_ANASTASIA_DORMICUM_DOSE
+    | E_ANASTASIA_KATAMIN_DOSE
+    | E_ANASTASIA_ACTIQ_DOSE
+    | E_FLUID_HARTMAN_DOSE
+    | E_FLUID_PLASMA_DOSE
+    | E_FLUID_BLOOD_DOSE
+    | E_ANTIBIOTIC_CETRIAXONE_DOSE
+    | E_ANTIBIOTIC_FLAGYL_DOSE
+    | E_HEXAKAPRON_DOSE;
   time: number;
   id: number;
 }

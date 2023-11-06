@@ -39,5 +39,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.radio,
     borderRadius: 20,
     margin: 4,
+    height: 40,
   },
 });
