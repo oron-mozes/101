@@ -51,13 +51,17 @@ export function BloodPressureInputFieldHandler({
             textAlign="right"
             onChangeText={(value) => {
               let subStrIndex = 2;
+              let maxLength = 2;
               if (value.startsWith("1")) {
                 subStrIndex = 3;
+                maxLength = 3;
               }
-              value = `${value.substring(0, subStrIndex)}/${value.substring(
-                subStrIndex
-              )}`;
-              console.log({ value });
+              if (value.indexOf("/") === -1 && value.length >= maxLength) {
+                value = `${value.substring(0, subStrIndex)}/${value.substring(
+                  subStrIndex
+                )}`;
+              }
+
               onChange(value);
             }}
           />

@@ -6,6 +6,10 @@ Follow guide at: https://docs.expo.dev/workflow/android-studio-emulator/
 
 ## Development
 
+https://docs.expo.dev/develop/development-builds/create-a-build/
+
+create a build - paste in to the device and make sure to install it. then you can npx export start --dev-client
+
 1. $npm run start
 2. select a for android
 

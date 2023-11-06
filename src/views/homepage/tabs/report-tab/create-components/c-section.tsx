@@ -101,29 +101,11 @@ export function CSection() {
         <BloodPressureInputFieldHandler
           disabled={disabled}
           value={bloodPressure}
-          label={translation("bloodPressureDiastolic")}
+          label={translation("bloodPressure")}
           onChange={(value) => {
             handlers.setBloodPressure(value);
           }}
         />
-        {/* <InputField
-          disabled={disabled}
-          numeric
-          value={bloodPressure.diastolic?.toString()}
-          label={translation("bloodPressureDiastolic")}
-          onChange={(diastolic) => {
-            handlers.setDiastolic(Number(diastolic));
-          }}
-        />
-        <InputField
-          disabled={disabled}
-          value={bloodPressure.systolic?.toString()}
-          label={translation("bloodPressureSystolic")}
-          numeric
-          onChange={(systolic) => {
-            handlers.setSystolic(Number(systolic));
-          }}
-        /> */}
       </Card.Content>
 
       {actions?.map((measurements: IMeasurementsInformation, index) => {

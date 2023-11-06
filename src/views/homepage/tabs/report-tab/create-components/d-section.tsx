@@ -31,17 +31,29 @@ const emptyState: IReaction = {
 };
 export function DSection() {
   const translation = useTranslation();
-  const { general, speech, movement, eyes, GCS } = usePatientRecordsStore(
-    (state) => state.activePatient.reaction
+  const GCS = usePatientRecordsStore(
+    (state) => state.activePatient.reaction.GCS
   );
-  const handlers = usePatientRecordsStore(
-    (state) => state.reaction_handlers
+  const general = usePatientRecordsStore(
+    (state) => state.activePatient.reaction.general
   );
+  const speech = usePatientRecordsStore(
+    (state) => state.activePatient.reaction.speech
+  );
+  const movement = usePatientRecordsStore(
+    (state) => state.activePatient.reaction.movement
+  );
+  const eyes = usePatientRecordsStore(
+    (state) => state.activePatient.reaction.eyes
+  );
+  const handlers = usePatientRecordsStore((state) => state.reaction_handlers);
   const disabled = usePatientRecordsStore(
     (state) => state.activePatient.disabled
   );
   useEffect(() => {
-    handlers.setGCS(calcGCS({ eyes, movement, speech }));
+    const newGCS = calcGCS({ eyes, movement, speech });
+
+    handlers.setGCS(newGCS);
   }, [eyes, movement, speech]);
   const isSelected = isSelectedHandler(general);
 
@@ -50,52 +62,72 @@ export function DSection() {
       <Card.Content style={styles.content}>
         <SectionHeader label={translation("dSection")} />
       </Card.Content>
-      <Card.Content style={[styles.innerContent]}>
-        {Object.values(EReactionGeneral).map((item) => (
-          <ToggleButton
-            disabled={disabled}
-            label={translation(item)}
-            status={isSelected(item)}
-            onSelect={() => handlers.toggleGeneral(item)}
-            key={item}
-          />
-        ))}
+      <Card.Content style={[styles.innerContent, styles.section]}>
+        <Text style={styles.title}>{translation("general")}</Text>
+        <View style={[styles.options]}>
+          {Object.values(EReactionGeneral).map((item) => (
+            <ToggleButton
+              disabled={disabled}
+              label={translation(item)}
+              status={isSelected(item)}
+              onSelect={() => handlers.toggleGeneral(item)}
+              key={item}
+            />
+          ))}
+        </View>
+      </Card.Content>
+      <Card.Content style={[styles.innerContent, styles.section]}>
+        <Text style={styles.title}>{translation("speech")}</Text>
+        <View style={[styles.options]}>
+          {Object.values(EReactionSpeech).map((item) => (
+            <ToggleButton
+              disabled={disabled}
+              label={translation(item)}
+              status={item === speech}
+              onSelect={() => {
+                handlers.setSpeech(item);
+              }}
+              key={item}
+            />
+          ))}
+        </View>
+      </Card.Content>
+      <Card.Content style={[styles.innerContent, styles.section]}>
+        <Text style={styles.title}>{translation("eyes")}</Text>
+        <View style={[styles.options]}>
+          {Object.values(EReactionEyes).map((item) => (
+            <ToggleButton
+              disabled={disabled}
+              label={translation(item)}
+              status={item === eyes}
+              onSelect={() => {
+                handlers.setEyes(item);
+              }}
+              key={item}
+            />
+          ))}
+        </View>
+      </Card.Content>
+      <Card.Content style={[styles.innerContent, styles.section]}>
+        <Text style={styles.title}>{translation("movement")}</Text>
+        <View style={[styles.options]}>
+          {Object.values(EReactionMovement).map((item) => (
+            <ToggleButton
+              disabled={disabled}
+              label={translation(item)}
+              status={item === movement}
+              onSelect={() => {
+                handlers.setMovement(item);
+              }}
+              key={item}
+            />
+          ))}
+        </View>
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
-        <View style={[styles.section]}>
-          <DropDown
-            disabled={disabled}
-            initialValue={speech}
-            onSelect={(value) => {
-              handlers.setSpeech(value.id as EReactionSpeech);
-            }}
-            label={translation("speech")}
-            options={convertToOptions(EReactionSpeech, translation)}
-          />
-          <DropDown
-            disabled={disabled}
-            initialValue={eyes}
-            onSelect={(value) => {
-              handlers.setEyes(value.id as EReactionEyes);
-            }}
-            label={translation("eys")}
-            options={convertToOptions(EReactionEyes, translation)}
-          />
-        </View>
-        <View style={[styles.section]}>
-          <DropDown
-            disabled={disabled}
-            initialValue={movement}
-            onSelect={(value) => {
-              handlers.setMovement(value.id as EReactionMovement);
-            }}
-            label={translation("movement")}
-            options={convertToOptions(EReactionMovement, translation)}
-          />
-          <View style={[styles.section, styles.GCS]}>
-            <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>
-            <Text style={[styles.fakeInput]}>{GCS}</Text>
-          </View>
+        <View style={[styles.GCS]}>
+          <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>
+          <Text style={[styles.fakeInput]}>{GCS}</Text>
         </View>
       </Card.Content>
     </Card>
@@ -116,19 +148,26 @@ const styles = StyleSheet.create({
     height: inputHeight,
   },
   GCS: {
+    width: "50%",
     backgroundColor: colors.radio,
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
-  section: { flex: 1, margin: gutter },
+  section: { flexDirection: "column" },
   card: {
     ...design.card,
   },
   content: { ...design.content },
   innerContent: {
     flexDirection: "row-reverse",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignContent: "center",
     marginTop: 10,
+  },
+  title: {
+    textAlign: "right",
+  },
+  options: {
+    flexDirection: "row-reverse",
   },
 });

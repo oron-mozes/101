@@ -387,12 +387,12 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      setGCS(gcs: number) {
+      setGCS(GCS: number) {
         const current = state.getState();
         current.updatePartialPatient({
           reaction: {
             ...current.activePatient.reaction,
-            gcs,
+            GCS,
           },
         });
       },
