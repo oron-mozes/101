@@ -64,7 +64,7 @@ export function MeasurementForm({
           const provider = Object.values(providers).find(
             (p) => p.idf_id.toString() === value.id
           );
-          handlers.updateAtIndex({ provider }, measurement.id);
+          handlers.updateAtIndex({ provider }, index);
         }}
         label={translation("treatment_provider")}
         options={Object.values(providers).map((provider) => ({
@@ -79,15 +79,12 @@ export function MeasurementForm({
         label={translation("treatment_puls")}
         value={measurement.puls?.toString()}
         onChange={(puls) => {
-          handlers.updateAtIndex(
-            { puls: convertStringToNumber(puls) },
-            measurement.id
-          );
+          handlers.updateAtIndex({ puls: convertStringToNumber(puls) }, index);
         }}
       />
       <BloodPressureInputFieldHandler
         onChange={(bloodPressure) => {
-          handlers.updateAtIndex({ bloodPressure }, measurement.id);
+          handlers.updateAtIndex({ bloodPressure }, index);
         }}
         label={translation("treatment_bloodPressure")}
         editable={lockEdit}
@@ -102,7 +99,7 @@ export function MeasurementForm({
         onChange={(breath) => {
           handlers.updateAtIndex(
             { breath: convertStringToNumber(breath) },
-            measurement.id
+            index
           );
         }}
       />
@@ -112,10 +109,7 @@ export function MeasurementForm({
         label={translation("treatment_spo2")}
         value={measurement.spo2?.toString()}
         onChange={(spo2) => {
-          handlers.updateAtIndex(
-            { spo2: convertStringToNumber(spo2) },
-            measurement.id
-          );
+          handlers.updateAtIndex({ spo2: convertStringToNumber(spo2) }, index);
         }}
       />
       <InputField
@@ -126,7 +120,7 @@ export function MeasurementForm({
         onChange={(etcos) => {
           handlers.updateAtIndex(
             { etcos: convertStringToNumber(etcos) },
-            measurement.id
+            index
           );
         }}
       />
@@ -136,7 +130,7 @@ export function MeasurementForm({
         onSelect={(pain) => {
           handlers.updateAtIndex(
             { pain: convertStringToNumber(pain.id) },
-            measurement.id
+            index
           );
         }}
         label={translation("treatment_pain")}
@@ -151,10 +145,7 @@ export function MeasurementForm({
         label={translation("treatment_prpo")}
         value={measurement.prpo?.toString()}
         onChange={(prpo) => {
-          handlers.updateAtIndex(
-            { prpo: convertStringToNumber(prpo) },
-            measurement.id
-          );
+          handlers.updateAtIndex({ prpo: convertStringToNumber(prpo) }, index);
         }}
       />
       <InputField
@@ -163,10 +154,7 @@ export function MeasurementForm({
         label={translation("GCS")}
         value={measurement.GCS?.toString()}
         onChange={(GCS) => {
-          handlers.updateAtIndex(
-            { GCS: convertStringToNumber(GCS) },
-            measurement.id
-          );
+          handlers.updateAtIndex({ GCS: convertStringToNumber(GCS) }, index);
         }}
       />
       <InputField
@@ -177,7 +165,7 @@ export function MeasurementForm({
         onChange={(urine) => {
           handlers.updateAtIndex(
             { urine: convertStringToNumber(urine) },
-            measurement.id
+            index
           );
         }}
       />
@@ -189,7 +177,7 @@ export function MeasurementForm({
         onChange={(blood) => {
           handlers.updateAtIndex(
             { blood: convertStringToNumber(blood) },
-            measurement.id
+            index
           );
         }}
       />

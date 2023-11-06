@@ -21,17 +21,20 @@ export function HomepageFooter() {
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate(ROUTES.IMPORT_PATIENT)}
+        onPress={() =>
+          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS })
+        }
       >
         <View style={styles.textBox}>
-          <StatusIcon active={selected === TAB_STATUS.SCAN} />
+          <PatientCareIcon active={selected === TAB_STATUS.STATUS} />
+
           <Text
             style={[
               styles.text,
-              selected === TAB_STATUS.SCAN ? styles.bold : {},
+              selected === TAB_STATUS.STATUS ? styles.bold : {},
             ]}
           >
-            {translation("importPatient")}
+            {translation("patientsStatus")}
           </Text>
         </View>
       </TouchableWithoutFeedback>
@@ -53,20 +56,17 @@ export function HomepageFooter() {
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
-        onPress={() =>
-          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS })
-        }
+        onPress={() => navigation.navigate(ROUTES.IMPORT_PATIENT)}
       >
         <View style={styles.textBox}>
-          <PatientCareIcon active={selected === TAB_STATUS.STATUS} />
-
+          <StatusIcon active={selected === TAB_STATUS.SCAN} />
           <Text
             style={[
               styles.text,
-              selected === TAB_STATUS.STATUS ? styles.bold : {},
+              selected === TAB_STATUS.SCAN ? styles.bold : {},
             ]}
           >
-            {translation("patientsStatus")}
+            {translation("importPatient")}
           </Text>
         </View>
       </TouchableWithoutFeedback>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   textBox: {
     flex: 1,
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     borderLeftWidth: 1,
