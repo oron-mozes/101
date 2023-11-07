@@ -27,7 +27,7 @@ export function TimePicker({
   useEffect(() => {
     onChange(value);
   }, []);
-  console.log(editable);
+
   return (
     <TouchableOpacity
       onPress={() => editable && toggleTime(true)}

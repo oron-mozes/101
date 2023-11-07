@@ -39,6 +39,77 @@ import {
   updateDataInIndex,
 } from "../views/homepage/tabs/report-tab/create-components/utils";
 
+const initialPatient = {
+  incident_information: {
+    injury_time: null,
+    care_time: null,
+    date: null,
+  },
+  disabled: false,
+  id: null,
+  personal_information: {
+    full_name: null,
+    idf_id: null,
+    patientId: null,
+  },
+  breathing: {
+    fulfill: false,
+    breathingCount: null,
+    saturation: null,
+    actions: [],
+  },
+  airway: {
+    fulfill: false,
+    actions: [],
+  },
+  consciousness: [],
+  provider: {
+    full_name: null,
+    id: null,
+    idf_id: null,
+    rank: null,
+    unit_name: null,
+    role: null,
+  },
+  eSection: [],
+  injuries: [],
+  measurements: {
+    fulfill: false,
+    bloodPressure: null,
+    actions: [],
+    shock: null,
+    palpated: null,
+    puls: null,
+  },
+  reaction: {
+    general: [],
+    eyes: EReactionEyes.NONE,
+    speech: EReactionSpeech.NONE,
+    movement: EReactionMovement.NONE,
+    GCS: 3,
+  },
+  medicationsAndFluids: { actions: [] },
+  injuryReason: {
+    reasons: [],
+    circumstance: null,
+  },
+  prognosis: null,
+  evacuation: {
+    time: null,
+    destination: null,
+    transportation: null,
+    status: null,
+    special_care: null,
+  },
+  treatmentGuide: {
+    guides: [],
+    measurements: {
+      period: null,
+      actions: [],
+    },
+  },
+};
+
 export const usePatientRecordsStore = create<{
   patients: IPatientRecord[];
   activePatient: {
@@ -174,76 +245,7 @@ export const usePatientRecordsStore = create<{
 }>()(
   devtools((set, get, state) => ({
     patients: [],
-    activePatient: {
-      incident_information: {
-        injury_time: null,
-        care_time: null,
-        date: null,
-      },
-      disabled: false,
-      id: null,
-      personal_information: {
-        full_name: null,
-        idf_id: null,
-        patientId: null,
-      },
-      breathing: {
-        fulfill: false,
-        breathingCount: null,
-        saturation: null,
-        actions: [],
-      },
-      airway: {
-        fulfill: false,
-        actions: [],
-      },
-      consciousness: [],
-      provider: {
-        full_name: null,
-        id: null,
-        idf_id: null,
-        rank: null,
-        unit_name: null,
-        role: null,
-      },
-      eSection: [],
-      injuries: [],
-      measurements: {
-        fulfill: false,
-        bloodPressure: null,
-        actions: [],
-        shock: null,
-        palpated: null,
-        puls: null,
-      },
-      reaction: {
-        general: [],
-        eyes: EReactionEyes.NONE,
-        speech: EReactionSpeech.NONE,
-        movement: EReactionMovement.NONE,
-        GCS: 3,
-      },
-      medicationsAndFluids: { actions: [] },
-      injuryReason: {
-        reasons: [],
-        circumstance: null,
-      },
-      prognosis: null,
-      evacuation: {
-        time: null,
-        destination: null,
-        transportation: null,
-        status: null,
-        special_care: null,
-      },
-      treatmentGuide: {
-        guides: [],
-        measurements: {
-          period: null,
-          actions: [],
-        },
-      },
-    },
+    activePatient: { ...initialPatient },
     updatePrognosis(prognosis: string) {
       const current = state.getState();
       current.updatePartialPatient({
@@ -1006,6 +1008,7 @@ export const usePatientRecordsStore = create<{
       set((state) => ({
         ...state,
         patients: [...patients],
+        activePatient: { ...initialPatient },
       }));
     },
     updatePartialPatient(data) {

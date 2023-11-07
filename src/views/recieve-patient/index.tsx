@@ -26,17 +26,18 @@ export default function ReceivePatientScreen() {
   const handleBarcodeRead = (event) => {
     if (event.data) {
       const { patient } = decompress(JSON.parse(event.data));
-      storage.save({
-        key: STORAGE.PATIENTS_RECORD,
-        id: patient.id,
-        data: {
-          ...patient,
-          evacuation: {
-            ...patient.evacuation,
-            status: STATUS.ACTIVE,
-          },
-        },
-      });
+      console.log(patient);
+      // storage.save({
+      //   key: STORAGE.PATIENTS_RECORD,
+      //   id: patient.id,
+      //   data: {
+      //     ...patient,
+      //     evacuation: {
+      //       ...patient.evacuation,
+      //       status: STATUS.ACTIVE,
+      //     },
+      //   },
+      // });
       navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
     }
   };
