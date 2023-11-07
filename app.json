@@ -6,6 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "platforms": ["android"],
+    "supportsTablet": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,17 +19,16 @@
       "runtimeVersion": {
         "policy": "appVersion"
       },
-      "bundleIdentifier": "host.android.triage",
-      "isRTL": true
+      "bundleIdentifier": "host.android.triage"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#006be5"
+        "backgroundColor": "#006be5",
+        "isRTL": true
       },
       "package": "host.android.triage",
-      "runtimeVersion": "1.0.0",
-      "isRTL": true
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -40,6 +41,14 @@
     "owner": "oron-mozes",
     "updates": {
       "url": "https://u.expo.dev/bc3202ce-a848-4dc5-99d9-208f3e9aed42"
-    }
+    },
+    "plugins": [
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "101 needs access to your Camera."
+        }
+      ]
+    ]
   }
 }

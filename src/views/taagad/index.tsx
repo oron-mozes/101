@@ -105,6 +105,7 @@ export default function TaagadScreen() {
               }}
             />
             <Button
+              mode="contained"
               onPress={() => {
                 updateTaagadName(taggadName);
               }}
@@ -154,69 +155,71 @@ export default function TaagadScreen() {
             );
           })}
 
-        <View style={styles.fields}>
-          {["full_name", "idf_id"].map((item) => (
-            <InputField
-              key={item}
-              disabled={false}
-              maxLength={item === "idf_id" ? 7 : null}
-              numeric={item === "idf_id"}
-              label={translation(item)}
-              onChange={(value: string) => {
-                saveCareProviderInfo({ [item]: value });
-              }}
-              value={newCareProvider[item]}
-            />
-          ))}
-          {["rank", "role"].map((item) => (
-            <DropDown
-              key={item}
-              disabled={false}
-              label={translation(item)}
-              options={DDOptions[item]}
-              initialValue={newCareProvider[item]}
-              onSelect={(selected) => {
-                saveCareProviderInfo({ [item]: selected.id });
-              }}
-            />
-          ))}
+        {Boolean(taggad.unit_name) && (
+          <>
+            <View style={styles.fields}>
+              {["full_name", "idf_id"].map((item) => (
+                <InputField
+                  key={item}
+                  disabled={false}
+                  maxLength={item === "idf_id" ? 7 : null}
+                  numeric={item === "idf_id"}
+                  label={translation(item)}
+                  onChange={(value: string) => {
+                    saveCareProviderInfo({ [item]: value });
+                  }}
+                  value={newCareProvider[item]}
+                />
+              ))}
+              {["rank", "role"].map((item) => (
+                <DropDown
+                  key={item}
+                  editable={true}
+                  label={translation(item)}
+                  options={DDOptions[item]}
+                  initialValue={newCareProvider[item]}
+                  onSelect={(selected) => {
+                    saveCareProviderInfo({ [item]: selected.id });
+                  }}
+                />
+              ))}
 
-          <IconButton
-            disabled={isCareProviderValid()}
-            icon="note-plus"
-            iconColor={colors.primary}
-            size={30}
-            onPress={saveNewProvider}
-          />
-        </View>
-
-        <Button
-          mode="contained"
-          disabled={!isFormValid()}
-          style={{ marginTop: 30 }}
-          onPress={() => {
-            navigation.navigate(ROUTES.HOME);
-          }}
-        >
-          {translation("continue")}
-        </Button>
-        <Button
-          mode="outlined"
-          // disabled={!isFormValid()}
-          textColor="#fff"
-          style={{ backgroundColor: "red", marginTop: 100 }}
-          onPress={async () => {
-            storage.clearMap();
-            await Promise.all([
-              // storage.remove({ key: STORAGE.TAAGAD }),
-              storage.remove({ key: STORAGE.PATIENTS_RECORD }),
-            ]);
-            await loadInitialState();
-            navigation.navigate(ROUTES.HOME);
-          }}
-        >
-          CAUTION!! DELETE ALL
-        </Button>
+              <Button
+                mode="outlined"
+                disabled={isCareProviderValid()}
+                onPress={saveNewProvider}
+              >
+                {translation("save")}
+              </Button>
+            </View>
+            <Button
+              mode="contained"
+              disabled={!isFormValid()}
+              style={{ marginTop: 30 }}
+              onPress={() => {
+                navigation.navigate(ROUTES.HOME);
+              }}
+            >
+              {translation("continue")}
+            </Button>
+            <Button
+              mode="contained"
+              textColor="#fff"
+              style={{ backgroundColor: "red", marginTop: 100 }}
+              onPress={async () => {
+                storage.clearMap();
+                await Promise.all([
+                  // storage.remove({ key: STORAGE.TAAGAD }),
+                  storage.remove({ key: STORAGE.PATIENTS_RECORD }),
+                ]);
+                await loadInitialState();
+                navigation.navigate(ROUTES.HOME);
+              }}
+            >
+              CAUTION!! DELETE ALL
+            </Button>
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -224,10 +227,12 @@ export default function TaagadScreen() {
 
 const styles = StyleSheet.create({
   fields: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
   },
   container: {
-    direction: "rtl",
     flex: 1,
     paddingTop: StatusBar.currentHeight,
     width: "100%",
@@ -236,7 +241,4 @@ const styles = StyleSheet.create({
   scrollView: {
     marginHorizontal: 20,
   },
-  table: { margin: 4, width: "98%" },
-  tableHeader: { backgroundColor: "rgba(229, 241, 255, 1)" },
-  form: { backgroundColor: "rgba(229, 241, 255, 1)" },
 });

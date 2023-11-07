@@ -76,12 +76,12 @@ export function ASection() {
           return (
             <Card.Content
               style={[styles.innerContent, styles.actionRow]}
-              key={`${airWayInfo.action}-${index}`}
+              key={`${airWayInfo.action}-${index}`} 
             >
               <View style={styles.element}>
                 <DropDown
                   label={translation("actionTaken")}
-                  editable={disabled}
+                  editable={!disabled}
                   initialValue={airWayInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
                     value &&

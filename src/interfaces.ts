@@ -361,6 +361,7 @@ export interface IInjury {
   id: number;
 }
 export interface IPatientRecord {
+  new: boolean;
   id?: string;
   personal_information: IPersonalInformation;
   incident_information: IIncidentInformation;

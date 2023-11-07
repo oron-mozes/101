@@ -64,9 +64,10 @@ export default function QrCode() {
         </View>
         <View style={styles.qrWrapper}>
           <QRCode
+            quietZone={3}
             value={JSON.stringify(decodedPatient[qrIndex])}
-            logo={require("./Logo.png")}
-            size={300}
+            // logo={require("./Logo.png")}
+            size={500}
           />
         </View>
         <View style={styles.buttonsView}>
@@ -101,9 +102,11 @@ export default function QrCode() {
 
 const styles = StyleSheet.create({
   qrWrapper: {
-    borderWidth: 1,
-    borderColor: "grey",
-    padding: 30,
+    // borderWidth: 1,
+    // borderColor: "grey",
+    // padding: 50,
+    marginTop: 50,
+    marginBottom: 50,
   },
   descriptionView: {
     marginBottom: 20,

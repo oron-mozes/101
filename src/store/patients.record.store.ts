@@ -40,6 +40,7 @@ import {
 } from "../views/homepage/tabs/report-tab/create-components/utils";
 
 const initialPatient = {
+  new: false,
   incident_information: {
     injury_time: null,
     care_time: null,
