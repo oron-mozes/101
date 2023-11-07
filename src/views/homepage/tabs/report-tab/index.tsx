@@ -86,12 +86,12 @@ export const emptyPatient: IPatientRecord = {
       },
     ],
   },
-
   evacuation: {
     status: null,
     time: null,
     transportation: null,
     destination: null,
+    special_care: null,
   },
   treatmentGuide: {
     guides: [],

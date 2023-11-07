@@ -11,7 +11,10 @@ export function Prognosis() {
   const prognosis = usePatientRecordsStore(
     (state) => state.activePatient.prognosis
   );
-  const update = usePatientRecordsStore((state) => state.updatePartialPatient);
+
+  const updatePrognosis = usePatientRecordsStore(
+    (state) => state.updatePrognosis
+  );
   const disabled = usePatientRecordsStore(
     (state) => state.activePatient.disabled
   );
@@ -27,9 +30,7 @@ export function Prognosis() {
           disabled={disabled}
           numberOfLines={5}
           onChange={(value: string) => {
-            update({
-              prognosis: value,
-            });
+            updatePrognosis(value);
           }}
           value={prognosis}
           label={translation("prognosis")}

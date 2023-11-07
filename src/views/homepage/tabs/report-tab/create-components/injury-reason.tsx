@@ -41,7 +41,7 @@ export function InjuryReason() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          editable={disabled}
+          disabled={disabled}
           onChange={(circumstance: string) => {
             handlers.setCircumstance(circumstance);
           }}

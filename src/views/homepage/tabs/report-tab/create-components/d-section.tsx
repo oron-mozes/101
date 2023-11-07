@@ -37,6 +37,7 @@ export function DSection() {
   const general = usePatientRecordsStore(
     (state) => state.activePatient.reaction.general
   );
+  console.log({ general });
   const speech = usePatientRecordsStore(
     (state) => state.activePatient.reaction.speech
   );

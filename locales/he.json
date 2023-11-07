@@ -215,5 +215,6 @@
   "saveAndContinue": "שמירה וסגירה",
   "takenMedication": "נוזלים ותרופות שניתנו",
   "done": "סיום",
-  "injuryType": "סוג פציעה"
+  "injuryType": "סוג פציעה",
+  "qrScan": "סריקת ברקוד {{current}}/{{max}}"
 }

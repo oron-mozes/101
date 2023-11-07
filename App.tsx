@@ -20,6 +20,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const theme = {
   // ...DefaultTheme,
+  direction: "rtl",
   roundness: 1,
   colors: {
     ...DefaultTheme.colors,
@@ -31,7 +32,9 @@ export const theme = {
 export default function App() {
   const { hasPermission, requestPermission } = useCameraPermission();
   const { loadInitialState } = useTaggadStore();
-  const { loadPatientsState } = usePatientRecordsStore();
+  const loadPatientsState = usePatientRecordsStore(
+    (state) => state.loadPatientsState
+  );
   const [appReady, toggleReady] = useState<boolean>(false);
 
   // storage.remove({ key: STORAGE.PATIENTS_RECORD });

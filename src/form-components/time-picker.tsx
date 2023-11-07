@@ -15,7 +15,7 @@ export function TimePicker({
   label,
   onChange,
   value = new Date().getTime(),
-  editable,
+  editable = true,
 }: {
   editable: boolean;
   label: string;
@@ -27,6 +27,7 @@ export function TimePicker({
   useEffect(() => {
     onChange(value);
   }, []);
+  console.log(editable);
   return (
     <TouchableOpacity
       onPress={() => editable && toggleTime(true)}

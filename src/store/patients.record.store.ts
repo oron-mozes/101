@@ -61,6 +61,7 @@ export const usePatientRecordsStore = create<{
     treatmentGuide: ITreatment;
   };
   updatePartialPatient(data: any): void;
+  updatePrognosis(data: any): void;
   loadPatientsState(): Promise<boolean>;
   addPatient(data: IPatientRecord): Promise<void>;
   savePatient(): Promise<void>;
@@ -233,6 +234,7 @@ export const usePatientRecordsStore = create<{
         destination: null,
         transportation: null,
         status: null,
+        special_care: null,
       },
       treatmentGuide: {
         guides: [],
@@ -241,6 +243,13 @@ export const usePatientRecordsStore = create<{
           actions: [],
         },
       },
+    },
+    updatePrognosis(prognosis: string) {
+      const current = state.getState();
+      current.updatePartialPatient({
+        ...current.activePatient,
+        prognosis,
+      });
     },
     treatmentGuide_handlers: {
       setInitial(data: ITreatment) {
@@ -355,7 +364,7 @@ export const usePatientRecordsStore = create<{
       },
       toggleGeneral(select: EReactionGeneral) {
         const current = state.getState();
-
+        console.log(current.activePatient.reaction.general);
         current.updatePartialPatient({
           reaction: {
             ...current.activePatient.reaction,

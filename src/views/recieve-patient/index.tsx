@@ -22,6 +22,7 @@ export default function ReceivePatientScreen() {
   const goBackHome = () =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
 
+  console.log("?????");
   const handleBarcodeRead = (event) => {
     if (event.data) {
       const { patient } = decompress(JSON.parse(event.data));
@@ -32,7 +33,7 @@ export default function ReceivePatientScreen() {
           ...patient,
           evacuation: {
             ...patient.evacuation,
-            status: STATUS.NEW_PATIENT,
+            status: STATUS.ACTIVE,
           },
         },
       });

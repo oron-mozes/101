@@ -7,8 +7,6 @@ import { useTaggadStore } from "../../store/taggad.store";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";
 import { StatusTab } from "./tabs/status-tab";
-import storage, { STORAGE } from "../../../storage";
-import { usePatientRecordsStore } from "../../store/patients.record.store";
 
 export enum TAB_STATUS {
   STATUS = "STATUS",
@@ -24,7 +22,7 @@ export default function HomeScreen() {
     () => route.params?.tab ?? TAB_STATUS.STATUS,
     [route.params?.tab]
   );
- 
+
   useEffect(() => {
     if (!taggad.unit_name) {
       navigation.navigate(ROUTES.ACCOUNT);

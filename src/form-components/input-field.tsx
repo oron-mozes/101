@@ -17,7 +17,7 @@ import {
 export interface IInputField {
   onChange(value: string): void;
   label: string;
-  editable: boolean;
+  disabled: boolean;
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
@@ -27,7 +27,7 @@ export interface IInputField {
 export function InputField({
   label,
   onChange,
-  editable,
+  disabled,
   value,
   numeric = false,
   numberOfLines = 1,
@@ -36,7 +36,7 @@ export function InputField({
 }: IInputField) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
-    editable && inputRef.current.focus();
+    !disabled && inputRef.current.focus();
   };
   return (
     <TouchableWithoutFeedback onPress={handleInputPress}>
@@ -64,7 +64,7 @@ export function InputField({
             multiline={numberOfLines > 1}
             style={[styles.text, numberOfLines > 1 ? styles.fixHeightText : {}]}
             keyboardType={numeric ? "numeric" : "default"}
-            editable={editable}
+            editable={!disabled}
             value={value}
             textAlign="right"
             onChangeText={(value) => {

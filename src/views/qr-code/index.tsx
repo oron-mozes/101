@@ -1,5 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -20,10 +20,12 @@ import {
 import { ROUTES } from "../../routes";
 
 import { compress, trimUndefinedRecursively, decompress } from "compress-json";
+import { getByteSize, splicePatient } from "./utils";
 
 export default function QrCode() {
   const route = useRoute<RouteProp<RootStackParamList>>();
   const patient = useMemo(() => route.params.patient, []);
+  const [qrIndex, setQrIndex] = useState<number>(0);
   const translation = useTranslation();
   const navigation = useNavigation<StackNavigation>();
   const reportEvac = async () => {
@@ -43,7 +45,7 @@ export default function QrCode() {
   };
   const goBackHome = () => navigation.navigate(ROUTES.HOME);
   trimUndefinedRecursively(patient);
-  const decodedPatient = compress({ patient });
+  const decodedPatient = splicePatient(patient);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,7 +64,7 @@ export default function QrCode() {
         </View>
         <View style={styles.qrWrapper}>
           <QRCode
-            value={JSON.stringify(decodedPatient)}
+            value={JSON.stringify(decodedPatient[qrIndex])}
             logo={require("./Logo.png")}
             size={220}
           />
@@ -85,7 +87,9 @@ export default function QrCode() {
             style={styles.button}
             buttonColor="rgba(0, 107, 229, 1)"
             icon="check"
-            onPress={reportEvac}
+            onPress={() => {
+              reportEvac();
+            }}
           >
             {translation("approveEvac")}
           </Button>

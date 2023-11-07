@@ -17,7 +17,8 @@
       "runtimeVersion": {
         "policy": "appVersion"
       },
-      "bundleIdentifier": "host.android.triage"
+      "bundleIdentifier": "host.android.triage",
+      "isRTL": true
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +26,8 @@
         "backgroundColor": "#006be5"
       },
       "package": "host.android.triage",
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": "1.0.0",
+      "isRTL": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
