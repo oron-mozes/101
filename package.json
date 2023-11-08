@@ -10,7 +10,9 @@
     "ios": "expo run:ios",
     "update": "eas update",
     "web": "expo start --web",
-    "apk": "eas build -p android --profile preview"
+    "apk": "eas build -p android --profile preview",
+    "dev":"eas build --profile development --platform android",
+    "cache": "cd android && ./gradlew clean`"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
