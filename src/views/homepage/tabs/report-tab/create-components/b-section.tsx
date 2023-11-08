@@ -59,9 +59,7 @@ export function BSection() {
           onSelect={(id: string) => {
             handlers.toggleFulfill(id === TOGGLE.YES);
           }}
-          selected={
-            fulfill !== null ? (fulfill ? TOGGLE.YES : TOGGLE.NO) : null
-          }
+          selected={fulfill ? TOGGLE.YES : TOGGLE.NO}
           options={convertToOptions(TOGGLE, translation)}
         />
       </Card.Content>

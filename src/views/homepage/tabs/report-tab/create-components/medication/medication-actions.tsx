@@ -10,6 +10,9 @@ export function MedicationActions() {
   const actions = usePatientRecordsStore(
     (state) => state.activePatient.medicationsAndFluids.actions
   );
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
+  );
   const handlers = usePatientRecordsStore(
     (state) => state.medicationsAndFluids_handlers
   );
@@ -24,22 +27,22 @@ export function MedicationActions() {
             <View style={[styles.innerContent]}>
               <View style={[styles.innerContent, styles.action]}>
                 <CheckButton
-                  disabled={true}
+                  disabled={disabled}
                   label={translation(action.treatment)}
                   checked={false}
                   onSelect={() => {}}
                 />
                 {action.type && (
                   <CheckButton
-                    disabled={true}
+                    disabled={disabled}
                     label={translation(action.type)}
                     checked={false}
                     onSelect={() => {}}
                   />
                 )}
                 <CheckButton
-                  disabled={true}
-                  label={translation(action.dose)}
+                  disabled={disabled}
+                  label={translation(action.dose ?? "")}
                   checked={false}
                   onSelect={() => {}}
                 />
@@ -53,7 +56,7 @@ export function MedicationActions() {
               >
                 <View style={{ width: 120 }}>
                   <TimePicker
-                    disabled={true}
+                    editable={disabled}
                     value={action.time}
                     label={translation("actionTime")}
                     onChange={() => {}}

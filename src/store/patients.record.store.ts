@@ -189,7 +189,9 @@ export const usePatientRecordsStore = create<{
       xPos,
       yPos,
       data,
+      id,
     }: {
+      id: number;
       xPos: number;
       yPos: number;
       data: IInjuryInformation;
@@ -462,7 +464,10 @@ export const usePatientRecordsStore = create<{
           medicationsAndFluids: {
             ...current.activePatient.medicationsAndFluids,
             actions: current.activePatient.medicationsAndFluids.actions.filter(
-              (item) => item.id !== id
+              (item) => {
+                console.log(item.id, id);
+                return item.id !== id;
+              }
             ),
           },
         });
@@ -626,9 +631,9 @@ export const usePatientRecordsStore = create<{
           ),
         });
       },
-      addInjury({ xPos, yPos, data }) {
+      addInjury({ xPos, yPos, data, id }) {
         const current = state.getState();
-        const id = new Date().getTime();
+
         current.updatePartialPatient({
           injuries: [
             ...current.activePatient.injuries,
@@ -643,10 +648,15 @@ export const usePatientRecordsStore = create<{
       },
       removeInjury(id: number) {
         const current = state.getState();
+        console.log(
+          "DD",
+          id,
+          current.activePatient.injuries.filter((item) => item.id !== id)
+        );
         current.updatePartialPatient({
-          injuries: current.activePatient.injuries.filter(
-            (item) => item.id !== id
-          ),
+          injuries: [
+            ...current.activePatient.injuries.filter((item) => item.id !== id),
+          ],
         });
       },
     },

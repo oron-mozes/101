@@ -66,15 +66,16 @@ export function DSection() {
       <Card.Content style={[styles.innerContent, styles.section]}>
         <Text style={styles.title}>{translation("general")}</Text>
         <View style={[styles.options]}>
-          {Object.values(EReactionGeneral).map((item) => (
-            <ToggleButton
-              disabled={disabled}
-              label={translation(item)}
-              status={isSelected(item)}
-              onSelect={() => handlers.toggleGeneral(item)}
-              key={item}
-            />
-          ))}
+          {general &&
+            Object.values(EReactionGeneral).map((item) => (
+              <ToggleButton
+                disabled={disabled}
+                label={translation(item)}
+                status={isSelected(item)}
+                onSelect={() => handlers.toggleGeneral(item)}
+                key={item}
+              />
+            ))}
         </View>
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.section]}>

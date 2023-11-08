@@ -12,6 +12,8 @@ import { GunLegend } from "./gun-legend";
 import { HitLegend } from "./hit-legend";
 import { CutLegend } from "./cut-legend";
 import { BurnLegend } from "./burns-legend";
+import { hasBeenClicked } from "./utils";
+import { ConfirmModal } from "../../../../../../components/confirm-modal";
 
 export function PatientBodyPicker() {
   const translation = useTranslation();
@@ -21,16 +23,25 @@ export function PatientBodyPicker() {
 
   const handlers = usePatientRecordsStore((state) => state.injuries_handlers);
   const [showModal, toggleModal] = useState<boolean>(false);
+  const [readyForDelete, setToDelete] = useState<number>();
 
   const handlePress = (event) => {
     const { locationX, locationY } = event.nativeEvent;
-    handlers.addInjury({
-      xPos: locationX,
-      yPos: locationY,
-      data: null,
-    });
+    const point = { xPos: locationX, yPos: locationY };
+    const clickedOnInjury = injuries.find((injury) =>
+      hasBeenClicked(injury, point)
+    );
+    if (!clickedOnInjury) {
+      handlers.addInjury({
+        ...point,
+        data: null,
+        id: new Date().getTime(),
+      });
 
-    toggleModal(true);
+      toggleModal(true);
+    } else {
+      setToDelete(clickedOnInjury.id);
+    }
   };
 
   return (
@@ -40,6 +51,15 @@ export function PatientBodyPicker() {
           closeHandler={() => toggleModal(false)}
           onChange={(data) => {
             handlers.updateAtIndex({ data }, injuries.length - 1);
+          }}
+        />
+      )}
+      {readyForDelete && (
+        <ConfirmModal
+          closeHandler={() => setToDelete(null)}
+          onConfirm={() => {
+            handlers.removeInjury(readyForDelete);
+            setToDelete(null);
           }}
         />
       )}

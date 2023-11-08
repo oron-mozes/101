@@ -26,6 +26,7 @@ export function ToggleButton({
         <Text
           style={[styles.text, disabled ? styles.disabled : {}]}
           disabled={disabled}
+          onPress={() => onSelect(!status)}
         >
           {label}
         </Text>

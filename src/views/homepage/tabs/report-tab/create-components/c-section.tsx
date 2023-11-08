@@ -66,16 +66,6 @@ export function CSection() {
         <RadioGroup
           disabled={disabled}
           horizontal
-          label={translation("shock")}
-          onSelect={(id: string) => {
-            handlers.toggleShock(id === TOGGLE.YES);
-          }}
-          selected={shock !== null ? (shock ? TOGGLE.YES : TOGGLE.NO) : null}
-          options={convertToOptions(TOGGLE, translation)}
-        />
-        <RadioGroup
-          disabled={disabled}
-          horizontal
           label={translation("palpated")}
           onSelect={(id: string) => {
             handlers.togglePalpated(id === TOGGLE.YES);
@@ -83,6 +73,16 @@ export function CSection() {
           selected={
             palpated !== null ? (palpated ? TOGGLE.YES : TOGGLE.NO) : null
           }
+          options={convertToOptions(TOGGLE, translation)}
+        />
+        <RadioGroup
+          disabled={disabled}
+          horizontal
+          label={translation("shock")}
+          onSelect={(id: string) => {
+            handlers.toggleShock(id === TOGGLE.YES);
+          }}
+          selected={shock !== null ? (shock ? TOGGLE.YES : TOGGLE.NO) : null}
           options={convertToOptions(TOGGLE, translation)}
         />
       </Card.Content>
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   content: { ...design.content },
   innerContent: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     justifyContent: "center",
     alignContent: "center",
     marginTop: 10,

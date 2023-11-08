@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Button,
@@ -28,6 +28,10 @@ export function InjuryModal({
     new Date().getTime()
   );
 
+  useEffect(() => {
+    console.log("Loaded");
+    setTouniquet_time(new Date().getTime());
+  }, []);
   const toggleValue = (value) => {
     data ? setData(null) : setData(value);
   };
@@ -141,7 +145,7 @@ export function InjuryModal({
 
           {touniquet && (
             <TimePicker
-              editable={false}
+              editable={true}
               value={touniquet_time}
               label={translation("TH_time")}
               onChange={(touniquet_time: number) => {

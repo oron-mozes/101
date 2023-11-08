@@ -53,7 +53,7 @@ export function Evacuation() {
           <TimePicker
             editable={disabled}
             value={time}
-            label={translation("time")}
+            label={translation("actionTime")}
             onChange={(time: number) => {
               handlers.setTime(time);
             }}

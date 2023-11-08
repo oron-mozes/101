@@ -19,8 +19,8 @@ import {
 } from "../../interfaces";
 import { ROUTES } from "../../routes";
 
-import { compress, trimUndefinedRecursively, decompress } from "compress-json";
-import { getByteSize, splicePatient } from "./utils";
+import { trimUndefinedRecursively } from "compress-json";
+import { splicePatient } from "./utils";
 
 export default function QrCode() {
   const route = useRoute<RouteProp<RootStackParamList>>();

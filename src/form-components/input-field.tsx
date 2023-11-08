@@ -1,23 +1,22 @@
-import { memo, useRef } from "react";
+import { useRef } from "react";
 import {
   StyleSheet,
+  TextInput,
   TouchableWithoutFeedback,
   View,
-  TextInput,
 } from "react-native";
 import { Icon, Text } from "react-native-paper";
 import {
-  borderSetup,
-  offset,
+  colors,
   gutter,
   inputContainer,
   inputHeight,
-  colors,
+  offset
 } from "../shared-config";
 export interface IInputField {
   onChange(value: string): void;
   label: string;
-  disabled: boolean;
+  editable: boolean;
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
@@ -27,7 +26,7 @@ export interface IInputField {
 export function InputField({
   label,
   onChange,
-  disabled,
+  editable,
   value,
   numeric = false,
   numberOfLines = 1,
@@ -36,7 +35,7 @@ export function InputField({
 }: IInputField) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
-    !disabled && inputRef.current.focus();
+    !editable && inputRef.current.focus();
   };
   return (
     <TouchableWithoutFeedback onPress={handleInputPress}>
@@ -64,7 +63,7 @@ export function InputField({
             multiline={numberOfLines > 1}
             style={[styles.text, numberOfLines > 1 ? styles.fixHeightText : {}]}
             keyboardType={numeric ? "numeric" : "default"}
-            editable={!disabled}
+            editable={!editable}
             value={value}
             textAlign="right"
             onChangeText={(value) => {

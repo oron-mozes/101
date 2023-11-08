@@ -34,11 +34,13 @@ export function NewMedication({ onClose }: { onClose(): void }) {
     (state) => state.medicationsAndFluids_handlers
   );
   const translation = useTranslation();
+  const [allowSave, toggleSave] = useState<boolean>(false);
   useEffect(() => {
     actions.length === 0
       ? setNewMedication({
           ...emptyState,
           time: new Date().getTime(),
+          id: new Date().getTime(),
         })
       : setNewMedication(null);
   }, [actions]);
@@ -172,7 +174,12 @@ export function NewMedication({ onClose }: { onClose(): void }) {
               onPress={addRow}
               mode="contained"
               icon="check"
-              disabled={!newMedication.dose && !newMedication.treatment}
+              disabled={
+                !(
+                  Boolean(newMedication?.dose) &&
+                  Boolean(newMedication?.treatment)
+                )
+              }
             >
               {translation("saveAndContinue")}
             </Button>
@@ -189,6 +196,7 @@ export function NewMedication({ onClose }: { onClose(): void }) {
               setNewMedication({
                 ...emptyState,
                 time: new Date().getTime(),
+                id: new Date().getTime(),
               });
             }}
           >

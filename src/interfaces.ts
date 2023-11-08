@@ -207,7 +207,7 @@ export enum E_ANASTASIA_KATAMIN_DOSE {
   D500MG = "D500MG",
 }
 export enum E_ANASTASIA_DORMICUM_DOSE {
-  D1_5 = "D1_5MG",
+  D1_5MG = "D1_5MG",
   D5MG = "D5MG",
 }
 export enum E_ANASTASIA_ACTIQ_DOSE {

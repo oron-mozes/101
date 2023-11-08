@@ -5,13 +5,19 @@ import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { design } from "../shared-style";
 import { MedicationActions } from "./medication-actions";
 import { NewMedication } from "./newMedication";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { colors, gutter } from "../../../../../../shared-config";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 
 export function MedicationsAndFluidSection() {
   const translation = useTranslation();
+  const actions = usePatientRecordsStore(
+    (state) => state.activePatient.medicationsAndFluids.actions
+  );
+
   const [showNewMedicationForm, toggleNewMedicationForm] =
     useState<boolean>(false);
+
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>

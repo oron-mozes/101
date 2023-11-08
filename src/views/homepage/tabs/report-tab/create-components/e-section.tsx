@@ -7,13 +7,20 @@ import { EEsectionChips } from "../../../../../interfaces";
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
 import { isSelectedHandler } from "./utils";
+import { useState } from "react";
 
 export function ESection() {
-  const list = usePatientRecordsStore((state) => state.activePatient.eSection);
+  const eSection = usePatientRecordsStore(
+    (state) => state.activePatient.eSection
+  );
   const handlers = usePatientRecordsStore((state) => state.esection_handlers);
+  const disabled = usePatientRecordsStore(
+    (state) => state.activePatient.disabled
+  );
+  const [selected, forceUpdate] = useState<EEsectionChips[]>([]);
 
   const translation = useTranslation();
-  const isSelected = isSelectedHandler(list);
+  const isSelected = isSelectedHandler(eSection);
 
   return (
     <Card style={styles.card}>
@@ -23,11 +30,14 @@ export function ESection() {
       <Card.Content style={styles.innerContent}>
         {Object.values(EEsectionChips).map((item) => (
           <ToggleButton
-            disabled={false}
+            disabled={disabled}
             key={item}
             label={translation(item)}
             status={isSelected(item)}
-            onSelect={() => handlers.toggleSelection(item)}
+            onSelect={() => {
+              forceUpdate([item]);
+              handlers.toggleSelection(item);
+            }}
           />
         ))}
       </Card.Content>

@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { decompress } from "compress-json";
 import React from "react";
 import {
   SafeAreaView,
@@ -7,13 +8,11 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import { RNCamera } from "react-native-camera";
 import { useTranslation } from "../../hooks/useMyTranslation";
-import { STATUS, StackNavigation } from "../../interfaces";
+import { StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { TAB_STATUS } from "../homepage";
-import { decompress } from "compress-json";
-import { RNCamera } from "react-native-camera";
-import storage, { STORAGE } from "../../../storage";
 
 export default function ReceivePatientScreen() {
   const navigation = useNavigation<StackNavigation>();

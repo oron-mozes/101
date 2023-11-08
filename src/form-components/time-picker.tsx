@@ -71,7 +71,7 @@ export function TimePicker({
               data.nativeEvent.timestamp !== 0 &&
               data.nativeEvent.timestamp < new Date().getTime()
             ) {
-              onChange(data.nativeEvent.timestamp);
+              onChange(data.nativeEvent.timestamp + data.nativeEvent.utcOffset);
             }
           }}
         />
