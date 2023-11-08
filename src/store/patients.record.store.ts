@@ -368,7 +368,6 @@ export const usePatientRecordsStore = create<{
       },
       toggleGeneral(select: EReactionGeneral) {
         const current = state.getState();
-        console.log(current.activePatient.reaction.general);
         current.updatePartialPatient({
           reaction: {
             ...current.activePatient.reaction,
@@ -465,7 +464,6 @@ export const usePatientRecordsStore = create<{
             ...current.activePatient.medicationsAndFluids,
             actions: current.activePatient.medicationsAndFluids.actions.filter(
               (item) => {
-                console.log(item.id, id);
                 return item.id !== id;
               }
             ),
@@ -648,11 +646,7 @@ export const usePatientRecordsStore = create<{
       },
       removeInjury(id: number) {
         const current = state.getState();
-        console.log(
-          "DD",
-          id,
-          current.activePatient.injuries.filter((item) => item.id !== id)
-        );
+
         current.updatePartialPatient({
           injuries: [
             ...current.activePatient.injuries.filter((item) => item.id !== id),

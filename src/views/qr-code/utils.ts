@@ -43,11 +43,7 @@ export function splicePatient(patient: IPatientRecord) {
       removeNulls(partialData);
 
       const decodedPatient = compress({ partialData });
-      console.log({
-        IN: true,
-        B: getByteSize(decodedPatient),
-        L: JSON.stringify(decodedPatient).length,
-      });
+
       buckets.push(decodedPatient);
       temp = { [key]: patient[key] };
     } else {
@@ -63,14 +59,9 @@ export function splicePatient(patient: IPatientRecord) {
 
     removeNulls(partialData);
     const decodedPatient = compress({ partialData });
-    console.log({
-      IN: false,
-      B: getByteSize(decodedPatient),
-      L: JSON.stringify(decodedPatient).length,
-    });
+
     buckets.push(decodedPatient);
   }
-  console.log(buckets[0]);
   return buckets;
 }
 

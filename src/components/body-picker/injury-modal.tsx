@@ -29,7 +29,6 @@ export function InjuryModal({
   );
 
   useEffect(() => {
-    console.log("Loaded");
     setTouniquet_time(new Date().getTime());
   }, []);
   const toggleValue = (value) => {

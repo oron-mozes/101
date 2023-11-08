@@ -15,7 +15,6 @@ export function CheckButton({
   disabled = false,
   checked = false,
 }: ICheckButton) {
-  console.log(checked);
   return (
     <Button
       mode="contained"

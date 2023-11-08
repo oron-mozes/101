@@ -148,7 +148,6 @@ export function ReportTab() {
       setActivePatient(route.params.patient);
     }
     return () => {
-      console.log("SAVE!!!!");
       savePatient();
     };
   }, [handlers]);

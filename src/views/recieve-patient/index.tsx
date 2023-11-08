@@ -21,7 +21,6 @@ export default function ReceivePatientScreen() {
   const goBackHome = () =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
 
-  console.log("?????");
   const handleBarcodeRead = (event) => {
     if (event.data) {
       const { patient } = decompress(JSON.parse(event.data));
