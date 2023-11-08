@@ -6,6 +6,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { RNCamera } from "react-native-camera";
@@ -13,6 +14,8 @@ import { useTranslation } from "../../hooks/useMyTranslation";
 import { StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { TAB_STATUS } from "../homepage";
+import BarcodeZxingScan from "react-native-barcode-zxing-scan";
+import { Text } from "react-native-paper";
 
 export default function ReceivePatientScreen() {
   const navigation = useNavigation<StackNavigation>();
@@ -20,7 +23,13 @@ export default function ReceivePatientScreen() {
 
   const goBackHome = () =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
-
+  const handleClick = () => {
+    console.log(BarcodeZxingScan);
+    // BarcodeZxingScan.showQrReader(barcodeScanned);
+  };
+  const barcodeScanned = (data) => {
+    console.log("Barcode ", data);
+  };
   const handleBarcodeRead = (event) => {
     if (event.data) {
       const { patient } = decompress(JSON.parse(event.data));
@@ -49,6 +58,19 @@ export default function ReceivePatientScreen() {
             onBarCodeRead={handleBarcodeRead}
             captureAudio={false}
           />
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={() => handleClick()}
+            style={{
+              margin: 20,
+              backgroundColor: "blue",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 30 }}>SCAN</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

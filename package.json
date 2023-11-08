@@ -11,7 +11,7 @@
     "update": "eas update",
     "web": "expo start --web",
     "apk": "eas build -p android --profile preview",
-    "dev":"eas build --profile development --platform android",
+    "dev": "eas build --profile development --platform android",
     "cache": "cd android && ./gradlew clean`"
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "react-i18nify": "^6.1.1",
     "react-native": "0.72.6",
     "react-native-autocomplete-dropdown": "^3.0.2",
+    "react-native-barcode-zxing-scan": "^1.0.2",
     "react-native-camera": "^4.2.1",
     "react-native-elements": "^3.4.3",
     "react-native-localize": "^3.0.2",
