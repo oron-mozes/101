@@ -15,7 +15,7 @@ export function ESection() {
   );
   const handlers = usePatientRecordsStore((state) => state.esection_handlers);
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
   const [selected, forceUpdate] = useState<EEsectionChips[]>([]);
 

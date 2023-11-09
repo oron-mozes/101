@@ -12,12 +12,12 @@ export function Avpu() {
   const consciousness = usePatientRecordsStore(
     (state) => state.activePatient.consciousness ?? []
   );
-  
+
   const handlers = usePatientRecordsStore(
     (state) => state.consciousness_handlers
   );
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   return (

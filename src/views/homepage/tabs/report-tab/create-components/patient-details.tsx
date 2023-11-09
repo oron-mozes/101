@@ -29,7 +29,7 @@ export function PatientDetails() {
   });
 
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   const translation = useTranslation();

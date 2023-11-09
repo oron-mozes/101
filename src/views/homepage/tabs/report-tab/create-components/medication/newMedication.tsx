@@ -26,7 +26,7 @@ export function NewMedication({ onClose }: { onClose(): void }) {
     (state) => state.activePatient.medicationsAndFluids.actions
   );
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
   const [newMedication, setNewMedication] =
     useState<IMedicationsAndFluidInformation>();

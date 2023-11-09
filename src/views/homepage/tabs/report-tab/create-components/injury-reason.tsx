@@ -18,7 +18,7 @@ export function InjuryReason() {
     (state) => state.injuryReason_handlers
   );
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   const isSelected = isSelectedHandler(injuryReason?.reasons ?? []);

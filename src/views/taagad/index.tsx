@@ -97,7 +97,7 @@ export default function TaagadScreen() {
         ) : (
           <>
             <InputField
-              editable={Boolean(taggad.unit_name)}
+              editable={true}
               label={translation("idfUnit")}
               value={taggadName}
               onChange={(unit_name: string) => {
@@ -161,7 +161,7 @@ export default function TaagadScreen() {
               {["full_name", "idf_id"].map((item) => (
                 <InputField
                   key={item}
-                  editable={false}
+                  editable={true}
                   maxLength={item === "idf_id" ? 7 : null}
                   numeric={item === "idf_id"}
                   label={translation(item === "idf_id" ? "idf" : item)}
@@ -174,7 +174,7 @@ export default function TaagadScreen() {
               {["rank", "role"].map((item) => (
                 <DropDown
                   key={item}
-                  editable={false}
+                  editable={true}
                   label={translation(item)}
                   options={DDOptions[item]}
                   initialValue={newCareProvider[item]}
@@ -192,16 +192,18 @@ export default function TaagadScreen() {
                 {translation("add")}
               </Button>
             </View>
-            <Button
-              mode="contained"
-              disabled={!isFormValid()}
-              style={{ marginTop: 30 }}
-              onPress={() => {
-                navigation.navigate(ROUTES.HOME);
-              }}
-            >
-              {translation("continue")}
-            </Button>
+            {Object.keys(taggad.care_providers ?? {}).length !== 0 && (
+              <Button
+                mode="contained"
+                disabled={!isFormValid()}
+                style={{ marginTop: 30 }}
+                onPress={() => {
+                  navigation.navigate(ROUTES.HOME);
+                }}
+              >
+                {translation("continue")}
+              </Button>
+            )}
             <Button
               mode="contained"
               textColor="#fff"

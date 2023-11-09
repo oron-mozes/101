@@ -15,7 +15,7 @@ export function Prognosis() {
     (state) => state.updatePrognosis
   );
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   return (

@@ -27,7 +27,7 @@ export function TreatmentGuide() {
     (state) => state.activePatient.treatmentGuide.guides ?? []
   );
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
   const handlers = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers

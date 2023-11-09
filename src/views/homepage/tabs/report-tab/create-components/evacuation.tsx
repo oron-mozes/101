@@ -30,7 +30,7 @@ export function Evacuation() {
   const handlers = usePatientRecordsStore((state) => state.evacuation_handlers);
 
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   return (

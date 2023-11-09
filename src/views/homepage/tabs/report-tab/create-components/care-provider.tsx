@@ -15,7 +15,7 @@ export function CareProvider() {
   );
   const handlers = usePatientRecordsStore((state) => state.provider_handlers);
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   return (

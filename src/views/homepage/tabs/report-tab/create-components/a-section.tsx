@@ -21,7 +21,7 @@ import { useEffect } from "react";
 export function ASection() {
   const translation = useTranslation();
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   const handlers = usePatientRecordsStore((state) => state.airway_handlers);

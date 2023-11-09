@@ -11,7 +11,7 @@ export function MedicationActions() {
     (state) => state.activePatient.medicationsAndFluids.actions
   );
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
   const handlers = usePatientRecordsStore(
     (state) => state.medicationsAndFluids_handlers

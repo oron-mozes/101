@@ -35,7 +35,7 @@ export function MeasurementForm({
     (state) => state.treatmentGuide_handlers
   );
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
   const providers = useTaggadStore((state) => state.taggad.care_providers);
   const painRang = [...Array(11).keys()];

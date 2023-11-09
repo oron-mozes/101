@@ -28,7 +28,7 @@ export function CSection() {
   const translation = useTranslation();
 
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
   const shock = usePatientRecordsStore(
     (state) => state.activePatient.measurements.shock

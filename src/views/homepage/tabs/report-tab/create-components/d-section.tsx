@@ -48,7 +48,7 @@ export function DSection() {
   );
   const handlers = usePatientRecordsStore((state) => state.reaction_handlers);
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
   useEffect(() => {
     const newGCS = calcGCS({ eyes, movement, speech });

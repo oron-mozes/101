@@ -26,7 +26,7 @@ const emptyState: IBreathingInformation = {
 export function BSection() {
   const translation = useTranslation();
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   const { saturation, breathingCount, fulfill } = usePatientRecordsStore(

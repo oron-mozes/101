@@ -50,7 +50,7 @@ export function Measurements() {
     (state) => state.treatmentGuide_handlers
   );
   const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.disabled
+    (state) => state.activePatient.editable
   );
 
   useEffect(() => {

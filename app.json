@@ -11,17 +11,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#006be5"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#006be5"
       },
       "package": "host.android.triage",
-      "runtimeVersion": "1.2.0",
-      "isRTL": true
+      "runtimeVersion": "1.2.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"

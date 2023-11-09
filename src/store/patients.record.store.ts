@@ -45,7 +45,7 @@ const initialPatient = {
     care_time: null,
     date: null,
   },
-  disabled: false,
+  editable: true,
   id: null,
   personal_information: {
     full_name: null,
@@ -114,7 +114,7 @@ export const usePatientRecordsStore = create<{
   patients: IPatientRecord[];
   activePatient: {
     incident_information: IIncidentInformation;
-    disabled: boolean;
+    editable: boolean;
     id: string;
     personal_information: IPersonalInformation;
     provider: ICareProvider;
