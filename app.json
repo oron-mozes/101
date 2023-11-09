@@ -11,15 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#006be5"
     },
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "runtimeVersion": {
-        "policy": "appVersion"
-      },
-      "bundleIdentifier": "host.android.triage",
-      "isRTL": true
-    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
@@ -40,6 +34,9 @@
     "owner": "oron-mozes",
     "updates": {
       "url": "https://u.expo.dev/bc3202ce-a848-4dc5-99d9-208f3e9aed42"
+    },
+    "ios": {
+      "runtimeVersion": "1.0.0"
     }
   }
 }
