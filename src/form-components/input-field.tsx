@@ -35,7 +35,7 @@ export function InputField({
 }: IInputField) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
-    !editable && inputRef.current.focus();
+    editable && inputRef.current.focus();
   };
   return (
     <TouchableWithoutFeedback onPress={handleInputPress}>
@@ -61,9 +61,12 @@ export function InputField({
             maxLength={maxLength}
             numberOfLines={numberOfLines}
             multiline={numberOfLines > 1}
-            style={[styles.text, numberOfLines > 1 ? styles.fixHeightText : {}]}
+            style={[
+              styles.text,
+              numberOfLines > 1 ? styles.fixHeightText : { flex: 1 },
+            ]}
             keyboardType={numeric ? "numeric" : "default"}
-            editable={!editable}
+            editable={editable}
             value={value}
             textAlign="right"
             onChangeText={(value) => {
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     width: "100%",
     // marginLeft: -20,
-    marginTop: -5,
+    marginTop: 5,
   },
   fixHeight: {
     height: 150,
@@ -105,7 +108,6 @@ const styles = StyleSheet.create({
     ...inputContainer,
   },
   text: {
-    flex: 1,
     textAlign: "right",
     alignItems: "flex-start",
     marginBottom: gutter,

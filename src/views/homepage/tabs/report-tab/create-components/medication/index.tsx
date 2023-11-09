@@ -37,7 +37,7 @@ export function MedicationsAndFluidSection() {
               toggleNewMedicationForm(true);
             }}
           >
-            {translation("addAction")}
+            {translation("addMedication")}
           </Text>
         </Card.Content>
       )}
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   content: { ...design.content },
   addItemAction: {
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
     margin: gutter,
   },
   innerContent: {

@@ -20,8 +20,8 @@ export function MedicationActions() {
 
   return (
     <>
-      {actions.map((action) => (
-        <View key={action.id}>
+      {actions.map((action, index) => (
+        <View key={`${action.time}|${index}`}>
           <Card.Content style={[styles.innerContent, styles.section]}>
             <Text style={styles.title}>{translation("takenMedication")}</Text>
             <View style={[styles.innerContent]}>
@@ -59,12 +59,14 @@ export function MedicationActions() {
                     editable={disabled}
                     value={action.time}
                     label={translation("actionTime")}
-                    onChange={() => {}}
+                    onChange={(time) => {
+                      handlers.updateAtIndex({ time }, index);
+                    }}
                   />
                 </View>
                 <Text
                   onPress={() => {
-                    handlers.removeAction(action.id);
+                    handlers.removeAction(index);
                   }}
                   style={styles.deleteAction}
                 >

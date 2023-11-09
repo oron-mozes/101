@@ -22,9 +22,6 @@ export function StatusTab() {
   const goToPatientPage = (patient) => {
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   };
-  useEffect(() => {
-    return () => {};
-  }, []);
   return (
     <View>
       <TouchableWithoutFeedback

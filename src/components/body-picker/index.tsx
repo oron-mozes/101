@@ -1,4 +1,4 @@
-import Svg, { Path } from "react-native-svg";
+import Svg, { Path, G } from "react-native-svg";
 import { Gunshot } from "./gunshot";
 import { Sharpnel } from "./sharpnel";
 import { Touniquet } from "./touniquet";
@@ -13,7 +13,7 @@ export function BodyPicker() {
   return (
     <Svg width={550} height={653} viewBox="0 0 442 653">
       {injuries.map((injury) => (
-        <>
+        <G key={injury.id}>
           {injury.data?.hits && <Hit xPos={injury.xPos} yPos={injury.yPos} />}
           {injury.data?.burn && <Burn xPos={injury.xPos} yPos={injury.yPos} />}
           {injury.data?.gunshot && (
@@ -29,7 +29,7 @@ export function BodyPicker() {
               text={injury.data.touniquet_time}
             />
           )}
-        </>
+        </G>
       ))}
 
       <Path

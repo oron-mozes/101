@@ -67,7 +67,7 @@ export function TreatmentGuide() {
           <Card.Content style={[styles.innerContent]}>
             <View style={[styles.innerContent, styles.split]}>
               <TimePicker
-                disabled={false}
+                editable={true}
                 value={guide.order_time}
                 label={translation("treatment_order_time")}
                 onChange={(order_time) => {
@@ -75,7 +75,7 @@ export function TreatmentGuide() {
                 }}
               />
               <DropDown
-                disabled={false}
+                editable={true}
                 initialValue={guide.provider_issuer?.idf_id?.toString()}
                 onSelect={(value) => {
                   const provider_issuer = Object.values(providers).find(
@@ -90,7 +90,7 @@ export function TreatmentGuide() {
                 }))}
               />
             </View>
-            <View style={[styles.innerContent, styles.split]}>
+            {/* <View style={[styles.innerContent, styles.split]}>
               <TimePicker
                 disabled={false}
                 value={guide.execution_time}
@@ -114,7 +114,7 @@ export function TreatmentGuide() {
                   title: `${provider.full_name}, ${provider.idf_id}`,
                 }))}
               />
-            </View>
+            </View> */}
           </Card.Content>
         </View>
       ))}
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   addItemAction: {
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
     margin: gutter,
   },
   split: {

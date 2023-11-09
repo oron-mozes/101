@@ -29,6 +29,7 @@ export function MeasurementForm({
   const screenWidth = Dimensions.get("window").width;
   const widthInVw = (screenWidth * columnWidth) / 100;
   const [lockEdit, toggleEdit] = useState<boolean>(editable);
+
   const translation = useTranslation();
   const handlers = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers
@@ -39,7 +40,7 @@ export function MeasurementForm({
   const providers = useTaggadStore((state) => state.taggad.care_providers);
   const painRang = [...Array(11).keys()];
   useEffect(() => {
-    toggleEdit(!disabled && editable);
+    // toggleEdit(!disabled && editable);
   }, [disabled, editable]);
   return (
     <View

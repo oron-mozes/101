@@ -98,7 +98,7 @@ const initialPatient = {
     time: null,
     destination: null,
     transportation: null,
-    status: null,
+    status: STATUS.NEW_PATIENT,
     special_care: null,
   },
   treatmentGuide: {
@@ -371,10 +371,9 @@ export const usePatientRecordsStore = create<{
         current.updatePartialPatient({
           reaction: {
             ...current.activePatient.reaction,
-            general: toggleListData(
-              current.activePatient.reaction.general,
-              select
-            ),
+            general: [
+              ...toggleListData(current.activePatient.reaction.general, select),
+            ],
           },
         });
       },
@@ -463,8 +462,8 @@ export const usePatientRecordsStore = create<{
           medicationsAndFluids: {
             ...current.activePatient.medicationsAndFluids,
             actions: current.activePatient.medicationsAndFluids.actions.filter(
-              (item) => {
-                return item.id !== id;
+              (a, index) => {
+                return index !== id;
               }
             ),
           },
@@ -479,11 +478,13 @@ export const usePatientRecordsStore = create<{
         current.updatePartialPatient({
           medicationsAndFluids: {
             ...current.activePatient.medicationsAndFluids,
-            actions: updateDataInIndex(
-              current.activePatient.medicationsAndFluids.actions,
-              data,
-              index
-            ),
+            actions: [
+              ...updateDataInIndex(
+                current.activePatient.medicationsAndFluids.actions,
+                data,
+                index
+              ),
+            ],
           },
         });
       },

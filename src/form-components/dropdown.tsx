@@ -24,7 +24,7 @@ export function DropDown({
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>
       <Picker
-        enabled={!editable}
+        enabled={editable}
         style={styles.picker}
         mode="dialog"
         selectedValue={selected}

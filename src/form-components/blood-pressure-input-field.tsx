@@ -1,11 +1,6 @@
 import { memo, useRef } from "react";
-import {
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-  TextInput,
-} from "react-native";
-import { Icon, Text } from "react-native-paper";
+import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { TextInput, Icon, Text } from "react-native-paper";
 import {
   borderSetup,
   offset,
@@ -32,23 +27,27 @@ export function BloodPressureInputFieldHandler({
 }: IInputField) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
+    console.log("????");
     editable && inputRef.current.focus();
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handleInputPress}>
+    <TouchableWithoutFeedback onPress={() => handleInputPress}>
       <View style={[styles.container]}>
         <View style={[styles.content]}>
-          <Text onPress={handleInputPress} style={styles.offset}>
+          <Text onPress={() => handleInputPress} style={styles.offset}>
             {label}
           </Text>
           <TextInput
+            disabled={!editable}
+            underlineColor="transparent"
             ref={inputRef}
-            style={[styles.text]}
             keyboardType="numeric"
             maxLength={7}
             value={value}
             textAlign="right"
+            style={{ backgroundColor: "transparent" }}
+            contentStyle={[styles.text]}
             onChangeText={(value) => {
               let subStrIndex = 2;
               let maxLength = 2;
@@ -83,7 +82,7 @@ const styles = StyleSheet.create({
     ...offset,
     marginBottom: 0,
     width: "100%",
-    marginTop: -5,
+    marginTop: 0,
   },
   fixHeight: {
     height: 150,
@@ -92,10 +91,12 @@ const styles = StyleSheet.create({
     ...inputContainer,
   },
   text: {
-    flex: 1,
+    // flex: 1,
     textAlign: "right",
-    alignItems: "flex-end",
+    alignItems: "flex-start",
     marginBottom: gutter,
     marginRight: gutter,
+    width: "100%",
+    backgroundColor: "transparent",
   },
 });

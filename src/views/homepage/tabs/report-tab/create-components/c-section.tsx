@@ -99,7 +99,7 @@ export function CSection() {
         />
 
         <BloodPressureInputFieldHandler
-          editable={disabled}
+          editable={!disabled}
           value={bloodPressure}
           label={translation("bloodPressure")}
           onChange={(value) => {
@@ -165,7 +165,11 @@ export function CSection() {
                 onPress={() => handlers.removeAction(index)}
                 style={styles.deleteAction}
               >
-                <Icon size={20} source="delete-outline" color={colors.primary} />
+                <Icon
+                  size={20}
+                  source="delete-outline"
+                  color={colors.primary}
+                />
               </Text>
             </View>
           </Card.Content>

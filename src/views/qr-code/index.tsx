@@ -23,14 +23,18 @@ import { trimUndefinedRecursively } from "compress-json";
 import { splicePatient } from "./utils";
 import { colors } from "../../shared-config";
 import StepIndicator from "react-native-step-indicator";
+import { usePatientRecordsStore } from "../../store/patients.record.store";
 
 export default function QrCode() {
   const route = useRoute<RouteProp<RootStackParamList>>();
   const patient = useMemo(() => route.params.patient, []);
   const [qrIndex, setQrIndex] = useState<number>(0);
+  const setActivePatient = usePatientRecordsStore(state => state.setActivePatient)
+  const savePatient = usePatientRecordsStore(state => state.savePatient)
   const translation = useTranslation();
   const navigation = useNavigation<StackNavigation>();
   const reportEvac = async () => {
+    
     const updatedPatient: IPatientRecord = {
       ...patient,
       evacuation: {
@@ -38,15 +42,18 @@ export default function QrCode() {
         status: STATUS.CLOSED,
       },
     };
-    await storage.save({
-      key: STORAGE.PATIENTS_RECORD,
-      id: patient.id,
-      data: updatedPatient,
-    });
+    setActivePatient(updatedPatient)
+    await savePatient()
+    // await storage.save({
+    //   key: STORAGE.PATIENTS_RECORD,
+    //   id: patient.id,
+    //   data: updatedPatient,
+    // });
     goBackHome();
   };
   const goBackHome = () => navigation.navigate(ROUTES.HOME);
   trimUndefinedRecursively(patient);
+
   const decodedPatient = splicePatient(patient);
 
   const labels = decodedPatient.map(

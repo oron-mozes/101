@@ -227,12 +227,14 @@
   "D1MG": "1 מ״ג",
   "D1": "מנה",
   "confirmMessage": "האם אתה בטוח.ה שאת.ה רוצה למחוק את הפציעה?",
-  "confirm": "אישור",
+  "confirm": "מאשר",
   "next": "המשך",
   "waitingForQrCode": "נא לסרוק ברקוד",
   "gotQrCodeNumber": "ברקוד מספר {{current}} התקבל",
   "patientComplete": "כל פרטי הפצוע.ה התקבלו",
   "new": "חדש",
   "idf": "מספר אישי",
-  "add": "הוסף"
+  "add": "הוסף",
+  "treatedBy":"טופל על ידי: {{provider}}",
+  "waitingForScan":"ממתין לברקוד הראשון"
 }

@@ -8,6 +8,7 @@ import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 
 import { design } from "./shared-style";
+import { useEffect } from "react";
 
 export function PatientDetails() {
   const { full_name, idf_id } = usePatientRecordsStore(
@@ -23,9 +24,14 @@ export function PatientDetails() {
     return state.personal_information_handlers;
   });
 
+  const updatePartialPatient = usePatientRecordsStore((state) => {
+    return state.updatePartialPatient;
+  });
+
   const disabled = usePatientRecordsStore(
     (state) => state.activePatient.disabled
   );
+
   const translation = useTranslation();
   return (
     <Card style={styles.card}>

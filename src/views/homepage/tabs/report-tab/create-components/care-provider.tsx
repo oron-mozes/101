@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { Card } from "react-native-paper";
+import { Card, Text } from "react-native-paper";
 import { DropDown } from "../../../../../form-components/dropdown";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
@@ -26,8 +26,17 @@ export function CareProvider() {
 
       <Card.Content style={[styles.innerContent]}>
         <View style={{ flex: 1 }}>
+          {provider.full_name && (
+            <Text style={{ marginBottom: 10 }}>
+              {translation("treatedBy", {
+                provider: `${provider.full_name}, ${
+                  provider.idf_id
+                } ${translation(provider.role)}`,
+              })}
+            </Text>
+          )}
           <DropDown
-            disabled={disabled}
+            editable={disabled}
             label={translation("careProviderName")}
             initialValue={provider.idf_id?.toString()}
             onSelect={(value) => {
@@ -36,10 +45,13 @@ export function CareProvider() {
               );
               handlers.addProvider(setProvider);
             }}
-            options={Object.values(careProviders).map((provider) => ({
-              id: provider.idf_id.toString(),
-              title: `${provider.full_name}, ${provider.idf_id}`,
-            }))}
+            options={Object.values(careProviders).map((provider) => {
+              const title = translation(provider.role);
+              return {
+                id: provider.idf_id.toString(),
+                title: `${provider.full_name}, ${provider.idf_id} ${title}`,
+              };
+            })}
           />
         </View>
       </Card.Content>

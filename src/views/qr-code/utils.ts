@@ -35,7 +35,7 @@ export function splicePatient(patient: IPatientRecord) {
   for (const key in patient) {
     const maxString = JSON.stringify({ ...temp, [key]: patient[key] });
 
-    if (maxString.length > 1800) {
+    if (maxString.length > 1200) {
       const partialData = {
         id: patient.personal_information.patientId,
         data: temp,
