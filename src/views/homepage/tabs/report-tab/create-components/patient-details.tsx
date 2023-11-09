@@ -26,7 +26,6 @@ export function PatientDetails() {
   const disabled = usePatientRecordsStore(
     (state) => state.activePatient.disabled
   );
-
   const translation = useTranslation();
   return (
     <Card style={styles.card}>
@@ -35,7 +34,15 @@ export function PatientDetails() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          disabled={disabled}
+          editable={disabled}
+          label={translation("patientName")}
+          onChange={(full_name: string) => {
+            handlers.setFullName(full_name);
+          }}
+          value={full_name}
+        />
+        <InputField
+          editable={disabled}
           label={translation("idf_id")}
           maxLength={7}
           onChange={(idf_id) => {
@@ -43,14 +50,6 @@ export function PatientDetails() {
           }}
           numeric
           value={idf_id?.toString()}
-        />
-        <InputField
-          disabled={disabled}
-          label={translation("patientName")}
-          onChange={(full_name: string) => {
-            handlers.setFullName(full_name);
-          }}
-          value={full_name}
         />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
@@ -65,7 +64,7 @@ export function PatientDetails() {
 
         <View style={styles.personalInfo}>
           <TimePicker
-            disabled={disabled}
+            editable={disabled}
             value={incident_information.care_time ?? new Date().getTime()}
             label={translation("timeOfTreatment")}
             onChange={(care_time: number) => {
@@ -73,7 +72,7 @@ export function PatientDetails() {
             }}
           />
           <TimePicker
-            disabled={disabled}
+            editable={disabled}
             value={incident_information.injury_time ?? new Date().getTime()}
             label={translation("timeOfInjury")}
             onChange={(injury_time: number) => {

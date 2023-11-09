@@ -574,7 +574,7 @@ export const usePatientRecordsStore = create<{
           measurements: {
             ...current.activePatient.measurements,
             actions: current.activePatient.measurements.actions.filter(
-              (item) => item.id !== id
+              (a, index) => index !== id
             ),
           },
         });
@@ -843,7 +843,7 @@ export const usePatientRecordsStore = create<{
           breathing: {
             ...current.activePatient.breathing,
             actions: current.activePatient.breathing.actions.filter(
-              (item) => item.id !== id
+              (a, index) => index !== id
             ),
           },
         });

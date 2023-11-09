@@ -165,7 +165,7 @@ export function CSection() {
                 onPress={() => handlers.removeAction(index)}
                 style={styles.deleteAction}
               >
-                <Icon size={20} source="delete" color={colors.primary} />
+                <Icon size={20} source="delete-outline" color={colors.primary} />
               </Text>
             </View>
           </Card.Content>

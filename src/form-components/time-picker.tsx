@@ -28,6 +28,7 @@ export function TimePicker({
     onChange(value);
   }, []);
 
+  
   return (
     <TouchableOpacity
       onPress={() => editable && toggleTime(true)}
@@ -60,10 +61,13 @@ export function TimePicker({
       {showTime && (
         <DateTimePicker
           display="spinner"
+          textColor="white"
           disabled={!editable}
           value={new Date(value)}
           mode="time"
           is24Hour={true}
+          positiveButton={{ label: "אישור", textColor: "white" }}
+          negativeButton={{ label: "סגור", textColor: "white" }}
           onChange={(data) => {
             toggleTime(false);
 
@@ -71,7 +75,10 @@ export function TimePicker({
               data.nativeEvent.timestamp !== 0 &&
               data.nativeEvent.timestamp < new Date().getTime()
             ) {
-              onChange(data.nativeEvent.timestamp + data.nativeEvent.utcOffset);
+              data.nativeEvent.utcOffset &&
+                onChange(
+                  data.nativeEvent.timestamp + data.nativeEvent.utcOffset
+                );
             }
           }}
         />

@@ -34,9 +34,17 @@ export function ConfirmModal({
         <View style={styles.content}>
           <Text>{translation("confirmMessage")}</Text>
         </View>
-        <View>
-          <Button onPress={onConfirm}>{translation("confirm")}</Button>
-          <Button onPress={closeHandler}>{translation("close")}</Button>
+        <View style={{ flexDirection: "row" }}>
+          <Button onPress={onConfirm} mode="contained">
+            {translation("confirm")}
+          </Button>
+          <Button
+            onPress={closeHandler}
+            mode="outlined"
+            style={{ marginLeft: 10 }}
+          >
+            {translation("cancel")}
+          </Button>
         </View>
       </Modal>
     </Portal>

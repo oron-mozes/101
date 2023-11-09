@@ -117,7 +117,9 @@ export function ASection() {
                   options={convertToOptions(TOGGLE, translation)}
                 />
                 <Text
-                  onPress={() => handlers.removeAction(index)}
+                  onPress={() => {
+                    handlers.removeAction(airWayInfo.id);
+                  }}
                   style={styles.deleteAction}
                 >
                   <Icon

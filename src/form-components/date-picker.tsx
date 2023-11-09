@@ -39,7 +39,6 @@ export function DatePicker({
       style={[styles.container]}
     >
       <View style={[styles.content]}>
-        <Icon source="calendar" size={20} />
         <View>
           {!time && <Text onPress={() => toggleTime(true)}>{label}</Text>}
           {time && (
@@ -48,6 +47,7 @@ export function DatePicker({
             </Text>
           )}
         </View>
+        <Icon source="calendar" size={20} />
       </View>
       {time && (
         <Text onPress={() => toggleTime(true)} style={styles.offset}>

@@ -27,7 +27,7 @@ export const borderSetup = {
 
 export const offset: TextStyle = {
   textAlign: I18nManager.isRTL ? "left" : "right",
-  marginTop: -(inputHeight + 15),
+  marginTop: -(inputHeight + 5),
   marginLeft: 10,
   fontSize: 12,
 };

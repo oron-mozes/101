@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   addItemAction: {
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
     margin: gutter,
   },
   breathingView: {

@@ -182,7 +182,7 @@ export function ReportTab() {
             id={ACCORDION_ITEM.FIRST_TAB}
             titleStyle={{
               color: colors.text,
-              textAlign: "right",
+              textAlign: "left",
             }}
           >
             <PatientDetails />
@@ -213,7 +213,7 @@ export function ReportTab() {
             )}
             titleStyle={{
               color: colors.text,
-              textAlign: "right",
+              textAlign: "left",
             }}
             style={styles.accordion}
             title={translation("treatments")}

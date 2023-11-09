@@ -11,7 +11,7 @@ import {
   gutter,
   inputContainer,
   inputHeight,
-  offset
+  offset,
 } from "../shared-config";
 export interface IInputField {
   onChange(value: string): void;
