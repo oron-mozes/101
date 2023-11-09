@@ -132,7 +132,7 @@ export const usePatientRecordsStore = create<{
     treatmentGuide: ITreatment;
   };
   updatePartialPatient(data: any): void;
-  updatePrognosis(data: any): void;
+  updatePrognosis(data: string): void;
   loadPatientsState(): Promise<boolean>;
   addPatient(data: IPatientRecord): Promise<void>;
   savePatient(): Promise<void>;
@@ -984,13 +984,12 @@ export const usePatientRecordsStore = create<{
         treatmentGuide: undefined,
       };
       for (const key in final) {
-        if (_.isArray(active[key])) {
+        if (_.isArray(active[key]) || _.isString(active[key])) {
           final[key] = active[key];
         } else {
           final[key] = _.omitBy(active[key], _.isNil);
         }
       }
-
       const updateAtIndex = patients.findIndex((p) => {
         return (
           p.personal_information.patientId ===

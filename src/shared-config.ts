@@ -1,4 +1,4 @@
-import { ImageStyle, TextStyle, ViewStyle } from "react-native";
+import { ImageStyle, TextStyle, ViewStyle, I18nManager } from "react-native";
 
 export const colors = {
   primary: "rgba(0, 107, 229, 1)",
@@ -26,8 +26,8 @@ export const borderSetup = {
 };
 
 export const offset: TextStyle = {
-  textAlign: "left",
-  marginTop: -(inputHeight + 5),
+  textAlign: I18nManager.isRTL ? "left" : "right",
+  marginTop: -(inputHeight + 15),
   marginLeft: 10,
   fontSize: 12,
 };
@@ -45,4 +45,13 @@ export const inputContainer: ViewStyle | TextStyle | ImageStyle = {
   height: inputHeight,
 
   // justifyContent: "flex-end",
+};
+
+export const getLayout = () => {
+  if (I18nManager.isRTL) {
+    return { flexDirection: "row" };
+  }
+  return {
+    flexDirection: "row-reverse",
+  };
 };

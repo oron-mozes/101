@@ -7,6 +7,7 @@ import { useTaggadStore } from "../../store/taggad.store";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";
 import { StatusTab } from "./tabs/status-tab";
+import { colors } from "../../shared-config";
 
 export enum TAB_STATUS {
   STATUS = "STATUS",
@@ -44,5 +45,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     justifyContent: "space-between",
+    backgroundColor: colors.textInputBG,
   },
 });

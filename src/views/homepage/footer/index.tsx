@@ -9,6 +9,8 @@ import { ROUTES } from "../../../routes";
 import { colors } from "../../../shared-config";
 import { PatientCareIcon } from "./patient-care-icon";
 import { StatusIcon } from "./status-icon";
+import { QrIcon } from "../../../components/qr-icon/qr";
+import { PatientStatusIcon } from "./patient-status-icon";
 
 export function HomepageFooter() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -26,7 +28,7 @@ export function HomepageFooter() {
         }
       >
         <View style={styles.textBox}>
-          <PatientCareIcon active={selected === TAB_STATUS.STATUS} />
+          <PatientStatusIcon active={selected === TAB_STATUS.STATUS} />
 
           <Text
             style={[
@@ -59,15 +61,7 @@ export function HomepageFooter() {
         onPress={() => navigation.navigate(ROUTES.IMPORT_PATIENT)}
       >
         <View style={styles.textBox}>
-          <StatusIcon active={selected === TAB_STATUS.SCAN} />
-          <Text
-            style={[
-              styles.text,
-              selected === TAB_STATUS.SCAN ? styles.bold : {},
-            ]}
-          >
-            {translation("importPatient")}
-          </Text>
+          <QrIcon color={colors.text} label="importPatient" />
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -96,6 +90,6 @@ const styles = StyleSheet.create({
     borderColor: colors.textInputBorderColor,
   },
   text: {
-    marginRight: 8,
+    marginLeft: 8,
   },
 });

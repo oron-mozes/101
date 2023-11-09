@@ -1,58 +1,102 @@
 import { useNavigation } from "@react-navigation/native";
 import { decompress } from "compress-json";
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { RNCamera } from "react-native-camera";
+import { Button, Text } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
-import { StackNavigation } from "../../interfaces";
+import { IPatientRecord, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
+import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { TAB_STATUS } from "../homepage";
-import BarcodeZxingScan from "react-native-barcode-zxing-scan";
-import { Text } from "react-native-paper";
 
 export default function ReceivePatientScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
+  const [aggregatedPatient, setPatient] = useState<Partial<IPatientRecord>>({
+    new: true,
+  });
+  const [scanCount, updateScanCount] = useState<number>(0);
+  const [doneScanning, setDone] = useState<boolean>(false);
+  const addPatient = usePatientRecordsStore((state) => state.addPatient);
 
+  const [parts, addParts] = useState<number[]>([]);
   const goBackHome = () =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
-  const handleClick = () => {
-    console.log(BarcodeZxingScan);
-    // BarcodeZxingScan.showQrReader(barcodeScanned);
-  };
-  const barcodeScanned = (data) => {
-    console.log("Barcode ", data);
-  };
+
   const handleBarcodeRead = (event) => {
-    if (event.data) {
-      const { patient } = decompress(JSON.parse(event.data));
-      console.log(patient);
-      // storage.save({
-      //   key: STORAGE.PATIENTS_RECORD,
-      //   id: patient.id,
-      //   data: {
-      //     ...patient,
-      //     evacuation: {
-      //       ...patient.evacuation,
-      //       status: STATUS.ACTIVE,
-      //     },
-      //   },
-      // });
-      navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
+    try {
+      const parsed = JSON.parse(event.data);
+      const patient = decompress(parsed);
+      if (parts.includes(patient.partialData.part)) {
+        return;
+      }
+      const newKeys = Object.keys(patient.partialData.data);
+
+      addParts(patient.partialData.part);
+      if (!aggregatedPatient?.[newKeys[0]]) {
+        setPatient({ ...aggregatedPatient, ...patient.partialData.data });
+        updateScanCount(scanCount + 1);
+
+        patient.partialData.isLast && setDone(true);
+      }
+    } catch (e) {
+      console.log({ event, e });
     }
+  };
+  const saveData = () => {
+    // addPatient(aggregatedPatient as IPatientRecord);
+    // navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
   };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <StatusBar barStyle="light-content" />
-        <View style={{ flex: 1 }}>
+        <View style={{ height: 100 }}>
+          <View>
+            <Text
+              style={{ textAlign: "center", fontWeight: "bold" }}
+              variant="bodyLarge"
+            >
+              {!doneScanning &&
+                parts.length === 0 &&
+                translation("waitingForQrCode")}
+              {!doneScanning &&
+                parts.length !== 0 &&
+                translation("gotQrCodeNumber", {
+                  current: parts[parts.length - 1].toString(),
+                })}
+              {doneScanning && translation("patientComplete")}
+            </Text>
+          </View>
+        </View>
+        {aggregatedPatient?.personal_information && (
+          <>
+            <View
+              style={[
+                styles.descriptionView,
+                { marginTop: 30, marginBottom: 20 },
+              ]}
+            >
+              <Text style={{ flex: 1, textAlign: "center" }}>
+                {translation("patientName")}
+              </Text>
+              <Text style={{ flex: 1, textAlign: "center" }}>
+                {aggregatedPatient.personal_information.full_name}
+              </Text>
+            </View>
+            <View style={styles.descriptionView}>
+              <Text>{translation("idf_id")}</Text>
+              <Text>{aggregatedPatient.personal_information.idf_id}</Text>
+            </View>
+          </>
+        )}
+        <View>
           <RNCamera
             style={styles.camera}
             onBarCodeRead={handleBarcodeRead}
@@ -60,17 +104,20 @@ export default function ReceivePatientScreen() {
           />
         </View>
         <View>
-          <TouchableOpacity
-            onPress={() => handleClick()}
-            style={{
-              margin: 20,
-              backgroundColor: "blue",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={{ fontSize: 30 }}>SCAN</Text>
-          </TouchableOpacity>
+            <Button
+              disabled={!doneScanning}
+              mode="contained"
+              onPress={saveData}
+            >
+              {translation("saveAndContinue")}
+            </Button>
+            <Button mode="contained" onPress={goBackHome}>
+              {translation("cancel")}
+            </Button>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

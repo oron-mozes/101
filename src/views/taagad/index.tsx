@@ -161,10 +161,10 @@ export default function TaagadScreen() {
               {["full_name", "idf_id"].map((item) => (
                 <InputField
                   key={item}
-                  editable={true}
+                  editable={false}
                   maxLength={item === "idf_id" ? 7 : null}
                   numeric={item === "idf_id"}
-                  label={translation(item)}
+                  label={translation(item === "idf_id" ? "idf" : item)}
                   onChange={(value: string) => {
                     saveCareProviderInfo({ [item]: value });
                   }}
@@ -174,7 +174,7 @@ export default function TaagadScreen() {
               {["rank", "role"].map((item) => (
                 <DropDown
                   key={item}
-                  editable={true}
+                  editable={false}
                   label={translation(item)}
                   options={DDOptions[item]}
                   initialValue={newCareProvider[item]}
@@ -189,7 +189,7 @@ export default function TaagadScreen() {
                 disabled={isCareProviderValid()}
                 onPress={saveNewProvider}
               >
-                {translation("save")}
+                {translation("add")}
               </Button>
             </View>
             <Button

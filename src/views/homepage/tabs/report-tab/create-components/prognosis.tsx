@@ -11,7 +11,6 @@ export function Prognosis() {
   const prognosis = usePatientRecordsStore(
     (state) => state.activePatient.prognosis
   );
-
   const updatePrognosis = usePatientRecordsStore(
     (state) => state.updatePrognosis
   );
@@ -27,7 +26,7 @@ export function Prognosis() {
 
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          disabled={disabled}
+          editable={disabled}
           numberOfLines={5}
           onChange={(value: string) => {
             updatePrognosis(value);

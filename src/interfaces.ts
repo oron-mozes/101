@@ -362,6 +362,7 @@ export interface IInjury {
 }
 export interface IPatientRecord {
   id?: string;
+  new?: boolean;
   personal_information: IPersonalInformation;
   incident_information: IIncidentInformation;
   provider: Partial<ICareProvider>;
