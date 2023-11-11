@@ -6,13 +6,13 @@ import { colors } from "../shared-config";
 export interface ICheckButton {
   onSelect(e: any): void;
   label: string;
-  disabled?: boolean;
+  editable?: boolean;
   checked?: boolean;
 }
 export function CheckButton({
   label,
   onSelect,
-  disabled = false,
+  editable = true,
   checked = false,
 }: ICheckButton) {
   return (
@@ -21,7 +21,7 @@ export function CheckButton({
       onPress={(e) => {
         onSelect(e);
       }}
-      disabled={disabled}
+      disabled={!editable}
       style={[styles.container, checked ? styles.checked : {}]}
       textColor={checked ? "#fff" : textColor}
     >

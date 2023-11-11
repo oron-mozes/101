@@ -1,29 +1,17 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  TouchableHighlight,
-  View,
-} from "react-native";
-import { Icon, Text } from "react-native-paper";
-import {
-  borderRadius,
-  colors,
-  gutter,
-  offset,
-  inputContainer,
-} from "../shared-config";
 import date from "date-and-time";
+import { useEffect, useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Icon, Text } from "react-native-paper";
+import { borderRadius, colors, gutter, offset } from "../shared-config";
 
 export function DatePicker({
   label,
   onChange,
   value,
-  disabled,
+  editable,
 }: {
-  disabled: boolean;
+  editable: boolean;
   label: string;
   value?: number;
   onChange(value: number): void;
@@ -56,7 +44,7 @@ export function DatePicker({
       )}
       {showTime && (
         <DateTimePicker
-          disabled={disabled}
+          disabled={!editable}
           value={new Date()}
           mode="date"
           onChange={(data) => {

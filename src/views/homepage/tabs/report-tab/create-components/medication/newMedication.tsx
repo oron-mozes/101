@@ -25,9 +25,7 @@ export function NewMedication({ onClose }: { onClose(): void }) {
   const actions = usePatientRecordsStore(
     (state) => state.activePatient.medicationsAndFluids.actions
   );
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
+
   const [newMedication, setNewMedication] =
     useState<IMedicationsAndFluidInformation>();
   const handlers = usePatientRecordsStore(
@@ -95,7 +93,6 @@ export function NewMedication({ onClose }: { onClose(): void }) {
               <View style={[styles.options]}>
                 {Object.values(MEDICATION_TREATMENT).map((item) => (
                   <CheckButton
-                    disabled={disabled}
                     label={translation(item)}
                     checked={item === newMedication.treatment}
                     onSelect={() => {
@@ -109,7 +106,6 @@ export function NewMedication({ onClose }: { onClose(): void }) {
                 ))}
               </View>
               <TimePicker
-                editable={disabled}
                 value={newMedication.time}
                 label={translation("actionTime")}
                 onChange={(time: number) => {
@@ -128,7 +124,6 @@ export function NewMedication({ onClose }: { onClose(): void }) {
                   {Object.values(selectedTreatmentType).map((item) => (
                     <CheckButton
                       key={item}
-                      disabled={disabled}
                       label={translation(item)}
                       checked={item === newMedication.type}
                       onSelect={() => {
@@ -153,7 +148,6 @@ export function NewMedication({ onClose }: { onClose(): void }) {
                 <View style={[styles.options]}>
                   {Object.values(selectedTreatmentDose).map((item) => (
                     <CheckButton
-                      disabled={disabled}
                       label={translation(item)}
                       checked={item === newMedication?.dose}
                       onSelect={() => {
@@ -190,7 +184,6 @@ export function NewMedication({ onClose }: { onClose(): void }) {
         <Card.Content style={[styles.innerContent, styles.addItemAction]}>
           <Icon size={20} source="plus" color={colors.primary} />
           <Text
-            disabled={disabled}
             style={{ color: colors.primary, fontSize: 17 }}
             onPress={() => {
               setNewMedication({

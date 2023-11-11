@@ -14,9 +14,6 @@ export function CareProvider() {
     (state) => state.activePatient.provider
   );
   const handlers = usePatientRecordsStore((state) => state.provider_handlers);
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
 
   return (
     <Card style={styles.card}>
@@ -36,7 +33,6 @@ export function CareProvider() {
             </Text>
           )}
           <DropDown
-            editable={disabled}
             label={translation("careProviderName")}
             initialValue={provider.idf_id?.toString()}
             onSelect={(value) => {

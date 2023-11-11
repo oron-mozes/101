@@ -17,7 +17,7 @@ export function TimePicker({
   value = new Date().getTime(),
   editable = true,
 }: {
-  editable: boolean;
+  editable?: boolean;
   label: string;
   value?: number;
   onChange(value: number): void;
@@ -28,7 +28,6 @@ export function TimePicker({
     onChange(value);
   }, []);
 
-  
   return (
     <TouchableOpacity
       onPress={() => editable && toggleTime(true)}

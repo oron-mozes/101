@@ -25,9 +25,6 @@ const emptyState: IBreathingInformation = {
 };
 export function BSection() {
   const translation = useTranslation();
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
 
   const { saturation, breathingCount, fulfill } = usePatientRecordsStore(
     (state) => state.activePatient.breathing
@@ -53,7 +50,6 @@ export function BSection() {
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.breathingView]}>
         <RadioGroup
-          disabled={disabled || actions.length !== 0}
           horizontal
           label={translation("breathingInjury")}
           onSelect={(id: string) => {
@@ -66,7 +62,6 @@ export function BSection() {
       {fulfill && (
         <Card.Content style={[styles.innerContent]}>
           <InputField
-            editable={disabled}
             label={translation("breathings")}
             numeric
             value={breathingCount?.toString()}
@@ -75,7 +70,6 @@ export function BSection() {
             }}
           />
           <InputField
-            editable={disabled}
             numeric
             value={saturation?.toString()}
             label={translation("saturation")}
@@ -101,7 +95,6 @@ export function BSection() {
             >
               <View style={styles.element}>
                 <DropDown
-                  editable={disabled}
                   label={translation("actionTaken")}
                   initialValue={breathingInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
@@ -118,7 +111,6 @@ export function BSection() {
               </View>
               <View style={[styles.element, styles.actionRow]}>
                 <TimePicker
-                  editable={disabled}
                   value={breathingInfo.time}
                   label={translation("actionTime")}
                   onChange={(time: number) => {
@@ -126,7 +118,6 @@ export function BSection() {
                   }}
                 />
                 <RadioGroup
-                  disabled={disabled}
                   label={translation("actionResult")}
                   onSelect={(id: string) => {
                     handlers.updateAtIndex(
@@ -139,7 +130,6 @@ export function BSection() {
                 />
 
                 <Text
-                  disabled={disabled}
                   onPress={() => handlers.removeAction(index)}
                   style={styles.deleteAction}
                 >
@@ -157,7 +147,6 @@ export function BSection() {
         <Card.Content style={[styles.innerContent, styles.addItemAction]}>
           <Icon size={20} source="plus" color={colors.primary} />
           <Text
-            disabled={disabled}
             style={{ color: colors.primary, fontSize: 17 }}
             onPress={addRow}
           >

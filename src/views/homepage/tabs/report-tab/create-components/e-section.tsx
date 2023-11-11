@@ -14,9 +14,7 @@ export function ESection() {
     (state) => state.activePatient.eSection
   );
   const handlers = usePatientRecordsStore((state) => state.esection_handlers);
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
+
   const [selected, forceUpdate] = useState<EEsectionChips[]>([]);
 
   const translation = useTranslation();
@@ -30,7 +28,6 @@ export function ESection() {
       <Card.Content style={styles.innerContent}>
         {Object.values(EEsectionChips).map((item) => (
           <ToggleButton
-            disabled={disabled}
             key={item}
             label={translation(item)}
             status={isSelected(item)}

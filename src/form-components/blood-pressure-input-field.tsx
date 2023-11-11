@@ -9,10 +9,10 @@ import {
   inputHeight,
   colors,
 } from "../shared-config";
-export interface IInputField {
+export interface IBloodPressureInputFieldHandler {
   onChange(value: string): void;
   label: string;
-  editable: boolean;
+  editable?: boolean;
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
@@ -22,12 +22,11 @@ export interface IInputField {
 export function BloodPressureInputFieldHandler({
   label,
   onChange,
-  editable,
+  editable = true,
   value,
-}: IInputField) {
+}: IBloodPressureInputFieldHandler) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
-    console.log("????");
     editable && inputRef.current.focus();
   };
 

@@ -498,10 +498,15 @@ export const usePatientRecordsStore = create<{
       },
       toggleFulfill(fulfill: boolean) {
         const current = state.getState();
+        const actions = fulfill
+          ? current.activePatient.measurements.actions
+          : [];
+
         current.updatePartialPatient({
           measurements: {
             ...current.activePatient.measurements,
             fulfill,
+            actions: [...actions],
           },
         });
       },
@@ -746,11 +751,13 @@ export const usePatientRecordsStore = create<{
       },
       toggleFulfill(fulfill: boolean) {
         const current = state.getState();
+        const actions = fulfill ? current.activePatient.airway.actions : [];
 
         current.updatePartialPatient({
           airway: {
             ...current.activePatient.airway,
             fulfill,
+            actions,
           },
         });
       },
@@ -802,10 +809,13 @@ export const usePatientRecordsStore = create<{
       },
       toggleFulfill(fulfill: boolean) {
         const current = state.getState();
+        const actions = fulfill ? current.activePatient.breathing.actions : [];
+
         current.updatePartialPatient({
           breathing: {
             ...current.activePatient.breathing,
             fulfill,
+            actions,
           },
         });
       },

@@ -17,9 +17,6 @@ export function InjuryReason() {
   const handlers = usePatientRecordsStore(
     (state) => state.injuryReason_handlers
   );
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
 
   const isSelected = isSelectedHandler(injuryReason?.reasons ?? []);
 
@@ -31,7 +28,6 @@ export function InjuryReason() {
       <Card.Content style={styles.innerContent}>
         {Object.values(EInjuryReason).map((item) => (
           <ToggleButton
-            disabled={disabled}
             key={item}
             label={translation(item)}
             status={isSelected(item)}
@@ -41,7 +37,6 @@ export function InjuryReason() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          disabled={disabled}
           onChange={(circumstance: string) => {
             handlers.setCircumstance(circumstance);
           }}

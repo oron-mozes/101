@@ -1,19 +1,15 @@
+import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Card, Icon, Text } from "react-native-paper";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { colors, gutter } from "../../../../../../shared-config";
 import { design } from "../shared-style";
 import { MedicationActions } from "./medication-actions";
 import { NewMedication } from "./newMedication";
-import { useEffect, useState } from "react";
-import { colors, gutter } from "../../../../../../shared-config";
-import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 
 export function MedicationsAndFluidSection() {
   const translation = useTranslation();
-  const actions = usePatientRecordsStore(
-    (state) => state.activePatient.medicationsAndFluids.actions
-  );
 
   const [showNewMedicationForm, toggleNewMedicationForm] =
     useState<boolean>(false);

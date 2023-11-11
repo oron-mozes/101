@@ -10,9 +10,9 @@ export function DropDown({
   options,
   initialValue,
   onSelect,
-  editable,
+  editable = true,
 }: {
-  editable: boolean;
+  editable?: boolean;
   label: string;
   initialValue?: string;
   onSelect(value: IOption): void;

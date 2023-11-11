@@ -20,9 +20,6 @@ import { useEffect } from "react";
 
 export function ASection() {
   const translation = useTranslation();
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
 
   const handlers = usePatientRecordsStore((state) => state.airway_handlers);
   const actions = usePatientRecordsStore(
@@ -52,7 +49,6 @@ export function ASection() {
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.airwayView]}>
         <RadioGroup
-          disabled={disabled || actions.length !== 0}
           horizontal
           label={translation("airWayInjury")}
           onSelect={(id: string) => {
@@ -81,7 +77,6 @@ export function ASection() {
               <View style={styles.element}>
                 <DropDown
                   label={translation("actionTaken")}
-                  editable={disabled}
                   initialValue={airWayInfo.action}
                   onSelect={(value: TAutocompleteDropdownItem) => {
                     value &&
@@ -97,7 +92,6 @@ export function ASection() {
               </View>
               <View style={[styles.element, styles.actionRow]}>
                 <TimePicker
-                  editable={disabled}
                   value={airWayInfo.time}
                   label={translation("actionTime")}
                   onChange={(time: number) => {
@@ -105,7 +99,6 @@ export function ASection() {
                   }}
                 />
                 <RadioGroup
-                  disabled={disabled}
                   label={translation("actionResult")}
                   onSelect={(id: string) => {
                     handlers.updateAtIndex(
@@ -136,7 +129,6 @@ export function ASection() {
         <Card.Content style={[styles.innerContent, styles.addItemAction]}>
           <Icon size={20} source="plus" color={colors.primary} />
           <Text
-            disabled={disabled}
             style={{ color: colors.primary, fontSize: 17 }}
             onPress={addRow}
           >

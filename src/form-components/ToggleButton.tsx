@@ -5,27 +5,27 @@ import { colors, gutter } from "../shared-config";
 export interface IRadioButton {
   onSelect(e: boolean): void;
   label: string;
-  disabled: boolean;
+  editable?: boolean;
   status?: boolean;
 }
 export function ToggleButton({
   label,
   onSelect,
-  disabled,
+  editable = true,
   status = false,
 }: IRadioButton) {
   return (
     <TouchableOpacity onPress={() => onSelect(!status)}>
       <View style={styles.container}>
         <RadioButtonPaper
-          disabled={disabled}
+          disabled={!editable}
           onPress={() => onSelect(!status)}
           value={""}
           status={status ? "checked" : "unchecked"}
         />
         <Text
-          style={[styles.text, disabled ? styles.disabled : {}]}
-          disabled={disabled}
+          style={[styles.text, !editable ? styles.disabled : {}]}
+          disabled={!editable}
           onPress={() => onSelect(!status)}
         >
           {label}

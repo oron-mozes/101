@@ -16,7 +16,7 @@ import {
 export interface IInputField {
   onChange(value: string): void;
   label: string;
-  editable: boolean;
+  editable?: boolean;
   numeric?: boolean;
   icon?: string;
   numberOfLines?: number;
@@ -26,7 +26,7 @@ export interface IInputField {
 export function InputField({
   label,
   onChange,
-  editable,
+  editable = true,
   value,
   numeric = false,
   numberOfLines = 1,

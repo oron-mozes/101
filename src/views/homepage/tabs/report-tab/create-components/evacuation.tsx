@@ -29,10 +29,6 @@ export function Evacuation() {
   );
   const handlers = usePatientRecordsStore((state) => state.evacuation_handlers);
 
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
-
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
@@ -41,7 +37,6 @@ export function Evacuation() {
       <Card.Content style={[styles.innerContent]}>
         <View style={{ flex: 1 }}>
           <InputField
-            editable={disabled}
             value={destination}
             label={translation("destination")}
             onChange={(destination: string) => {
@@ -51,7 +46,6 @@ export function Evacuation() {
         </View>
         <View style={{ width: 120 }}>
           <TimePicker
-            editable={disabled}
             value={time}
             label={translation("actionTime")}
             onChange={(time: number) => {
@@ -66,7 +60,6 @@ export function Evacuation() {
       <Card.Content style={styles.innerContent}>
         {Object.values(ETransportation).map((item) => (
           <ToggleButton
-            disabled={disabled}
             key={item}
             label={translation(item)}
             status={transportation === item}
@@ -84,7 +77,6 @@ export function Evacuation() {
       <Card.Content style={styles.innerContent}>
         {Object.values(STATUS).map((item) => (
           <StatusChip
-            disabled={disabled}
             key={item}
             label={translation(item)}
             status={item}

@@ -47,9 +47,7 @@ export function DSection() {
     (state) => state.activePatient.reaction.eyes
   );
   const handlers = usePatientRecordsStore((state) => state.reaction_handlers);
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
+
   useEffect(() => {
     const newGCS = calcGCS({ eyes, movement, speech });
 
@@ -68,7 +66,6 @@ export function DSection() {
           {general &&
             Object.values(EReactionGeneral).map((item) => (
               <ToggleButton
-                disabled={disabled}
                 label={translation(item)}
                 status={isSelected(item)}
                 onSelect={() => handlers.toggleGeneral(item)}
@@ -82,7 +79,6 @@ export function DSection() {
         <View style={[styles.options]}>
           {Object.values(EReactionSpeech).map((item) => (
             <ToggleButton
-              disabled={disabled}
               label={translation(item)}
               status={item === speech}
               onSelect={() => {
@@ -98,7 +94,6 @@ export function DSection() {
         <View style={[styles.options]}>
           {Object.values(EReactionEyes).map((item) => (
             <ToggleButton
-              disabled={disabled}
               label={translation(item)}
               status={item === eyes}
               onSelect={() => {
@@ -114,7 +109,6 @@ export function DSection() {
         <View style={[styles.options]}>
           {Object.values(EReactionMovement).map((item) => (
             <ToggleButton
-              disabled={disabled}
               label={translation(item)}
               status={item === movement}
               onSelect={() => {

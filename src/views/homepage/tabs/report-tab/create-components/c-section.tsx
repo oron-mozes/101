@@ -27,9 +27,6 @@ const emptyState: IMeasurementsInformation = {
 export function CSection() {
   const translation = useTranslation();
 
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
   const shock = usePatientRecordsStore(
     (state) => state.activePatient.measurements.shock
   );
@@ -64,7 +61,7 @@ export function CSection() {
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.measurementsView]}>
         <RadioGroup
-          disabled={disabled}
+        
           horizontal
           label={translation("palpated")}
           onSelect={(id: string) => {
@@ -76,7 +73,7 @@ export function CSection() {
           options={convertToOptions(TOGGLE, translation)}
         />
         <RadioGroup
-          disabled={disabled}
+       
           horizontal
           label={translation("shock")}
           onSelect={(id: string) => {
@@ -89,7 +86,6 @@ export function CSection() {
 
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          editable={disabled}
           value={puls?.toString()}
           numeric
           label={translation("puls")}
@@ -99,7 +95,7 @@ export function CSection() {
         />
 
         <BloodPressureInputFieldHandler
-          editable={!disabled}
+         
           value={bloodPressure}
           label={translation("bloodPressure")}
           onChange={(value) => {
@@ -124,7 +120,7 @@ export function CSection() {
             <View style={styles.element}>
               <DropDown
                 label={translation("actionTaken")}
-                editable={disabled}
+               
                 initialValue={measurements.action}
                 onSelect={(value: TAutocompleteDropdownItem) => {
                   value &&
@@ -140,7 +136,7 @@ export function CSection() {
             </View>
             <View style={[styles.element, styles.actionRow]}>
               <TimePicker
-                editable={disabled}
+              
                 value={measurements.time}
                 label={translation("actionTime")}
                 onChange={(time: number) => {
@@ -148,7 +144,7 @@ export function CSection() {
                 }}
               />
               <RadioGroup
-                disabled={disabled}
+              
                 label={translation("actionResult")}
                 onSelect={(id: string) => {
                   handlers.updateAtIndex(
@@ -161,7 +157,7 @@ export function CSection() {
               />
 
               <Text
-                disabled={disabled}
+             
                 onPress={() => handlers.removeAction(index)}
                 style={styles.deleteAction}
               >
@@ -179,7 +175,7 @@ export function CSection() {
         <Card.Content style={[styles.innerContent, styles.addItemAction]}>
           <Icon size={20} source="plus" color={colors.primary} />
           <Text
-            disabled={disabled}
+         
             style={{ color: colors.primary, fontSize: 17 }}
             onPress={addRow}
           >
