@@ -1007,7 +1007,7 @@ export const usePatientRecordsStore = create<{
           final.personal_information.patientId
         );
       });
-
+      final.new = false;
       if (updateAtIndex === -1) {
         patients.push(final);
       } else {
