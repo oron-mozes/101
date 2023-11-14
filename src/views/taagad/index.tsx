@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 import { Button, Divider, IconButton, Text } from "react-native-paper";
-import storage, { STORAGE } from "../../../storage";
 import { DropDown } from "../../form-components/dropdown";
 import { InputField } from "../../form-components/input-field";
 import { useTranslation } from "../../hooks/useMyTranslation";
@@ -17,7 +16,6 @@ import { ROUTES } from "../../routes";
 import { colors } from "../../shared-config";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { useTaggadStore } from "../../store/taggad.store";
-import { generateXLSX } from "../../utils/export-to-xlsx";
 import { convertToOptions } from "../homepage/tabs/report-tab/create-components/utils";
 import { BluLogo } from "./blue-logo";
 
@@ -30,13 +28,8 @@ export const initialProviderState: ICareProvider = {
 };
 
 export default function TaagadScreen() {
-  const {
-    addProvider,
-    taggad,
-    removeProvider,
-    updateTaagadName,
-    loadInitialState,
-  } = useTaggadStore();
+  const { addProvider, taggad, removeProvider, updateTaagadName } =
+    useTaggadStore();
 
   const translation = useTranslation();
   const navigation = useNavigation<StackNavigation>();
@@ -60,7 +53,11 @@ export default function TaagadScreen() {
   };
 
   const isCareProviderValid = useCallback(() => {
-    return Object.values(newCareProvider).some((prop) => !prop);
+    return Boolean(
+      newCareProvider.full_name &&
+        newCareProvider.idf_id &&
+        newCareProvider.role
+    );
   }, [newCareProvider]);
 
   const saveCareProviderInfo = (data: Partial<ICareProvider>) => {
@@ -191,7 +188,7 @@ export default function TaagadScreen() {
 
               <Button
                 mode="outlined"
-                disabled={isCareProviderValid()}
+                disabled={!isCareProviderValid()}
                 onPress={saveNewProvider}
               >
                 {translation("add")}

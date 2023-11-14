@@ -1,5 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { Button, DataTable, Text } from "react-native-paper";
 import { TAB_STATUS } from "../..";
 import { QrIcon } from "../../../../components/qr-icon/qr";
@@ -23,7 +28,7 @@ export function StatusTab() {
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   };
   return (
-    <View>
+    <ScrollView>
       <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE })
@@ -105,7 +110,7 @@ export function StatusTab() {
           );
         })}
       </DataTable>
-    </View>
+    </ScrollView>
   );
 }
 
