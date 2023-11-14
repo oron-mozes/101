@@ -37,23 +37,23 @@ export function InjuryModal({
   const shouldBeDisabled = (value) => {
     return !data ? false : data !== value;
   };
-
+  const onSave = () => {
+    const response: IInjuryInformation = {};
+    if (touniquet) {
+      response.touniquet = touniquet;
+      response.touniquet_time = touniquet_time;
+    }
+    if (data) {
+      response[data] = true;
+    }
+    onChange(response);
+    closeHandler();
+  };
   return (
     <Portal>
       <Modal
         visible={true}
-        onDismiss={() => {
-          const response: IInjuryInformation = {};
-          if (touniquet) {
-            response.touniquet = touniquet;
-            response.touniquet_time = touniquet_time;
-          }
-          if (data) {
-            response[data] = true;
-          }
-          onChange(response);
-          closeHandler();
-        }}
+        onDismiss={onSave}
         contentContainerStyle={{
           padding: 20,
           alignItems: "center",
@@ -153,6 +153,13 @@ export function InjuryModal({
             />
           )}
         </View>
+        {(data || touniquet) && (
+          <View>
+            <Button mode="contained" onPress={onSave}>
+              {translation("save")}
+            </Button>
+          </View>
+        )}
       </Modal>
     </Portal>
   );

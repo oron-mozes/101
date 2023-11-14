@@ -131,6 +131,7 @@ export const usePatientRecordsStore = create<{
     evacuation: IEvacuationInformation;
     treatmentGuide: ITreatment;
   };
+  deletePatients(): void;
   updatePartialPatient(data: any): void;
   updatePrognosis(data: string): void;
   loadPatientsState(): Promise<boolean>;
@@ -246,6 +247,10 @@ export const usePatientRecordsStore = create<{
   };
 }>()(
   devtools((set, get, state) => ({
+    async deletePatients() {
+      await storage.remove({ key: STORAGE.PATIENTS_RECORD });
+      set((state) => ({ ...state, patients: [] }));
+    },
     patients: [],
     activePatient: _.cloneDeep(initialPatient),
     updatePrognosis(prognosis: string) {

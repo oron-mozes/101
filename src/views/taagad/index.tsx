@@ -15,7 +15,9 @@ import { useTranslation } from "../../hooks/useMyTranslation";
 import { ICareProvider, RANK, ROLE, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { colors } from "../../shared-config";
+import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { useTaggadStore } from "../../store/taggad.store";
+import { generateXLSX } from "../../utils/export-to-xlsx";
 import { convertToOptions } from "../homepage/tabs/report-tab/create-components/utils";
 import { BluLogo } from "./blue-logo";
 
@@ -42,7 +44,10 @@ export default function TaagadScreen() {
     ...initialProviderState,
   });
   const [taggadName, setTaggdName] = useState<string>();
-
+  const patients = usePatientRecordsStore((state) => state.patients);
+  const deletePatients = usePatientRecordsStore(
+    (state) => state.deletePatients
+  );
   const saveNewProvider = async () => {
     await addProvider(newCareProvider);
     updateCareProvider({ ...initialProviderState });
@@ -135,7 +140,7 @@ export default function TaagadScreen() {
                     }
                   />
                 ))}
-                {["rank", "role"].map((item) => (
+                {["role"].map((item) => (
                   <DropDown
                     key={item}
                     editable={true}
@@ -171,7 +176,7 @@ export default function TaagadScreen() {
                   value={newCareProvider[item]}
                 />
               ))}
-              {["rank", "role"].map((item) => (
+              {["role"].map((item) => (
                 <DropDown
                   key={item}
                   editable={true}
@@ -204,22 +209,35 @@ export default function TaagadScreen() {
                 {translation("continue")}
               </Button>
             )}
-            <Button
-              mode="contained"
-              textColor="#fff"
-              style={{ backgroundColor: "red", marginTop: 100 }}
-              onPress={async () => {
-                storage.clearMap();
-                await Promise.all([
-                  // storage.remove({ key: STORAGE.TAAGAD }),
-                  storage.remove({ key: STORAGE.PATIENTS_RECORD }),
-                ]);
-                await loadInitialState();
-                navigation.navigate(ROUTES.HOME);
-              }}
-            >
-              CAUTION!! DELETE ALL
-            </Button>
+            <View style={{ flexDirection: "row" }}>
+              <Button
+                mode="contained"
+                textColor="#fff"
+                style={{
+                  backgroundColor: "red",
+                  marginTop: 100,
+                  marginRight: 30,
+                }}
+                onPress={async () => {
+                  await deletePatients();
+
+                  navigation.navigate(ROUTES.HOME);
+                }}
+              >
+                {translation("delete")}
+              </Button>
+
+              {/* <Button
+                mode="contained"
+                textColor="#fff"
+                style={{ backgroundColor: "blue", marginTop: 100 }}
+                onPress={async () => {
+                  generateXLSX(patients);
+                }}
+              >
+                {translation("share")}
+              </Button> */}
+            </View>
           </>
         )}
       </ScrollView>

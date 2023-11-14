@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { IProps, RootStackParamList } from "../../interfaces";
@@ -17,7 +17,7 @@ export default function MainMenu() {
   const patient = useMemo(() => route.params?.patient, [route.params?.patient]);
   const { full_name = "", idf_id = "" } = patient?.personal_information ?? {};
   return (
-    <View>
+    <View style={{ flexDirection: "row-reverse", alignItems: "center" }}>
       {selected !== TAB_STATUS.CREATE && (
         <Text style={[styles.text]}>{translation("mainMenu")}</Text>
       )}

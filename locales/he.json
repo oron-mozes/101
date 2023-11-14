@@ -239,5 +239,10 @@
   "waitingForScan": "ממתין לברקוד הראשון",
   "SECTION": "סקשן",
   "SEATING": "הושבה",
-  "JT": "JT"
+  "JT": "JT",
+  "share": "שתף",
+  "delete": "מחק תיקים רפואיים לצמיתות",
+  "patientId": "מזהה ייחודי למטופל",
+  "injury_time": "שעת פציעה",
+  "care_time": "שעת טיפול"
 }
