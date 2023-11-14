@@ -48,6 +48,25 @@ export function BSection() {
       <Card.Content style={styles.content}>
         <SectionHeader label={translation("bSection")} />
       </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        <InputField
+          label={translation("breathings")}
+          numeric
+          value={breathingCount?.toString()}
+          onChange={(breathingCount) => {
+            handlers.setBreathingCount(Number(breathingCount));
+          }}
+        />
+        <InputField
+          numeric
+          value={saturation?.toString()}
+          label={translation("saturation")}
+          onChange={(saturation) => {
+            handlers.setSaturation(Number(saturation));
+          }}
+        />
+      </Card.Content>
+
       <Card.Content style={[styles.innerContent, styles.breathingView]}>
         <RadioGroup
           horizontal
@@ -59,26 +78,7 @@ export function BSection() {
           options={convertToOptions(TOGGLE, translation)}
         />
       </Card.Content>
-      {fulfill && (
-        <Card.Content style={[styles.innerContent]}>
-          <InputField
-            label={translation("breathings")}
-            numeric
-            value={breathingCount?.toString()}
-            onChange={(breathingCount) => {
-              handlers.setBreathingCount(Number(breathingCount));
-            }}
-          />
-          <InputField
-            numeric
-            value={saturation?.toString()}
-            label={translation("saturation")}
-            onChange={(saturation) => {
-              handlers.setSaturation(Number(saturation));
-            }}
-          />
-        </Card.Content>
-      )}
+
       {fulfill &&
         actions.map((breathingInfo: IBreathingInformation, index) => {
           const isSuccessful =

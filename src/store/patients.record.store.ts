@@ -83,9 +83,9 @@ const initialPatient = {
   },
   reaction: {
     general: [],
-    eyes: EReactionEyes.NONE,
-    speech: EReactionSpeech.NONE,
-    movement: EReactionMovement.NONE,
+    eyes: null,
+    speech: null,
+    movement: null,
     GCS: 3,
   },
   medicationsAndFluids: { actions: [] },
@@ -247,7 +247,7 @@ export const usePatientRecordsStore = create<{
 }>()(
   devtools((set, get, state) => ({
     patients: [],
-    activePatient: { ...initialPatient },
+    activePatient: _.cloneDeep(initialPatient),
     updatePrognosis(prognosis: string) {
       const current = state.getState();
       current.updatePartialPatient({
@@ -361,10 +361,10 @@ export const usePatientRecordsStore = create<{
     },
     reaction_handlers: {
       setInitial(data: IReaction) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          reaction: { ...current.activePatient.reaction, ...data },
-        });
+        // const current = state.getState();
+        // current.updatePartialPatient({
+        //   reaction: { ...current.activePatient.reaction, ...data },
+        // });
       },
       toggleGeneral(select: EReactionGeneral) {
         const current = state.getState();
@@ -588,10 +588,10 @@ export const usePatientRecordsStore = create<{
     },
     injuryReason_handlers: {
       setInitial(data: IInjuryReason) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          injuryReason: { ...current.activePatient.injuryReason, ...data },
-        });
+        // const current = state.getState();
+        // current.updatePartialPatient({
+        //   injuryReason: { ...current.activePatient.injuryReason, ...data },
+        // });
       },
       toggleReason(reason: EInjuryReason) {
         const current = state.getState();
@@ -885,9 +885,8 @@ export const usePatientRecordsStore = create<{
         const current = state.getState();
 
         current.updatePartialPatient({
-          consciousness: [
-            ...toggleListData(current.activePatient.consciousness, select),
-          ],
+          consciousness:
+            current.activePatient.consciousness[0] === select ? [] : [select],
         });
       },
     },
@@ -1018,11 +1017,11 @@ export const usePatientRecordsStore = create<{
         key: STORAGE.PATIENTS_RECORD,
         data: { patients },
       });
-
+      console.log(initialPatient.injuryReason);
       set((state) => ({
         ...state,
         patients: [...patients],
-        activePatient: { ...initialPatient },
+        activePatient: _.cloneDeep(initialPatient),
       }));
     },
     updatePartialPatient(data) {

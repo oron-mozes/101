@@ -40,9 +40,9 @@ export function calcGCS({
   movement: EReactionMovement;
 }): number {
   return (
-    GSC_SCORE.speech[speech] +
-    GSC_SCORE.movement[movement] +
-    GSC_SCORE.eyes[eyes]
+    (GSC_SCORE.speech?.[speech] || 0) +
+    (GSC_SCORE.movement?.[movement] || 0) +
+    (GSC_SCORE.eyes?.[eyes] || 0)
   );
 }
 

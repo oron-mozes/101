@@ -8,12 +8,14 @@ export interface ICheckButton {
   label: string;
   editable?: boolean;
   checked?: boolean;
+  style?: object;
 }
 export function CheckButton({
   label,
   onSelect,
   editable = true,
   checked = false,
+  style = {},
 }: ICheckButton) {
   return (
     <Button
@@ -22,7 +24,7 @@ export function CheckButton({
         onSelect(e);
       }}
       disabled={!editable}
-      style={[styles.container, checked ? styles.checked : {}]}
+      style={[styles.container, checked ? styles.checked : {}, style]}
       textColor={checked ? "#fff" : textColor}
     >
       {label}

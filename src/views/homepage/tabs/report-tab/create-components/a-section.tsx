@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Card, Icon, Text } from "react-native-paper";
@@ -9,14 +10,12 @@ import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import {
   EAirWayTreatment,
   IAirWayInformation,
-  TAirWayTreatment,
   TOGGLE,
 } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
 import { convertToOptions, validateLastItem } from "./utils";
-import { useEffect } from "react";
 
 export function ASection() {
   const translation = useTranslation();
@@ -82,7 +81,7 @@ export function ASection() {
                     value &&
                       handlers.updateAtIndex(
                         {
-                          action: value.id as TAirWayTreatment,
+                          action: value.id as EAirWayTreatment,
                         },
                         index
                       );

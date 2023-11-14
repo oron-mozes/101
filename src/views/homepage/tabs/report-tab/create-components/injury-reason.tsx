@@ -14,6 +14,7 @@ export function InjuryReason() {
   const injuryReason = usePatientRecordsStore(
     (state) => state.activePatient.injuryReason
   );
+  const activePatient = usePatientRecordsStore((state) => state.activePatient);
   const handlers = usePatientRecordsStore(
     (state) => state.injuryReason_handlers
   );

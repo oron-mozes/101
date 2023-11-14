@@ -62,8 +62,11 @@ export enum EAirWayTreatment {
   AW = "AW",
   INTUBE = "INTUBE",
   CONIOTOMY = "CONIOTOMY",
+  SECTION = "SECTION",
+  SEATING = "SEATING",
+  JT = "JT",
 }
-export type TAirWayTreatment = "AW" | "INTUBE" | "CONIOTOMY";
+
 export enum EBreathingTreatment {
   OXIGEN = "OXIGEN",
   MOUTH = "MOUTH",
@@ -99,7 +102,7 @@ export interface IInjuryReason {
 }
 
 export interface IAirWayInformation {
-  action: TAirWayTreatment;
+  action: EAirWayTreatment;
   time: number;
   successful: boolean;
   id: number;
@@ -170,12 +173,12 @@ export enum EReactionSpeech {
   STRAIGHT = "STRAIGHT",
 }
 export enum EReactionMovement {
-  NONE = "NONE",
-  OFTEN = "OFTEN",
-  IN_PLACE = "IN_PLACE",
-  RETREAT = "RETREAT",
-  BENDING = "BENDING",
   STRAIGHTENING = "STRAIGHTENING",
+  BENDING = "BENDING",
+  RETREAT = "RETREAT",
+  IN_PLACE = "IN_PLACE",
+  OFTEN = "OFTEN",
+  NONE = "NONE",
 }
 
 export interface IReaction {

@@ -113,6 +113,7 @@ export function ReportTab() {
   const full_name = usePatientRecordsStore(
     (state) => state.activePatient.personal_information.full_name
   );
+
   const handlers = usePatientRecordsStore(
     (state) => state.personal_information_handlers
   );

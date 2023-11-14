@@ -86,10 +86,10 @@
   "STOP_BLEEDING": "עצירת דמם",
   "IO": "IO",
   "dSection": "D",
-  "general": "כללי",
-  "eyes": "עיניים",
-  "speech": "דיבור",
-  "movement": "תנועה",
+  "general": "כללי- גלזגו",
+  "eyes": "גלזגו - עיניים",
+  "speech": "גלזגו - דיבור",
+  "movement": "גלזגו - תנועה",
   "GCS": "GCS",
   "NON_MOTORIZED": "חסר מוטורי",
   "NON_SENSORY": "חסר סנסורי",
@@ -235,6 +235,9 @@
   "new": "חדש",
   "idf": "מספר אישי",
   "add": "הוסף",
-  "treatedBy":"טופל על ידי: {{provider}}",
-  "waitingForScan":"ממתין לברקוד הראשון"
+  "treatedBy": "טופל על ידי: {{provider}}",
+  "waitingForScan": "ממתין לברקוד הראשון",
+  "SECTION": "סקשן",
+  "SEATING": "הושבה",
+  "JT": "JT"
 }

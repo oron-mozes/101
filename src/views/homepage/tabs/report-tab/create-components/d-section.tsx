@@ -46,6 +46,7 @@ export function DSection() {
   const eyes = usePatientRecordsStore(
     (state) => state.activePatient.reaction.eyes
   );
+
   const handlers = usePatientRecordsStore((state) => state.reaction_handlers);
 
   useEffect(() => {

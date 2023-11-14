@@ -32,7 +32,7 @@ export function NewMedication({ onClose }: { onClose(): void }) {
     (state) => state.medicationsAndFluids_handlers
   );
   const translation = useTranslation();
-  const [allowSave, toggleSave] = useState<boolean>(false);
+  const [selectedStyle, setSelectedStyle] = useState<object>({});
   useEffect(() => {
     actions.length === 0
       ? setNewMedication({
@@ -93,9 +93,11 @@ export function NewMedication({ onClose }: { onClose(): void }) {
               <View style={[styles.options]}>
                 {Object.values(MEDICATION_TREATMENT).map((item) => (
                   <CheckButton
+                    style={item === newMedication.treatment && selectedStyle}
                     label={translation(item)}
                     checked={item === newMedication.treatment}
                     onSelect={() => {
+                      setSelectedStyle(styles[MEDICATION_TREATMENT[item]]);
                       setNewMedication({
                         ...newMedication,
                         treatment: item,
@@ -115,7 +117,7 @@ export function NewMedication({ onClose }: { onClose(): void }) {
             </View>
           </Card.Content>
 
-          {selectedTreatmentType && (
+          {selectedTreatmentType && newMedication.treatment && (
             <>
               <Divider style={{ width: "100%", marginTop: 10 }} />
               <Card.Content style={[styles.innerContent, styles.section]}>
@@ -123,6 +125,7 @@ export function NewMedication({ onClose }: { onClose(): void }) {
                 <View style={[styles.options]}>
                   {Object.values(selectedTreatmentType).map((item) => (
                     <CheckButton
+                      style={item === newMedication.type && selectedStyle}
                       key={item}
                       label={translation(item)}
                       checked={item === newMedication.type}
@@ -148,6 +151,7 @@ export function NewMedication({ onClose }: { onClose(): void }) {
                 <View style={[styles.options]}>
                   {Object.values(selectedTreatmentDose).map((item) => (
                     <CheckButton
+                      style={item === newMedication.dose && selectedStyle}
                       label={translation(item)}
                       checked={item === newMedication?.dose}
                       onSelect={() => {
@@ -202,6 +206,18 @@ export function NewMedication({ onClose }: { onClose(): void }) {
 }
 
 const styles = StyleSheet.create({
+  [MEDICATION_TREATMENT.ANASTASIA]: {
+    backgroundColor: "#746D75",
+  },
+  [MEDICATION_TREATMENT.ANTIBIOTIC]: {
+    backgroundColor: "#8C4843",
+  },
+  [MEDICATION_TREATMENT.FLUIDS]: {
+    backgroundColor: "#820B8A",
+  },
+  [MEDICATION_TREATMENT.HEXAKAPRON]: {
+    backgroundColor: "#19535F",
+  },
   ctaContainer: {
     justifyContent: "flex-end",
   },
