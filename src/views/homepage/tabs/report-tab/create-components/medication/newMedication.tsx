@@ -93,7 +93,6 @@ export function NewMedication({ onClose }: { onClose(): void }) {
               <View style={[styles.options]}>
                 {Object.values(MEDICATION_TREATMENT).map((item) => (
                   <CheckButton
-                    style={item === newMedication.treatment && selectedStyle}
                     label={translation(item)}
                     checked={item === newMedication.treatment}
                     onSelect={() => {
@@ -125,7 +124,6 @@ export function NewMedication({ onClose }: { onClose(): void }) {
                 <View style={[styles.options]}>
                   {Object.values(selectedTreatmentType).map((item) => (
                     <CheckButton
-                      style={item === newMedication.type && selectedStyle}
                       key={item}
                       label={translation(item)}
                       checked={item === newMedication.type}
@@ -151,7 +149,6 @@ export function NewMedication({ onClose }: { onClose(): void }) {
                 <View style={[styles.options]}>
                   {Object.values(selectedTreatmentDose).map((item) => (
                     <CheckButton
-                      style={item === newMedication.dose && selectedStyle}
                       label={translation(item)}
                       checked={item === newMedication?.dose}
                       onSelect={() => {

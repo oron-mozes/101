@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import { textColor } from "./shared-style";
 import { colors } from "../shared-config";
 
@@ -8,7 +8,7 @@ export interface ICheckButton {
   label: string;
   editable?: boolean;
   checked?: boolean;
-  style?: object;
+  style?: { color?: string; backgroundColor?: string };
 }
 export function CheckButton({
   label,
@@ -19,15 +19,16 @@ export function CheckButton({
 }: ICheckButton) {
   return (
     <Button
-      mode="contained"
+      // mode="contained"
       onPress={(e) => {
         onSelect(e);
       }}
       disabled={!editable}
       style={[styles.container, checked ? styles.checked : {}, style]}
-      textColor={checked ? "#fff" : textColor}
     >
-      {label}
+      <Text style={{ color: checked ? style?.color ?? "#fff" : textColor }}>
+        {label}
+      </Text>
     </Button>
   );
 }
@@ -35,7 +36,6 @@ export function CheckButton({
 const styles = StyleSheet.create({
   checked: {
     backgroundColor: colors.active,
-    color: colors.textInputBG,
   },
   container: {
     backgroundColor: colors.radio,

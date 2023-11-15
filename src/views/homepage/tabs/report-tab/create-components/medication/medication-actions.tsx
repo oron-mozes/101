@@ -25,23 +25,26 @@ export function MedicationActions() {
             <View style={[styles.innerContent]}>
               <View style={[styles.innerContent, styles.action]}>
                 <CheckButton
+                  style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
                   editable={false}
                   label={translation(action.treatment)}
-                  checked={false}
+                  checked={true}
                   onSelect={() => {}}
                 />
                 {action.type && (
                   <CheckButton
+                    style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
                     editable={false}
                     label={translation(action.type)}
-                    checked={false}
+                    checked={true}
                     onSelect={() => {}}
                   />
                 )}
                 <CheckButton
+                  style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
                   editable={false}
                   label={translation(action.dose ?? "")}
-                  checked={false}
+                  checked={true}
                   onSelect={() => {}}
                 />
               </View>
