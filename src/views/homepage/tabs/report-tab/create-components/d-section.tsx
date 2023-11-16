@@ -76,7 +76,7 @@ export function DSection() {
         </View>
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.section]}>
-        <Text>{ translation('glazgo')}</Text>
+        <Text variant="titleMedium">{translation("glazgo")}</Text>
         <Text style={styles.title}>{translation("movement")}</Text>
         <View style={[styles.options]}>
           {Object.values(EReactionMovement).map((item) => (
@@ -121,7 +121,7 @@ export function DSection() {
           ))}
         </View>
       </Card.Content>
-     
+
       <Card.Content style={[styles.innerContent]}>
         <View style={[styles.GCS]}>
           <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>

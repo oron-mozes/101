@@ -128,7 +128,7 @@ export default function TaagadScreen() {
                     editable={true}
                     maxLength={item === "idf_id" ? 9 : null}
                     numeric={item === "idf_id"}
-                    label={translation(item)}
+                    label={translation(item === "idf_id" ? "tz" : item)}
                     onChange={(value) => {}}
                     value={
                       item === "idf_id"
@@ -166,7 +166,7 @@ export default function TaagadScreen() {
                   editable={true}
                   maxLength={item === "idf_id" ? 9 : null}
                   numeric={item === "idf_id"}
-                  label={translation(item === "idf_id" ? "idf" : item)}
+                  label={translation(item === "idf_id" ? "tz" : item)}
                   onChange={(value: string) => {
                     saveCareProviderInfo({ [item]: value });
                   }}

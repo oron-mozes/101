@@ -174,11 +174,11 @@ export enum EReactionSpeech {
   NONE = "NONE",
 }
 export enum EReactionMovement {
-  STRAIGHTENING = "STRAIGHTENING",
-  BENDING = "BENDING",
-  RETREAT = "RETREAT",
-  IN_PLACE = "IN_PLACE",
   OFTEN = "OFTEN",
+  IN_PLACE = "IN_PLACE",
+  RETREAT = "RETREAT",
+  BENDING = "BENDING",
+  STRAIGHTENING = "STRAIGHTENING",
   NONE = "NONE",
 }
 
