@@ -126,7 +126,7 @@ export default function TaagadScreen() {
                   <InputField
                     key={item}
                     editable={true}
-                    maxLength={item === "idf_id" ? 7 : null}
+                    maxLength={item === "idf_id" ? 9 : null}
                     numeric={item === "idf_id"}
                     label={translation(item)}
                     onChange={(value) => {}}
@@ -164,7 +164,7 @@ export default function TaagadScreen() {
                 <InputField
                   key={item}
                   editable={true}
-                  maxLength={item === "idf_id" ? 7 : null}
+                  maxLength={item === "idf_id" ? 9 : null}
                   numeric={item === "idf_id"}
                   label={translation(item === "idf_id" ? "idf" : item)}
                   onChange={(value: string) => {

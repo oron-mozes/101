@@ -76,6 +76,22 @@ export function DSection() {
         </View>
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.section]}>
+        <Text>{ translation('glazgo')}</Text>
+        <Text style={styles.title}>{translation("movement")}</Text>
+        <View style={[styles.options]}>
+          {Object.values(EReactionMovement).map((item) => (
+            <ToggleButton
+              label={translation(item)}
+              status={item === movement}
+              onSelect={() => {
+                handlers.setMovement(item);
+              }}
+              key={item}
+            />
+          ))}
+        </View>
+      </Card.Content>
+      <Card.Content style={[styles.innerContent, styles.section]}>
         <Text style={styles.title}>{translation("speech")}</Text>
         <View style={[styles.options]}>
           {Object.values(EReactionSpeech).map((item) => (
@@ -105,21 +121,7 @@ export function DSection() {
           ))}
         </View>
       </Card.Content>
-      <Card.Content style={[styles.innerContent, styles.section]}>
-        <Text style={styles.title}>{translation("movement")}</Text>
-        <View style={[styles.options]}>
-          {Object.values(EReactionMovement).map((item) => (
-            <ToggleButton
-              label={translation(item)}
-              status={item === movement}
-              onSelect={() => {
-                handlers.setMovement(item);
-              }}
-              key={item}
-            />
-          ))}
-        </View>
-      </Card.Content>
+     
       <Card.Content style={[styles.innerContent]}>
         <View style={[styles.GCS]}>
           <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>

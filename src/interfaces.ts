@@ -83,6 +83,7 @@ export enum EEsectionChips {
   UNDRESSING = "UNDRESSING",
   FLIPPING = "FLIPPING",
   SPLINTING = "SPLINTING",
+  ACTIVE_HIT = "ACTIVE_HIT",
 }
 export enum EInjuryReason {
   SHOOTING = "SHOOTING",
@@ -159,18 +160,18 @@ export enum EReactionGeneral {
 }
 
 export enum EReactionEyes {
-  NONE = "NONE",
-  TO_PAIN = "TO_PAIN",
-  TO_VOICE = "TO_VOICE",
   SPONTANEITY = "SPONTANEITY",
+  TO_VOICE = "TO_VOICE",
+  TO_PAIN = "TO_PAIN",
+  NONE = "NONE",
 }
 
 export enum EReactionSpeech {
-  NONE = "NONE",
-  VOICES = "VOICES",
-  WORDS = "WORDS",
-  CONFUSED = "CONFUSED",
   STRAIGHT = "STRAIGHT",
+  CONFUSED = "CONFUSED",
+  WORDS = "WORDS",
+  VOICES = "VOICES",
+  NONE = "NONE",
 }
 export enum EReactionMovement {
   STRAIGHTENING = "STRAIGHTENING",
@@ -209,6 +210,10 @@ export enum E_ANASTASIA_KATAMIN_DOSE {
   D250MG = "D250MG",
   D500MG = "D500MG",
 }
+export enum E_ANASTASIA_MORFIUM_DOSE {
+  D2MG = "D2MG",
+  D5MG = "D5MG",
+}
 export enum E_ANASTASIA_DORMICUM_DOSE {
   D1_5MG = "D1_5MG",
   D5MG = "D5MG",
@@ -217,7 +222,7 @@ export enum E_ANASTASIA_ACTIQ_DOSE {
   D800MG = "D800MG",
 }
 export enum E_HEXAKAPRON_DOSE {
-  D1MG = "D1MG",
+  D1G = "D1G",
 }
 
 export enum EMedications {
@@ -259,6 +264,7 @@ export enum E_ANASTASIA_TREATMENT {
   KETAMINE = "KETAMINE",
   DORMICUM = "DORMICUM",
   ACTIQ = "ACTIQ",
+  MORFIUM = "MORFIUM",
 }
 
 export enum E_FLUID_HARTMAN_DOSE {
