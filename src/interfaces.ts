@@ -374,7 +374,7 @@ export interface IPatientRecord {
   new?: boolean;
   personal_information: IPersonalInformation;
   incident_information: IIncidentInformation;
-  provider: Partial<ICareProvider>;
+  providers: Partial<ICareProvider>[];
   injuries: IInjury[];
   consciousness: ECconsciousness[];
   eSection: EEsectionChips[];

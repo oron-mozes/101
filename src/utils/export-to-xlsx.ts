@@ -1,31 +1,14 @@
 import XLSX from "xlsx";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
+import {
+  documentDirectory,
+  makeDirectoryAsync,
+  writeAsStringAsync,
+  EncodingType,
+} from "expo-file-system";
+import Sharing from "expo-sharing";
 import { IInjury, IPatientRecord } from "../interfaces";
+import { getLocaleKey } from "./helpers";
 import locale from "../../locales/he.json";
-import { timeToDate } from "./date-to-time";
-import date from "date-and-time";
-
-function convertor(key, value) {
-  switch (key) {
-    case "injury_time":
-    case "care_time":
-      return timeToDate(value);
-    case "date":
-      return date.format(new Date(value), "DD/MM/YY");
-    default:
-      return value;
-  }
-}
-
-function getLocaleKey(data) {
-  const res = {};
-  for (const key in data) {
-    res[locale[key]] = convertor(key, data[key]);
-  }
-
-  return res;
-}
 
 function injuriesList(data: IInjury[]) {}
 
@@ -33,8 +16,9 @@ function convertToReadableData(data: IPatientRecord[]) {
   return data.map((patient) => ({
     ...getLocaleKey(patient.personal_information),
     ...getLocaleKey(patient.incident_information),
-    [locale.providerTeam]: JSON.stringify(getLocaleKey(patient.provider)),
+    [locale.providerTeam]: JSON.stringify(getLocaleKey(patient.providers)),
     // [locale.injuryReason]: JSON.stringify(getLocaleKey(patient.injuries)),
+    
   }));
 }
 
@@ -47,15 +31,15 @@ export async function generateXLSX(data: IPatientRecord[]) {
     type: "base64",
     bookType: "xlsx",
   });
-  const uri = FileSystem.documentDirectory + `${date}.xlsx`;
-  const downloadsDirectory = FileSystem.documentDirectory + "downloads/";
+  const uri = documentDirectory + `${date}.xlsx`;
+  const downloadsDirectory = documentDirectory + "downloads/";
 
-  await FileSystem.makeDirectoryAsync(downloadsDirectory, {
+  await makeDirectoryAsync(downloadsDirectory, {
     intermediates: true,
   });
 
-  await FileSystem.writeAsStringAsync(uri, wbout, {
-    encoding: FileSystem.EncodingType.Base64,
+  await writeAsStringAsync(uri, wbout, {
+    encoding: EncodingType.Base64,
   });
 
   await Sharing.shareAsync(uri, {
