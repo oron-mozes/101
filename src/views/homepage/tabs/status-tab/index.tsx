@@ -95,7 +95,7 @@ export function StatusTab() {
                 <StatusChip
                   label={translation(patient?.evacuation?.status ?? "")}
                   status={patient?.evacuation?.status}
-                  disabled={false}
+                  editable={false}
                 />
               </DataTable.Cell>
               <DataTable.Cell
