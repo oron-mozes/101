@@ -45,8 +45,11 @@ export default function ReceivePatientScreen() {
       parts.add(patient.partialData.part);
 
       addParts(parts);
-      console.log("AA", newKeys[0], aggregatedPatient);
-
+      if (patient.partialData.data.provider) {
+        patient.partialData.data.providers = [
+          patient.partialData.data.provider,
+        ];
+      }
       setPatient({ ...aggregatedPatient, ...patient.partialData.data });
       updateScanCount(scanCount + 1);
 
