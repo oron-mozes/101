@@ -1046,7 +1046,6 @@ export const usePatientRecordsStore = create<{
         key: STORAGE.PATIENTS_RECORD,
         data: { patients },
       });
-      console.log(initialPatient.injuryReason);
       set((state) => ({
         ...state,
         patients: [...patients],

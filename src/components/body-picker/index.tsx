@@ -31,7 +31,6 @@ export function BodyPicker() {
       result: "data-uri",
     }).then(
       (uri) => {
-        console.log(activePatient.id, uri);
         addInjuriesImage(activePatient.id, uri);
       },
       (error) => console.error("Oops, snapshot failed", error)
