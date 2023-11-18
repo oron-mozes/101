@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, Image } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Alert } from "react-native";
 import { Button } from "react-native-paper";
-import { BodyPicker } from "../../components/body-picker";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
-import { generateXLSX } from "../../utils/export-to-xlsx";
 
 export function GlobalActions() {
   const translation = useTranslation();
@@ -17,17 +15,30 @@ export function GlobalActions() {
     (state) => state.deletePatients
   );
   const patients = usePatientRecordsStore((state) => state.patients);
-  const activePatient = usePatientRecordsStore((state) => state.activePatient);
   const setActivePatient = usePatientRecordsStore(
     (state) => state.setActivePatient
   );
-  const [patientsImage, addPatientImage] = useState<string[]>([]);
+  const confirmDelete = () => {
+    Alert.alert(
+      "מחיקת תיקים רפואיים",
+      "הינך עומד.ת למחוק את כל התיקים הרפואיים ששמורים במכשיר. אנא וודא.י ייצוא ושמירה של המידע לפני המשך הפעולה.",
+      [
+        {
+          text: "ביטול",
+          style: "cancel",
+        },
+        {
+          text: "אני מאשר.ת",
+          onPress: async () => {
+            await deletePatients();
 
-  const [currentPatientIndex, changeCurrentPatientIndex] = useState<number>();
-  useEffect(() => {
-    changeCurrentPatientIndex(0);
-    setActivePatient(patients[0]);
-  }, []);
+            navigation.navigate(ROUTES.HOME);
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <View style={{ flexDirection: "row" }}>
       <Button
@@ -38,16 +49,12 @@ export function GlobalActions() {
           marginTop: 100,
           marginRight: 30,
         }}
-        onPress={async () => {
-          await deletePatients();
-
-          navigation.navigate(ROUTES.HOME);
-        }}
+        onPress={confirmDelete}
       >
         {translation("delete")}
       </Button>
 
-      <Button
+      {/* <Button
         mode="contained"
         textColor="#fff"
         style={{ backgroundColor: "blue", marginTop: 100 }}
@@ -57,7 +64,7 @@ export function GlobalActions() {
         }}
       >
         {translation("share")}
-      </Button>
+      </Button> */}
     </View>
   );
 }
