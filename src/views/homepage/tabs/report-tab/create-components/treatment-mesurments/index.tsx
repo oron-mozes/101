@@ -65,7 +65,7 @@ export function Measurements() {
       time: new Date().getTime(),
     });
   };
-
+  console.log({ period });
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>

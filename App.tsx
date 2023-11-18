@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
-import { StatusBar, StyleSheet, View } from "react-native";
+import { I18nManager, StatusBar, StyleSheet, View } from "react-native";
 import { DefaultTheme, PaperProvider, Text } from "react-native-paper";
 import { useCameraPermission } from "react-native-vision-camera";
 import { Logo101 } from "./src/components/left-menu/101-logo";
@@ -38,8 +38,9 @@ export default function App() {
   );
   const [appReady, toggleReady] = useState<boolean>(false);
 
-  // storage.remove({ key: STORAGE.PATIENTS_RECORD });
   useEffect(() => {
+    I18nManager.forceRTL(true);
+
     if (!hasPermission) {
       requestPermission();
     }
