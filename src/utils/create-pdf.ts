@@ -24,9 +24,9 @@ export const createPDFWithImage = async (
                     <th>${locale.date}</th>
                 </tr>
                 <tr>
-                    <td>${patient.personal_information.full_name}></td>
-                    <td>${patient.personal_information.idf_id}</td>
-                    <td>${patient.personal_information.patientId}</td>
+                    <td>${patient.personal_information?.full_name}></td>
+                    <td>${patient.personal_information?.idf_id}</td>
+                    <td>${patient.personal_information?.patientId}</td>
                     <td>${timeToDate(
                       new Date(patient.incident_information.injury_time)
                     )}</td>
@@ -63,7 +63,10 @@ export const createPDFWithImage = async (
                     <td> <img src="${imagePath}" width="500" height="500" /></td>
                 </tr>
             </table>
-          
+          <br/>
+          <br/>
+          <br/>
+          <br/>
             <h1>${locale.avpu}</h1>
             <table border="1">
                 <tr>
@@ -156,6 +159,7 @@ export const createPDFWithImage = async (
                     <th>${locale.GCS}</th>
                 </tr>
                 <tr>
+               
                 <td>${locale[patient.reaction.movement]}</td> 
                 <td>${locale[patient.reaction.speech]}</td> 
                 <td>${locale[patient.reaction.eyes]}</td> 
@@ -166,7 +170,10 @@ export const createPDFWithImage = async (
                 })}</td> 
               </tr>
             </table>
-         
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <h1>E</h1>
             <table border="1">
                 <tr>
@@ -199,13 +206,16 @@ export const createPDFWithImage = async (
                 <tr>
                     <td>${locale.careProviderName}</td> 
                 </tr>
-                ${patient.providers?.map(
-                  (provider) => `<tr>
-                    <td>${provider.full_name}, ${provider.idf_id}, ${
-                    locale[provider.role]
+                ${patient.providers?.map((provider) => {
+                  if (!provider) {
+                    return `<tr/>`;
+                  }
+                  return `<tr>
+                    <td>${provider?.full_name}, ${provider?.idf_id}, ${
+                    locale[provider?.role]
                   }</td> 
-                </tr>`
-                )}
+                </tr>`;
+                })}
             </table>
              <h1>${locale.evacuate}</h1>
             <label>${locale.destination}: ${
@@ -228,6 +238,80 @@ export const createPDFWithImage = async (
                   <td>${locale[patient.evacuation.status]}</td> 
               </tr>
             </table>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/><br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+              <h1>${locale.treatments}</h1>
+              <h2>${locale.treatments}</h2>
+              <table border="1">
+                <tr>
+                    <td>${locale.care_guide}</td> 
+                    <td>${locale.order_time}</td> 
+                    <td>${locale.execution_time}</td> 
+                  
+                </tr>
+              ${patient.treatmentGuide.guides.map(
+                (guide) => ` <tr>
+                    <td>${guide.care_guide}</td> 
+                    <td>${timeToDate(new Date(guide.order_time))}</td> 
+                    <td>${timeToDate(new Date(guide.execution_time))}</td> 
+                </tr>`
+              )}
+              </table>
+              <h2>${locale.measurements}</h2>
+              <label>${locale.period}: ${
+    patient.treatmentGuide.measurements.period
+  }</label>
+              <table border="1">
+                <tr>
+                    <td>${locale.treatment_time}</td> 
+                    <td>${locale.treatment_provider}</td> 
+                    <td>${locale.treatment_puls}</td> 
+                    <td>${locale.treatment_bloodPressure}</td> 
+                    <td>${locale.treatment_breath}</td> 
+                    <td>${locale.treatment_spo2}</td> 
+                    <td>${locale.etcos}</td> 
+                    <td>${locale.pain}</td> 
+                    <td>${locale.prpo}</td> 
+                    <td>${locale.GCS}</td> 
+                    <td>${locale.urine}</td> 
+                    <td>${locale.treatment_blood}</td> 
+                  
+                </tr>
+              ${patient.treatmentGuide.measurements.actions.map(
+                (measurement) => {
+                  if (!measurement.provider) {
+                    return "";
+                  }
+                  return `<tr>
+                    <td>${timeToDate(new Date(measurement.time))}</td> 
+                    <td>${measurement.provider?.full_name}, ${
+                    measurement.provider?.idf_id
+                  }, ${locale[measurement.provider?.role]}</td> 
+                  <td>${measurement.puls}</td> 
+                  <td>${measurement.bloodPressure}</td> 
+                  <td>${measurement.breath}</td> 
+                  <td>${measurement.spo2}</td> 
+                  <td>${measurement.etcos}</td> 
+                  <td>${measurement.pain}</td> 
+                  <td>${measurement.prpo}</td> 
+                  <td>${measurement.GCS}</td> 
+                  <td>${measurement.urine}</td> 
+                  <td>${measurement.blood}</td> 
+                </tr>`;
+                }
+              )}
+              </table>
             </body>
           </html>
         `;

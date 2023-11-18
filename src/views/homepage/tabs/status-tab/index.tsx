@@ -85,7 +85,7 @@ export function StatusTab() {
                   />
                 )}
               >
-                <DataTable.Row key={index}>
+                <DataTable.Row key={index} style={{ backgroundColor: "white" }}>
                   <DataTable.Cell
                     onPress={() => goToPatientPage(patient)}
                     style={[styles.title]}

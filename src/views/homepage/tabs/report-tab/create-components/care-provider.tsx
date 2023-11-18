@@ -10,9 +10,10 @@ import { design } from "./shared-style";
 export function CareProvider() {
   const translation = useTranslation();
   const careProviders = useTaggadStore((state) => state.taggad.care_providers);
-  const provider = usePatientRecordsStore(
-    (state) => state.activePatient.provider
+  const providers = usePatientRecordsStore(
+    (state) => state.activePatient.providers ?? []
   );
+
   const handlers = usePatientRecordsStore((state) => state.provider_handlers);
 
   return (
@@ -23,18 +24,21 @@ export function CareProvider() {
 
       <Card.Content style={[styles.innerContent]}>
         <View style={{ flex: 1 }}>
-          {provider.full_name && (
-            <Text style={{ marginBottom: 10 }}>
-              {translation("treatedBy", {
-                provider: `${provider.full_name}, ${
-                  provider.idf_id
-                } ${translation(provider.role)}`,
-              })}
-            </Text>
+          {providers.map(
+            (provider) =>
+              provider.full_name && (
+                <Text style={{ marginBottom: 10 }} key={provider.idf_id}>
+                  {translation("treatedBy", {
+                    provider: `${provider.full_name}, ${
+                      provider.idf_id
+                    } ${translation(provider.role)}`,
+                  })}
+                </Text>
+              )
           )}
           <DropDown
             label={translation("careProviderName")}
-            initialValue={provider.idf_id?.toString()}
+            initialValue={providers?.[0]?.idf_id?.toString()}
             onSelect={(value) => {
               const setProvider = Object.values(careProviders).find(
                 (p) => p.idf_id.toString() === value.id

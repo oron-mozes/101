@@ -7,6 +7,7 @@ import { colors } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 
 export function MedicationActions() {
+  const translation = useTranslation();
   const actions = usePatientRecordsStore(
     (state) => state.activePatient.medicationsAndFluids.actions
   );
@@ -14,75 +15,76 @@ export function MedicationActions() {
   const handlers = usePatientRecordsStore(
     (state) => state.medicationsAndFluids_handlers
   );
-  const translation = useTranslation();
 
   return (
     <>
-      {actions.map((action, index) => (
-        <View key={`${action.time}|${index}`}>
-          <Card.Content style={[styles.innerContent, styles.section]}>
-            <Text style={styles.title}>{translation("takenMedication")}</Text>
-            <View style={[styles.innerContent]}>
-              <View style={[styles.innerContent, styles.action]}>
-                <CheckButton
-                  style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
-                  editable={false}
-                  label={translation(action.treatment)}
-                  checked={true}
-                  onSelect={() => {}}
-                />
-                {action.type && (
+      {actions.map((action, index) => {
+        return (
+          <View key={`${action.time}|${index}`}>
+            <Card.Content style={[styles.innerContent, styles.section]}>
+              <Text style={styles.title}>{translation("takenMedication")}</Text>
+              <View style={[styles.innerContent]}>
+                <View style={[styles.innerContent, styles.action]}>
                   <CheckButton
                     style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
                     editable={false}
-                    label={translation(action.type)}
+                    label={translation(action.treatment)}
                     checked={true}
                     onSelect={() => {}}
                   />
-                )}
-                <CheckButton
-                  style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
-                  editable={false}
-                  label={translation(action.dose ?? "")}
-                  checked={true}
-                  onSelect={() => {}}
-                />
-              </View>
-              <View
-                style={[
-                  styles.innerContent,
-                  styles.action,
-                  { justifyContent: "flex-end" },
-                ]}
-              >
-                <View style={{ width: 120 }}>
-                  <TimePicker
+                  {action.type && (
+                    <CheckButton
+                      style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
+                      editable={false}
+                      label={translation(action.type)}
+                      checked={true}
+                      onSelect={() => {}}
+                    />
+                  )}
+                  <CheckButton
+                    style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
                     editable={false}
-                    value={action.time}
-                    label={translation("actionTime")}
-                    onChange={(time) => {
-                      handlers.updateAtIndex({ time }, index);
-                    }}
+                    label={translation(action.dose ?? "")}
+                    checked={true}
+                    onSelect={() => {}}
                   />
                 </View>
-                <Text
-                  onPress={() => {
-                    handlers.removeAction(index);
-                  }}
-                  style={styles.deleteAction}
+                <View
+                  style={[
+                    styles.innerContent,
+                    styles.action,
+                    { justifyContent: "flex-end" },
+                  ]}
                 >
-                  <Icon
-                    size={20}
-                    source="delete-outline"
-                    color={colors.primary}
-                  />
-                </Text>
+                  <View style={{ width: 120 }}>
+                    <TimePicker
+                      editable={false}
+                      value={action.time}
+                      label={translation("actionTime")}
+                      onChange={(time) => {
+                        handlers.updateAtIndex({ time }, index);
+                      }}
+                    />
+                  </View>
+                  <Text
+                    onPress={() => {
+                      handlers.removeAction(index);
+                    }}
+                    style={styles.deleteAction}
+                  >
+                    <Icon
+                      size={20}
+                      source="delete-outline"
+                      color={colors.primary}
+                    />
+                  </Text>
+                </View>
               </View>
-            </View>
-          </Card.Content>
-          <Divider style={{ width: "100%", marginTop: 10 }} />
-        </View>
-      ))}
+            </Card.Content>
+            <Divider style={{ width: "100%", marginTop: 10 }} />
+          </View>
+        );
+      })}
     </>
   );
 }

@@ -19,7 +19,7 @@ export function Evacuation() {
     (state) => state.activePatient.evacuation.destination
   );
   const time = usePatientRecordsStore(
-    (state) => state.activePatient.evacuation.time
+    (state) => state.activePatient.evacuation.time ?? new Date().getTime()
   );
   const transportation = usePatientRecordsStore(
     (state) => state.activePatient.evacuation.transportation

@@ -1,15 +1,17 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
+import date from "date-and-time";
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
 import {
   borderSetup,
-  offset,
   colors,
   gutter,
   inputHeight,
+  offset,
 } from "../shared-config";
-import date from "date-and-time";
+// import { Appearance, useColorScheme } from "react-native-appearance";
+import { useColorScheme } from "react-native";
 
 export function TimePicker({
   label,
@@ -23,6 +25,7 @@ export function TimePicker({
   onChange(value: number): void;
 }) {
   const [showTime, toggleTime] = useState<boolean>(false);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     onChange(value);
@@ -59,14 +62,20 @@ export function TimePicker({
       )}
       {showTime && (
         <DateTimePicker
+          style={{ backgroundColor: "black" }}
           display="spinner"
-          textColor="white"
           disabled={!editable}
           value={new Date(value)}
           mode="time"
           is24Hour={true}
-          positiveButton={{ label: "אישור", textColor: "white" }}
-          negativeButton={{ label: "סגור", textColor: "white" }}
+          positiveButton={{
+            label: "אישור",
+            textColor: colorScheme === "light" ? "black" : "white",
+          }}
+          negativeButton={{
+            label: "סגור",
+            textColor: colorScheme === "light" ? "black" : "white",
+          }}
           onChange={(data) => {
             toggleTime(false);
 

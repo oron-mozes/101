@@ -63,14 +63,7 @@ const initialPatient = {
     actions: [],
   },
   consciousness: [],
-  provider: {
-    full_name: null,
-    id: null,
-    idf_id: null,
-    rank: null,
-    unit_name: null,
-    role: null,
-  },
+  providers: [],
   eSection: [],
   injuries: [],
   measurements: {
@@ -117,7 +110,7 @@ export const usePatientRecordsStore = create<{
     editable: boolean;
     id: string;
     personal_information: IPersonalInformation;
-    provider: ICareProvider;
+    providers: ICareProvider[];
     injuries: IInjury[];
     consciousness: ECconsciousness[];
     eSection: EEsectionChips[];
@@ -445,19 +438,15 @@ export const usePatientRecordsStore = create<{
     },
     provider_handlers: {
       setInitial(data: ICareProvider) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          provider: { ...current.activePatient.provider, ...data },
-        });
+        // const current = state.getState();
+        // current.updatePartialPatient({
+        //   providers: [...(current.activePatient.providers ?? []), data],
+        // });
       },
       addProvider(provider) {
         const current = state.getState();
-
         current.updatePartialPatient({
-          provider: {
-            ...current.activePatient.provider,
-            ...provider,
-          },
+          providers: [...(current.activePatient.providers ?? []), provider],
         });
       },
     },
@@ -1008,7 +997,7 @@ export const usePatientRecordsStore = create<{
       const final: IPatientRecord = {
         personal_information: undefined,
         incident_information: undefined,
-        provider: undefined,
+        providers: [],
         injuries: [],
         consciousness: [],
         eSection: [],

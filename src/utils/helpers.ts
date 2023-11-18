@@ -34,7 +34,6 @@ export function getLocaleKey(data) {
     if (Array.isArray(data[key])) {
       res[locale[key]] = getLocaleKey(data[key]);
     } else if (_.isObject(data[key])) {
-      console.log({ key });
       res[locale[key]] = getLocaleKey(data[key]);
     } else {
       res[locale[key]] = convertor(key, data[key]);

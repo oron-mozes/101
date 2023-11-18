@@ -15,10 +15,12 @@ import HomeScreen from "./src/views/homepage";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const theme = {
   // ...DefaultTheme,
+  dark: true,
   direction: "rtl",
   roundness: 1,
   colors: {
