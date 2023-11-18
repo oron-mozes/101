@@ -9,13 +9,12 @@ import MainMenu from "./src/components/main-menu";
 import { RootStackParamList } from "./src/interfaces";
 import { ROUTES } from "./src/routes";
 import { colors } from "./src/shared-config";
+import { usePatientRecordsStore } from "./src/store/patients.record.store";
+import { useTaggadStore } from "./src/store/taggad.store";
 import HomeScreen from "./src/views/homepage";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
-import { useTaggadStore } from "./src/store/taggad.store";
-import { usePatientRecordsStore } from "./src/store/patients.record.store";
-import storage, { STORAGE } from "./storage";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const theme = {

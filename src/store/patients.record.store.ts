@@ -131,7 +131,10 @@ export const usePatientRecordsStore = create<{
     evacuation: IEvacuationInformation;
     treatmentGuide: ITreatment;
   };
+  injuriesImage: Record<string, string>;
+  addInjuriesImage(id: string, image: string): void;
   deletePatients(): void;
+  deletePatient(patientId): void;
   updatePartialPatient(data: any): void;
   updatePrognosis(data: string): void;
   loadPatientsState(): Promise<boolean>;
@@ -247,6 +250,27 @@ export const usePatientRecordsStore = create<{
   };
 }>()(
   devtools((set, get, state) => ({
+    injuriesImage: {},
+    addInjuriesImage(id: string, image: string) {
+      const current = state.getState();
+      current.injuriesImage[id] = image;
+      set((state) => ({
+        ...state,
+        injuriesImage: { ...current.injuriesImage },
+      }));
+    },
+    async deletePatient(patientId) {
+      const current = state.getState();
+      const cleanPatients = current.patients.filter(
+        (patient) => patient.id !== patientId
+      );
+
+      await storage.save({
+        key: STORAGE.PATIENTS_RECORD,
+        data: { patients: cleanPatients },
+      });
+      set((state) => ({ ...state, patients: cleanPatients }));
+    },
     async deletePatients() {
       await storage.remove({ key: STORAGE.PATIENTS_RECORD });
       set((state) => ({ ...state, patients: [] }));

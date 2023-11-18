@@ -1,31 +1,60 @@
-import XLSX from "xlsx";
 import {
+  EncodingType,
   documentDirectory,
   makeDirectoryAsync,
+  readAsStringAsync,
   writeAsStringAsync,
-  EncodingType,
 } from "expo-file-system";
-import Sharing from "expo-sharing";
-import { IInjury, IPatientRecord } from "../interfaces";
-import { getLocaleKey } from "./helpers";
+import { SaveFormat, manipulateAsync } from "expo-image-manipulator";
+import { shareAsync } from "expo-sharing";
+import XLSX from "xlsx";
 import locale from "../../locales/he.json";
+import { IPatientRecord } from "../interfaces";
+import { getLocaleKey } from "./helpers";
+// import XlsxPopulate from "xlsx-populate";
+import ImgToBase64 from "react-native-image-base64";
+import { createPDFWithImage } from "./create-pdf";
 
-function injuriesList(data: IInjury[]) {}
-
-function convertToReadableData(data: IPatientRecord[]) {
-  return data.map((patient) => ({
-    ...getLocaleKey(patient.personal_information),
-    ...getLocaleKey(patient.incident_information),
-    [locale.providerTeam]: JSON.stringify(getLocaleKey(patient.providers)),
-    // [locale.injuryReason]: JSON.stringify(getLocaleKey(patient.injuries)),
-    
-  }));
+async function getImage64(imageUri: string) {
+  return manipulateAsync(imageUri, [], { compress: 1, format: SaveFormat.PNG });
 }
 
-export async function generateXLSX(data: IPatientRecord[]) {
+async function convertToReadableData(data: IPatientRecord[]) {
+  return data.map((patient, index) => {
+    return [
+      ...getLocaleKey(patient.personal_information),
+      ...getLocaleKey(patient.incident_information),
+      {
+        [locale.providerTeam]: JSON.stringify(getLocaleKey(patient.providers)),
+      },
+      // [locale.injuryReason]: base64Image,
+    ];
+  });
+}
+
+export async function generateXLSX(
+  data: IPatientRecord[],
+  patientsImage: string[]
+) {
+  return createPDFWithImage(patientsImage[0]);
+
   const date = new Date().getTime();
-  const ws = XLSX.utils.json_to_sheet(convertToReadableData(data));
+  // const dataToSave = await convertToReadableData(data);
+  // const image = await getImage64(patientsImage[0]);
+  // console.log({ image });
+  // const base64Image = await readAsStringAsync(image.uri, {
+  //   encoding: EncodingType.Base64,
+  // });
+  const base64Image = await ImgToBase64.getBase64String(patientsImage[0]);
+
+  const dataToSave = [
+    ["Name", "Age", "Image"],
+    ["John Doe", 25, base64Image],
+    // Add more rows as needed
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(dataToSave);
   const wb = XLSX.utils.book_new();
+
   XLSX.utils.book_append_sheet(wb, ws, "Patients");
   const wbout = XLSX.write(wb, {
     type: "base64",
@@ -42,7 +71,7 @@ export async function generateXLSX(data: IPatientRecord[]) {
     encoding: EncodingType.Base64,
   });
 
-  await Sharing.shareAsync(uri, {
+  await shareAsync(uri, {
     mimeType:
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     dialogTitle: "101 data",

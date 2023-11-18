@@ -278,5 +278,7 @@
   "action": "פעולה",
   "successful": "הצלחה",
   "id": "id",
-  "time": "שעת ביצוע"
+  "time": "שעת ביצוע",
+  "deleteRecord": "מחק תיק רפואי",
+  "exportRecord": "יצא לpdf"
 }

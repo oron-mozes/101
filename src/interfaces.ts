@@ -131,6 +131,7 @@ export interface IAirway {
   fulfill: boolean;
 }
 
+
 export enum EMeasurementsTreatments {
   STOP_BLEEDING = "STOP_BLEEDING",
   PERIPHERAL_VAIN = "PERIPHERAL",
