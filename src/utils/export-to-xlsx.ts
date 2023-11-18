@@ -2,7 +2,6 @@ import {
   EncodingType,
   documentDirectory,
   makeDirectoryAsync,
-  readAsStringAsync,
   writeAsStringAsync,
 } from "expo-file-system";
 import { SaveFormat, manipulateAsync } from "expo-image-manipulator";
@@ -11,9 +10,6 @@ import XLSX from "xlsx";
 import locale from "../../locales/he.json";
 import { IPatientRecord } from "../interfaces";
 import { getLocaleKey } from "./helpers";
-// import XlsxPopulate from "xlsx-populate";
-import ImgToBase64 from "react-native-image-base64";
-import { createPDFWithImage } from "./create-pdf";
 
 async function getImage64(imageUri: string) {
   return manipulateAsync(imageUri, [], { compress: 1, format: SaveFormat.PNG });
@@ -36,23 +32,10 @@ export async function generateXLSX(
   data: IPatientRecord[],
   patientsImage: string[]
 ) {
-  return createPDFWithImage(patientsImage[0]);
-
   const date = new Date().getTime();
-  // const dataToSave = await convertToReadableData(data);
-  // const image = await getImage64(patientsImage[0]);
-  // console.log({ image });
-  // const base64Image = await readAsStringAsync(image.uri, {
-  //   encoding: EncodingType.Base64,
-  // });
-  const base64Image = await ImgToBase64.getBase64String(patientsImage[0]);
+  const dataToSave = await convertToReadableData(data);
 
-  const dataToSave = [
-    ["Name", "Age", "Image"],
-    ["John Doe", 25, base64Image],
-    // Add more rows as needed
-  ];
-  const ws = XLSX.utils.aoa_to_sheet(dataToSave);
+  const ws = XLSX.utils.json_to_sheet(dataToSave);
   const wb = XLSX.utils.book_new();
 
   XLSX.utils.book_append_sheet(wb, ws, "Patients");

@@ -60,7 +60,7 @@ export function PatientDetails() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <DatePicker
-          disabled={disabled}
+          editable={disabled}
           value={incident_information.date ?? new Date().getTime()}
           label={translation("date")}
           onChange={(date: number) => {
