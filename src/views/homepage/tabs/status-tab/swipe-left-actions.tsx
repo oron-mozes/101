@@ -6,6 +6,7 @@ import { BodyPicker } from "../../../../components/body-picker";
 import { generateXLSX } from "../../../../utils/export-to-xlsx";
 import { useRef, useState } from "react";
 import { createPDFWithImage } from "../../../../utils/create-pdf";
+import { colors } from "../../../../shared-config";
 
 export function RenderLeftActions({
   progressAnimatedValue,
@@ -50,7 +51,11 @@ export function RenderLeftActions({
       >
         <Animated.Text
           style={[
-            { backgroundColor: "pink" },
+            {
+              fontWeight: "bold",
+              backgroundColor: colors.primary,
+              color: colors.radio,
+            },
             {
               transform: [{ translateX: scale }],
             },
@@ -64,7 +69,11 @@ export function RenderLeftActions({
         </Animated.Text>
         <Animated.Text
           style={[
-            { backgroundColor: "green" },
+            {
+              backgroundColor: colors.textInputBorderColor,
+              color: colors.text,
+              fontWeight: "bold",
+            },
             {
               transform: [{ translateX: scale }],
             },
