@@ -34,20 +34,23 @@ export default function ReceivePatientScreen() {
   const handleBarcodeRead = (event) => {
     try {
       const parsed = JSON.parse(event.data);
+
       const patient = decompress(parsed);
 
       if (parts.has(patient.partialData.part)) {
         return;
       }
       const newKeys = Object.keys(patient.partialData.data);
-      parts.add(patient.partialData.part);
-      addParts(parts);
-      if (!aggregatedPatient?.[newKeys[0]]) {
-        setPatient({ ...aggregatedPatient, ...patient.partialData.data });
-        updateScanCount(scanCount + 1);
 
-        patient.partialData.isLast && setDone(true);
-      }
+      parts.add(patient.partialData.part);
+
+      addParts(parts);
+      console.log("AA", newKeys[0], aggregatedPatient);
+
+      setPatient({ ...aggregatedPatient, ...patient.partialData.data });
+      updateScanCount(scanCount + 1);
+
+      patient.partialData.isLast && setDone(true);
     } catch (e) {
       console.log({ event, e });
     }
