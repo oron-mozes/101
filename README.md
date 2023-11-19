@@ -40,5 +40,7 @@ https://www.figma.com/file/arl3RP1jwbWoE9Fua9bAdp/101?type=design&node-id=49-227
 
 ```
 
-3. we need to make sure that build.gradle includes inside "defaultConfig":
+3. add `<uses-feature android:name="android.hardware.nfc" android:required="true" />`
+
+4. we need to make sure that build.gradle includes inside "defaultConfig":
    `missingDimensionStrategy 'react-native-camera', 'general'`

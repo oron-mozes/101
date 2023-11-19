@@ -73,7 +73,6 @@ export default function App() {
                 backgroundColor: theme.colors.primary,
               },
               title: "",
-
               headerRight: () => <MainMenu />,
               headerLeft: () => <Logo101 />,
             }}
