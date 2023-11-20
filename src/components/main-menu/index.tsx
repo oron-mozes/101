@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo } from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { IProps, RootStackParamList } from "../../interfaces";
 import { colors } from "../../shared-config";
 import { TAB_STATUS } from "../../views/homepage";
 import { RouteProp, useRoute } from "@react-navigation/native";
+import { useNFCReader } from "../../hooks/useNfcReader";
+import { useNFCSender } from "../../hooks/useNfcSender";
 
 export default function MainMenu() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -16,6 +18,8 @@ export default function MainMenu() {
   );
   const patient = useMemo(() => route.params?.patient, [route.params?.patient]);
   const { full_name = "", idf_id = "" } = patient?.personal_information ?? {};
+  const readNFC = useNFCReader();
+  const sendNFC = useNFCSender();
   return (
     <View style={{ flexDirection: "row-reverse", alignItems: "center" }}>
       {selected !== TAB_STATUS.CREATE && (
@@ -24,6 +28,12 @@ export default function MainMenu() {
       {selected === TAB_STATUS.CREATE && (
         <Text style={[styles.text]}>{`${full_name} ${idf_id}`}</Text>
       )}
+      <Button onPress={readNFC} style={{ backgroundColor: "pink" }}>
+        Read NFC
+      </Button>
+      <Button onPress={sendNFC} style={{ backgroundColor: "pink" }}>
+        Send NFC
+      </Button>
     </View>
   );
 }

@@ -15,6 +15,7 @@ import HomeScreen from "./src/views/homepage";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import TaagadScreen from "./src/views/taagad";
+import { useNfc } from "./src/hooks/useNfc";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -31,6 +32,7 @@ export const theme = {
 };
 
 export default function App() {
+  // const [nfcSupported] = useNfc();
   const { hasPermission, requestPermission } = useCameraPermission();
   const { loadInitialState } = useTaggadStore();
   const loadPatientsState = usePatientRecordsStore(
@@ -40,7 +42,7 @@ export default function App() {
 
   useEffect(() => {
     I18nManager.forceRTL(true);
-
+    console.log(I18nManager.isRTL);
     if (!hasPermission) {
       requestPermission();
     }
