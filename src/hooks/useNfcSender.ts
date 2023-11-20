@@ -6,22 +6,26 @@ import {
   NFCTagType4NDEFContentType,
 } from "react-native-hce";
 
+import * as TT from "react-native-nfc-manager";
 export function useNFCSender() {
   const [logsWrite, addLog] = useState<string>();
   let session;
+
   async function writeNdef() {
-    addLog("CAll");
-    ToastAndroid.show("Yalla", 1000);
+    ToastAndroid.show("Write", 1000);
     const tag = new NFCTagType4({
       type: NFCTagType4NDEFContentType.Text,
       content: "Hello world",
       writable: false,
     });
-    addLog("TAG");
+
     session = await HCESession.getInstance();
     session.setApplication(tag);
-    addLog("TAG E");
+
     await session.setEnabled(true);
+    session.on(HCESession.Events.HCE_STATE_READ, () => {
+      ToastAndroid.show("The tag has been read! Thank You.", ToastAndroid.LONG);
+    });
   }
   return { writeNdef, logsWrite };
 }
