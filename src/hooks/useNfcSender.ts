@@ -1,44 +1,27 @@
-import { useEffect } from "react";
-import NfcManager, { Ndef, NfcEvents, NfcTech } from "react-native-nfc-manager";
+import { useState } from "react";
+import { ToastAndroid } from "react-native";
+import {
+  HCESession,
+  NFCTagType4,
+  NFCTagType4NDEFContentType,
+} from "react-native-hce";
 
 export function useNFCSender() {
-  useEffect(() => {
-    initNfc();
-  }, []);
-  async function initNfc() {
-    try {
-      const well = await NfcManager.isEnabled();
-      // console.log("????", { well });
-      // await NfcManager.start();
-    } catch (e) {
-      console.log("BADD!!!!", e);
-    }
+  const [logsWrite, addLog] = useState<string>();
+  let session;
+  async function writeNdef() {
+    addLog("CAll");
+    ToastAndroid.show("Yalla", 1000);
+    const tag = new NFCTagType4({
+      type: NFCTagType4NDEFContentType.Text,
+      content: "Hello world",
+      writable: false,
+    });
+    addLog("TAG");
+    session = await HCESession.getInstance();
+    session.setApplication(tag);
+    addLog("TAG E");
+    await session.setEnabled(true);
   }
-
-  async function writeNdef({ type, value }) {
-    let result = false;
-    console.log("???????");
-    try {
-      // Step 1
-      await NfcManager.requestTechnology(NfcTech.Ndef, {
-        alertMessage: "Ready to write some NDEF",
-      });
-
-      const bytes = Ndef.encodeMessage([Ndef.textRecord("Hello NFC")]);
-
-      if (bytes) {
-        await NfcManager.ndefHandler // Step2
-          .writeNdefMessage(bytes); // Step3
-      }
-
-      result = true;
-    } catch (ex) {
-      console.warn(ex);
-    }
-
-    // Step 4
-    NfcManager.cancelTechnologyRequest().catch(() => 0);
-    return result;
-  }
-  return writeNdef;
+  return { writeNdef, logsWrite };
 }

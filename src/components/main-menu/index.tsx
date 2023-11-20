@@ -18,8 +18,8 @@ export default function MainMenu() {
   );
   const patient = useMemo(() => route.params?.patient, [route.params?.patient]);
   const { full_name = "", idf_id = "" } = patient?.personal_information ?? {};
-  const readNFC = useNFCReader();
-  const sendNFC = useNFCSender();
+  const { logs, readTag } = useNFCReader();
+  const { logsWrite, writeNdef } = useNFCSender();
   return (
     <View style={{ flexDirection: "row-reverse", alignItems: "center" }}>
       {selected !== TAB_STATUS.CREATE && (
@@ -28,11 +28,13 @@ export default function MainMenu() {
       {selected === TAB_STATUS.CREATE && (
         <Text style={[styles.text]}>{`${full_name} ${idf_id}`}</Text>
       )}
-      <Button onPress={readNFC} style={{ backgroundColor: "pink" }}>
+      <Button onPress={readTag} style={{ backgroundColor: "pink" }}>
         Read NFC
+        {logs}
       </Button>
-      <Button onPress={sendNFC} style={{ backgroundColor: "pink" }}>
+      <Button onPress={() => writeNdef()} style={{ backgroundColor: "pink" }}>
         Send NFC
+        {logsWrite}
       </Button>
     </View>
   );

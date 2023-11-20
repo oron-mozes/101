@@ -13,6 +13,7 @@
     "apk": "eas build -p android --profile preview",
     "dev": "eas build --profile development --platform android",
     "cache": "cd android && ./gradlew clean",
+    "gbuild": "cd android && ./gradlew build",
     "version-fix": "adb uninstall host.android.triage"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
     "react-native-autocomplete-dropdown": "^3.0.2",
     "react-native-camera": "^4.2.1",
     "react-native-gesture-handler": "^2.13.4",
+    "react-native-hce": "^0.2.0",
     "react-native-image-base64": "^0.1.4",
     "react-native-nfc-manager": "^3.14.11",
     "react-native-paper": "^5.11.1",
