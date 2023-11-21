@@ -8,7 +8,7 @@ import { usePatientRecordsStore } from "../../../../../../store/patients.record.
 import { design } from "../shared-style";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { IMeasurementsAction } from "../../../../../../interfaces";
-import { useTaggadStore } from "../../../../../../store/taggad.store";
+import { useStationStore } from "../../../../../../store/station.store";
 import { Button } from "react-native-paper";
 import { useEffect, useState } from "react";
 import { BloodPressureInputFieldHandler } from "../../../../../../form-components/blood-pressure-input-field";
@@ -37,7 +37,7 @@ export function MeasurementForm({
   const disabled = usePatientRecordsStore(
     (state) => state.activePatient.editable
   );
-  const providers = useTaggadStore((state) => state.taggad.care_providers);
+  const providers = useStationStore((state) => state.station.care_providers);
   const painRang = [...Array(11).keys()];
   useEffect(() => {
     // toggleEdit(!disabled && editable);

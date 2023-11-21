@@ -9,7 +9,7 @@ import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { ITreatmentGuide } from "../../../../../interfaces";
 import { colors, gutter } from "../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
-import { useTaggadStore } from "../../../../../store/taggad.store";
+import { useStationStore } from "../../../../../store/station.store";
 import { design } from "./shared-style";
 
 const emptyState: ITreatmentGuide = {
@@ -22,7 +22,7 @@ const emptyState: ITreatmentGuide = {
 };
 export function TreatmentGuide() {
   const translation = useTranslation();
-  const providers = useTaggadStore((state) => state.taggad.care_providers);
+  const providers = useStationStore((state) => state.station.care_providers);
   const guides = usePatientRecordsStore(
     (state) => state.activePatient.treatmentGuide.guides ?? []
   );

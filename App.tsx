@@ -10,11 +10,11 @@ import { RootStackParamList } from "./src/interfaces";
 import { ROUTES } from "./src/routes";
 import { colors } from "./src/shared-config";
 import { usePatientRecordsStore } from "./src/store/patients.record.store";
-import { useTaggadStore } from "./src/store/taggad.store";
+import { useStationStore } from "./src/store/station.store";
 import HomeScreen from "./src/views/homepage";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
-import TaagadScreen from "./src/views/taagad";
+import StationScreen from "./src/views/taagad";
 import { useNfc } from "./src/hooks/useNfc";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -34,7 +34,7 @@ export const theme = {
 export default function App() {
   // const [nfcSupported] = useNfc();
   const { hasPermission, requestPermission } = useCameraPermission();
-  const { loadInitialState } = useTaggadStore();
+  const { loadInitialState } = useStationStore();
   const loadPatientsState = usePatientRecordsStore(
     (state) => state.loadPatientsState
   );
@@ -67,7 +67,7 @@ export default function App() {
         backgroundColor={theme.colors.primary}
       />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={ROUTES.HOME}>
+        <Stack.Navigator initialRouteName={ROUTES.STATION}>
           <Stack.Screen
             name={ROUTES.HOME}
             options={{
@@ -81,7 +81,7 @@ export default function App() {
             component={HomeScreen}
           />
           <Stack.Screen
-            name={ROUTES.ACCOUNT}
+            name={ROUTES.STATION}
             options={{
               headerStyle: {
                 backgroundColor: theme.colors.primary,
@@ -89,7 +89,7 @@ export default function App() {
               headerLeft: () => <Logo101 />,
               title: "",
             }}
-            component={TaagadScreen}
+            component={StationScreen}
           />
           <Stack.Screen
             name={ROUTES.IMPORT_PATIENT}

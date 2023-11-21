@@ -131,7 +131,6 @@ export interface IAirway {
   fulfill: boolean;
 }
 
-
 export enum EMeasurementsTreatments {
   STOP_BLEEDING = "STOP_BLEEDING",
   PERIPHERAL_VAIN = "PERIPHERAL",
@@ -421,9 +420,9 @@ export interface ICareProvider {
   role: ROLE;
 }
 
-export interface ITaagad {
+export interface IStation {
   unit_name: string;
-  care_providers: { [key: string]: ICareProvider };
+  care_providers: ICareProvider[];
 }
 
 export interface IProps extends NativeStackScreenProps<RootStackParamList> {}

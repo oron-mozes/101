@@ -13,7 +13,7 @@ import {
 } from "../../../../interfaces";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
-import { useTaggadStore } from "../../../../store/taggad.store";
+import { useStationStore } from "../../../../store/station.store";
 import { ASection } from "./create-components/a-section";
 import { Avpu } from "./create-components/avpu";
 import { BSection } from "./create-components/b-section";
@@ -126,7 +126,7 @@ export function ReportTab() {
   const setActivePatient = usePatientRecordsStore(
     (state) => state.setActivePatient
   );
-  const taggad = useTaggadStore((state) => state.taggad);
+  const taggad = useStationStore((state) => state.station);
   const translation = useTranslation();
 
   const [selectedAccordionItemId, setSelectedAccordionItemId] =

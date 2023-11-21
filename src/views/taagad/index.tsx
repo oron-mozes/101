@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet } from "react-native";
-import { Divider } from "react-native-paper";
+import { InputField } from "../../form-components/input-field";
+import { useTranslation } from "../../hooks/useMyTranslation";
 import { ICareProvider } from "../../interfaces";
 import { colors } from "../../shared-config";
+import { useStationStore } from "../../store/station.store";
 import { AddProvider } from "./add-provider";
-import { AddStation } from "./add-station";
-import { SavedProvider } from "./saved-provider";
 import { GlobalActions } from "./global-actions";
+import { SavedProvider } from "./partials/saved-provider";
+import { StationHeader } from "./partials/station-header";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,
@@ -15,7 +18,15 @@ export const initialProviderState: ICareProvider = {
   role: null,
 };
 
-export default function TaagadScreen() {
+export default function StationScreen() {
+  const translation = useTranslation();
+  const station = useStationStore((state) => state.station);
+  const hardStationReset = useStationStore((state) => state.hardStationReset);
+  const [stationName, setStationName] = useState<string>(station.unit_name);
+  const [providers, setProviders] = useState<ICareProvider[]>(
+    station.care_providers ?? []
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -25,11 +36,27 @@ export default function TaagadScreen() {
           marginTop: 30,
         }}
       >
-        <AddStation />
-        <Divider style={{ marginTop: 10, marginBottom: 10, width: "100%" }} />
-        <SavedProvider />
-        <AddProvider />
+        <StationHeader />
         <GlobalActions />
+        <InputField
+          editable={true}
+          label={translation("idfUnit")}
+          value={stationName}
+          onChange={(unit_name: string) => {
+            setStationName(unit_name);
+          }}
+        />
+        <SavedProvider
+          providers={providers}
+          removeProvider={(id) =>
+            setProviders(providers.filter((p) => p.idf_id !== id))
+          }
+        />
+        <AddProvider
+          addProvider={(provider: ICareProvider) => {
+            setProviders([...providers, provider]);
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   );

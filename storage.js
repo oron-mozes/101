@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const STORAGE = {
   PATIENTS_RECORD: "patientsRecord",
   USER: "user",
-  TAAGAD: "taagad",
+  STATION: "station",
 };
 
 const storage = new Storage({

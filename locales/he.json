@@ -252,7 +252,7 @@
   "D1MG": "1 מ״ג",
   "D1": "מנה",
   "confirmMessage": "האם אתה בטוח.ה שאת.ה רוצה למחוק את הפציעה?",
-  "confirm": "מאשר",
+  "confirm": "אני מאשר.ת",
   "next": "המשך",
   "waitingForQrCode": "נא לסרוק ברקוד",
   "gotQrCodeNumber": "ברקוד מספר {{current}} התקבל",
@@ -265,7 +265,6 @@
   "SECTION": "סקשן",
   "SEATING": "הושבה",
   "JT": "JT",
-  "share": "שתף",
   "delete": "מחק תיקים רפואיים לצמיתות",
   "patientId": "מזהה ייחודי למטופל",
   "injury_time": "שעת פציעה",
@@ -280,5 +279,11 @@
   "id": "id",
   "time": "שעת ביצוע",
   "deleteRecord": "מחיקה",
-  "exportRecord": "יצא לPDF"
+  "exportRecord": "יצא לPDF",
+  "deleteStation": "מחק תחנה",
+  "share": "שיתוף",
+  "shareTitle": "שיתוף מידע רפואי",
+  "shareDescription": "שים לב, הינך עומד לשתף מידע אישי והרפואי של התחנה. זהו מידע רגיש",
+  "deleteStationTitle": "איפוס תחנה",
+  "deleteStationDescription": "הינך עומד.ת למחוק את כל המידע על התחנה ששמור במכשיר. אנא וודא.י ייצוא ושמירה של כל המידע לפני המשך הפעולה"
 }

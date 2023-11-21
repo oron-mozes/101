@@ -12,7 +12,7 @@ export function Logo101() {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
       <TouchableWithoutFeedback
-        onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
+        onPress={() => navigation.navigate(ROUTES.STATION)}
       >
         <View style={{ marginRight: 10 }}>
           <Icon size={30} source="cog-outline" color="white" />

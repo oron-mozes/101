@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from "react";
 import { SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { RootStackParamList, StackNavigation } from "../../interfaces";
 import { ROUTES } from "../../routes";
-import { useTaggadStore } from "../../store/taggad.store";
+import { useStationStore } from "../../store/station.store";
 import { HomepageFooter } from "./footer";
 import { ReportTab } from "./tabs/report-tab";
 import { StatusTab } from "./tabs/status-tab";
@@ -16,7 +16,7 @@ export enum TAB_STATUS {
 }
 
 export default function HomeScreen() {
-  const { taggad } = useTaggadStore();
+  const { station: taggad } = useStationStore();
   const route = useRoute<RouteProp<RootStackParamList>>();
   const navigation = useNavigation<StackNavigation>();
   const tab = useMemo(
@@ -26,7 +26,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!taggad.unit_name) {
-      navigation.navigate(ROUTES.ACCOUNT);
+      navigation.navigate(ROUTES.STATION);
     }
   }, [route.params?.tab]);
 

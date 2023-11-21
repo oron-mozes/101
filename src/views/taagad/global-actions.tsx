@@ -1,70 +1,63 @@
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { View, Alert } from "react-native";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
+import { DialogWrapper } from "../../components/dialog";
 import { useTranslation } from "../../hooks/useMyTranslation";
-import { StackNavigation } from "../../interfaces";
-import { ROUTES } from "../../routes";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
+import { useStationStore } from "../../store/station.store";
 
 export function GlobalActions() {
   const translation = useTranslation();
-  const navigation = useNavigation<StackNavigation>();
-
+  const [showDeleteModal, toggleDeleteModal] = useState<boolean>(false);
+  const [showShareModal, toggleShareModal] = useState<boolean>(false);
   const deletePatients = usePatientRecordsStore(
     (state) => state.deletePatients
   );
-  const patients = usePatientRecordsStore((state) => state.patients);
-  const setActivePatient = usePatientRecordsStore(
-    (state) => state.setActivePatient
-  );
-  const confirmDelete = () => {
-    Alert.alert(
-      "מחיקת תיקים רפואיים",
-      "הינך עומד.ת למחוק את כל התיקים הרפואיים ששמורים במכשיר. אנא וודא.י ייצוא ושמירה של המידע לפני המשך הפעולה.",
-      [
-        {
-          text: "ביטול",
-          style: "cancel",
-        },
-        {
-          text: "אני מאשר.ת",
-          onPress: async () => {
-            await deletePatients();
-
-            navigation.navigate(ROUTES.HOME);
-          },
-        },
-      ]
-    );
-  };
+  const hardStationReset = useStationStore((state) => state.hardStationReset);
 
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={[styles.container]}>
+      <DialogWrapper
+        testId="delete-station"
+        visible={showDeleteModal}
+        onClose={() => toggleDeleteModal(false)}
+        title={translation("deleteStationTitle")}
+        description={translation("deleteStationDescription")}
+        onConfirm={async () => {
+          await Promise.all([deletePatients(), hardStationReset()]);
+        }}
+      />
+      <DialogWrapper
+        testId="share-station"
+        visible={showShareModal}
+        onClose={() => toggleShareModal(false)}
+        title={translation("shareTitle")}
+        description={translation("shareDescription")}
+        onConfirm={async () => {}}
+      />
       <Button
-        mode="contained"
-        textColor="#fff"
-        style={{
-          backgroundColor: "red",
-          marginTop: 100,
-          marginRight: 30,
-        }}
-        onPress={confirmDelete}
+        testID="delete-station"
+        onPress={() => toggleDeleteModal(true)}
+        icon="delete-outline"
+        textColor="red"
       >
-        {translation("delete")}
+        {translation("deleteStation")}
       </Button>
-
-      {/* <Button
-        mode="contained"
-        textColor="#fff"
-        style={{ backgroundColor: "blue", marginTop: 100 }}
-        onPress={async () => {
-          changeCurrentPatientIndex(0);
-          setActivePatient(patients[0]);
-        }}
+      <Button
+        onPress={() => toggleShareModal(true)}
+        icon="share-variant-outline"
       >
         {translation("share")}
-      </Button> */}
+      </Button>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+
+    width: "100%",
+  },
+});

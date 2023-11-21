@@ -4,12 +4,14 @@ import { DropDown } from "../../../../../form-components/dropdown";
 import { SectionHeader } from "../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
-import { useTaggadStore } from "../../../../../store/taggad.store";
+import { useStationStore } from "../../../../../store/station.store";
 import { design } from "./shared-style";
 
 export function CareProvider() {
   const translation = useTranslation();
-  const careProviders = useTaggadStore((state) => state.taggad.care_providers);
+  const careProviders = useStationStore(
+    (state) => state.station.care_providers
+  );
   const providers = usePatientRecordsStore(
     (state) => state.activePatient.providers ?? []
   );
