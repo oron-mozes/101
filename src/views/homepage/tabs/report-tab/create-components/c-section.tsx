@@ -73,7 +73,6 @@ export function CSection() {
           options={convertToOptions(TOGGLE, translation)}
         />
         <RadioGroup
-       
           horizontal
           label={translation("shock")}
           onSelect={(id: string) => {
@@ -95,7 +94,6 @@ export function CSection() {
         />
 
         <BloodPressureInputFieldHandler
-         
           value={bloodPressure}
           label={translation("bloodPressure")}
           onChange={(value) => {

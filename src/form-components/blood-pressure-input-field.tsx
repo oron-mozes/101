@@ -1,14 +1,8 @@
-import { memo, useRef } from "react";
+import { useRef } from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
-import { TextInput, Icon, Text } from "react-native-paper";
-import {
-  borderSetup,
-  offset,
-  gutter,
-  inputContainer,
-  inputHeight,
-  colors,
-} from "../shared-config";
+import { Text, TextInput } from "react-native-paper";
+import { inputContainer } from "../shared-config";
+import { calcBloodPressureValue } from "./utils";
 export interface IBloodPressureInputFieldHandler {
   onChange(value: string): void;
   label: string;
@@ -32,11 +26,12 @@ export function BloodPressureInputFieldHandler({
 
   return (
     <TouchableWithoutFeedback onPress={() => handleInputPress}>
-      <View style={[styles.container]}>
-        <View style={[styles.content]}>
-          <Text onPress={() => handleInputPress} style={styles.offset}>
-            {label}
-          </Text>
+      <View style={{ flex: 1, margin: 4 }}>
+        <Text onPress={() => handleInputPress} style={styles.label}>
+          {label}
+        </Text>
+
+        <View>
           <TextInput
             disabled={!editable}
             underlineColor="transparent"
@@ -47,20 +42,8 @@ export function BloodPressureInputFieldHandler({
             textAlign="right"
             style={{ backgroundColor: "transparent" }}
             contentStyle={[styles.text]}
-            onChangeText={(value) => {
-              let subStrIndex = 2;
-              let maxLength = 2;
-              if (value.startsWith("1")) {
-                subStrIndex = 3;
-                maxLength = 3;
-              }
-              if (value.indexOf("/") === -1 && value.length >= maxLength) {
-                value = `${value.substring(0, subStrIndex)}/${value.substring(
-                  subStrIndex
-                )}`;
-              }
-
-              onChange(value);
+            onChangeText={(newValue) => {
+              onChange(calcBloodPressureValue(value, newValue));
             }}
           />
         </View>
@@ -70,32 +53,18 @@ export function BloodPressureInputFieldHandler({
 }
 
 const styles = StyleSheet.create({
+  label: {
+    marginBottom: 10,
+  },
   content: {
-    flexDirection: "column",
-    justifyContent: "space-around",
-    height: inputHeight - 10,
-    backgroundColor: colors.textInputBG,
-    width: "100%",
-  },
-  offset: {
-    ...offset,
-    marginBottom: 0,
-    width: "100%",
-    marginTop: 0,
-  },
-  fixHeight: {
-    height: 150,
-  },
-  container: {
     ...inputContainer,
-  },
-  text: {
-    // flex: 1,
-    textAlign: "right",
-    alignItems: "flex-start",
-    marginBottom: gutter,
-    marginRight: gutter,
+    flex: 0,
+    // flexDirection: "column",
+    // justifyContent: "space-around",
+    // height: inputHeight - 10,
+
     width: "100%",
-    backgroundColor: "transparent",
   },
+
+  text: inputContainer,
 });
