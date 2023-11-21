@@ -40,7 +40,6 @@ export function PatientDetails() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
-          editable={disabled}
           label={translation("patientName")}
           onChange={(full_name: string) => {
             handlers.setFullName(full_name);
@@ -48,7 +47,6 @@ export function PatientDetails() {
           value={full_name}
         />
         <InputField
-          editable={disabled}
           label={translation("idf_id")}
           maxLength={7}
           onChange={(idf_id) => {
@@ -60,7 +58,6 @@ export function PatientDetails() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <DatePicker
-          editable={disabled}
           value={incident_information.date ?? new Date().getTime()}
           label={translation("date")}
           onChange={(date: number) => {
@@ -70,7 +67,6 @@ export function PatientDetails() {
 
         <View style={styles.personalInfo}>
           <TimePicker
-            editable={disabled}
             value={incident_information.care_time ?? new Date().getTime()}
             label={translation("timeOfTreatment")}
             onChange={(care_time: number) => {
@@ -78,7 +74,6 @@ export function PatientDetails() {
             }}
           />
           <TimePicker
-            editable={disabled}
             value={incident_information.injury_time ?? new Date().getTime()}
             label={translation("timeOfInjury")}
             onChange={(injury_time: number) => {

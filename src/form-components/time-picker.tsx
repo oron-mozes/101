@@ -8,7 +8,7 @@ import {
   colors,
   gutter,
   inputHeight,
-  offset,
+  inputContainer,
 } from "../shared-config";
 // import { Appearance, useColorScheme } from "react-native-appearance";
 import { useColorScheme } from "react-native";
@@ -32,86 +32,72 @@ export function TimePicker({
   }, []);
 
   return (
-    <TouchableOpacity
-      onPress={() => editable && toggleTime(true)}
-      style={[styles.container]}
-    >
-      <View style={[styles.content]}>
-        <View>
-          {!value && (
-            <Text onPress={() => editable && toggleTime(true)}>{label}</Text>
-          )}
-          {value && (
-            <Text
-              onPress={() => editable && toggleTime(true)}
-              style={styles.time}
-            >
-              {date.format(
-                new Date(value === 0 ? new Date().getTime() : value),
-                "HH:mm"
-              )}
-            </Text>
-          )}
+    <View style={{ flex: 1, margin: 4 }}>
+      <Text style={styles.label}>{label}</Text>
+      <TouchableOpacity onPress={() => editable && toggleTime(true)}>
+        <View style={[styles.content]}>
+          <View>
+            {!value && (
+              <Text onPress={() => editable && toggleTime(true)}>{label}</Text>
+            )}
+            {value && (
+              <Text
+                onPress={() => editable && toggleTime(true)}
+                style={styles.time}
+              >
+                {date.format(
+                  new Date(value === 0 ? new Date().getTime() : value),
+                  "HH:mm"
+                )}
+              </Text>
+            )}
+          </View>
+          <Icon source="clock-outline" size={20} />
         </View>
-        <Icon source="clock-outline" size={20} />
-      </View>
-      {value && (
-        <Text onPress={() => toggleTime(true)} style={styles.offset}>
-          {label}
-        </Text>
-      )}
-      {showTime && (
-        <DateTimePicker
-          style={{ backgroundColor: "black" }}
-          display="spinner"
-          disabled={!editable}
-          value={new Date(value)}
-          mode="time"
-          is24Hour={true}
-          positiveButton={{
-            label: "אישור",
-            textColor: colorScheme === "light" ? "black" : "white",
-          }}
-          negativeButton={{
-            label: "סגור",
-            textColor: colorScheme === "light" ? "black" : "white",
-          }}
-          onChange={(data) => {
-            toggleTime(false);
 
-            if (
-              data.nativeEvent.timestamp !== 0 &&
-              data.nativeEvent.timestamp < new Date().getTime()
-            ) {
-              data.nativeEvent.utcOffset &&
-                onChange(
-                  data.nativeEvent.timestamp + data.nativeEvent.utcOffset
-                );
-            }
-          }}
-        />
-      )}
-    </TouchableOpacity>
+        {showTime && (
+          <DateTimePicker
+            style={{ backgroundColor: "black" }}
+            display="spinner"
+            disabled={!editable}
+            value={new Date(value)}
+            mode="time"
+            is24Hour={true}
+            positiveButton={{
+              label: "אישור",
+              textColor: colorScheme === "light" ? "black" : "white",
+            }}
+            negativeButton={{
+              label: "סגור",
+              textColor: colorScheme === "light" ? "black" : "white",
+            }}
+            onChange={(data) => {
+              toggleTime(false);
+
+              if (
+                data.nativeEvent.timestamp !== 0 &&
+                data.nativeEvent.timestamp < new Date().getTime()
+              ) {
+                data.nativeEvent.utcOffset &&
+                  onChange(
+                    data.nativeEvent.timestamp + data.nativeEvent.utcOffset
+                  );
+              }
+            }}
+          />
+        )}
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: inputHeight,
-    marginBottom: gutter * 2,
-  },
   content: {
-    flexDirection: "row",
+    ...inputContainer,
     justifyContent: "space-around",
-    alignItems: "center",
-    height: inputHeight,
-    margin: gutter,
-    backgroundColor: colors.textInputBG,
-    ...borderSetup,
   },
-  offset: {
-    ...offset,
+  label: {
+    marginBottom: 10,
   },
   time: {
     fontSize: 18,
