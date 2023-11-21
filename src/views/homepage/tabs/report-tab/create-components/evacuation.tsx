@@ -75,18 +75,22 @@ export function Evacuation() {
         </View>
       </Card.Content>
       <Card.Content style={styles.innerContent}>
-        {Object.values(STATUS).map((item) => (
-          <StatusChip
-            key={item}
-            label={translation(item)}
-            status={item}
-            allowSelect
-            selected={evacuation.status === item}
-            onSelect={() => {
-              handlers.setStatus(item);
-            }}
-          />
-        ))}
+        {Object.values(STATUS)
+          .filter(
+            (status) => ![STATUS.NEW_PATIENT, STATUS.CLOSED].includes(status)
+          )
+          .map((item) => (
+            <StatusChip
+              key={item}
+              label={translation(item)}
+              status={item}
+              allowSelect
+              selected={evacuation.status === item}
+              onSelect={() => {
+                handlers.setStatus(item);
+              }}
+            />
+          ))}
       </Card.Content>
     </Card>
   );

@@ -15,6 +15,7 @@ export interface IInputField {
   icon?: string;
   numberOfLines?: number;
   maxLength?: number;
+  placeholder?: string;
   value: string;
 }
 export function InputField({
@@ -26,6 +27,7 @@ export function InputField({
   numberOfLines = 1,
   maxLength,
   icon,
+  placeholder = "",
 }: IInputField) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
@@ -44,6 +46,7 @@ export function InputField({
         </Text>
         <View>
           <TextInput
+            placeholder={placeholder}
             ref={inputRef}
             maxLength={maxLength}
             numberOfLines={numberOfLines}

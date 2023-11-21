@@ -6,6 +6,7 @@ import { useTranslation } from "../../../../../hooks/useMyTranslation";
 import { ECconsciousness } from "../../../../../interfaces";
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
+import { CheckButton } from "../../../../../form-components/select-button";
 
 export function Avpu() {
   const translation = useTranslation();
@@ -27,10 +28,10 @@ export function Avpu() {
       </Card.Content>
       <Card.Content style={styles.innerContent}>
         {Object.values(ECconsciousness).map((item) => (
-          <ToggleButton
+          <CheckButton
             label={translation(item)}
             onSelect={() => handlers.toggleConsciousness(item)}
-            status={consciousness.indexOf(item) !== -1}
+            checked={consciousness.indexOf(item) !== -1}
             key={item}
           />
         ))}

@@ -21,6 +21,7 @@ import {
 import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
 import { design } from "./shared-style";
 import { calcGCS, convertToOptions, isSelectedHandler } from "./utils";
+import { CheckButton } from "../../../../../form-components/select-button";
 
 const emptyState: IReaction = {
   GCS: null,
@@ -62,7 +63,9 @@ export function DSection() {
         <SectionHeader label={translation("dSection")} />
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.section]}>
-        <Text style={styles.title}>{translation("general")}</Text>
+        <Text style={[styles.title, { marginBottom: 5 }]}>
+          {translation("general")}
+        </Text>
         <View style={[styles.options]}>
           {general &&
             Object.values(EReactionGeneral).map((item) => (
@@ -76,13 +79,15 @@ export function DSection() {
         </View>
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.section]}>
-        <Text variant="titleMedium">{translation("glazgo")}</Text>
-        <Text style={styles.title}>{translation("movement")}</Text>
+        <Text variant="titleMedium" style={[styles.title, { marginTop: 10 }]}>
+          {translation("glazgo")}
+        </Text>
+        <Text>{translation("movement")}</Text>
         <View style={[styles.options]}>
           {Object.values(EReactionMovement).map((item) => (
-            <ToggleButton
+            <CheckButton
               label={translation(item)}
-              status={item === movement}
+              checked={item === movement}
               onSelect={() => {
                 handlers.setMovement(item);
               }}
@@ -92,12 +97,12 @@ export function DSection() {
         </View>
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.section]}>
-        <Text style={styles.title}>{translation("speech")}</Text>
+        <Text>{translation("speech")}</Text>
         <View style={[styles.options]}>
           {Object.values(EReactionSpeech).map((item) => (
-            <ToggleButton
+            <CheckButton
               label={translation(item)}
-              status={item === speech}
+              checked={item === speech}
               onSelect={() => {
                 handlers.setSpeech(item);
               }}
@@ -107,12 +112,12 @@ export function DSection() {
         </View>
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.section]}>
-        <Text style={styles.title}>{translation("eyes")}</Text>
+        <Text>{translation("eyes")}</Text>
         <View style={[styles.options]}>
           {Object.values(EReactionEyes).map((item) => (
-            <ToggleButton
+            <CheckButton
               label={translation(item)}
-              status={item === eyes}
+              checked={item === eyes}
               onSelect={() => {
                 handlers.setEyes(item);
               }}
@@ -164,6 +169,8 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "left",
+    fontSize: 17,
+    fontWeight: "bold",
   },
   options: {
     flexDirection: "row",

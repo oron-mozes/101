@@ -14,7 +14,6 @@ export function InjuryReason() {
   const injuryReason = usePatientRecordsStore(
     (state) => state.activePatient.injuryReason
   );
-  const activePatient = usePatientRecordsStore((state) => state.activePatient);
   const handlers = usePatientRecordsStore(
     (state) => state.injuryReason_handlers
   );
@@ -38,6 +37,7 @@ export function InjuryReason() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
+          placeholder={translation("injuryReasonPlaceholder")}
           onChange={(circumstance: string) => {
             handlers.setCircumstance(circumstance);
           }}

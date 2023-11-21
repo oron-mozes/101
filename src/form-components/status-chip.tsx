@@ -22,14 +22,7 @@ export function StatusChip({
   editable = true,
 }: IStatusChipProps) {
   return (
-    <View
-      style={[
-        styles.container,
-        priority[status],
-        allowSelect ? styles.withSelect : {},
-      ]}
-    >
-      <Text>{label}</Text>
+    <View style={[styles.container, priority[status]]}>
       {allowSelect && (
         <RadioButtonPaper
           disabled={!editable}
@@ -40,22 +33,22 @@ export function StatusChip({
           status={selected ? "checked" : "unchecked"}
         />
       )}
+      <Text style={styles.text}>{label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  withSelect: {
-    height: 80,
-  },
   text: {
     ...chipText,
+    textAlign: "left",
+    fontSize: 17,
   },
   container: {
     ...chipContainer,
-    padding: 10,
-    justifyContent: "space-between",
-    flexDirection: "column",
+    // padding: 10,
+    justifyContent: "space-around",
+    flexDirection: "row",
     alignItems: "center",
     borderRadius: 8,
   },

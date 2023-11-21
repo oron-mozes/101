@@ -5,9 +5,10 @@ export const textColor = "rgba(37, 54, 65, 1)";
 export const chipText: TextStyle = {
   fontSize: 12,
   lineHeight: 24,
-  width: "100%",
+  flex: 1,
   marginLeft: 0,
   textAlign: "center",
+ 
 };
 
 const chipPadding: number = 0;
@@ -15,7 +16,7 @@ export const chipContainer = {
   flex: 1,
   paddingLeft: chipPadding,
   paddingRight: chipPadding,
-  height: 40,
+  height: 48,
   margin: 4,
 
   borderWidth: 1,

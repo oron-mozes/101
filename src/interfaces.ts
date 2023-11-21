@@ -95,6 +95,7 @@ export enum EInjuryReason {
   ACCIDENT = "ACCIDENT",
   GUIDED = "GUIDED",
   GAS = "GAS",
+  SHRAPNEL = "SHRAPNEL",
 }
 
 export interface IInjuryReason {
