@@ -1,13 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
 import { DialogWrapper } from "../../../components/dialog";
 import { useTranslation } from "../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../store/patients.record.store";
 import { useStationStore } from "../../../store/station.store";
-import { useNavigation } from "@react-navigation/native";
-import { ROUTES } from "../../../routes";
-import { StackNavigation } from "../../../interfaces";
 
 export function GlobalActions() {
   const translation = useTranslation();
@@ -17,7 +14,15 @@ export function GlobalActions() {
     (state) => state.deletePatients
   );
   const hardStationReset = useStationStore((state) => state.hardStationReset);
+  const unit_name = useStationStore((state) => state.station.unit_name);
+  const [disabled, setDisable] = useState<boolean>(!Boolean(unit_name));
 
+  useEffect(() => {
+    setDisable(!Boolean(unit_name));
+    return () => {
+      setDisable(!Boolean(unit_name));
+    };
+  }, [unit_name]);
   return (
     <View style={[styles.container]}>
       <DialogWrapper
@@ -40,6 +45,7 @@ export function GlobalActions() {
         onConfirm={async () => {}}
       />
       <Button
+        disabled={disabled}
         testID="delete-station"
         onPress={() => toggleDeleteModal(true)}
         icon="delete-outline"
@@ -48,6 +54,7 @@ export function GlobalActions() {
         {translation("deleteStation")}
       </Button>
       <Button
+        disabled={disabled}
         onPress={() => toggleShareModal(true)}
         icon="share-variant-outline"
       >

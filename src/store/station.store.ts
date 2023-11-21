@@ -7,7 +7,7 @@ import { devtools } from "zustand/middleware";
 export const useStationStore = create<{
   station: IStation;
   loadInitialState(): Promise<boolean>;
-  addProvider(data: ICareProvider): Promise<void>;
+  addProviders(data: ICareProvider[]): Promise<void>;
   updateStationName(name: string): Promise<void>;
   hardStationReset(): Promise<void>;
 }>()(
@@ -41,12 +41,9 @@ export const useStationStore = create<{
         return false;
       }
     },
-    async addProvider(newCareProvider: ICareProvider) {
+    async addProviders(newCareProvider: ICareProvider[]) {
       const currentData = get().station;
-      currentData.care_providers = [
-        ...currentData.care_providers,
-        newCareProvider,
-      ];
+      currentData.care_providers = newCareProvider;
       await storage.save({ key: STORAGE.STATION, data: currentData });
       set((state) => ({ ...state, station: currentData }));
     },

@@ -62,12 +62,12 @@ jest.mock("dorch-hce", () => {
 });
 import "@testing-library/jest-native/extend-expect";
 import { render, screen, fireEvent } from "@testing-library/react-native";
-import { GlobalActions } from "./partials/global-actions";
-import { usePatientRecordsStore } from "../../store/patients.record.store";
-import { useStationStore } from "../../store/station.store";
+import { GlobalActions } from "./global-actions";
+import { usePatientRecordsStore } from "../../../store/patients.record.store";
+import { useStationStore } from "../../../store/station.store";
 import { Provider as PaperProvider, Button } from "react-native-paper";
-import { theme } from "../../../App";
-import locales from "../../../locales/he.json";
+import { theme } from "../../../../App";
+import locales from "../../../../locales/he.json";
 
 describe("Station Global action", () => {
   const deletePatients = jest.fn();
@@ -76,7 +76,10 @@ describe("Station Global action", () => {
     deletePatients.mockReset();
     hardStationReset.mockReset();
     usePatientRecordsStore.setState({ deletePatients });
-    useStationStore.setState({ hardStationReset });
+    useStationStore.setState({
+      hardStationReset,
+      station: { unit_name: "station", care_providers: [] },
+    });
   });
   it("it toggle delete station", async () => {
     render(

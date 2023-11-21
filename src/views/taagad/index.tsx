@@ -34,7 +34,7 @@ export default function StationScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
   const station = useStationStore((state) => state.station);
-  const addProvider = useStationStore((state) => state.addProvider);
+  const addProviders = useStationStore((state) => state.addProviders);
   const updateStationName = useStationStore((state) => state.updateStationName);
   const [stationName, setStationName] = useState<string>(station.unit_name);
   const [providers, setProviders] = useState<ICareProvider[]>(
@@ -152,14 +152,13 @@ export default function StationScreen() {
                 disabled={!valid}
                 onPress={async () => {
                   updateStationName(stationName);
-                  await Promise.all(
-                    providers.map((provider) =>
-                      addProvider({
-                        ...provider,
-                        unit_name: station.unit_name,
-                      })
-                    )
+                  await addProviders(
+                    providers.map((provider) => ({
+                      ...provider,
+                      unit_name: station.unit_name,
+                    }))
                   );
+
                   navigation.navigate(ROUTES.HOME);
                 }}
               >
