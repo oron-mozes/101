@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { ToastAndroid } from "react-native";
-import {
-  HCESession,
-  NFCTagType4,
-  NFCTagType4NDEFContentType,
-} from "react-native-hce";
+import { HCESession, NFCTagType4, NFCTagType4NDEFContentType} from "dorch-hce";
 
-import * as TT from "react-native-nfc-manager";
 export function useNFCSender() {
   const [logsWrite, addLog] = useState<string>();
   let session;
