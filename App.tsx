@@ -69,7 +69,7 @@ export default function App() {
       />
 
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={ROUTES.STATION}>
+        <Stack.Navigator initialRouteName={ROUTES.HOME}>
           <Stack.Screen
             name={ROUTES.HOME}
             options={{
