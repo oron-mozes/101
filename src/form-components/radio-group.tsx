@@ -19,7 +19,9 @@ export function RadioGroup({
 }) {
   return (
     <View style={[horizontal ? styles.horizontal : styles.vertical]}>
-      <Text style={{ marginRight: horizontal ? 0 : 10 }}>{label}</Text>
+      <Text style={{ marginRight: horizontal ? 0 : 10, marginLeft: 4 }}>
+        {label}
+      </Text>
       <View style={[styles.horizontal]}>
         {options.map((option) => (
           <CheckButton
@@ -43,5 +45,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  vertical: {},
+  vertical: {
+    marginTop: 4,
+  },
 });
