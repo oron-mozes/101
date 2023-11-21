@@ -16,6 +16,7 @@ import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import StationScreen from "./src/views/taagad";
 import { useNfc } from "./src/hooks/useNfc";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -66,6 +67,7 @@ export default function App() {
         barStyle="light-content"
         backgroundColor={theme.colors.primary}
       />
+
       <NavigationContainer>
         <Stack.Navigator initialRouteName={ROUTES.STATION}>
           <Stack.Screen

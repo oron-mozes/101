@@ -265,7 +265,9 @@ export const usePatientRecordsStore = create<{
       set((state) => ({ ...state, patients: cleanPatients }));
     },
     async deletePatients() {
-      await storage.remove({ key: STORAGE.PATIENTS_RECORD });
+      const current = state.getState();
+      current.patients.length !== 0 &&
+        (await storage.remove({ key: STORAGE.PATIENTS_RECORD }));
       set((state) => ({ ...state, patients: [] }));
     },
     patients: [],

@@ -389,6 +389,7 @@ export interface IPatientRecord {
   treatmentGuide: ITreatment;
 }
 export enum ROLE {
+  UNIT_MEDIC = "UNIT_MEDIC",
   MEDIC = "MEDIC",
   PARAMEDIC = "PARAMEDIC",
   MD = "MD",
@@ -415,7 +416,6 @@ export enum RANK {
 export interface ICareProvider {
   full_name: string;
   idf_id: number;
-  rank: RANK;
   unit_name: string;
   role: ROLE;
 }

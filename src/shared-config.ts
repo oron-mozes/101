@@ -6,7 +6,7 @@ export const colors = {
   outline: "rgba(0, 107, 229, 1)",
   surface: "#CCE4FF",
   text: "rgba(0, 36, 77, 1)",
-  textInputBorderColor: "rgba(190, 207, 218, 1)",
+  textInputBorderColor: "#BECFDA",
   textInputBG: "rgba(255, 255, 255, 1)",
   disabled: "rgba(157, 183, 200, 1)",
   radio: "rgba(222, 231, 237, 1)",
@@ -16,7 +16,7 @@ export const colors = {
 
 export const gutter: number = 4;
 export const borderRadius: number = 8;
-export const inputHeight: number = 62;
+export const inputHeight: number = 54;
 
 export const borderSetup = {
   backgroundColor: colors.textInputBG,
@@ -36,15 +36,27 @@ export const inputContainer: ViewStyle | TextStyle | ImageStyle = {
   flexDirection: "row",
   alignContent: "center",
   flex: 1,
-  margin: 4,
   backgroundColor: colors.textInputBG,
   textAlign: "right",
   alignItems: "center",
   ...borderSetup,
   color: colors.text,
   height: inputHeight,
+  paddingLeft: 4,
+  paddingRight: 4,
+};
+export const ddContainer: ViewStyle | TextStyle | ImageStyle = {
+  // flexDirection: "row",
+  // alignContent: "center",
+  // flex: 1,
+  backgroundColor: colors.textInputBG,
+  textAlign: "right",
+  alignItems: "center",
+  // ...borderSetup,
+  color: colors.text,
 
-  // justifyContent: "flex-end",
+  // paddingLeft: 4,
+  // paddingRight: 4,
 };
 
 export const getLayout = () => {

@@ -65,7 +65,6 @@ describe("Export helpers", () => {
       {
         full_name: "שם אישי",
         idf_id: 123456789,
-        rank: RANK.RANK_1,
         unit_name: "תחנה",
         role: ROLE.MD,
       },
@@ -281,14 +280,13 @@ describe("Export helpers", () => {
           provider_issuer: {
             full_name: "שם אישי",
             idf_id: 123456789,
-            rank: RANK.RANK_1,
+
             unit_name: "תחנה",
             role: ROLE.MD,
           },
           provider_executer: {
             full_name: "שם אישי",
             idf_id: 123456789,
-            rank: RANK.RANK_1,
             unit_name: "תחנה",
             role: ROLE.MD,
           },
@@ -303,7 +301,7 @@ describe("Export helpers", () => {
             provider: {
               full_name: "שם אישי",
               idf_id: 123456789,
-              rank: RANK.RANK_1,
+
               unit_name: "תחנה",
               role: ROLE.MD,
             },

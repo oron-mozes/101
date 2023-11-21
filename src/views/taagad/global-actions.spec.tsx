@@ -62,7 +62,7 @@ jest.mock("dorch-hce", () => {
 });
 import "@testing-library/jest-native/extend-expect";
 import { render, screen, fireEvent } from "@testing-library/react-native";
-import { GlobalActions } from "./global-actions";
+import { GlobalActions } from "./partials/global-actions";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { useStationStore } from "../../store/station.store";
 import { Provider as PaperProvider, Button } from "react-native-paper";
@@ -90,5 +90,8 @@ describe("Station Global action", () => {
       "delete-station-dialog-title"
     );
     expect(dialogTitle).toHaveTextContent(locales.deleteStationTitle);
+    fireEvent.press(screen.getByTestId("delete-station-dialog-confirm"));
+    expect(hardStationReset).toHaveBeenCalled();
+    expect(deletePatients).toHaveBeenCalled();
   });
 });

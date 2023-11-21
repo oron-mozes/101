@@ -1,61 +1,91 @@
-import { Picker } from "@react-native-picker/picker";
-import { StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
+import { useState } from "react";
+import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Dialog, Icon, Portal, Text } from "react-native-paper";
 import { useTranslation } from "../hooks/useMyTranslation";
 import { IOption } from "../interfaces";
-import { borderSetup, gutter, inputHeight, offset } from "../shared-config";
+import { inputContainer, inputHeight } from "../shared-config";
 
 export function DropDown({
   label,
   options,
   initialValue,
   onSelect,
+  testId = "",
   editable = true,
 }: {
   editable?: boolean;
   label: string;
+  testId?: string;
   initialValue?: string;
   onSelect(value: IOption): void;
   options: IOption[];
 }) {
   const translation = useTranslation();
-  const selected = initialValue || 0;
+  const selected = initialValue;
+  const [showOptions, toggleOptions] = useState<boolean>(false);
+  const onClose = () => toggleOptions(false);
   return (
     <View style={styles.field}>
+      <Portal>
+        <Dialog
+          visible={showOptions}
+          onDismiss={onClose}
+          style={{ padding: 0 }}
+        >
+          <Dialog.Content>
+            {options.map((option) => (
+              <TouchableWithoutFeedback
+                key={option.id}
+                onPress={() => {
+                  onSelect(option);
+                  onClose();
+                }}
+              >
+                <Text
+                  key={option.id}
+                  onPress={() => {
+                    onSelect(option);
+                  }}
+                  variant="bodyMedium"
+                  style={styles.option}
+                  testID={`${testId}${testId ? "-" : ""}option-${option.id}`}
+                >
+                  {option.title}
+                </Text>
+              </TouchableWithoutFeedback>
+            ))}
+          </Dialog.Content>
+        </Dialog>
+      </Portal>
       <Text style={styles.label}>{label}</Text>
-      <Picker
-        enabled={editable}
-        style={styles.picker}
-        mode="dialog"
-        selectedValue={selected}
-        onValueChange={(itemValue, itemIndex) => {
-          if (itemValue) {
-            onSelect(options[itemIndex - 1]);
-          }
-        }}
-      >
-        <Picker.Item label={translation("select")} value={0} />
-        {options.map((option) => (
-          <Picker.Item label={option.title} value={option.id} key={option.id} />
-        ))}
-      </Picker>
+      <TouchableWithoutFeedback onPress={() => editable && toggleOptions(true)}>
+        <View style={styles.picker}>
+          <Text style={{ flex: 1, textAlign: "center" }}>
+            {selected ?? translation("select")}
+          </Text>
+          <View style={{ marginRight: 10, transform: "rotate(180deg)" }}>
+            <Icon source="triangle" size={10} />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  option: {
+    height: inputHeight - 10,
+    verticalAlign: "middle",
+  },
   picker: {
-    marginTop: -11,
+    ...inputContainer,
+    flex: 0,
   },
   field: {
-    ...borderSetup,
-    height: inputHeight,
-    margin: gutter,
     flex: 1,
+    marginTop: 4,
   },
   label: {
-    ...offset,
-    fontSize: 12,
-    marginTop: -3,
+    marginBottom: 10,
   },
 });

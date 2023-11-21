@@ -8,7 +8,6 @@ export const useStationStore = create<{
   station: IStation;
   loadInitialState(): Promise<boolean>;
   addProvider(data: ICareProvider): Promise<void>;
-  removeProvider(providerId: number): Promise<void>;
   updateStationName(name: string): Promise<void>;
   hardStationReset(): Promise<void>;
 }>()(
@@ -19,6 +18,10 @@ export const useStationStore = create<{
     },
     async hardStationReset() {
       await storage.clearMapForKey(STORAGE.STATION);
+      set((state) => ({
+        ...state,
+        station: { unit_name: null, care_providers: [] },
+      }));
     },
     async loadInitialState() {
       try {
@@ -40,20 +43,14 @@ export const useStationStore = create<{
     },
     async addProvider(newCareProvider: ICareProvider) {
       const currentData = get().station;
-      currentData.care_providers = {
+      currentData.care_providers = [
         ...currentData.care_providers,
-        [newCareProvider.idf_id]: newCareProvider,
-      };
+        newCareProvider,
+      ];
       await storage.save({ key: STORAGE.STATION, data: currentData });
       set((state) => ({ ...state, station: currentData }));
     },
-    async removeProvider(provideId: number) {
-      const currentData = get().station;
-      delete currentData.care_providers[provideId];
 
-      await storage.save({ key: STORAGE.STATION, data: currentData });
-      set((state) => ({ ...state, station: currentData }));
-    },
     async updateStationName(name: string) {
       const currentData = get().station;
       currentData.unit_name = name;

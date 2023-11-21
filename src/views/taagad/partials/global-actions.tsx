@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
-import { DialogWrapper } from "../../components/dialog";
-import { useTranslation } from "../../hooks/useMyTranslation";
-import { usePatientRecordsStore } from "../../store/patients.record.store";
-import { useStationStore } from "../../store/station.store";
+import { DialogWrapper } from "../../../components/dialog";
+import { useTranslation } from "../../../hooks/useMyTranslation";
+import { usePatientRecordsStore } from "../../../store/patients.record.store";
+import { useStationStore } from "../../../store/station.store";
+import { useNavigation } from "@react-navigation/native";
+import { ROUTES } from "../../../routes";
+import { StackNavigation } from "../../../interfaces";
 
 export function GlobalActions() {
   const translation = useTranslation();
@@ -25,6 +28,7 @@ export function GlobalActions() {
         description={translation("deleteStationDescription")}
         onConfirm={async () => {
           await Promise.all([deletePatients(), hardStationReset()]);
+          toggleDeleteModal(false);
         }}
       />
       <DialogWrapper
