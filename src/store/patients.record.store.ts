@@ -142,7 +142,6 @@ export const usePatientRecordsStore = create<{
     setPeriod(period: number): void;
     updateAtIndex(data: Partial<IMeasurementsAction>, index: number): void;
     updateGuideAtIndex(data: Partial<ITreatmentGuide>, index: number): void;
-    setInitial(data: ITreatment): void;
   };
   reaction_handlers: {
     setEyes(eyes: EReactionEyes): void;
@@ -150,11 +149,9 @@ export const usePatientRecordsStore = create<{
     setMovement(movement: EReactionMovement): void;
     toggleGeneral(select: EReactionGeneral): void;
     setGCS(gcs: number): void;
-    setInitial(data: IReaction): void;
   };
   provider_handlers: {
     addProvider(provider: ICareProvider): void;
-    setInitial(data: ICareProvider): void;
   };
   medicationsAndFluids_handlers: {
     addAction(action: IMedicationsAndFluidInformation): void;
@@ -163,7 +160,6 @@ export const usePatientRecordsStore = create<{
       data: Partial<IMedicationsAndFluidInformation>,
       index: number
     ): void;
-    setInitial(data: IMedicationsAndFluid): void;
   };
   measurements_handlers: {
     toggleFulfill(fulfill: boolean): void;
@@ -174,12 +170,10 @@ export const usePatientRecordsStore = create<{
     addAction(action: IMeasurementsInformation): void;
     removeAction(id: number): void;
     updateAtIndex(data: Partial<IMeasurementsInformation>, index: number): void;
-    setInitial(data: IMeasurements): void;
   };
   injuryReason_handlers: {
     toggleReason(reason: EInjuryReason): void;
     setCircumstance(circumstance: string): void;
-    setInitial(data: IInjuryReason): void;
   };
   injuries_handlers: {
     addInjury({
@@ -195,7 +189,6 @@ export const usePatientRecordsStore = create<{
     }): void;
     removeInjury(id: number): void;
     updateAtIndex(data: Partial<IInjury>, index: number): void;
-    setInitial(data: IInjury[]): void;
   };
   evacuation_handlers: {
     setTime(time: number): void;
@@ -203,11 +196,9 @@ export const usePatientRecordsStore = create<{
     setTransportation(transportation: ETransportation): void;
     setSpecialCare(special_care: boolean): void;
     setStatus(status: STATUS): void;
-    setInitial(data: IEvacuationInformation): void;
   };
   esection_handlers: {
     toggleSelection(select: EEsectionChips): void;
-    setInitial(data: EEsectionChips[]): void;
   };
   breathing_handlers: {
     toggleFulfill(fulfill: boolean): void;
@@ -216,18 +207,15 @@ export const usePatientRecordsStore = create<{
     addAction(action: IBreathingInformation): void;
     removeAction(id: number): void;
     updateAtIndex(data: Partial<IBreathingInformation>, index: number): void;
-    setInitial(date: IBreathing): void;
   };
   incident_information_handlers: {
     setTime(injury_time: number): void;
     setCareTime(care_time: number): void;
     setDate(date: number): void;
-    setInitial(data: IIncidentInformation): void;
   };
   personal_information_handlers: {
     setFullName(full_name: string): void;
     setIdf(idf_id: number): void;
-    setInitial(data: IPersonalInformation): void;
     setPatientId(data: string): void;
   };
   airway_handlers: {
@@ -235,11 +223,9 @@ export const usePatientRecordsStore = create<{
     addAction(action: IAirWayInformation): void;
     removeAction(id: number): void;
     updateById(data: Partial<IAirWayInformation>, index: number): void;
-    setInitial(data: IAirway): void;
   };
   consciousness_handlers: {
     toggleConsciousness(select: ECconsciousness): void;
-    setInitial(data: ECconsciousness[]): void;
   };
 }>()(
   devtools((set, get, state) => ({
@@ -280,12 +266,6 @@ export const usePatientRecordsStore = create<{
       });
     },
     treatmentGuide_handlers: {
-      setInitial(data: ITreatment) {
-        const current = state.getState();
-        // current.updatePartialPatient({
-        //   treatmentGuide: { ...current.activePatient.treatmentGuide, ...data },
-        // });
-      },
       addGuide(guide: ITreatmentGuide) {
         const current = state.getState();
         current.updatePartialPatient({
@@ -384,12 +364,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     reaction_handlers: {
-      setInitial(data: IReaction) {
-        // const current = state.getState();
-        // current.updatePartialPatient({
-        //   reaction: { ...current.activePatient.reaction, ...data },
-        // });
-      },
       toggleGeneral(select: EReactionGeneral) {
         const current = state.getState();
         current.updatePartialPatient({
@@ -439,12 +413,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     provider_handlers: {
-      setInitial(data: ICareProvider) {
-        // const current = state.getState();
-        // current.updatePartialPatient({
-        //   providers: [...(current.activePatient.providers ?? []), data],
-        // });
-      },
       addProvider(provider) {
         const current = state.getState();
         current.updatePartialPatient({
@@ -453,15 +421,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     medicationsAndFluids_handlers: {
-      setInitial(data: IMedicationsAndFluid) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          medicationsAndFluids: {
-            ...current.activePatient.medicationsAndFluids,
-            ...data,
-          },
-        });
-      },
       addAction(action: IMedicationsAndFluidInformation) {
         const current = state.getState();
 
@@ -510,12 +469,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     measurements_handlers: {
-      setInitial(data: IMeasurements) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          measurements: { ...current.activePatient.measurements, ...data },
-        });
-      },
       toggleFulfill(fulfill: boolean) {
         const current = state.getState();
         const actions = fulfill
@@ -607,12 +560,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     injuryReason_handlers: {
-      setInitial(data: IInjuryReason) {
-        // const current = state.getState();
-        // current.updatePartialPatient({
-        //   injuryReason: { ...current.activePatient.injuryReason, ...data },
-        // });
-      },
       toggleReason(reason: EInjuryReason) {
         const current = state.getState();
 
@@ -638,12 +585,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     injuries_handlers: {
-      setInitial(data: IInjury[]) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          injuries: [...current.activePatient.injuries, ...data],
-        });
-      },
       updateAtIndex(data: Partial<IInjury>, index: number) {
         const current = state.getState();
 
@@ -681,15 +622,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     incident_information_handlers: {
-      setInitial(data: IIncidentInformation) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          incident_information: {
-            ...current.activePatient.incident_information,
-            ...data,
-          },
-        });
-      },
       setTime(injury_time: number) {
         const current = state.getState();
 
@@ -722,16 +654,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     personal_information_handlers: {
-      setInitial(data: IPersonalInformation) {
-        const current = state.getState();
-
-        current.updatePartialPatient({
-          personal_information: {
-            ...current.activePatient.personal_information,
-            ...data,
-          },
-        });
-      },
       setFullName(full_name: string) {
         const current = state.getState();
         current.updatePartialPatient({
@@ -763,12 +685,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     airway_handlers: {
-      setInitial(data: IAirway) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          airway: { ...current.activePatient.airway, ...data },
-        });
-      },
       toggleFulfill(fulfill: boolean) {
         const current = state.getState();
         const actions = fulfill ? current.activePatient.airway.actions : [];
@@ -817,12 +733,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     breathing_handlers: {
-      setInitial(data: IBreathing) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          breathing: { ...current.activePatient.breathing, ...data },
-        });
-      },
       toggleFulfill(fulfill: boolean) {
         const current = state.getState();
         const actions = fulfill ? current.activePatient.breathing.actions : [];
@@ -891,12 +801,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     consciousness_handlers: {
-      setInitial(data: ECconsciousness[]) {
-        const current = state.getState();
-        // current.updatePartialPatient({
-        //   consciousness: [...current.activePatient.consciousness, ...data],
-        // });
-      },
       toggleConsciousness(select: ECconsciousness) {
         const current = state.getState();
 
@@ -907,12 +811,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     esection_handlers: {
-      setInitial(data: EEsectionChips[]) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          eSection: [...current.activePatient.eSection, ...data],
-        });
-      },
       toggleSelection(select: string) {
         const current = state.getState();
         current.updatePartialPatient({
@@ -921,12 +819,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     evacuation_handlers: {
-      setInitial(data: IEvacuationInformation) {
-        const current = state.getState();
-        current.updatePartialPatient({
-          evacuation: { ...current.activePatient.evacuation, ...data },
-        });
-      },
       setTime(time: number) {
         const current = state.getState();
 
