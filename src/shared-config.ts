@@ -15,6 +15,7 @@ export const colors = {
   accordion: "rgba(222, 231, 237, 1)",
 };
 export const theme = {
+  ...DefaultTheme,
   dark: true,
   direction: "rtl",
   roundness: 1,

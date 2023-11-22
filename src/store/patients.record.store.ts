@@ -33,11 +33,11 @@ import {
   ITreatmentGuide,
   STATUS,
 } from "../interfaces";
-import { emptyPatient } from "../views/homepage/tabs/report-tab";
 import {
   toggleListData,
   updateDataInIndex,
 } from "../views/homepage/tabs/report-tab/create-components/utils";
+import { emptyPatient } from "../views/homepage/tabs/report-tab/empty-patient";
 
 const initialPatient = {
   incident_information: {

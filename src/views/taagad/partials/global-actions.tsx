@@ -36,14 +36,14 @@ export function GlobalActions() {
           toggleDeleteModal(false);
         }}
       />
-      <DialogWrapper
+      {/* <DialogWrapper
         testId="share-station"
         visible={showShareModal}
         onClose={() => toggleShareModal(false)}
         title={translation("shareTitle")}
         description={translation("shareDescription")}
         onConfirm={async () => {}}
-      />
+      /> */}
       <Button
         disabled={disabled}
         testID="delete-station"
