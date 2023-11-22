@@ -24,14 +24,11 @@ export function DropDown({
   const selected = initialValue;
   const [showOptions, toggleOptions] = useState<boolean>(false);
   const onClose = () => toggleOptions(false);
+  console.log({ showOptions });
   return (
     <View style={styles.field}>
       <Portal>
-        <Dialog
-          visible={showOptions}
-          onDismiss={onClose}
-          style={{ padding: 0 }}
-        >
+        <Dialog visible={showOptions} onDismiss={onClose}>
           <Dialog.Content>
             {options.map((option) => (
               <TouchableWithoutFeedback

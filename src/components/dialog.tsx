@@ -1,4 +1,4 @@
-import { Button, Dialog, Paragraph, Portal, Text } from "react-native-paper";
+import { Button, Dialog, Portal, Text } from "react-native-paper";
 import { useTranslation } from "../hooks/useMyTranslation";
 
 export function DialogWrapper({
@@ -20,19 +20,7 @@ export function DialogWrapper({
 
   return (
     <Portal>
-      <Portal>
-        <Dialog visible={visible} onDismiss={onClose}>
-          <Dialog.Title>Sample Dialog</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>This is a sample dialog content.</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={onClose}>Cancel</Button>
-            <Button onPress={onClose}>Ok</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-      {/* <Dialog visible={visible} onDismiss={onClose}>
+      <Dialog visible={visible} onDismiss={onClose}>
         <Dialog.Title testID={`${testId}${testId ? "-" : ""}dialog-title`}>
           {title}
         </Dialog.Title>
@@ -59,7 +47,7 @@ export function DialogWrapper({
             {translation("cancel")}
           </Button>
         </Dialog.Actions>
-      </Dialog> */}
+      </Dialog>
     </Portal>
   );
 }

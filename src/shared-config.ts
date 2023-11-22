@@ -1,5 +1,5 @@
 import { ImageStyle, TextStyle, ViewStyle, I18nManager } from "react-native";
-import { DefaultTheme } from "@react-navigation/native";
+import { DefaultTheme } from "react-native-paper";
 
 export const colors = {
   primary: "rgba(0, 107, 229, 1)",
