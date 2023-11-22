@@ -22,11 +22,6 @@ describe("Avpu", () => {
 
   it("renders correctly", () => {
     const { getByTestId } = render(<Avpu />);
-    const avpuComponent = getByTestId("avpu-component");
-    expect(avpuComponent).toBeDefined();
-  });
-  it("renders correctly", () => {
-    const { getByTestId } = render(<Avpu />);
     const checkButton = getByTestId(
       `avpu-${ECconsciousness.APVN_NONE}-check-button`
     );
