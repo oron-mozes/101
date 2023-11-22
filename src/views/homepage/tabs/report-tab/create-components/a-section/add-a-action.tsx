@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Icon, Text } from "react-native-paper";
-import { initialEmptyAction } from ".";
+
 import { DropDown } from "../../../../../../form-components/dropdown";
 import { RadioGroup } from "../../../../../../form-components/radio-group";
 import { TimePicker } from "../../../../../../form-components/time-picker";
@@ -14,6 +14,7 @@ import {
 import { colors, gutter } from "../../../../../../shared-config";
 import { convertToOptions } from "../utils";
 import { isSuccessful } from "./utils";
+import { initialEmptyAction } from "./a-section";
 
 export function AddAAction({
   airWayInfo,
@@ -26,8 +27,9 @@ export function AddAAction({
   const successful = isSuccessful(airWayInfo.successful);
   return (
     <>
-      <View style={styles.element}>
+      <View style={styles.element} testID="new-airway">
         <DropDown
+          testID="new-airway-action"
           label={translation("actionTaken")}
           initialValue={airWayInfo.action}
           onSelect={(value: TAutocompleteDropdownItem) => {
@@ -45,6 +47,7 @@ export function AddAAction({
           }}
         />
         <RadioGroup
+          testID="new-airway-action-successful"
           label={translation("actionResult")}
           onSelect={(id: string) => {
             update({ ...airWayInfo, successful: id === TOGGLE.YES });
@@ -53,12 +56,13 @@ export function AddAAction({
           options={convertToOptions(TOGGLE, translation)}
         />
         <Text
+          testID="clear-airway-action"
           onPress={() => {
             update({ ...initialEmptyAction });
           }}
           style={styles.deleteAction}
         >
-          <Icon size={20} source="delete-outline" color={colors.primary} />
+          <Icon size={25} source="delete-outline" color={colors.primary} />
         </Text>
       </View>
     </>
@@ -68,8 +72,8 @@ export function AddAAction({
 const styles = StyleSheet.create({
   deleteAction: {
     justifyContent: "center",
-    marginRight: 3,
-    marginTop: 32,
+    marginLeft: 5,
+    marginTop: 50,
   },
   element: { flex: 1 },
   actionRow: {

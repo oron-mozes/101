@@ -4,13 +4,7 @@ import { ScrollView, StatusBar, StyleSheet } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
-import {
-  EReactionEyes,
-  EReactionMovement,
-  EReactionSpeech,
-  IPatientRecord,
-  RootStackParamList,
-} from "../../../../interfaces";
+import { RootStackParamList } from "../../../../interfaces";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useStationStore } from "../../../../store/station.store";

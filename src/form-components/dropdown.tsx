@@ -10,12 +10,12 @@ export function DropDown({
   options,
   initialValue,
   onSelect,
-  testId = "",
+  testID = "",
   editable = true,
 }: {
   editable?: boolean;
   label: string;
-  testId?: string;
+  testID?: string;
   initialValue?: string;
   onSelect(value: IOption): void;
   options: IOption[];
@@ -45,7 +45,7 @@ export function DropDown({
                   }}
                   variant="bodyMedium"
                   style={styles.option}
-                  testID={`${testId}${testId ? "-" : ""}option-${option.id}`}
+                  testID={`${testID}${testID ? "-" : ""}option-${option.id}`}
                 >
                   {option.title}
                 </Text>
@@ -55,7 +55,10 @@ export function DropDown({
         </Dialog>
       </Portal>
       <Text style={styles.label}>{label}</Text>
-      <TouchableWithoutFeedback onPress={() => editable && toggleOptions(true)}>
+      <TouchableWithoutFeedback
+        onPress={() => editable && toggleOptions(true)}
+        testID={`${testID}${testID ? "-" : ""}choose`}
+      >
         <View style={styles.picker}>
           <Text style={{ flex: 1, textAlign: "center" }}>
             {selected ?? translation("select")}

@@ -15,18 +15,19 @@ export function CheckButton({
   label,
   onSelect,
   editable = true,
-  checked = false,
+  checked,
   style = {},
   testID,
 }: ICheckButton) {
   return (
     <Button
-      // mode="contained"
       testID={`${testID ? `${testID}-` : ""}check-button`}
       onPress={(e) => {
         onSelect(e);
       }}
       disabled={!editable}
+      aria-checked={checked}
+      data-checked={checked}
       style={[styles.container, checked ? styles.checked : {}, style]}
     >
       <Text style={{ color: checked ? style?.color ?? "#fff" : textColor }}>

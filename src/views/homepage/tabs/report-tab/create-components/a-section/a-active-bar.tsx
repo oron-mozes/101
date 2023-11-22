@@ -14,8 +14,10 @@ export function AActiveBar() {
   const fulfill = usePatientRecordsStore(
     (state) => state.activePatient.airway.fulfill
   );
+
   return (
     <RadioGroup
+      testID="airway-fulfill"
       horizontal
       label={translation("airWayInjury")}
       onSelect={(id: string) => {

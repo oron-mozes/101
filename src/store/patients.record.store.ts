@@ -45,7 +45,7 @@ const initialPatient = {
     care_time: null,
     date: null,
   },
-  editable: true,
+
   id: null,
   personal_information: {
     full_name: null,
@@ -53,13 +53,13 @@ const initialPatient = {
     patientId: null,
   },
   breathing: {
-    fulfill: false,
+    fulfill: null,
     breathingCount: null,
     saturation: null,
     actions: [],
   },
   airway: {
-    fulfill: false,
+    fulfill: null,
     actions: [],
   },
   consciousness: [],
@@ -67,7 +67,7 @@ const initialPatient = {
   eSection: [],
   injuries: [],
   measurements: {
-    fulfill: false,
+    fulfill: null,
     bloodPressure: null,
     actions: [],
     shock: null,

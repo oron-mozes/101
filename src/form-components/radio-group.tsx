@@ -1,6 +1,6 @@
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import { CheckButton } from "./select-button";
+import { StyleSheet, Text, View } from "react-native";
 import { IOption } from "../interfaces";
+import { CheckButton } from "./select-button";
 
 export function RadioGroup({
   label,
@@ -37,7 +37,7 @@ export function RadioGroup({
             onSelect={() => {
               onSelect(option.id);
             }}
-            checked={selected === option.id}
+            checked={selected !== undefined ? selected === option.id : null}
           />
         ))}
       </View>

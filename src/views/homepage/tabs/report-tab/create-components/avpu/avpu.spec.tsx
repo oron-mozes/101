@@ -20,7 +20,7 @@ describe("Avpu", () => {
     });
   });
 
-  it("renders correctly", () => {
+  it("call the toggle with the selected item", () => {
     const { getByTestId } = render(<Avpu />);
     const checkButton = getByTestId(
       `avpu-${ECconsciousness.APVN_NONE}-check-button`
