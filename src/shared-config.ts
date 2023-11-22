@@ -1,4 +1,5 @@
 import { ImageStyle, TextStyle, ViewStyle, I18nManager } from "react-native";
+import { DefaultTheme } from "@react-navigation/native";
 
 export const colors = {
   primary: "rgba(0, 107, 229, 1)",
@@ -13,11 +14,21 @@ export const colors = {
   active: "rgba(159, 96, 159, 1)",
   accordion: "rgba(222, 231, 237, 1)",
 };
+export const theme = {
+  dark: true,
+  direction: "rtl",
+  roundness: 1,
+  colors: {
+    ...DefaultTheme.colors,
+    ...colors,
+    background: "white",
+  },
+};
 
 export const gutter: number = 4;
 export const borderRadius: number = 8;
 export const inputHeight: number = 54;
-
+export const inputFontSize: number = 17;
 export const borderSetup = {
   backgroundColor: colors.textInputBG,
   borderRadius: borderRadius,

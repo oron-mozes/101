@@ -1,13 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { decompress } from "compress-json";
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import { RNCamera } from "react-native-camera";
 import { Button, Text } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";

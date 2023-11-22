@@ -17,6 +17,7 @@ export interface IInputField {
   maxLength?: number;
   placeholder?: string;
   value: string;
+  testID?: string;
 }
 export function InputField({
   label,
@@ -28,24 +29,33 @@ export function InputField({
   maxLength,
   icon,
   placeholder = "",
+  testID,
 }: IInputField) {
   const inputRef = useRef(null);
   const handleInputPress = () => {
     editable && inputRef.current.focus();
   };
   return (
-    <TouchableWithoutFeedback onPress={handleInputPress}>
+    <TouchableWithoutFeedback
+      onPress={handleInputPress}
+      testID={`${testID ? `${testID}-` : ""}input-touch`}
+    >
       <View style={[styles.container]}>
         {icon && (
           <View style={[styles.icon]}>
             <Icon source={icon} size={20} />
           </View>
         )}
-        <Text onPress={handleInputPress} style={styles.label}>
+        <Text
+          onPress={handleInputPress}
+          style={styles.label}
+          testID={`${testID ? `${testID}-` : ""}input-label`}
+        >
           {label}
         </Text>
         <View>
           <TextInput
+            testID={`${testID ? `${testID}-` : ""}input`}
             placeholder={placeholder}
             ref={inputRef}
             maxLength={maxLength}

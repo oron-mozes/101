@@ -18,9 +18,11 @@ export function TimePicker({
   onChange,
   value = new Date().getTime(),
   editable = true,
+  testID,
 }: {
   editable?: boolean;
   label: string;
+  testID?: string;
   value?: number;
   onChange(value: number): void;
 }) {
@@ -33,15 +35,26 @@ export function TimePicker({
 
   return (
     <View style={{ flex: 1, margin: 4 }}>
-      <Text style={styles.label}>{label}</Text>
+      <Text
+        style={styles.label}
+        testID={`${testID ? `${testID}-` : ""}picker-label`}
+      >
+        {label}
+      </Text>
       <TouchableOpacity onPress={() => editable && toggleTime(true)}>
         <View style={[styles.content]}>
           <View>
             {!value && (
-              <Text onPress={() => editable && toggleTime(true)}>{label}</Text>
+              <Text
+                onPress={() => editable && toggleTime(true)}
+                testID={`${testID ? `${testID}-` : ""}picker-toggle`}
+              >
+                {label}
+              </Text>
             )}
             {value && (
               <Text
+                testID={`${testID ? `${testID}-` : ""}picker-view`}
                 onPress={() => editable && toggleTime(true)}
                 style={styles.time}
               >
@@ -57,6 +70,7 @@ export function TimePicker({
 
         {showTime && (
           <DateTimePicker
+            testID={`${testID ? `${testID}-` : ""}picker`}
             style={{ backgroundColor: "black" }}
             display="spinner"
             disabled={!editable}
@@ -72,6 +86,7 @@ export function TimePicker({
               textColor: colorScheme === "light" ? "black" : "white",
             }}
             onChange={(data) => {
+              console.log("??", data.nativeEvent.timestamp);
               toggleTime(false);
 
               if (

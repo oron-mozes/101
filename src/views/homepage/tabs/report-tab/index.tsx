@@ -25,7 +25,7 @@ import { Evacuation } from "./create-components/evacuation";
 import { InjuryReason } from "./create-components/injury-reason";
 import { MedicationsAndFluidSection } from "./create-components/medication";
 import { PatientBodyPicker } from "./create-components/patient-body-picker";
-import { PatientDetails } from "./create-components/patient-details";
+import { PatientDetails } from "./create-components/patient-details/patient-details";
 import { Prognosis } from "./create-components/prognosis";
 import { TreatmentGuide } from "./create-components/treatment-guide";
 import { Measurements } from "./create-components/treatment-mesurments";

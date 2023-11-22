@@ -3,16 +3,24 @@ import date from "date-and-time";
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
-import { borderRadius, colors, gutter, inputContainer } from "../shared-config";
+import {
+  borderRadius,
+  colors,
+  gutter,
+  inputContainer,
+  inputFontSize,
+} from "../shared-config";
 
 export function DatePicker({
   label,
   onChange,
   value,
   editable = true,
+  testID,
 }: {
   editable?: boolean;
   label: string;
+  testID?: string;
   value?: number;
   onChange(value: number): void;
 }) {
@@ -23,12 +31,24 @@ export function DatePicker({
   }, [time]);
   return (
     <View style={{ flex: 1, margin: 4 }}>
-      <Text style={styles.label}>{label}</Text>
-      <TouchableOpacity onPress={() => toggleTime(true)}>
+      <Text
+        style={styles.label}
+        testID={`${testID ? `${testID}-` : ""}date-label`}
+      >
+        {label}
+      </Text>
+      <TouchableOpacity
+        onPress={() => toggleTime(true)}
+        testID={`${testID ? `${testID}-` : ""}date-touch`}
+      >
         <View style={[styles.content]}>
           <View>
             {time && (
-              <Text onPress={() => toggleTime(true)} style={styles.time}>
+              <Text
+                onPress={() => toggleTime(true)}
+                style={styles.time}
+                testID={`${testID ? `${testID}-` : ""}date-view`}
+              >
                 {date.format(new Date(time), "DD/MM/YY")}
               </Text>
             )}
@@ -38,6 +58,7 @@ export function DatePicker({
 
         {showTime && (
           <DateTimePicker
+            testID={`${testID ? `${testID}-` : ""}date-picker`}
             disabled={!editable}
             value={new Date()}
             mode="date"
@@ -58,10 +79,9 @@ const styles = StyleSheet.create({
   },
   content: {
     ...inputContainer,
-    justifyContent: "space-around",
   },
-
   time: {
-    fontSize: 18,
+    fontSize: inputFontSize,
+    marginRight: 8,
   },
 });

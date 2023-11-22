@@ -1,18 +1,19 @@
 import { StyleSheet, View } from "react-native";
 import { Card } from "react-native-paper";
-import { DatePicker } from "../../../../../form-components/date-picker";
-import { InputField } from "../../../../../form-components/input-field";
-import { SectionHeader } from "../../../../../form-components/section-header";
-import { TimePicker } from "../../../../../form-components/time-picker";
-import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
-
-import { design } from "./shared-style";
-import { useEffect } from "react";
+import { DatePicker } from "../../../../../../form-components/date-picker";
+import { InputField } from "../../../../../../form-components/input-field";
+import { SectionHeader } from "../../../../../../form-components/section-header";
+import { TimePicker } from "../../../../../../form-components/time-picker";
+import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
+import { design } from "../shared-style";
 
 export function PatientDetails() {
-  const { full_name, idf_id } = usePatientRecordsStore(
-    (state) => state.activePatient.personal_information
+  const full_name = usePatientRecordsStore(
+    (state) => state.activePatient.personal_information.full_name
+  );
+  const idf_id = usePatientRecordsStore(
+    (state) => state.activePatient.personal_information.idf_id
   );
   const incident_information = usePatientRecordsStore(
     (state) => state.activePatient.incident_information
@@ -24,14 +25,6 @@ export function PatientDetails() {
     return state.personal_information_handlers;
   });
 
-  const updatePartialPatient = usePatientRecordsStore((state) => {
-    return state.updatePartialPatient;
-  });
-
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
-
   const translation = useTranslation();
   return (
     <Card style={styles.card}>
@@ -40,6 +33,7 @@ export function PatientDetails() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
+          testID="patient-name"
           label={translation("patientName")}
           onChange={(full_name: string) => {
             handlers.setFullName(full_name);
@@ -47,8 +41,9 @@ export function PatientDetails() {
           value={full_name}
         />
         <InputField
+          testID="idf-id"
           label={translation("idf_id")}
-          maxLength={7}
+          maxLength={9}
           onChange={(idf_id) => {
             handlers.setIdf(Number(idf_id));
           }}
@@ -57,16 +52,9 @@ export function PatientDetails() {
         />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
-        <DatePicker
-          value={incident_information.date ?? new Date().getTime()}
-          label={translation("date")}
-          onChange={(date: number) => {
-            incidentHandlers.setDate(date);
-          }}
-        />
-
         <View style={styles.personalInfo}>
           <TimePicker
+            testID="care-time"
             value={incident_information.care_time ?? new Date().getTime()}
             label={translation("timeOfTreatment")}
             onChange={(care_time: number) => {
@@ -74,6 +62,7 @@ export function PatientDetails() {
             }}
           />
           <TimePicker
+            testID="injury-time"
             value={incident_information.injury_time ?? new Date().getTime()}
             label={translation("timeOfInjury")}
             onChange={(injury_time: number) => {
@@ -81,6 +70,14 @@ export function PatientDetails() {
             }}
           />
         </View>
+        <DatePicker
+          testID="injury"
+          value={incident_information.date ?? new Date().getTime()}
+          label={translation("date")}
+          onChange={(date: number) => {
+            incidentHandlers.setDate(date);
+          }}
+        />
       </Card.Content>
     </Card>
   );

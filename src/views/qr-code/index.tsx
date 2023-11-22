@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { Button, Text } from "react-native-paper";
 import QRCode from "react-native-qrcode-svg";
-import storage, { STORAGE } from "../../../storage";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import {
   IPatientRecord,
@@ -20,10 +19,10 @@ import {
 import { ROUTES } from "../../routes";
 
 import { trimUndefinedRecursively } from "compress-json";
-import { splicePatient } from "./utils";
-import { colors } from "../../shared-config";
 import StepIndicator from "react-native-step-indicator";
+import { colors } from "../../shared-config";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
+import { splicePatient } from "./utils";
 
 export default function QrCode() {
   const route = useRoute<RouteProp<RootStackParamList>>();

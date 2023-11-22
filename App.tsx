@@ -2,35 +2,21 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { I18nManager, StatusBar, StyleSheet, View } from "react-native";
-import { DefaultTheme, PaperProvider, Text } from "react-native-paper";
+import { PaperProvider, Text } from "react-native-paper";
 import { useCameraPermission } from "react-native-vision-camera";
 import { Logo101 } from "./src/components/left-menu/101-logo";
 import MainMenu from "./src/components/main-menu";
 import { RootStackParamList } from "./src/interfaces";
 import { ROUTES } from "./src/routes";
-import { colors } from "./src/shared-config";
 import { usePatientRecordsStore } from "./src/store/patients.record.store";
 import { useStationStore } from "./src/store/station.store";
 import HomeScreen from "./src/views/homepage";
 import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import StationScreen from "./src/views/taagad";
-import { useNfc } from "./src/hooks/useNfc";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { theme } from "./src/shared-config";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-export const theme = {
-  // ...DefaultTheme,
-  dark: true,
-  direction: "rtl",
-  roundness: 1,
-  colors: {
-    ...DefaultTheme.colors,
-    ...colors,
-    background: "white",
-  },
-};
 
 export default function App() {
   // const [nfcSupported] = useNfc();

@@ -9,6 +9,7 @@ export interface ICheckButton {
   editable?: boolean;
   checked?: boolean;
   style?: { color?: string; backgroundColor?: string };
+  testID?: string;
 }
 export function CheckButton({
   label,
@@ -16,6 +17,7 @@ export function CheckButton({
   editable = true,
   checked = false,
   style = {},
+  testID,
 }: ICheckButton) {
   return (
     <Button

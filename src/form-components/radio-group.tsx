@@ -9,22 +9,28 @@ export function RadioGroup({
   selected,
   horizontal = false,
   editable = true,
+  testID,
 }: {
   editable?: boolean;
   horizontal?: boolean;
   selected: string;
+  testID?: string;
   onSelect(id: string): void;
   options: IOption[];
   label: string;
 }) {
   return (
     <View style={[horizontal ? styles.horizontal : styles.vertical]}>
-      <Text style={{ marginRight: horizontal ? 0 : 10, marginLeft: 4 }}>
+      <Text
+        style={{ flex: 1, marginLeft: 4 }}
+        testID={`${testID ? `${testID}-` : ""}radio-label`}
+      >
         {label}
       </Text>
-      <View style={[styles.horizontal]}>
+      <View style={[styles.horizontal, { flex: 1 }]}>
         {options.map((option) => (
           <CheckButton
+            testID={`${testID ? `${testID}-` : ""}radio-${option.id}`}
             editable={editable}
             key={option.id}
             label={option.title}

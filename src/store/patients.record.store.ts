@@ -234,7 +234,7 @@ export const usePatientRecordsStore = create<{
     toggleFulfill(fulfill: boolean): void;
     addAction(action: IAirWayInformation): void;
     removeAction(id: number): void;
-    updateAtIndex(data: Partial<IAirWayInformation>, index: number): void;
+    updateById(data: Partial<IAirWayInformation>, index: number): void;
     setInitial(data: IAirway): void;
   };
   consciousness_handlers: {
@@ -803,19 +803,15 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      updateAtIndex(data: Partial<IAirWayInformation>, index: number) {
+      updateById(data: Partial<IAirWayInformation>, id: number) {
         const current = state.getState();
 
         current.updatePartialPatient({
           airway: {
             ...current.activePatient.airway,
-            actions: [
-              ...updateDataInIndex(
-                current.activePatient.airway.actions,
-                data,
-                index
-              ),
-            ],
+            actions: current.activePatient.airway.actions.map((action) =>
+              action.id === id ? data : action
+            ),
           },
         });
       },
@@ -1045,6 +1041,7 @@ export const usePatientRecordsStore = create<{
     },
     updatePartialPatient(data) {
       set((state) => {
+        console.log({ data });
         return {
           ...state,
           activePatient: { ...state.activePatient, ...data },

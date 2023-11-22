@@ -41,14 +41,10 @@ export function Avpu() {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    ...design.card,
-  },
-  content: { ...design.content },
+  card: design.card,
+  content: design.content,
   innerContent: {
-    flexDirection: "row-reverse",
-    justifyContent: "center",
-    alignContent: "center",
+    flexDirection: "row",
     marginTop: 10,
   },
 });
