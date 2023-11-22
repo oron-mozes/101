@@ -15,7 +15,7 @@ import { borderSetup, colors, gutter } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useStationStore } from "../../../../store/station.store";
 import { ASection } from "./create-components/a-section";
-import { Avpu } from "./create-components/avpu";
+import { Avpu } from "./create-components/avpu/avpu";
 import { BSection } from "./create-components/b-section";
 import { CSection } from "./create-components/c-section";
 import { CareProvider } from "./create-components/care-provider";

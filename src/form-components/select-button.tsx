@@ -22,6 +22,7 @@ export function CheckButton({
   return (
     <Button
       // mode="contained"
+      testID={`${testID ? `${testID}-` : ""}check-button`}
       onPress={(e) => {
         onSelect(e);
       }}

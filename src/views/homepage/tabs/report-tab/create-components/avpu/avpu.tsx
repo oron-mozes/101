@@ -1,12 +1,11 @@
 import { StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
-import { ToggleButton } from "../../../../../form-components/ToggleButton";
-import { SectionHeader } from "../../../../../form-components/section-header";
-import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import { ECconsciousness } from "../../../../../interfaces";
-import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
-import { design } from "./shared-style";
-import { CheckButton } from "../../../../../form-components/select-button";
+import { SectionHeader } from "../../../../../../form-components/section-header";
+import { CheckButton } from "../../../../../../form-components/select-button";
+import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { ECconsciousness } from "../../../../../../interfaces";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
+import { design } from "../shared-style";
 
 export function Avpu() {
   const translation = useTranslation();
@@ -17,9 +16,6 @@ export function Avpu() {
   const handlers = usePatientRecordsStore(
     (state) => state.consciousness_handlers
   );
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
 
   return (
     <Card style={styles.card}>
@@ -29,6 +25,7 @@ export function Avpu() {
       <Card.Content style={styles.innerContent}>
         {Object.values(ECconsciousness).map((item) => (
           <CheckButton
+            testID={`avpu-${item}`}
             label={translation(item)}
             onSelect={() => handlers.toggleConsciousness(item)}
             checked={consciousness.indexOf(item) !== -1}
