@@ -22,7 +22,7 @@ import { CareProvider } from "./create-components/care-provider";
 import { DSection } from "./create-components/d-section";
 import { ESection } from "./create-components/e-section";
 import { Evacuation } from "./create-components/evacuation";
-import { InjuryReason } from "./create-components/injury-reason";
+import { InjuryReason } from "./create-components/injury-reason/injury-reason";
 import { MedicationsAndFluidSection } from "./create-components/medication";
 import { PatientBodyPicker } from "./create-components/patient-body-picker";
 import { PatientDetails } from "./create-components/patient-details/patient-details";

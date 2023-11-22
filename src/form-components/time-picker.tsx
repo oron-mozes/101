@@ -86,7 +86,6 @@ export function TimePicker({
               textColor: colorScheme === "light" ? "black" : "white",
             }}
             onChange={(data) => {
-              console.log("??", data.nativeEvent.timestamp);
               toggleTime(false);
 
               if (

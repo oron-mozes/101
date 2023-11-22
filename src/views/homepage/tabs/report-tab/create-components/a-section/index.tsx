@@ -43,7 +43,6 @@ export function ASection() {
     !Boolean(actions.length) && updateAction({ ...initialEmptyAction });
   }, [actions]);
 
-  console.log({ actions });
   const newActionValid =
     (Boolean(action?.action) && Boolean(action?.time)) === true;
 

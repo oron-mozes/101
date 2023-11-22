@@ -1,33 +1,37 @@
 import { StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
-import { ToggleButton } from "../../../../../form-components/ToggleButton";
-import { InputField } from "../../../../../form-components/input-field";
-import { SectionHeader } from "../../../../../form-components/section-header";
-import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import { EInjuryReason } from "../../../../../interfaces";
-import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
-import { design } from "./shared-style";
-import { isSelectedHandler } from "./utils";
+import { ToggleButton } from "../../../../../../form-components/ToggleButton";
+import { InputField } from "../../../../../../form-components/input-field";
+import { SectionHeader } from "../../../../../../form-components/section-header";
+import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { EInjuryReason } from "../../../../../../interfaces";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
+import { design } from "../shared-style";
+import { isSelectedHandler } from "../utils";
 
 export function InjuryReason() {
   const translation = useTranslation();
-  const injuryReason = usePatientRecordsStore(
-    (state) => state.activePatient.injuryReason
+  const reasons = usePatientRecordsStore(
+    (state) => state.activePatient.injuryReason.reasons
+  );
+  const circumstance = usePatientRecordsStore(
+    (state) => state.activePatient.injuryReason.circumstance
   );
   const handlers = usePatientRecordsStore(
     (state) => state.injuryReason_handlers
   );
 
-  const isSelected = isSelectedHandler(injuryReason?.reasons ?? []);
+  const isSelected = isSelectedHandler(reasons ?? []);
 
   return (
-    <Card style={styles.card}>
+    <Card style={styles.card} testID="injury-reason-card">
       <Card.Content style={styles.content}>
         <SectionHeader label={translation("injuryReason")} />
       </Card.Content>
       <Card.Content style={styles.innerContent}>
         {Object.values(EInjuryReason).map((item) => (
           <ToggleButton
+            testID={`injury-reason-${item}`}
             key={item}
             label={translation(item)}
             status={isSelected(item)}
@@ -37,11 +41,12 @@ export function InjuryReason() {
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField
+          testID="injury-circumstance"
           placeholder={translation("injuryReasonPlaceholder")}
           onChange={(circumstance: string) => {
             handlers.setCircumstance(circumstance);
           }}
-          value={injuryReason?.circumstance}
+          value={circumstance}
           label={translation("circumstance")}
         />
       </Card.Content>

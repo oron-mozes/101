@@ -933,7 +933,6 @@ export const usePatientRecordsStore = create<{
     },
     updatePartialPatient(data) {
       set((state) => {
-        console.log({ data });
         return {
           ...state,
           activePatient: { ...state.activePatient, ...data },

@@ -7,23 +7,27 @@ export interface IRadioButton {
   label: string;
   editable?: boolean;
   status?: boolean;
+  testID?: string;
 }
 export function ToggleButton({
   label,
   onSelect,
   editable = true,
   status = false,
+  testID,
 }: IRadioButton) {
   return (
     <TouchableOpacity onPress={() => onSelect(!status)}>
       <View style={styles.container}>
         <RadioButtonPaper
+          testID={`${testID}${testID ? "-" : ""}radio-button`}
           disabled={!editable}
           onPress={() => onSelect(!status)}
           value={""}
           status={status ? "checked" : "unchecked"}
         />
         <Text
+          testID={`${testID}${testID ? "-" : ""}radio-label`}
           style={[styles.text, !editable ? styles.disabled : {}]}
           disabled={!editable}
           onPress={() => onSelect(!status)}
