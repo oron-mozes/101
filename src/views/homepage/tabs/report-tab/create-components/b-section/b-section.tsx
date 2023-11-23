@@ -12,7 +12,7 @@ import { AddActionCTA } from "../section-shared-components/add-action-cta";
 import { SavedAction } from "../section-shared-components/saved-action";
 import { design } from "../shared-style";
 import { BActiveBar } from "./b-active-bar";
-import { allowToAddAction } from "./utils";
+import { allowToAddAction } from "../section-shared-components/utils";
 
 const initialEmptyAction: IAction<EBreathingTreatment> = {
   action: null,

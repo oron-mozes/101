@@ -5,7 +5,6 @@ import {
   EEsectionChips,
   EInjuryReason,
   EMeasurementsTreatments,
-  EMedications,
   EReactionEyes,
   EReactionGeneral,
   EReactionMovement,
@@ -228,7 +227,6 @@ describe("Export helpers", () => {
           dose: E_ANASTASIA_ACTIQ_DOSE.D800MG,
           time: date,
           id: 123,
-          action: EMedications.ACTIQ,
         },
       ],
     };

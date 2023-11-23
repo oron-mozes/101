@@ -4,7 +4,7 @@ import { shareAsync } from "expo-sharing";
 import locale from "../../locales/he.json";
 import { IPatientRecord } from "../interfaces";
 import { timeToDate } from "./date-to-time";
-import { calcGCS } from "../views/homepage/tabs/report-tab/create-components/utils";
+import { calcGCS } from "../views/homepage/tabs/report-tab/create-components/d-section/utils";
 
 export const createPDFWithImage = async (
   imagePath: string,

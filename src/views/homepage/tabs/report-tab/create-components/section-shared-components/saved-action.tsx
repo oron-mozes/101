@@ -41,7 +41,7 @@ export function SavedAction<T>({
                 information.id
               );
           }}
-          options={convertToOptions<T>(options, translation)}
+          options={convertToOptions(options, translation)}
         />
       </View>
       <View style={[styles.element, styles.actionRow]}>

@@ -11,7 +11,7 @@ export interface IStatusChipProps {
   selected?: boolean;
   onSelect?(status: string): void;
   editable?: boolean;
-  testID: string;
+  testID?: string;
 }
 export function StatusChip({
   allowSelect = false,

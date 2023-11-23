@@ -1,5 +1,6 @@
 import { EAirWayTreatment, TOGGLE } from "../../../../../../interfaces";
-import { allowToAddAction, isSuccessful } from "./utils";
+import { allowToAddAction } from "../section-shared-components/utils";
+import { isSuccessful } from "./utils";
 
 describe("A section utils", () => {
   let action = {

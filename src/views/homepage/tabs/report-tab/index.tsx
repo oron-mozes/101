@@ -143,7 +143,7 @@ export function ReportTab() {
             id={ACCORDION_ITEM.SECOND_TAB}
           >
             <TreatmentGuide />
-            <Measurements />
+            {/* <Measurements /> */}
           </List.Accordion>
         </List.AccordionGroup>
       </ScrollView>

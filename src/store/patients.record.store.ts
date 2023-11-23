@@ -14,6 +14,7 @@ import {
   EReactionMovement,
   EReactionSpeech,
   ETransportation,
+  E_InjuryType,
   IAction,
   IAirway,
   IBreathing,
@@ -21,7 +22,6 @@ import {
   IEvacuationInformation,
   IIncidentInformation,
   IInjury,
-  IInjuryInformation,
   IInjuryReason,
   IMeasurements,
   IMeasurementsAction,
@@ -48,6 +48,7 @@ const initialPatient = {
   },
 
   id: null,
+  prognosis: [],
   personal_information: {
     full_name: null,
     idf_id: null,
@@ -87,7 +88,6 @@ const initialPatient = {
     reasons: [],
     circumstance: null,
   },
-  prognosis: null,
   evacuation: {
     time: null,
     destination: null,
@@ -141,7 +141,7 @@ export const usePatientRecordsStore = create<{
     removeGuide(id: number): void;
     removeMeasurementAction(id: number): void;
     setPeriod(period: number): void;
-    updateById(data: Partial<IMeasurementsAction>, index: number): void;
+    updateAtIndex(data: Partial<IMeasurementsAction>, index: number): void;
     updateGuideAtIndex(data: Partial<ITreatmentGuide>, index: number): void;
   };
   reaction_handlers: {
@@ -188,7 +188,7 @@ export const usePatientRecordsStore = create<{
       id: number;
       xPos: number;
       yPos: number;
-      data: IInjuryInformation;
+      data: E_InjuryType;
     }): void;
     cleanInjuries(): void;
     removeInjury(id: number): void;
@@ -340,7 +340,7 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      updateById(data: Partial<IMeasurementsAction>, index: number) {
+      updateAtIndex(data: Partial<IMeasurementsAction>, index: number) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -887,7 +887,6 @@ export const usePatientRecordsStore = create<{
       const patient = {
         ...selectedPatient,
       };
-
       set((state) => ({ ...state, activePatient: { ...patient } as any }));
     },
     async savePatient() {
@@ -908,10 +907,12 @@ export const usePatientRecordsStore = create<{
         reaction: undefined,
         medicationsAndFluids: undefined,
         injuryReason: undefined,
-        prognosis: "",
+        prognosis: [],
         evacuation: undefined,
         treatmentGuide: undefined,
       };
+      console.log("final", { p1: final.prognosis, p2: active.prognosis });
+
       for (const key in final) {
         if (_.isArray(active[key]) || _.isString(active[key])) {
           final[key] = active[key];

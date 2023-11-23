@@ -49,9 +49,6 @@ export function Measurements() {
   const handlers = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers
   );
-  const disabled = usePatientRecordsStore(
-    (state) => state.activePatient.editable
-  );
 
   useEffect(() => {
     if (actions.length === 0) {
@@ -74,7 +71,7 @@ export function Measurements() {
       <Card.Content style={[styles.innerContent]}>
         <View style={[styles.innerContent, { flex: 1 }]}>
           <DropDown
-            editable={disabled}
+            editable={false}
             label={translation("treatment_period")}
             initialValue={period?.toString()}
             onSelect={(selected) => {

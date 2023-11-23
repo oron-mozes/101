@@ -10,9 +10,11 @@ import { colors, gutter } from "../../../../../../shared-config";
 
 export function Prognosis() {
   const translation = useTranslation();
-  const prognosis = usePatientRecordsStore(
-    (state) => state.activePatient.prognosis ?? []
-  );
+  const prognosis = usePatientRecordsStore((state) => [
+    ...state.activePatient.prognosis,
+  ]);
+  const activePatient = usePatientRecordsStore((state) => state.activePatient);
+  console.log(activePatient);
   const updatePrognosis = usePatientRecordsStore(
     (state) => state.updatePrognosis
   );

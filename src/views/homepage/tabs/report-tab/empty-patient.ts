@@ -53,7 +53,7 @@ export const emptyPatient: IPatientRecord = {
     actions: [
       {
         id: null,
-        action: null,
+
         dose: null,
         time: null,
         type: null,
