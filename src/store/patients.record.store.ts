@@ -190,8 +190,9 @@ export const usePatientRecordsStore = create<{
       yPos: number;
       data: IInjuryInformation;
     }): void;
+    cleanInjuries(): void;
     removeInjury(id: number): void;
-    updateById(data: Partial<IInjury>, index: number): void;
+    updateByIndex(data: Partial<IInjury>, index: number): void;
   };
   evacuation_handlers: {
     setTime(time: number): void;
@@ -589,9 +590,8 @@ export const usePatientRecordsStore = create<{
       },
     },
     injuries_handlers: {
-      updateById(data: Partial<IInjury>, index: number) {
+      updateByIndex(data: Partial<IInjury>, index: number) {
         const current = state.getState();
-
         current.updatePartialPatient({
           injuries: updateDataInIndex(
             current.activePatient.injuries,
@@ -602,7 +602,6 @@ export const usePatientRecordsStore = create<{
       },
       addInjury({ xPos, yPos, data, id }) {
         const current = state.getState();
-
         current.updatePartialPatient({
           injuries: [
             ...current.activePatient.injuries,
@@ -612,6 +611,14 @@ export const usePatientRecordsStore = create<{
               yPos,
               data,
             },
+          ],
+        });
+      },
+      cleanInjuries() {
+        const current = state.getState();
+        current.updatePartialPatient({
+          injuries: [
+            ...current.activePatient.injuries.filter((item) => item.data),
           ],
         });
       },

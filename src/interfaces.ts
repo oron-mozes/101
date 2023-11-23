@@ -50,14 +50,7 @@ export enum EHT_POSITION {
 export interface IHT {
   time: number;
 }
-export interface IInjuryInformation {
-  gunshot?: boolean;
-  hits?: boolean;
-  burn?: boolean;
-  cut?: boolean;
-  touniquet?: boolean;
-  touniquet_time?: number;
-}
+
 export enum EAirWayTreatment {
   AW = "AW",
   INTUBE = "INTUBE",
@@ -337,10 +330,21 @@ export interface ITreatment {
   measurements: ITreatmentGuideMeasurementsInformation;
 }
 
+export enum E_InjuryType {
+  BURN = "BURN",
+  CUT = "CUT",
+  HIT = "HIT",
+  GUNSHOT = "GUNSHOT",
+  TOUNIQUET = "TOUNIQUET",
+  "CG" = "CG",
+  "KATETER" = "KATETER",
+}
+
 export interface IInjury {
   xPos: number;
   yPos: number;
-  data: IInjuryInformation;
+  data: E_InjuryType;
+  time?: number;
   id: number;
 }
 export interface IPatientRecord {

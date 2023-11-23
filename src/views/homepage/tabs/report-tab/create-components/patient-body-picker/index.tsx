@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Card, Text } from "react-native-paper";
 import { BodyPicker } from "../../../../../../components/body-picker";
-import { InjuryModal } from "../../../../../../components/body-picker/injury-modal";
+import { InjuryModal } from "../../../../../../components/body-picker/injury-modal/injury-modal";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
@@ -14,11 +14,14 @@ import { CutLegend } from "./cut-legend";
 import { BurnLegend } from "./burns-legend";
 import { hasBeenClicked } from "./utils";
 import { ConfirmModal } from "../../../../../../components/confirm-modal";
+import { CGLegend } from "./cg-legend";
+import { KateterLegend } from "./kateter-legend";
+import { borderSetup } from "../../../../../../shared-config";
 
 export function PatientBodyPicker() {
   const translation = useTranslation();
   const injuries = usePatientRecordsStore((state) => {
-    return state.activePatient.injuries ?? [];
+    return [...state.activePatient.injuries];
   });
 
   const handlers = usePatientRecordsStore((state) => state.injuries_handlers);
@@ -50,7 +53,7 @@ export function PatientBodyPicker() {
         <InjuryModal
           closeHandler={() => toggleModal(false)}
           onChange={(data) => {
-            handlers.updateAtIndex({ data }, injuries.length - 1);
+            handlers.updateByIndex(data, injuries.length - 1);
           }}
         />
       )}
@@ -63,40 +66,61 @@ export function PatientBodyPicker() {
           }}
         />
       )}
-      <TouchableWithoutFeedback onPress={handlePress}>
-        <Card style={styles.card}>
-          <Card.Content style={styles.content}>
-            <SectionHeader label={translation("bodyPicker")} />
-          </Card.Content>
+
+      <Card style={styles.card}>
+        <Card.Content style={styles.content}>
+          <SectionHeader label={translation("bodyPicker")} />
+        </Card.Content>
+        <TouchableWithoutFeedback onPress={handlePress}>
           <Card.Content style={[styles.innerContent]}>
             <BodyPicker />
           </Card.Content>
-          <Card.Content
-            style={[styles.innerContent, styles.center, { marginTop: 40 }]}
-          >
+        </TouchableWithoutFeedback>
+        <Card.Content
+          style={[
+            styles.innerContent,
+            {
+              width: "98%",
+              marginLeft: "1%",
+              marginTop: 40,
+              flexDirection: "column",
+              ...borderSetup,
+            },
+          ]}
+        >
+          <Text style={{ fontWeight: "bold" }}>{translation("legend")}</Text>
+          <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View style={[styles.legend, { borderLeftWidth: 0 }]}>
               <TouniquetLegend />
-              <Text>{translation("TH")}</Text>
+              <Text variant="bodySmall">{translation("TH")}</Text>
+            </View>
+            <View style={styles.legend}>
+              <CGLegend />
+              <Text variant="bodySmall">{translation("cg")}</Text>
+            </View>
+            <View style={styles.legend}>
+              <KateterLegend />
+              <Text variant="bodySmall">{translation("kateter")}</Text>
             </View>
             <View style={styles.legend}>
               <GunLegend />
-              <Text>{translation("gunshots")}</Text>
+              <Text variant="bodySmall">{translation("gunshots")}</Text>
             </View>
             <View style={styles.legend}>
               <HitLegend />
-              <Text>{translation("hits")}</Text>
+              <Text variant="bodySmall">{translation("hits")}</Text>
             </View>
             <View style={styles.legend}>
               <CutLegend />
-              <Text>{translation("cut")}</Text>
+              <Text variant="bodySmall">{translation("cut")}</Text>
             </View>
             <View style={styles.legend}>
               <BurnLegend />
-              <Text>{translation("burn")}</Text>
+              <Text variant="bodySmall">{translation("burn")}</Text>
             </View>
-          </Card.Content>
-        </Card>
-      </TouchableWithoutFeedback>
+          </View>
+        </Card.Content>
+      </Card>
     </>
   );
 }
@@ -104,15 +128,13 @@ export function PatientBodyPicker() {
 const styles = StyleSheet.create({
   legend: {
     flex: 1,
+
     justifyContent: "center",
     alignItems: "center",
     borderLeftWidth: 1,
   },
-  card: {
-    ...design.card,
-  },
-  content: { ...design.content },
-  center: {},
+  card: design.card,
+  content: design.content,
   innerContent: {
     flexDirection: "row",
     flexWrap: "wrap",

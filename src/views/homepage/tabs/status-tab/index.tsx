@@ -72,6 +72,7 @@ export function StatusTab() {
           {sortByPriority(patients).map((patient, index) => {
             return (
               <Swipeable
+                key={index}
                 renderLeftActions={(
                   progressAnimatedValue,
                   dragAnimatedValue,

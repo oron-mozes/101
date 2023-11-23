@@ -149,10 +149,8 @@ const styles = StyleSheet.create({
   split: {
     flex: 1,
   },
-  card: {
-    ...design.card,
-  },
-  content: { ...design.content },
+  card: design.card,
+  content: design.content,
   innerContent: {
     flexDirection: "row-reverse",
     justifyContent: "center",

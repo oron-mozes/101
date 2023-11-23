@@ -41,7 +41,6 @@ export function updateDataInIndex<T>(data: T[], item: T, index: number): T[] {
   const replace = { ...data[index], ...item };
 
   newData[index] = replace;
-
   return newData;
 }
 

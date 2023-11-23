@@ -3,7 +3,8 @@ import date from "date-and-time";
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
-import { inputContainer } from "../shared-config";
+import { inputContainer, inputHeight } from "../shared-config";
+// import { Appearance, useColorScheme } from "react-native-appearance";
 import { useColorScheme } from "react-native";
 
 export function TimePicker({
@@ -24,10 +25,15 @@ export function TimePicker({
 
   useEffect(() => {
     onChange(value);
-  }, []);
+  }, [value]);
 
   return (
-    <View style={{ flex: 1, margin: 4 }}>
+    <View
+      style={{
+        flex: 1,
+        margin: 4,
+      }}
+    >
       <Text
         style={styles.label}
         testID={`${testID ? `${testID}-` : ""}picker-label`}
@@ -80,16 +86,17 @@ export function TimePicker({
             }}
             onChange={(data) => {
               toggleTime(false);
-
-              if (
-                data.nativeEvent.timestamp !== 0 &&
-                data.nativeEvent.timestamp < new Date().getTime()
-              ) {
-                data.nativeEvent.utcOffset &&
-                  onChange(
-                    data.nativeEvent.timestamp + data.nativeEvent.utcOffset
-                  );
-              }
+              //there is a bug that if past midnight, we change the time to the day before
+              //it consider it as same day so 23:07 and 00:07 are blocked
+              // if (
+              //   data.nativeEvent.timestamp !== 0 &&
+              //   data.nativeEvent.timestamp < new Date().getTime()
+              // ) {
+              data.nativeEvent.utcOffset &&
+                onChange(
+                  data.nativeEvent.timestamp + data.nativeEvent.utcOffset
+                );
+              // }
             }}
           />
         )}
@@ -108,5 +115,7 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 18,
+    height: inputHeight,
+    verticalAlign: "middle",
   },
 });
