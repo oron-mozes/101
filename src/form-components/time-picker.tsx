@@ -88,15 +88,15 @@ export function TimePicker({
               toggleTime(false);
               //there is a bug that if past midnight, we change the time to the day before
               //it consider it as same day so 23:07 and 00:07 are blocked
-              // if (
-              //   data.nativeEvent.timestamp !== 0 &&
-              //   data.nativeEvent.timestamp < new Date().getTime()
-              // ) {
-              data.nativeEvent.utcOffset &&
-                onChange(
-                  data.nativeEvent.timestamp + data.nativeEvent.utcOffset
-                );
-              // }
+              if (
+                data.nativeEvent.timestamp !== 0 &&
+                data.nativeEvent.timestamp < new Date().getTime()
+              ) {
+                data.nativeEvent.utcOffset &&
+                  onChange(
+                    data.nativeEvent.timestamp + data.nativeEvent.utcOffset
+                  );
+              }
             }}
           />
         )}
