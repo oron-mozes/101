@@ -4,22 +4,22 @@ import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { TOGGLE } from "../../../../../../interfaces";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { convertToOptions } from "../utils";
-import { isSuccessful } from "../section-shared-components/utils";
+import { isSuccessful } from "./utils";
 
-export function AActiveBar() {
+export function BActiveBar() {
   const translation = useTranslation();
   const toggleFulfill = usePatientRecordsStore(
-    (state) => state.airway_handlers.toggleFulfill
+    (state) => state.breathing_handlers.toggleFulfill
   );
   const fulfill = usePatientRecordsStore(
-    (state) => state.activePatient.airway.fulfill
+    (state) => state.activePatient.breathing.fulfill
   );
 
   return (
     <RadioGroup
-      testID="airway-fulfill"
+      testID="breathing-fulfill"
       horizontal
-      label={translation("airWayInjury")}
+      label={translation("breathingInjury")}
       onSelect={(id: string) => {
         toggleFulfill(id === TOGGLE.YES);
       }}

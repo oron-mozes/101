@@ -6,57 +6,60 @@ import { DropDown } from "../../../../../../form-components/dropdown";
 import { RadioGroup } from "../../../../../../form-components/radio-group";
 import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
-import {
-  EAirWayTreatment,
-  IAirWayInformation,
-  TOGGLE,
-} from "../../../../../../interfaces";
+import { IAction, TOGGLE } from "../../../../../../interfaces";
 import { colors, gutter } from "../../../../../../shared-config";
 import { convertToOptions } from "../utils";
 import { isSuccessful } from "./utils";
-import { initialEmptyAction } from "./a-section";
 
-export function AddAAction({
-  airWayInfo,
+export function AddAction<T>({
+  information,
   update,
+  initialEmptyAction,
+  testID,
+  options,
 }: {
-  airWayInfo: IAirWayInformation;
-  update(airWayInfo: IAirWayInformation): void;
+  options: Record<string, string>;
+  testID: string;
+  initialEmptyAction: IAction<T>;
+  information: IAction<T>;
+  update(information: IAction<T>): void;
 }) {
   const translation = useTranslation();
-  const successful = isSuccessful(airWayInfo.successful);
+  const successful = isSuccessful(information.successful);
   return (
     <>
-      <View style={styles.element} testID="new-airway">
+      <View style={styles.element} testID={testID}>
         <DropDown
-          testID="new-airway-action"
+          testID={`${testID}-action`}
           label={translation("actionTaken")}
-          initialValue={airWayInfo.action && translation(airWayInfo.action)}
+          initialValue={
+            information.action && translation(information.action as string)
+          }
           onSelect={(value: TAutocompleteDropdownItem) => {
-            update({ ...airWayInfo, action: value.id as EAirWayTreatment });
+            update({ ...information, action: value.id as T });
           }}
-          options={convertToOptions(EAirWayTreatment, translation)}
+          options={convertToOptions(options, translation)}
         />
       </View>
       <View style={[styles.element, styles.actionRow]}>
         <TimePicker
-          value={airWayInfo.time}
+          value={information.time}
           label={translation("actionTime")}
           onChange={(time: number) => {
-            update({ ...airWayInfo, time });
+            update({ ...information, time });
           }}
         />
         <RadioGroup
-          testID="new-airway-action-successful"
+          testID={`${testID}-action-successful`}
           label={translation("actionResult")}
           onSelect={(id: string) => {
-            update({ ...airWayInfo, successful: id === TOGGLE.YES });
+            update({ ...information, successful: id === TOGGLE.YES });
           }}
           selected={successful}
           options={convertToOptions(TOGGLE, translation)}
         />
         <Text
-          testID="clear-airway-action"
+          testID={`clear-${testID}-action`}
           onPress={() => {
             update({
               ...initialEmptyAction,

@@ -103,16 +103,11 @@ export interface IInjuryReason {
   circumstance: string;
 }
 
-export interface IAirWayInformation {
-  action: EAirWayTreatment;
+export interface IAction<T> {
+  action: T;
   time: number;
   successful: boolean;
   id: number;
-}
-export interface IBreathingInformation {
-  action: EBreathingTreatment;
-  time: number;
-  successful: boolean;
 }
 
 export const TOGGLE = {
@@ -121,14 +116,14 @@ export const TOGGLE = {
 };
 
 export interface IBreathing {
-  actions: IBreathingInformation[];
+  actions: IAction<EBreathingTreatment>[];
   breathingCount: number;
   saturation: number;
   fulfill: boolean;
 }
 
 export interface IAirway {
-  actions: IAirWayInformation[];
+  actions: IAction<EAirWayTreatment>[];
   fulfill: boolean;
 }
 
@@ -139,14 +134,8 @@ export enum EMeasurementsTreatments {
   IO = "IO",
 }
 
-export interface IMeasurementsInformation {
-  action: EMeasurementsTreatments;
-  time: number;
-  successful: boolean;
-}
 export interface IMeasurements {
-  actions: IMeasurementsInformation[];
-
+  actions: IAction<EMeasurementsTreatments>[];
   shock: boolean;
   palpated: boolean;
   puls: number;

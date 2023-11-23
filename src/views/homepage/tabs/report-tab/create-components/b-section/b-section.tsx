@@ -1,35 +1,44 @@
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { Card, Icon, Text } from "react-native-paper";
+import { Card } from "react-native-paper";
+import { InputField } from "../../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
-import { EAirWayTreatment, IAction } from "../../../../../../interfaces";
-import { colors, gutter, inputFontSize } from "../../../../../../shared-config";
+import { EBreathingTreatment, IAction } from "../../../../../../interfaces";
+import { gutter } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { AddAction } from "../section-shared-components/add-a-action";
+import { AddActionCTA } from "../section-shared-components/add-action-cta";
 import { SavedAction } from "../section-shared-components/saved-action";
 import { design } from "../shared-style";
-import { AActiveBar } from "./a-active-bar";
-import { allowToAddAction } from "../section-shared-components/utils";
-import { AddActionCTA } from "../section-shared-components/add-action-cta";
+import { BActiveBar } from "./b-active-bar";
+import { allowToAddAction } from "./utils";
 
-export const initialEmptyAction: IAction<EAirWayTreatment> = {
+const initialEmptyAction: IAction<EBreathingTreatment> = {
   action: null,
   time: null,
-  id: null,
   successful: null,
+  id: null,
 };
-
-export function ASection() {
+export function BSection() {
   const translation = useTranslation();
 
-  const actions = usePatientRecordsStore(
-    (state) => state.activePatient.airway.actions
+  const breathingCount = usePatientRecordsStore(
+    (state) => state.activePatient.breathing.breathingCount
   );
 
-  const handlers = usePatientRecordsStore((state) => state.airway_handlers);
+  const saturation = usePatientRecordsStore(
+    (state) => state.activePatient.breathing.saturation
+  );
 
-  const [action, updateAction] = useState<IAction<EAirWayTreatment>>();
+  const actions = usePatientRecordsStore(
+    (state) => state.activePatient.breathing.actions
+  );
+
+  const [action, updateAction] = useState<IAction<EBreathingTreatment>>();
+
+  const handlers = usePatientRecordsStore((state) => state.breathing_handlers);
+
   useEffect(() => {
     updateAction({
       ...initialEmptyAction,
@@ -48,46 +57,66 @@ export function ASection() {
       time: new Date().getTime(),
     });
   };
+
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
-        <SectionHeader label={translation("aSection")} />
+        <SectionHeader label={translation("bSection")} />
       </Card.Content>
-      <Card.Content style={[styles.innerContent, styles.airwayView]}>
-        <AActiveBar />
+      <Card.Content style={[styles.innerContent, styles.breathingView]}>
+        <BActiveBar />
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        <InputField
+          testID="breathing-count"
+          label={translation("breathings")}
+          numeric
+          value={breathingCount?.toString()}
+          onChange={(breathingCount) => {
+            handlers.setBreathingCount(Number(breathingCount));
+          }}
+        />
+        <InputField
+          testID="saturation"
+          numeric
+          value={saturation?.toString()}
+          label={translation("saturation")}
+          onChange={(saturation) => {
+            handlers.setSaturation(Number(saturation));
+          }}
+        />
       </Card.Content>
       <Card.Content style={{ flexDirection: "column" }}>
-        {actions.map((airWayInfo: IAction<EAirWayTreatment>) => (
+        {actions.map((breathingInfo: IAction<EBreathingTreatment>) => (
           <SavedAction
-            options={EAirWayTreatment}
-            testID="saved-airway-action-treatment"
-            information={airWayInfo}
-            key={airWayInfo.id}
+            options={EBreathingTreatment}
+            testID="saved-breathing-action-treatment"
+            information={breathingInfo}
+            key={breathingInfo.id}
             handlers={handlers}
           />
         ))}
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.actionRow]}>
         {action && (
-          <AddAction<EAirWayTreatment>
+          <AddAction<EBreathingTreatment>
             information={action}
             update={updateAction}
-            testID="new-airway"
-            options={EAirWayTreatment}
+            testID="new-breathing"
+            options={EBreathingTreatment}
             initialEmptyAction={initialEmptyAction}
           />
         )}
       </Card.Content>
-
       <Card.Content
-        testID="add-airway-action"
+        testID="add-breathing-action"
         style={[styles.innerContent, styles.addItemAction]}
         aria-disabled={!newActionValid}
       >
         <AddActionCTA
           valid={newActionValid}
           saveNewAction={saveNewAction}
-          testID="add-airway"
+          testID="add-breathing"
         />
       </Card.Content>
     </Card>
@@ -95,12 +124,6 @@ export function ASection() {
 }
 
 const styles = StyleSheet.create({
-  deleteAction: {
-    justifyContent: "center",
-    marginRight: 3,
-    marginTop: 32,
-  },
-  element: { flex: 1 },
   actionRow: {
     flexDirection: "row",
   },
@@ -108,8 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     margin: gutter,
   },
-  airwayView: {
-    justifyContent: "flex-start",
+  breathingView: {
     width: "50%",
   },
   card: {

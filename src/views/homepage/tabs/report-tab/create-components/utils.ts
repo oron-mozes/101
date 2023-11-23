@@ -46,10 +46,7 @@ export function calcGCS({
   );
 }
 
-export function convertToOptions(
-  data: Record<string, string>,
-  translation
-): IOption[] {
+export function convertToOptions<T>(data: T, translation): IOption[] {
   return Object.values(data).map((item) => ({
     id: item,
     title: translation(item),

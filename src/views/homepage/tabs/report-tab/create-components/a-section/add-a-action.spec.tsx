@@ -2,8 +2,8 @@ import { fireEvent, render } from "@testing-library/react-native";
 import { PaperProvider } from "react-native-paper";
 import { theme } from "../../../../../../shared-config";
 import { initialEmptyAction } from "./a-section";
-import { AddAAction } from "./add-a-action";
 import { EAirWayTreatment, TOGGLE } from "../../../../../../interfaces";
+import { AddAction } from "../section-shared-components/add-a-action";
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
@@ -17,9 +17,12 @@ describe("AddAAction", () => {
   it("should select EAirWayTreatment", () => {
     const { getByTestId } = render(
       <PaperProvider theme={theme}>
-        <AddAAction
-          airWayInfo={{ ...initialEmptyAction }}
+        <AddAction
+          information={{ ...initialEmptyAction }}
           update={mockUpdate}
+          options={EAirWayTreatment}
+          testID={"new-airway"}
+          initialEmptyAction={initialEmptyAction}
         />
       </PaperProvider>
     );
@@ -41,9 +44,12 @@ describe("AddAAction", () => {
   it("should send successful action and then reset", () => {
     const { getByTestId } = render(
       <PaperProvider theme={theme}>
-        <AddAAction
-          airWayInfo={{ ...initialEmptyAction }}
+        <AddAction
+          information={{ ...initialEmptyAction }}
           update={mockUpdate}
+          options={EAirWayTreatment}
+          testID={"new-airway"}
+          initialEmptyAction={initialEmptyAction}
         />
       </PaperProvider>
     );

@@ -10,8 +10,8 @@ import { usePatientRecordsStore } from "../../../../store/patients.record.store"
 import { useStationStore } from "../../../../store/station.store";
 import { ASection } from "./create-components/a-section";
 import { Avpu } from "./create-components/avpu/avpu";
-import { BSection } from "./create-components/b-section";
-import { CSection } from "./create-components/c-section";
+import { BSection } from "./create-components/b-section/b-section";
+import { CSection } from "./create-components/c-section/c-section";
 import { CareProvider } from "./create-components/care-provider";
 import { DSection } from "./create-components/d-section";
 import { ESection } from "./create-components/e-section";
@@ -115,12 +115,12 @@ export function ReportTab() {
             <ASection />
             <BSection />
             <CSection />
-            <DSection />
+            {/*<DSection />
             <ESection />
             <MedicationsAndFluidSection />
             <Prognosis />
             <CareProvider />
-            <Evacuation />
+            <Evacuation /> */}
           </List.Accordion>
           <List.Accordion
             right={() => (

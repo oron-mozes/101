@@ -3,18 +3,20 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import storage, { STORAGE } from "../../storage";
 import {
+  EAirWayTreatment,
+  EBreathingTreatment,
   ECconsciousness,
   EEsectionChips,
   EInjuryReason,
+  EMeasurementsTreatments,
   EReactionEyes,
   EReactionGeneral,
   EReactionMovement,
   EReactionSpeech,
   ETransportation,
-  IAirWayInformation,
+  IAction,
   IAirway,
   IBreathing,
-  IBreathingInformation,
   ICareProvider,
   IEvacuationInformation,
   IIncidentInformation,
@@ -23,7 +25,6 @@ import {
   IInjuryReason,
   IMeasurements,
   IMeasurementsAction,
-  IMeasurementsInformation,
   IMedicationsAndFluid,
   IMedicationsAndFluidInformation,
   IPatientRecord,
@@ -107,7 +108,6 @@ export const usePatientRecordsStore = create<{
   patients: IPatientRecord[];
   activePatient: {
     incident_information: IIncidentInformation;
-    editable: boolean;
     id: string;
     personal_information: IPersonalInformation;
     providers: ICareProvider[];
@@ -140,7 +140,7 @@ export const usePatientRecordsStore = create<{
     removeGuide(id: number): void;
     removeMeasurementAction(id: number): void;
     setPeriod(period: number): void;
-    updateAtIndex(data: Partial<IMeasurementsAction>, index: number): void;
+    updateById(data: Partial<IMeasurementsAction>, index: number): void;
     updateGuideAtIndex(data: Partial<ITreatmentGuide>, index: number): void;
   };
   reaction_handlers: {
@@ -156,7 +156,7 @@ export const usePatientRecordsStore = create<{
   medicationsAndFluids_handlers: {
     addAction(action: IMedicationsAndFluidInformation): void;
     removeAction(id: number): void;
-    updateAtIndex(
+    updateById(
       data: Partial<IMedicationsAndFluidInformation>,
       index: number
     ): void;
@@ -167,9 +167,12 @@ export const usePatientRecordsStore = create<{
     togglePalpated(palpated: boolean): void;
     setPuls(puls: number): void;
     setBloodPressure(bloodPressure: string): void;
-    addAction(action: IMeasurementsInformation): void;
+    addAction(action: IAction<EMeasurementsTreatments>): void;
     removeAction(id: number): void;
-    updateAtIndex(data: Partial<IMeasurementsInformation>, index: number): void;
+    updateById(
+      data: Partial<IAction<EMeasurementsTreatments>>,
+      index: number
+    ): void;
   };
   injuryReason_handlers: {
     toggleReason(reason: EInjuryReason): void;
@@ -188,7 +191,7 @@ export const usePatientRecordsStore = create<{
       data: IInjuryInformation;
     }): void;
     removeInjury(id: number): void;
-    updateAtIndex(data: Partial<IInjury>, index: number): void;
+    updateById(data: Partial<IInjury>, index: number): void;
   };
   evacuation_handlers: {
     setTime(time: number): void;
@@ -204,9 +207,9 @@ export const usePatientRecordsStore = create<{
     toggleFulfill(fulfill: boolean): void;
     setBreathingCount(count: number): void;
     setSaturation(count: number): void;
-    addAction(action: IBreathingInformation): void;
+    addAction(action: IAction<EBreathingTreatment>): void;
     removeAction(id: number): void;
-    updateAtIndex(data: Partial<IBreathingInformation>, index: number): void;
+    updateById(data: Partial<IAction<EBreathingTreatment>>, id: number): void;
   };
   incident_information_handlers: {
     setTime(injury_time: number): void;
@@ -220,9 +223,9 @@ export const usePatientRecordsStore = create<{
   };
   airway_handlers: {
     toggleFulfill(fulfill: boolean): void;
-    addAction(action: IAirWayInformation): void;
+    addAction(action: IAction<EAirWayTreatment>): void;
     removeAction(id: number): void;
-    updateById(data: Partial<IAirWayInformation>, index: number): void;
+    updateById(data: Partial<IAction<EAirWayTreatment>>, index: number): void;
   };
   consciousness_handlers: {
     toggleConsciousness(select: ECconsciousness): void;
@@ -327,7 +330,7 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      updateAtIndex(data: Partial<IMeasurementsAction>, index: number) {
+      updateById(data: Partial<IMeasurementsAction>, index: number) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -433,7 +436,6 @@ export const usePatientRecordsStore = create<{
             ],
           },
         });
-        console.log("??", current.activePatient.medicationsAndFluids.actions);
       },
       removeAction(id: number) {
         const current = state.getState();
@@ -449,7 +451,7 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      updateAtIndex(
+      updateById(
         data: Partial<IMedicationsAndFluidInformation>,
         index: number
       ) {
@@ -521,7 +523,7 @@ export const usePatientRecordsStore = create<{
         });
       },
 
-      addAction(action: IMeasurementsInformation) {
+      addAction(action: IAction<EMeasurementsTreatments>) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -531,7 +533,10 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      updateAtIndex(data: Partial<IMeasurementsInformation>, index: number) {
+      updateById(
+        data: Partial<IAction<EMeasurementsTreatments>>,
+        index: number
+      ) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -586,7 +591,7 @@ export const usePatientRecordsStore = create<{
       },
     },
     injuries_handlers: {
-      updateAtIndex(data: Partial<IInjury>, index: number) {
+      updateById(data: Partial<IInjury>, index: number) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -698,7 +703,7 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      addAction(action: IAirWayInformation) {
+      addAction(action: IAction<EAirWayTreatment>) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -720,7 +725,7 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      updateById(data: Partial<IAirWayInformation>, id: number) {
+      updateById(data: Partial<IAction<EAirWayTreatment>>, id: number) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -764,7 +769,7 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      addAction(action: IBreathingInformation) {
+      addAction(action: IAction<EBreathingTreatment>) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -786,7 +791,7 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      updateAtIndex(data: Partial<IBreathingInformation>, index: number) {
+      updateById(data: Partial<IAction<EBreathingTreatment>>, index: number) {
         const current = state.getState();
 
         current.updatePartialPatient({
@@ -909,17 +914,17 @@ export const usePatientRecordsStore = create<{
           final[key] = _.omitBy(active[key], _.isNil);
         }
       }
-      const updateAtIndex = patients.findIndex((p) => {
+      const updateById = patients.findIndex((p) => {
         return (
           p.personal_information.patientId ===
           final.personal_information.patientId
         );
       });
       final.new = false;
-      if (updateAtIndex === -1) {
+      if (updateById === -1) {
         patients.push(final);
       } else {
-        patients[updateAtIndex] = final;
+        patients[updateById] = final;
       }
 
       await storage.save({

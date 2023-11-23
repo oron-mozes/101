@@ -10,7 +10,9 @@ export function RadioGroup({
   horizontal = false,
   editable = true,
   testID,
+  style = {},
 }: {
+  style?: Record<string, unknown>;
   editable?: boolean;
   horizontal?: boolean;
   selected: string;
@@ -20,7 +22,7 @@ export function RadioGroup({
   label: string;
 }) {
   return (
-    <View style={[horizontal ? styles.horizontal : styles.vertical]}>
+    <View style={[horizontal ? styles.horizontal : styles.vertical, style]}>
       <Text
         style={{ flex: 1, marginLeft: 4 }}
         testID={`${testID ? `${testID}-` : ""}radio-label`}

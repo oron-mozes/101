@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { StyleSheet, View } from "react-native";
 import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 import { Icon, Text } from "react-native-paper";
@@ -5,53 +6,51 @@ import { DropDown } from "../../../../../../form-components/dropdown";
 import { RadioGroup } from "../../../../../../form-components/radio-group";
 import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
-import {
-  EAirWayTreatment,
-  IAirWayInformation,
-  TOGGLE,
-} from "../../../../../../interfaces";
+import { IAction, TOGGLE } from "../../../../../../interfaces";
 import { colors } from "../../../../../../shared-config";
-import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { convertToOptions } from "../utils";
 import { isSuccessful } from "./utils";
-import _ from "lodash";
 
-export function SavedAAction({
-  airWayInfo,
+export function SavedAction<T>({
+  information,
+  handlers,
+  testID,
+  options,
 }: {
-  airWayInfo: IAirWayInformation;
+  testID: string;
+  information: IAction<T>;
+  handlers;
+  options: Record<string, string>;
 }) {
   const translation = useTranslation();
-  const handlers = usePatientRecordsStore((state) => state.airway_handlers);
-  const successful = isSuccessful(airWayInfo.successful);
-  console.log("airWayInfo", airWayInfo);
+  const successful = isSuccessful(information.successful);
   return (
     <View style={{ flexDirection: "row" }}>
       <View style={styles.element}>
         <DropDown
-          testID="saved-airway-action-treatment"
+          testID={testID}
           label={translation("actionTaken")}
-          initialValue={translation(airWayInfo.action)}
+          initialValue={translation(information.action as string)}
           onSelect={(value: TAutocompleteDropdownItem) => {
-            if (_.isEqual(airWayInfo.action, value.id)) return;
+            if (_.isEqual(information.action, value.id)) return;
             value &&
               handlers.updateById(
                 {
-                  action: value.id as EAirWayTreatment,
+                  action: value.id as T,
                 },
-                airWayInfo.id
+                information.id
               );
           }}
-          options={convertToOptions(EAirWayTreatment, translation)}
+          options={convertToOptions<T>(options, translation)}
         />
       </View>
       <View style={[styles.element, styles.actionRow]}>
         <TimePicker
-          value={airWayInfo.time}
+          value={information.time}
           label={translation("actionTime")}
           onChange={(time: number) => {
-            if (_.isEqual(airWayInfo.time, time)) return;
-            handlers.updateById({ time }, airWayInfo.id);
+            if (_.isEqual(information.time, time)) return;
+            handlers.updateById({ time }, information.id);
           }}
         />
         <RadioGroup
@@ -59,7 +58,7 @@ export function SavedAAction({
           onSelect={(id: string) => {
             handlers.updateById(
               { successful: id === TOGGLE.YES },
-              airWayInfo.id
+              information.id
             );
           }}
           selected={successful}
@@ -67,7 +66,7 @@ export function SavedAAction({
         />
         <Text
           onPress={() => {
-            handlers.removeAction(airWayInfo.id);
+            handlers.removeAction(information.id);
           }}
           style={styles.deleteAction}
         >

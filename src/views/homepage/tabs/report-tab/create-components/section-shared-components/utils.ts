@@ -1,9 +1,5 @@
 import _ from "lodash";
-import {
-  EAirWayTreatment,
-  IAirWayInformation,
-  TOGGLE,
-} from "../../../../../../interfaces";
+import { IAction, TOGGLE } from "../../../../../../interfaces";
 
 export function isSuccessful(successful?: boolean) {
   return !_.isNull(successful) && !_.isUndefined(successful)
@@ -13,9 +9,9 @@ export function isSuccessful(successful?: boolean) {
     : null;
 }
 
-export function allowToAddAction(
-  actions: IAirWayInformation[],
-  action?: IAirWayInformation
+export function allowToAddAction<T>(
+  actions: IAction<T>[],
+  action?: IAction<T>
 ): boolean {
   if (!_.isNull(action?.action) && !_.isNull(action?.time)) {
     return true;
