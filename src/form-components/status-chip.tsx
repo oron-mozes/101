@@ -26,7 +26,7 @@ export function StatusChip({
     <View style={[styles.container, priority[status]]}>
       {allowSelect && (
         <RadioButtonPaper
-          testID={`${testID ? `${testID}-` : ""}-chip`}
+          testID={`${testID ? `${testID}-` : ""}chip`}
           disabled={!editable}
           onPress={() => {
             onSelect(label);

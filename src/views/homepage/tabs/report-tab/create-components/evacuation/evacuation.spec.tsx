@@ -35,7 +35,7 @@ describe("Evacuation", () => {
 
   it("should set and call status", () => {
     const { getByTestId } = render(<Evacuation />);
-    const status = getByTestId(`status-${STATUS.TO_EVAC}`);
+    const status = getByTestId(`status-${STATUS.TO_EVAC}-chip`);
     fireEvent.press(status);
     expect(setStatus).toHaveBeenCalledWith(STATUS.TO_EVAC);
   });
