@@ -433,6 +433,7 @@ export const usePatientRecordsStore = create<{
             ],
           },
         });
+        console.log("??", current.activePatient.medicationsAndFluids.actions);
       },
       removeAction(id: number) {
         const current = state.getState();
@@ -726,7 +727,7 @@ export const usePatientRecordsStore = create<{
           airway: {
             ...current.activePatient.airway,
             actions: current.activePatient.airway.actions.map((action) =>
-              action.id === id ? data : action
+              action.id === id ? { ...action, ...data } : action
             ),
           },
         });

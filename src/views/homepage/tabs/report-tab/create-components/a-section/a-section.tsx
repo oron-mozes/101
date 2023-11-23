@@ -3,18 +3,23 @@ import { StyleSheet } from "react-native";
 import { Card, Icon, Text } from "react-native-paper";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
-import { IAirWayInformation } from "../../../../../../interfaces";
+import {
+  EAirWayTreatment,
+  IAirWayInformation,
+} from "../../../../../../interfaces";
 import { colors, gutter, inputFontSize } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { design } from "../shared-style";
 import { AActiveBar } from "./a-active-bar";
 import { AddAAction } from "./add-a-action";
 import { SavedAAction } from "./saved-a-action";
+import _ from "lodash";
+import { allowToAddAction } from "./utils";
 
 export const initialEmptyAction = {
   action: null,
-  time: new Date().getTime(),
-  id: new Date().getTime(),
+  time: null,
+  id: null,
   successful: null,
 };
 
@@ -22,23 +27,31 @@ export function ASection() {
   const translation = useTranslation();
 
   const actions = usePatientRecordsStore(
-    (state) => state.activePatient.airway.actions ?? []
+    (state) => state.activePatient.airway.actions
   );
+
   const addAction = usePatientRecordsStore(
     (state) => state.airway_handlers.addAction
   );
 
   const [action, updateAction] = useState<IAirWayInformation>();
   useEffect(() => {
-    !Boolean(actions.length) && updateAction({ ...initialEmptyAction });
-  }, [actions]);
+    updateAction({
+      ...initialEmptyAction,
+      time: new Date().getTime(),
+      id: new Date().getTime(),
+    });
+  }, []);
 
-  const newActionValid =
-    (Boolean(action?.action) && Boolean(action?.time)) === true;
+  const newActionValid = allowToAddAction(actions, action);
 
   const saveNewAction = () => {
-    addAction(action);
-    updateAction(null);
+    addAction({ ...action });
+    updateAction({
+      ...initialEmptyAction,
+      id: new Date().getTime(),
+      time: new Date().getTime(),
+    });
   };
   return (
     <Card style={styles.card}>
@@ -48,7 +61,7 @@ export function ASection() {
       <Card.Content style={[styles.innerContent, styles.airwayView]}>
         <AActiveBar />
       </Card.Content>
-      <Card.Content style={[styles.innerContent, styles.actionRow]}>
+      <Card.Content style={{ flexDirection: "column" }}>
         {actions.map((airWayInfo: IAirWayInformation) => (
           <SavedAAction airWayInfo={airWayInfo} key={airWayInfo.id} />
         ))}
@@ -60,7 +73,7 @@ export function ASection() {
       <Card.Content
         testID="add-airway-action"
         style={[styles.innerContent, styles.addItemAction]}
-        aria-disabled={newActionValid}
+        aria-disabled={!newActionValid}
       >
         <Icon
           size={20}
@@ -68,13 +81,12 @@ export function ASection() {
           color={newActionValid ? colors.primary : colors.disabled}
         />
         <Text
+          testID="add-airway-action-button"
           style={{
             color: newActionValid ? colors.primary : colors.disabled,
             fontSize: inputFontSize,
           }}
-          onPress={() => {
-            newActionValid && saveNewAction();
-          }}
+          onPress={saveNewAction}
         >
           {translation("addAction")}
         </Text>

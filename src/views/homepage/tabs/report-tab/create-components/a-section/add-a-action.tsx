@@ -31,7 +31,7 @@ export function AddAAction({
         <DropDown
           testID="new-airway-action"
           label={translation("actionTaken")}
-          initialValue={airWayInfo.action}
+          initialValue={airWayInfo.action && translation(airWayInfo.action)}
           onSelect={(value: TAutocompleteDropdownItem) => {
             update({ ...airWayInfo, action: value.id as EAirWayTreatment });
           }}
@@ -58,7 +58,11 @@ export function AddAAction({
         <Text
           testID="clear-airway-action"
           onPress={() => {
-            update({ ...initialEmptyAction });
+            update({
+              ...initialEmptyAction,
+              time: new Date().getTime(),
+              id: new Date().getTime(),
+            });
           }}
           style={styles.deleteAction}
         >

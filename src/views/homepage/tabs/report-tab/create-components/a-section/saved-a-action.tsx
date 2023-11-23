@@ -10,11 +10,11 @@ import {
   IAirWayInformation,
   TOGGLE,
 } from "../../../../../../interfaces";
-import { colors, gutter } from "../../../../../../shared-config";
+import { colors } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { design } from "../shared-style";
 import { convertToOptions } from "../utils";
 import { isSuccessful } from "./utils";
+import _ from "lodash";
 
 export function SavedAAction({
   airWayInfo,
@@ -24,14 +24,16 @@ export function SavedAAction({
   const translation = useTranslation();
   const handlers = usePatientRecordsStore((state) => state.airway_handlers);
   const successful = isSuccessful(airWayInfo.successful);
-
+  console.log("airWayInfo", airWayInfo);
   return (
-    <>
+    <View style={{ flexDirection: "row" }}>
       <View style={styles.element}>
         <DropDown
+          testID="saved-airway-action-treatment"
           label={translation("actionTaken")}
-          initialValue={airWayInfo.action}
+          initialValue={translation(airWayInfo.action)}
           onSelect={(value: TAutocompleteDropdownItem) => {
+            if (_.isEqual(airWayInfo.action, value.id)) return;
             value &&
               handlers.updateById(
                 {
@@ -48,6 +50,7 @@ export function SavedAAction({
           value={airWayInfo.time}
           label={translation("actionTime")}
           onChange={(time: number) => {
+            if (_.isEqual(airWayInfo.time, time)) return;
             handlers.updateById({ time }, airWayInfo.id);
           }}
         />
@@ -68,38 +71,21 @@ export function SavedAAction({
           }}
           style={styles.deleteAction}
         >
-          <Icon size={20} source="delete-outline" color={colors.primary} />
+          <Icon size={25} source="delete-outline" color={colors.primary} />
         </Text>
       </View>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   deleteAction: {
     justifyContent: "center",
-    marginRight: 3,
-    marginTop: 32,
+    marginLeft: 5,
+    marginTop: 50,
   },
   element: { flex: 1 },
   actionRow: {
     flexDirection: "row",
-  },
-  addItemAction: {
-    justifyContent: "flex-start",
-    margin: gutter,
-  },
-  airwayView: {
-    width: "50%",
-  },
-  card: {
-    ...design.card,
-  },
-  content: { ...design.content },
-  innerContent: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignContent: "center",
-    marginTop: 10,
   },
 });

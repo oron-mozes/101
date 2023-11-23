@@ -60,7 +60,7 @@ export function DropDown({
         testID={`${testID}${testID ? "-" : ""}choose`}
       >
         <View style={styles.picker}>
-          <Text style={{ flex: 1, textAlign: "center" }}>
+          <Text style={{ flex: 1, textAlign: "center" }}  testID={`${testID}${testID ? "-" : ""}dd-selected`}>
             {selected ?? translation("select")}
           </Text>
           <View style={{ marginRight: 10, transform: "rotate(180deg)" }}>
