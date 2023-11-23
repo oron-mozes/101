@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
-import { ToggleButton } from "../../../../../form-components/ToggleButton";
-import { SectionHeader } from "../../../../../form-components/section-header";
-import { useTranslation } from "../../../../../hooks/useMyTranslation";
-import { EEsectionChips } from "../../../../../interfaces";
-import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
-import { design } from "./shared-style";
-import { isSelectedHandler } from "./utils";
+import { ToggleButton } from "../../../../../../form-components/ToggleButton";
+import { SectionHeader } from "../../../../../../form-components/section-header";
+import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { EEsectionChips } from "../../../../../../interfaces";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
+import { design } from "../shared-style";
+import { isSelectedHandler } from "../utils";
 import { useState } from "react";
 
 export function ESection() {
@@ -28,6 +28,7 @@ export function ESection() {
       <Card.Content style={styles.innerContent}>
         {Object.values(EEsectionChips).map((item) => (
           <ToggleButton
+            testID={`e-section-${item}`}
             key={item}
             label={translation(item)}
             status={isSelected(item)}

@@ -14,7 +14,7 @@ import { BSection } from "./create-components/b-section/b-section";
 import { CSection } from "./create-components/c-section/c-section";
 import { CareProvider } from "./create-components/care-provider";
 import { DSection } from "./create-components/d-section/d-section";
-import { ESection } from "./create-components/e-section";
+import { ESection } from "./create-components/e-section/e-section";
 import { Evacuation } from "./create-components/evacuation";
 import { InjuryReason } from "./create-components/injury-reason/injury-reason";
 import { MedicationsAndFluidSection } from "./create-components/medication";
@@ -116,8 +116,8 @@ export function ReportTab() {
             <BSection />
             <CSection />
             <DSection />
-            {/*<ESection />
-            <MedicationsAndFluidSection />
+            <ESection />
+            {/*<MedicationsAndFluidSection />
             <Prognosis />
             <CareProvider />
             <Evacuation /> */}
