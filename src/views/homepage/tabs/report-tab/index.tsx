@@ -12,7 +12,7 @@ import { ASection } from "./create-components/a-section";
 import { Avpu } from "./create-components/avpu/avpu";
 import { BSection } from "./create-components/b-section/b-section";
 import { CSection } from "./create-components/c-section/c-section";
-import { CareProvider } from "./create-components/care-provider";
+import { CareProvider } from "./create-components/care-provider/care-provider";
 import { DSection } from "./create-components/d-section/d-section";
 import { ESection } from "./create-components/e-section/e-section";
 import { Evacuation } from "./create-components/evacuation";
@@ -119,8 +119,8 @@ export function ReportTab() {
             <ESection />
             <MedicationsAndFluidSection />
             <Prognosis />
-            {/*<CareProvider />
-            <Evacuation /> */}
+            <CareProvider />
+            {/*<Evacuation /> */}
           </List.Accordion>
           <List.Accordion
             right={() => (

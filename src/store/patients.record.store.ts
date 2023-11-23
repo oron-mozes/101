@@ -428,7 +428,10 @@ export const usePatientRecordsStore = create<{
       addProvider(provider) {
         const current = state.getState();
         current.updatePartialPatient({
-          providers: [...(current.activePatient.providers ?? []), provider],
+          providers: _.uniqBy(
+            [...(current.activePatient.providers ?? []), provider],
+            "id"
+          ),
         });
       },
     },
