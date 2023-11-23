@@ -1,27 +1,27 @@
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Text } from "react-native-paper";
-import { ToggleButton } from "../../../../../form-components/ToggleButton";
-import { DropDown } from "../../../../../form-components/dropdown";
-import { SectionHeader } from "../../../../../form-components/section-header";
-import { useTranslation } from "../../../../../hooks/useMyTranslation";
+import { ToggleButton } from "../../../../../../form-components/ToggleButton";
+import { SectionHeader } from "../../../../../../form-components/section-header";
+import { CheckButton } from "../../../../../../form-components/select-button";
+import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import {
   EReactionEyes,
   EReactionGeneral,
   EReactionMovement,
   EReactionSpeech,
   IReaction,
-} from "../../../../../interfaces";
+} from "../../../../../../interfaces";
 import {
   colors,
   gutter,
   inputContainer,
   inputHeight,
-} from "../../../../../shared-config";
-import { usePatientRecordsStore } from "../../../../../store/patients.record.store";
-import { design } from "./shared-style";
-import { calcGCS, convertToOptions, isSelectedHandler } from "./utils";
-import { CheckButton } from "../../../../../form-components/select-button";
+} from "../../../../../../shared-config";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
+import { design } from "../shared-style";
+import { isSelectedHandler } from "../utils";
+import { calcGCS } from "./utils";
 
 const emptyState: IReaction = {
   GCS: null,
@@ -67,15 +67,15 @@ export function DSection() {
           {translation("general")}
         </Text>
         <View style={[styles.options]}>
-          {general &&
-            Object.values(EReactionGeneral).map((item) => (
-              <ToggleButton
-                label={translation(item)}
-                status={isSelected(item)}
-                onSelect={() => handlers.toggleGeneral(item)}
-                key={item}
-              />
-            ))}
+          {Object.values(EReactionGeneral).map((item) => (
+            <ToggleButton
+              testID={`reaction-general-${item}`}
+              label={translation(item)}
+              status={isSelected(item)}
+              onSelect={() => handlers.toggleGeneral(item)}
+              key={item}
+            />
+          ))}
         </View>
       </Card.Content>
       <Card.Content style={[styles.innerContent, styles.section]}>
@@ -86,6 +86,7 @@ export function DSection() {
         <View style={[styles.options]}>
           {Object.values(EReactionMovement).map((item) => (
             <CheckButton
+              testID={`reaction-movement-${item}`}
               label={translation(item)}
               checked={item === movement}
               onSelect={() => {
@@ -101,6 +102,7 @@ export function DSection() {
         <View style={[styles.options]}>
           {Object.values(EReactionSpeech).map((item) => (
             <CheckButton
+              testID={`reaction-speech-${item}`}
               label={translation(item)}
               checked={item === speech}
               onSelect={() => {
@@ -116,6 +118,7 @@ export function DSection() {
         <View style={[styles.options]}>
           {Object.values(EReactionEyes).map((item) => (
             <CheckButton
+              testID={`reaction-eyes-${item}`}
               label={translation(item)}
               checked={item === eyes}
               onSelect={() => {
@@ -130,7 +133,9 @@ export function DSection() {
       <Card.Content style={[styles.innerContent]}>
         <View style={[styles.GCS]}>
           <Text style={[styles.gcsTitle]}>{translation("GCS")}</Text>
-          <Text style={[styles.fakeInput]}>{GCS}</Text>
+          <Text style={[styles.fakeInput]} testID="gcs">
+            {GCS}
+          </Text>
         </View>
       </Card.Content>
     </Card>
