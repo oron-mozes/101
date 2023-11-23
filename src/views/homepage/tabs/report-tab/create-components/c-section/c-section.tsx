@@ -1,30 +1,19 @@
-import { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { TAutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
-import { Card, Icon, Text } from "react-native-paper";
-import { DropDown } from "../../../../../../form-components/dropdown";
-import { InputField } from "../../../../../../form-components/input-field";
-import { RadioGroup } from "../../../../../../form-components/radio-group";
-import { SectionHeader } from "../../../../../../form-components/section-header";
-import { TimePicker } from "../../../../../../form-components/time-picker";
-import { useTranslation } from "../../../../../../hooks/useMyTranslation";
-import {
-  EBreathingTreatment,
-  EMeasurementsTreatments,
-  IAction,
-  TOGGLE,
-} from "../../../../../../interfaces";
-import { colors, gutter } from "../../../../../../shared-config";
-import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { design } from "../shared-style";
-import { convertToOptions, validateLastItem } from "../utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import { Card } from "react-native-paper";
 import { BloodPressureInputFieldHandler } from "../../../../../../form-components/blood-pressure-input-field";
-import { RadAndShock } from "./rad-and-shock";
+import { InputField } from "../../../../../../form-components/input-field";
+import { SectionHeader } from "../../../../../../form-components/section-header";
+import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { EMeasurementsTreatments, IAction } from "../../../../../../interfaces";
+import { gutter } from "../../../../../../shared-config";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { AddAction } from "../section-shared-components/add-a-action";
 import { AddActionCTA } from "../section-shared-components/add-action-cta";
-import { allowToAddAction } from "../section-shared-components/utils";
 import { SavedAction } from "../section-shared-components/saved-action";
+import { allowToAddAction } from "../section-shared-components/utils";
+import { design } from "../shared-style";
+import { RadAndShock } from "./rad-and-shock";
 
 const initialEmptyAction: IAction<EMeasurementsTreatments> = {
   action: null,
@@ -35,12 +24,6 @@ const initialEmptyAction: IAction<EMeasurementsTreatments> = {
 export function CSection() {
   const translation = useTranslation();
 
-  const shock = usePatientRecordsStore(
-    (state) => state.activePatient.measurements.shock
-  );
-  const palpated = usePatientRecordsStore(
-    (state) => state.activePatient.measurements.palpated
-  );
   const puls = usePatientRecordsStore(
     (state) => state.activePatient.measurements.puls
   );
@@ -84,6 +67,7 @@ export function CSection() {
 
       <Card.Content style={[styles.innerContent]}>
         <InputField
+          testID="puls"
           value={puls?.toString()}
           numeric
           label={translation("puls")}

@@ -21,7 +21,7 @@ describe("AddAAction", () => {
           information={{ ...initialEmptyAction }}
           update={mockUpdate}
           options={EAirWayTreatment}
-          testID={"new-airway"}
+          testID="new-airway"
           initialEmptyAction={initialEmptyAction}
         />
       </PaperProvider>
@@ -48,7 +48,7 @@ describe("AddAAction", () => {
           information={{ ...initialEmptyAction }}
           update={mockUpdate}
           options={EAirWayTreatment}
-          testID={"new-airway"}
+          testID="new-airway"
           initialEmptyAction={initialEmptyAction}
         />
       </PaperProvider>
@@ -61,7 +61,7 @@ describe("AddAAction", () => {
     expect(mockUpdate).toHaveBeenCalledWith(
       expect.objectContaining({ successful: true })
     );
-    const resetAction = getByTestId(`clear-airway-action`);
+    const resetAction = getByTestId(`clear-new-airway-action`);
     fireEvent.press(resetAction);
     expect(mockUpdate).toHaveBeenCalledWith(
       expect.objectContaining({ ...initialEmptyAction })

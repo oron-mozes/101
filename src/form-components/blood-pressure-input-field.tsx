@@ -33,6 +33,7 @@ export function BloodPressureInputFieldHandler({
 
         <View>
           <TextInput
+            testID="blood-pressure-input"
             disabled={!editable}
             underlineColor="transparent"
             ref={inputRef}

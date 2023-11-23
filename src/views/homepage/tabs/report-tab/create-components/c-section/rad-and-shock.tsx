@@ -20,6 +20,7 @@ export function RadAndShock() {
     <>
       <View style={{ flex: 1, width: "50%" }}>
         <RadioGroup
+          testID="palpated"
           style={{ width: "70%" }}
           horizontal
           label={translation("palpated")}
@@ -34,6 +35,7 @@ export function RadAndShock() {
       </View>
       <View style={{ flex: 1, width: "50%", margin: 8 }}>
         <RadioGroup
+          testID="shock"
           style={{ width: "40%" }}
           horizontal
           label={translation("shock")}

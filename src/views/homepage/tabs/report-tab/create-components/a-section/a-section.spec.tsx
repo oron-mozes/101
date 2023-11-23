@@ -53,7 +53,7 @@ describe("ASection", () => {
     );
 
     expect(getByTestId("add-airway-action").props["aria-disabled"]).toBe(false);
-    const resetAction = getByTestId(`clear-airway-action`);
+    const resetAction = getByTestId(`clear-new-airway-action`);
     fireEvent.press(resetAction);
     expect(getByTestId("add-airway-action").props["aria-disabled"]).toBe(true);
   });

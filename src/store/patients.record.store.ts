@@ -162,7 +162,6 @@ export const usePatientRecordsStore = create<{
     ): void;
   };
   measurements_handlers: {
-    toggleFulfill(fulfill: boolean): void;
     toggleShock(shock: boolean): void;
     togglePalpated(palpated: boolean): void;
     setPuls(puls: number): void;
@@ -472,20 +471,6 @@ export const usePatientRecordsStore = create<{
       },
     },
     measurements_handlers: {
-      toggleFulfill(fulfill: boolean) {
-        const current = state.getState();
-        const actions = fulfill
-          ? current.activePatient.measurements.actions
-          : [];
-
-        current.updatePartialPatient({
-          measurements: {
-            ...current.activePatient.measurements,
-            fulfill,
-            actions: [...actions],
-          },
-        });
-      },
       toggleShock(shock: boolean) {
         const current = state.getState();
         current.updatePartialPatient({
