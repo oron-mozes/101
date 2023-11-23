@@ -358,7 +358,7 @@ export interface IPatientRecord {
   reaction: IReaction;
   medicationsAndFluids: IMedicationsAndFluid;
   injuryReason: IInjuryReason;
-  prognosis: string;
+  prognosis: string[];
   evacuation: IEvacuationInformation;
   treatmentGuide: ITreatment;
 }

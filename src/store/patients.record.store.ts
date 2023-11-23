@@ -120,7 +120,7 @@ export const usePatientRecordsStore = create<{
     reaction: IReaction;
     medicationsAndFluids: IMedicationsAndFluid;
     injuryReason: IInjuryReason;
-    prognosis: string;
+    prognosis: string[];
     evacuation: IEvacuationInformation;
     treatmentGuide: ITreatment;
   };
@@ -130,6 +130,7 @@ export const usePatientRecordsStore = create<{
   deletePatient(patientId): void;
   updatePartialPatient(data: any): void;
   updatePrognosis(data: string): void;
+  removePrognosis(index: number): void;
   loadPatientsState(): Promise<boolean>;
   addPatient(data: IPatientRecord): Promise<void>;
   savePatient(): Promise<void>;
@@ -264,7 +265,16 @@ export const usePatientRecordsStore = create<{
       const current = state.getState();
       current.updatePartialPatient({
         ...current.activePatient,
-        prognosis,
+        prognosis: [...(current.activePatient.prognosis ?? []), prognosis],
+      });
+    },
+    removePrognosis(index: number) {
+      const current = state.getState();
+      current.updatePartialPatient({
+        ...current.activePatient,
+        prognosis: current.activePatient.prognosis.filter(
+          (a, item) => item !== index
+        ),
       });
     },
     treatmentGuide_handlers: {

@@ -1,4 +1,9 @@
-import { IPatientRecord, EReactionEyes, EReactionSpeech, EReactionMovement } from "../../../../interfaces";
+import {
+  IPatientRecord,
+  EReactionEyes,
+  EReactionSpeech,
+  EReactionMovement,
+} from "../../../../interfaces";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -29,7 +34,7 @@ export const emptyPatient: IPatientRecord = {
     reasons: [],
     circumstance: null,
   },
-  prognosis: null,
+  prognosis: [],
   measurements: {
     shock: null,
     actions: [],

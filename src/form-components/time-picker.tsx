@@ -3,14 +3,7 @@ import date from "date-and-time";
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
-import {
-  borderSetup,
-  colors,
-  gutter,
-  inputHeight,
-  inputContainer,
-} from "../shared-config";
-// import { Appearance, useColorScheme } from "react-native-appearance";
+import { inputContainer } from "../shared-config";
 import { useColorScheme } from "react-native";
 
 export function TimePicker({

@@ -1,0 +1,1 @@
+export { Prognosis } from "./prognosis";

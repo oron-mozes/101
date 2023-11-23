@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Card, Divider, Icon, Text } from "react-native-paper";
+import { Card, Divider, Icon, Text } from "react-native-paper";
+import { InputField } from "../../../../../../form-components/input-field";
 import { CheckButton } from "../../../../../../form-components/select-button";
 import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
@@ -8,20 +9,14 @@ import {
   IMedicationsAndFluidInformation,
   MEDICATION_TREATMENT,
 } from "../../../../../../interfaces";
-import {
-  colors,
-  gutter,
-  inputFontSize,
-  inputHeight,
-} from "../../../../../../shared-config";
-import { design } from "../shared-style";
+import { colors, gutter } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
+import { design } from "../shared-style";
 import {
   allowAddMedication,
   getMedicationDoseByType,
   getMedicationType,
 } from "./utils";
-import { InputField } from "../../../../../../form-components/input-field";
 
 const emptyState: IMedicationsAndFluidInformation = {
   time: null,

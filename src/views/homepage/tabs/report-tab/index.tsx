@@ -20,7 +20,7 @@ import { InjuryReason } from "./create-components/injury-reason/injury-reason";
 import { MedicationsAndFluidSection } from "./create-components/medication";
 import { PatientBodyPicker } from "./create-components/patient-body-picker";
 import { PatientDetails } from "./create-components/patient-details/patient-details";
-import { Prognosis } from "./create-components/prognosis";
+import { Prognosis } from "./create-components/prognosis/prognosis";
 import { TreatmentGuide } from "./create-components/treatment-guide";
 import { Measurements } from "./create-components/treatment-mesurments";
 
@@ -118,8 +118,8 @@ export function ReportTab() {
             <DSection />
             <ESection />
             <MedicationsAndFluidSection />
-            {/*<<Prognosis />
-            <CareProvider />
+            <Prognosis />
+            {/*<CareProvider />
             <Evacuation /> */}
           </List.Accordion>
           <List.Accordion
