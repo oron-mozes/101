@@ -15,7 +15,7 @@ import { CSection } from "./create-components/c-section/c-section";
 import { CareProvider } from "./create-components/care-provider/care-provider";
 import { DSection } from "./create-components/d-section/d-section";
 import { ESection } from "./create-components/e-section/e-section";
-import { Evacuation } from "./create-components/evacuation";
+import { Evacuation } from "./create-components/evacuation/evacuation";
 import { InjuryReason } from "./create-components/injury-reason/injury-reason";
 import { MedicationsAndFluidSection } from "./create-components/medication";
 import { PatientBodyPicker } from "./create-components/patient-body-picker";
@@ -120,7 +120,7 @@ export function ReportTab() {
             <MedicationsAndFluidSection />
             <Prognosis />
             <CareProvider />
-            {/*<Evacuation /> */}
+            <Evacuation />
           </List.Accordion>
           <List.Accordion
             right={() => (

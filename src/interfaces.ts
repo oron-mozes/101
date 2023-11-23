@@ -412,4 +412,5 @@ export enum STATUS {
   TO_EVAC = "TO_EVAC",
   ACTIVE = "ACTIVE",
   CLOSED = "CLOSED",
+  HOLD = "HOLD",
 }

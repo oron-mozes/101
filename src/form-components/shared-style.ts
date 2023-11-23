@@ -8,7 +8,6 @@ export const chipText: TextStyle = {
   flex: 1,
   marginLeft: 0,
   textAlign: "center",
- 
 };
 
 const chipPadding: number = 0;
@@ -27,7 +26,10 @@ export const priority = {
     borderColor: "rgba(163, 245, 218, 1)",
     backgroundColor: "rgba(209, 250, 236, 1)",
   },
-
+  [STATUS.HOLD]: {
+    borderColor: "#9F609F",
+    backgroundColor: "#ECDFEC",
+  },
   [STATUS.URGENT]: {
     borderColor: "rgba(255, 162, 153, 1)",
     backgroundColor: "rgba(255, 208, 204, 1)",

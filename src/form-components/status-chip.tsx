@@ -1,9 +1,8 @@
+import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Chip } from "react-native-paper";
+import { RadioButton as RadioButtonPaper, Text } from "react-native-paper";
 import { STATUS } from "../interfaces";
 import { chipContainer, chipText, priority } from "./shared-style";
-import React from "react";
-import { RadioButton as RadioButtonPaper, Text } from "react-native-paper";
 
 export interface IStatusChipProps {
   status: STATUS;
@@ -12,6 +11,7 @@ export interface IStatusChipProps {
   selected?: boolean;
   onSelect?(status: string): void;
   editable?: boolean;
+  testID: string;
 }
 export function StatusChip({
   allowSelect = false,
@@ -20,11 +20,13 @@ export function StatusChip({
   status,
   onSelect,
   editable = true,
+  testID,
 }: IStatusChipProps) {
   return (
     <View style={[styles.container, priority[status]]}>
       {allowSelect && (
         <RadioButtonPaper
+          testID={`${testID ? `${testID}-` : ""}-chip`}
           disabled={!editable}
           onPress={() => {
             onSelect(label);
@@ -42,11 +44,10 @@ const styles = StyleSheet.create({
   text: {
     ...chipText,
     textAlign: "left",
-    fontSize: 17,
+    fontSize: 14,
   },
   container: {
     ...chipContainer,
-    // padding: 10,
     justifyContent: "space-around",
     flexDirection: "row",
     alignItems: "center",
