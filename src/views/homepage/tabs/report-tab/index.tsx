@@ -117,8 +117,8 @@ export function ReportTab() {
             <CSection />
             <DSection />
             <ESection />
-            {/*<MedicationsAndFluidSection />
-            <Prognosis />
+            <MedicationsAndFluidSection />
+            {/*<<Prognosis />
             <CareProvider />
             <Evacuation /> */}
           </List.Accordion>

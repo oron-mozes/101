@@ -13,7 +13,11 @@ import {
   E_HEXAKAPRON_DOSE,
   MEDICATION_TREATMENT,
 } from "../../../../../../interfaces";
-import { getMedicationDoseByType, getMedicationType } from "./utils";
+import {
+  allowAddMedication,
+  getMedicationDoseByType,
+  getMedicationType,
+} from "./utils";
 
 describe("medication utils", () => {
   it("should return the right list for medications type by treatment", () => {
@@ -26,6 +30,9 @@ describe("medication utils", () => {
     expect(
       getMedicationType({ treatment: MEDICATION_TREATMENT.FLUIDS })
     ).toEqual(E_FLUID_TREATMENT);
+    expect(
+      getMedicationType({ treatment: MEDICATION_TREATMENT.OTHER })
+    ).toEqual(null);
   });
 
   it("should return the right list for dose by type", () => {
@@ -59,5 +66,86 @@ describe("medication utils", () => {
     expect(
       getMedicationDoseByType({ treatment: MEDICATION_TREATMENT.HEXAKAPRON })
     ).toEqual(E_HEXAKAPRON_DOSE);
+  });
+
+  it("should get the right allowAddMedication", () => {
+    expect(
+      allowAddMedication({
+        treatment: MEDICATION_TREATMENT.OTHER,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(false);
+    expect(
+      allowAddMedication({
+        other: "other medication",
+        treatment: MEDICATION_TREATMENT.OTHER,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(true);
+    expect(
+      allowAddMedication({
+        treatment: MEDICATION_TREATMENT.HEXAKAPRON,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(false);
+    expect(
+      allowAddMedication({
+        dose: E_HEXAKAPRON_DOSE.D1G,
+        treatment: MEDICATION_TREATMENT.HEXAKAPRON,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(true);
+    expect(
+      allowAddMedication({
+        treatment: MEDICATION_TREATMENT.FLUIDS,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(false);
+    expect(
+      allowAddMedication({
+        treatment: MEDICATION_TREATMENT.FLUIDS,
+        type: E_FLUID_TREATMENT.BLOOD,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(false);
+    expect(
+      allowAddMedication({
+        dose: E_FLUID_BLOOD_DOSE.D1,
+        type: E_FLUID_TREATMENT.BLOOD,
+        treatment: MEDICATION_TREATMENT.FLUIDS,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(true);
+    expect(
+      allowAddMedication({
+        treatment: MEDICATION_TREATMENT.ANTIBIOTIC,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(false);
+    expect(
+      allowAddMedication({
+        treatment: MEDICATION_TREATMENT.ANTIBIOTIC,
+        type: E_ANTIBIOTIC_TREATMENT.CETRIAXONE,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(false);
+    expect(
+      allowAddMedication({
+        dose: E_ANTIBIOTIC_CETRIAXONE_DOSE.D1,
+        type: E_ANTIBIOTIC_TREATMENT.CETRIAXONE,
+        treatment: MEDICATION_TREATMENT.ANTIBIOTIC,
+        time: 0,
+        id: 0,
+      })
+    ).toBe(true);
   });
 });

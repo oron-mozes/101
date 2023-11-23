@@ -1,7 +1,6 @@
+import date from "date-and-time";
 import { StyleSheet, View } from "react-native";
-import { Card, Icon, Divider, Text } from "react-native-paper";
-import { CheckButton } from "../../../../../../form-components/select-button";
-import { TimePicker } from "../../../../../../form-components/time-picker";
+import { Card, Divider, Icon, IconButton, Text } from "react-native-paper";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { colors } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
@@ -17,75 +16,51 @@ export function MedicationActions() {
   );
 
   return (
-    <>
-      {actions.map((action, index) => {
-        return (
-          <View key={`${action.time}|${index}`}>
-            <Card.Content style={[styles.innerContent, styles.section]}>
-              <Text style={styles.title}>{translation("takenMedication")}</Text>
-              <View style={[styles.innerContent]}>
-                <View style={[styles.innerContent, styles.action]}>
-                  <CheckButton
-                    style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
-                    editable={false}
-                    label={translation(action.treatment)}
-                    checked={true}
-                    onSelect={() => {}}
-                  />
-                  {action.type && (
-                    <CheckButton
-                      style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
-                      editable={false}
-                      label={translation(action.type)}
-                      checked={true}
-                      onSelect={() => {}}
-                    />
-                  )}
-                  <CheckButton
-                    style={{ color: "#EBF0F3", backgroundColor: "#7A98AD" }}
-                    editable={false}
-                    label={translation(action.dose ?? "")}
-                    checked={true}
-                    onSelect={() => {}}
-                  />
-                </View>
-                <View
-                  style={[
-                    styles.innerContent,
-                    styles.action,
-                    { justifyContent: "flex-end" },
-                  ]}
-                >
-                  <View style={{ width: 120 }}>
-                    <TimePicker
-                      editable={false}
-                      value={action.time}
-                      label={translation("actionTime")}
-                      onChange={(time) => {
-                        handlers.updateAtIndex({ time }, index);
-                      }}
-                    />
-                  </View>
-                  <Text
-                    onPress={() => {
-                      handlers.removeAction(index);
-                    }}
-                    style={styles.deleteAction}
-                  >
-                    <Icon
-                      size={20}
-                      source="delete-outline"
-                      color={colors.primary}
-                    />
-                  </Text>
-                </View>
-              </View>
-            </Card.Content>
-            <Divider style={{ width: "100%", marginTop: 10 }} />
-          </View>
-        );
-      })}
-    </>
+    <View>
+      <Card.Content style={[styles.innerContent, styles.section]}>
+        {actions.length !== 0 && (
+          <Text style={styles.title}>{translation("takenMedication")}</Text>
+        )}
+        {actions.map((action, index) => {
+          return (
+            <View
+              key={`${action.time}|${index}`}
+              style={[
+                styles.innerContent,
+                {
+                  flexDirection: "row",
+
+                  alignItems: "center",
+                },
+              ]}
+            >
+              <Text variant="bodyLarge" style={{ flex: 1 }}>
+                {[
+                  translation(action.treatment),
+                  translation(action.type ?? ""),
+                  translation(action.dose ?? ""),
+                  action.other ?? "",
+                  date.format(new Date(action.time), "HH:mm"),
+                ]
+                  .filter((a) => a)
+                  .join(", ")}
+              </Text>
+              <IconButton
+                icon="delete-outline"
+                iconColor={colors.primary}
+                size={25}
+                onPress={() => {
+                  handlers.removeAction(index);
+                }}
+              />
+            </View>
+          );
+        })}
+      </Card.Content>
+      {actions.length !== 0 && (
+        <Divider style={{ width: "100%", marginTop: 10 }} />
+      )}
+    </View>
   );
 }
 

@@ -1,6 +1,7 @@
 import { Icon, Text } from "react-native-paper";
 import { colors, inputFontSize } from "../../../../../../shared-config";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { View } from "react-native";
 
 export function AddActionCTA({
   testID,
@@ -14,7 +15,7 @@ export function AddActionCTA({
   const translation = useTranslation();
 
   return (
-    <>
+    <View style={{ alignItems: "center", flexDirection: "row" }}>
       <Icon
         size={20}
         source="plus"
@@ -31,6 +32,6 @@ export function AddActionCTA({
       >
         {translation("addAction")}
       </Text>
-    </>
+    </View>
   );
 }

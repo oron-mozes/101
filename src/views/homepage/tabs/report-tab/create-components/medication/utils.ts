@@ -29,7 +29,8 @@ export function getMedicationType(
     (newMedication.treatment === MEDICATION_TREATMENT.ANTIBIOTIC &&
       E_ANTIBIOTIC_TREATMENT) ||
     (newMedication.treatment === MEDICATION_TREATMENT.FLUIDS &&
-      E_FLUID_TREATMENT)
+      E_FLUID_TREATMENT) ||
+    (newMedication.treatment === MEDICATION_TREATMENT.OTHER && null)
   );
 }
 export function getMedicationDoseByType(
@@ -59,4 +60,13 @@ export function getMedicationDoseByType(
     (newMedication.type === E_ANASTASIA_TREATMENT.MORFIUM &&
       E_ANASTASIA_MORFIUM_DOSE)
   );
+}
+
+export function allowAddMedication(
+  medication: IMedicationsAndFluidInformation
+): boolean {
+  if (medication.treatment === MEDICATION_TREATMENT.OTHER) {
+    return !!medication.other;
+  }
+  return !!getMedicationDoseByType(medication)?.[medication?.dose];
 }

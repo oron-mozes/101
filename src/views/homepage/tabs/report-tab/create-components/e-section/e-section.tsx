@@ -10,12 +10,10 @@ import { isSelectedHandler } from "../utils";
 import { useState } from "react";
 
 export function ESection() {
-  const eSection = usePatientRecordsStore(
-    (state) => state.activePatient.eSection
-  );
+  const eSection = usePatientRecordsStore((state) => [
+    ...state.activePatient.eSection,
+  ]);
   const handlers = usePatientRecordsStore((state) => state.esection_handlers);
-
-  const [selected, forceUpdate] = useState<EEsectionChips[]>([]);
 
   const translation = useTranslation();
   const isSelected = isSelectedHandler(eSection);
@@ -33,7 +31,6 @@ export function ESection() {
             label={translation(item)}
             status={isSelected(item)}
             onSelect={() => {
-              forceUpdate([item]);
               handlers.toggleSelection(item);
             }}
           />
