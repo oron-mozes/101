@@ -306,6 +306,7 @@
   "patientChrecteristics": "מאפייני פצוע.ה",
   "transfer": "העברה",
   "mainInjurySelection": "הגדרת פציעה עיקרית (מתוך הפציעות שסומנו)",
+  "mainInjuryTitle": "פציעה עיקרית",
   "receiveMethod": "בחר שיטת קליטת פצוע.ה (עדיפות לNFC)",
   "selectNFCMethod": "קליטת פצוע.ה ב NFC",
   "selectQrMethod": "קליטת פצוע.ה ב QR"

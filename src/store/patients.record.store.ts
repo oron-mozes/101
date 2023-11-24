@@ -650,32 +650,32 @@ export const usePatientRecordsStore = create<{
     incident_information_handlers: {
       setTime(injury_time: number) {
         const current = state.getState();
-
+        const merged = _.merge(current.activePatient.incident_information, {
+          injury_time,
+        });
+        console.log("setTime:", merged);
         current.updatePartialPatient({
-          incident_information: {
-            ...current.activePatient.incident_information,
-            injury_time,
-          },
+          incident_information: merged,
         });
       },
       setCareTime(care_time: number) {
         const current = state.getState();
-
+        const merged = _.merge(current.activePatient.incident_information, {
+          care_time,
+        });
+        console.log("setCareTime:", merged);
         current.updatePartialPatient({
-          incident_information: {
-            ...current.activePatient.incident_information,
-            care_time,
-          },
+          incident_information: merged,
         });
       },
       setDate(date: number) {
         const current = state.getState();
-
+        const merged = _.merge(current.activePatient.incident_information, {
+          date,
+        });
+        console.log("setDate:", merged);
         current.updatePartialPatient({
-          incident_information: {
-            ...current.activePatient.incident_information,
-            date,
-          },
+          incident_information: merged,
         });
       },
     },
@@ -906,7 +906,7 @@ export const usePatientRecordsStore = create<{
     },
     async savePatient() {
       const active = get().activePatient;
-      console.log("active", active);
+
       const patients = get().patients;
 
       const final: IPatientRecord = {
@@ -941,7 +941,7 @@ export const usePatientRecordsStore = create<{
         );
       });
       final.new = false;
-      console.log("updateById", updateById);
+
       if (updateById === -1) {
         patients.push(final);
       } else {

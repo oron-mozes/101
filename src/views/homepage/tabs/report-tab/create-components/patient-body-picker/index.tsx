@@ -128,11 +128,11 @@ export function PatientBodyPicker() {
             </View>
             <View style={styles.legend}>
               <GunLegend />
-              <Text variant="bodySmall">{translation("gunshots")}</Text>
+              <Text variant="bodySmall">{translation("gunshot")}</Text>
             </View>
             <View style={styles.legend}>
               <HitLegend />
-              <Text variant="bodySmall">{translation("hits")}</Text>
+              <Text variant="bodySmall">{translation("hit")}</Text>
             </View>
             <View style={styles.legend}>
               <CutLegend />

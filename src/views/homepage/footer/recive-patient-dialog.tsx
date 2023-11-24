@@ -1,6 +1,6 @@
-import { Button, Dialog, Portal, Text } from "react-native-paper";
-import { useTranslation } from "../../../hooks/useMyTranslation";
 import { useNavigation } from "@react-navigation/native";
+import { Button, Dialog, Portal } from "react-native-paper";
+import { useTranslation } from "../../../hooks/useMyTranslation";
 import { StackNavigation } from "../../../interfaces";
 import { ROUTES } from "../../../routes";
 

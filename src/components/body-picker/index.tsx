@@ -17,7 +17,7 @@ import { Kateter } from "./kateter";
 export function BodyPicker() {
   const viewRef = useRef(null);
   const injuries = usePatientRecordsStore((state) => {
-    return [...state.activePatient.injuries];
+    return state.activePatient.injuries;
   });
 
   const activePatient = usePatientRecordsStore((state) => {
@@ -35,17 +35,16 @@ export function BodyPicker() {
       result: "data-uri",
     }).then(
       (uri) => {
-        addInjuriesImage(activePatient.id, uri);
+        console.log("Snap");
+        addInjuriesImage(activePatient.personal_information.patientId, uri);
       },
       (error) => console.error("Oops, snapshot failed", error)
     );
   };
 
   useEffect(() => {
-    return () => {
-      captureAndSave();
-    };
-  }, []);
+    injuries.length !== 0 && captureAndSave();
+  }, [injuries]);
   return (
     <>
       <ViewShot ref={viewRef} style={{ opacity: 1, backgroundColor: "white" }}>

@@ -1,9 +1,9 @@
 import { fireEvent, render } from "@testing-library/react-native";
 import { PaperProvider } from "react-native-paper";
 import { theme } from "../../../../../../shared-config";
-import { initialEmptyAction } from "./a-section";
 import { EAirWayTreatment, TOGGLE } from "../../../../../../interfaces";
 import { AddAction } from "../section-shared-components/add-a-action";
+import { initialEmptyAction } from ".";
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),

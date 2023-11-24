@@ -1,38 +1,69 @@
+import _ from "lodash";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Card } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
 import { DatePicker } from "../../../../../../form-components/date-picker";
 import { InputField } from "../../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
+import { createPDFWithImage } from "../../../../../../utils/create-pdf";
 import { design } from "../shared-style";
 
 export function PatientDetails() {
-  const full_name = usePatientRecordsStore(
-    (state) => state.activePatient.personal_information.full_name
+  const patient = usePatientRecordsStore((state) => state.activePatient);
+
+  const personal_information = usePatientRecordsStore(
+    (state) => state.activePatient.personal_information
   );
-  const idf_id = usePatientRecordsStore(
-    (state) => state.activePatient.personal_information.idf_id
-  );
-  const patientId = usePatientRecordsStore(
-    (state) => state.activePatient.personal_information.patientId
-  );
-  console.log(patientId);
+  const [personalInfo, setPersonalInfo] = useState({
+    full_name: personal_information.full_name ?? "",
+    idf_id: personal_information.idf_id ?? null,
+    patientId: personal_information.patientId ?? null,
+  });
   const incident_information = usePatientRecordsStore(
     (state) => state.activePatient.incident_information
   );
-  const incidentHandlers = usePatientRecordsStore(
-    (state) => state.incident_information_handlers
-  );
-  const handlers = usePatientRecordsStore((state) => {
-    return state.personal_information_handlers;
+  const [incidentInfo, setIncident] = useState({
+    injury_time: incident_information.injury_time ?? new Date().getTime(),
+    care_time: incident_information.care_time ?? new Date().getTime(),
+    date: incident_information.date ?? new Date().getTime(),
   });
 
+  const updatePartialPatient = usePatientRecordsStore(
+    (state) => state.updatePartialPatient
+  );
+
   const translation = useTranslation();
+
+  useEffect(() => {
+    return function () {
+      if (!_.isEqual(personalInfo, personal_information)) {
+        updatePartialPatient({
+          personal_information: _.merge(personalInfo, personal_information),
+        });
+      }
+      if (!_.isEqual(incidentInfo, incident_information)) {
+        updatePartialPatient({
+          incident_information: _.merge(incidentInfo, incident_information),
+        });
+      }
+    };
+  }, [personal_information, incident_information]);
+  const image = usePatientRecordsStore(
+    (state) => state.injuriesImage?.[patient.personal_information.patientId]
+  );
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
+        <Button
+          onPress={() => {
+            createPDFWithImage(image, patient);
+          }}
+        >
+          Click
+        </Button>
         <SectionHeader label={translation("accountTitle")} />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
@@ -40,46 +71,49 @@ export function PatientDetails() {
           testID="patient-name"
           label={translation("patientName")}
           onChange={(full_name: string) => {
-            handlers.setFullName(full_name);
+            setPersonalInfo({ ...personalInfo, full_name });
           }}
-          value={full_name}
+          value={personalInfo.full_name ?? personal_information.full_name}
         />
         <InputField
           testID="idf-id"
           label={translation("idf_id")}
           maxLength={9}
           onChange={(idf_id) => {
-            handlers.setIdf(Number(idf_id));
+            setPersonalInfo({ ...personalInfo, idf_id: Number(idf_id) });
           }}
           numeric
-          value={idf_id?.toString()}
+          value={
+            personalInfo.idf_id?.toString() ??
+            personal_information.idf_id?.toString()
+          }
         />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <View style={styles.personalInfo}>
           <TimePicker
             testID="care-time"
-            value={incident_information.care_time ?? new Date().getTime()}
+            value={incidentInfo.care_time ?? incidentInfo.care_time}
             label={translation("timeOfTreatment")}
             onChange={(care_time: number) => {
-              incidentHandlers.setCareTime(care_time);
+              setIncident(_.merge(incidentInfo, care_time));
             }}
           />
           <TimePicker
             testID="injury-time"
-            value={incident_information.injury_time ?? new Date().getTime()}
+            value={incidentInfo.injury_time ?? incidentInfo.injury_time}
             label={translation("timeOfInjury")}
             onChange={(injury_time: number) => {
-              incidentHandlers.setTime(injury_time);
+              setIncident(_.merge(incidentInfo, injury_time));
             }}
           />
         </View>
         <DatePicker
           testID="injury"
-          value={incident_information.date ?? new Date().getTime()}
+          value={incidentInfo.date ?? incidentInfo.date}
           label={translation("date")}
           onChange={(date: number) => {
-            incidentHandlers.setDate(date);
+            setIncident(_.merge(incidentInfo, date));
           }}
         />
       </Card.Content>

@@ -23,7 +23,6 @@ import { sortByPriority } from "./utils";
 export function StatusTab() {
   const navigation = useNavigation<StackNavigation>();
   const patients = usePatientRecordsStore((state) => [...state.patients]);
-  console.log("patients", patients.length);
   const [selectedPatients, setSelectedPatients] = useState<Set<string>>(
     new Set()
   );

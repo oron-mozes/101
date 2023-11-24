@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { List } from "react-native-paper";
+import { Button, List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { RootStackParamList, STATUS } from "../../../../interfaces";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
