@@ -11,9 +11,9 @@ import { isSelectedHandler } from "../utils";
 
 export function InjuryReason() {
   const translation = useTranslation();
-  const reasons = usePatientRecordsStore(
-    (state) => state.activePatient.injuryReason.reasons
-  );
+  const reasons = usePatientRecordsStore((state) => [
+    ...state.activePatient.injuryReason.reasons,
+  ]);
   const circumstance = usePatientRecordsStore(
     (state) => state.activePatient.injuryReason.circumstance
   );
@@ -55,10 +55,8 @@ export function InjuryReason() {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    ...design.card,
-  },
-  content: { ...design.content },
+  card: design.card,
+  content: design.content,
   innerContent: {
     flexDirection: "row",
     flexWrap: "wrap",

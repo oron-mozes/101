@@ -1,15 +1,15 @@
 import date from "date-and-time";
 import { StyleSheet, View } from "react-native";
-import { Card, Divider, Icon, IconButton, Text } from "react-native-paper";
+import { Card, Divider, IconButton, Text } from "react-native-paper";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { colors } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 
 export function MedicationActions() {
   const translation = useTranslation();
-  const actions = usePatientRecordsStore(
-    (state) => state.activePatient.medicationsAndFluids.actions
-  );
+  const actions = usePatientRecordsStore((state) => [
+    ...state.activePatient.medicationsAndFluids.actions,
+  ]);
 
   const handlers = usePatientRecordsStore(
     (state) => state.medicationsAndFluids_handlers
@@ -24,6 +24,7 @@ export function MedicationActions() {
         {actions.map((action, index) => {
           return (
             <View
+              testID={`medication-action-${index}`}
               key={`${action.time}|${index}`}
               style={[
                 styles.innerContent,
@@ -34,7 +35,11 @@ export function MedicationActions() {
                 },
               ]}
             >
-              <Text variant="bodyLarge" style={{ flex: 1 }}>
+              <Text
+                variant="bodyLarge"
+                style={{ flex: 1 }}
+                testID={`medication-action-${index}-message`}
+              >
                 {[
                   translation(action.treatment),
                   translation(action.type ?? ""),

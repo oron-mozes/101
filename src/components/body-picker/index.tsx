@@ -1,18 +1,15 @@
 import { useEffect, useRef } from "react";
-import { Alert, View } from "react-native";
-import { Button, Text } from "react-native-paper";
 import Svg, { G, Path } from "react-native-svg";
-import ViewShot from "react-native-view-shot";
+import ViewShot, { captureRef } from "react-native-view-shot";
+import { E_InjuryType } from "../../interfaces";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { Burn } from "./burn";
+import { CG } from "./cg";
 import { Gunshot } from "./gunshot";
 import { Hit } from "./hit";
+import { Kateter } from "./kateter";
 import { Sharpnel } from "./sharpnel";
 import { Touniquet } from "./touniquet";
-import { captureRef } from "react-native-view-shot";
-import { E_InjuryType } from "../../interfaces";
-import { CG } from "./cg";
-import { Kateter } from "./kateter";
 
 export function BodyPicker() {
   const viewRef = useRef(null);
@@ -32,11 +29,11 @@ export function BodyPicker() {
       quality: 1,
       width: 500,
       height: 500,
-      result: "data-uri",
+      result: "base64",
     }).then(
       (uri) => {
         console.log("Snap");
-        addInjuriesImage(activePatient.personal_information.patientId, uri);
+        addInjuriesImage(uri);
       },
       (error) => console.error("Oops, snapshot failed", error)
     );

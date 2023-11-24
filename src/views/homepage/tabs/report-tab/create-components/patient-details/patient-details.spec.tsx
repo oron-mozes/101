@@ -185,7 +185,6 @@ describe("PatientDetails", () => {
       </PaperProvider>
     );
 
-    console.log(new Date().getTime());
     const careTime = getByTestId("care-time-picker-view");
     expect(careTime).toHaveTextContent("21:23");
 

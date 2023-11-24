@@ -124,9 +124,10 @@ export const usePatientRecordsStore = create<{
     prognosis: string[];
     evacuation: IEvacuationInformation;
     treatmentGuide: ITreatment;
+    image: string;
   };
   injuriesImage: Record<string, string>;
-  addInjuriesImage(id: string, image: string): void;
+  addInjuriesImage(image: string): void;
   deletePatients(): void;
   deletePatient(patientId): void;
   updatePartialPatient(data: any): void;
@@ -238,12 +239,12 @@ export const usePatientRecordsStore = create<{
 }>()(
   devtools((set, get, state) => ({
     injuriesImage: {},
-    addInjuriesImage(id: string, image: string) {
+    addInjuriesImage(image: string) {
       const current = state.getState();
-      current.injuriesImage[id] = image;
+
       set((state) => ({
         ...state,
-        injuriesImage: { ...current.injuriesImage },
+        activePatient: { ...current.activePatient, image },
       }));
     },
     async deletePatient(patientId) {
@@ -653,7 +654,7 @@ export const usePatientRecordsStore = create<{
         const merged = _.merge(current.activePatient.incident_information, {
           injury_time,
         });
-        console.log("setTime:", merged);
+
         current.updatePartialPatient({
           incident_information: merged,
         });
@@ -673,7 +674,7 @@ export const usePatientRecordsStore = create<{
         const merged = _.merge(current.activePatient.incident_information, {
           date,
         });
-        console.log("setDate:", merged);
+
         current.updatePartialPatient({
           incident_information: merged,
         });
