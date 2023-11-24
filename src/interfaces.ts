@@ -367,6 +367,7 @@ export interface IPatientRecord {
   prognosis: string[];
   evacuation: IEvacuationInformation;
   treatmentGuide: ITreatment;
+  image?: string;
 }
 export enum ROLE {
   UNIT_MEDIC = "UNIT_MEDIC",

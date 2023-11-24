@@ -3,6 +3,16 @@ import _ from "lodash";
 import locale from "../../locales/he.json";
 import { colors } from "../shared-config";
 import { timeToDate } from "./date-to-time";
+import {
+  IAirway,
+  IBreathing,
+  ICareProvider,
+  IMeasurements,
+  IMedicationsAndFluid,
+  ITreatmentGuide,
+  ITreatmentGuideMeasurementsInformation,
+  MEDICATION_TREATMENT,
+} from "../interfaces";
 
 function convertor(key, value) {
   switch (key) {
@@ -45,8 +55,11 @@ export function getLocaleKey(data) {
 }
 
 export function returnInfoTable(title: string, data: Record<string, any>[]) {
-  const titleElement = `<div style="width:100%; text-align:center; background-color:${colors.surface}">${title}</div>`;
-  const tableElement = `<table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${title}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
   <tr>
   ${Object.keys(data[0])
     .map(
@@ -72,12 +85,14 @@ export function returnInfoTable(title: string, data: Record<string, any>[]) {
     )
     .join(``)}
   </table>`;
-  return titleElement + tableElement;
 }
 
 export function returnInjuryReasonsTable(data: string[], circumstance) {
-  const titleElement = `<div style="width:100%; text-align:center; background-color:${colors.surface}">${locale.injuryReason}</div>`;
-  const tableElement = `<table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.injuryReason}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
   <tr>
   <th style="border-color: ${colors.surface}; text-align:right">${
     locale.reasons
@@ -95,14 +110,13 @@ export function returnInjuryReasonsTable(data: string[], circumstance) {
   <td style="border-color: ${colors.surface};">${circumstance ?? "לא דווח"}</td>
   </tr>
   </table>`;
-  return titleElement + tableElement;
 }
 
-export function returnBodyPicker(imagePath, mainInjury = "asdsadsadsad") {
+export function returnBodyPicker(imagePath, mainInjury = "") {
   return `
-  <div style="width:100%; text-align:center; background-color:${colors.surface};">${locale.injuryReason}</div>
+  <div style="width:100%; text-align:center; background-color:${colors.surface};"><strong>${locale.injuryReason}</strong></div>
   <div style="display: flex; flex-direction:row; width: 100%">
-      <div style="flex:2"> <img src="${imagePath}" width="500" height="500"/></div>
+      <div style="flex:2"> <img src="data:image/png;base64,${imagePath}" width="500" height="500"/></div>
       <div style="flex:1"> 
       <ul style="padding: 10px;border: 1px solid ${colors.textInputBorderColor}">
         <li  style="list-style: none; margin-bottom: 20px; margin-top: 10px">${locale.legend}</li>
@@ -170,4 +184,320 @@ export function returnBodyPicker(imagePath, mainInjury = "asdsadsadsad") {
       </ul>
       </div>
   </div>`;
+}
+
+export function returnConsciousnessTable(data: string[]) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.avpu}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  <tr>
+  <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.reasons
+  }</th>
+  </tr>
+  <td style="border-color: ${colors.surface};">${data
+    .map((item) => locale[item])
+    .join(", ")}</td>
+  </tr>
+  <tr>
+  </table>`;
+}
+
+export function returnAirwayTable(data: IAirway) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.aSection}</strong></div>
+  <div style="display: flex; flex-direction:row">
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px; flex: 1" border="1">
+  <tr>
+    <th  style="border-color: ${colors.surface}; text-align:right">${
+    locale.airWayInjury
+  }</th>
+  </tr>
+  <tr>
+    <th rowspan="${data.actions.length}" style="border-color: ${
+    colors.surface
+  }; text-align:right">${data.fulfill ? locale.yes : locale.no}</th>  
+  </tr>
+  <table>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px; flex: 2" border="1">
+  <tr>
+   
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionTaken
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionTime
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionResult
+  }</th>
+  </tr>
+  
+    ${data.actions
+      .map(
+        (action) => `<tr>
+    <td>${locale[action.action]}</td>
+    <td>${convertor("time", action.time)}</td>
+    <td>${action.successful ? locale.yes : locale.no}</td>
+    </tr>`
+      )
+      .join("")}
+ 
+  
+  </table>
+  </div>`;
+}
+
+export function returnBreathingTable(breathing: IBreathing) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.bSection}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  <tr>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.breathingInjury
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.saturation
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.breathingCount
+  }</th>
+  </tr>
+  <tr>
+    <td>${breathing.fulfill ? locale.yes : locale.no}</td>
+    <td>${breathing.saturation}</td>
+    <td>${breathing.breathingCount}</td>
+  </tr>
+  <tr>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionTaken
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionTime
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionResult
+  }</th>
+  </tr>
+  ${breathing.actions
+    .map(
+      (action) => `<tr>
+    
+    <td>${locale[action.action]}</td>
+    <td>${convertor("time", action.time)}</td>
+    <td>${action.successful ? locale.yes : locale.no}</td>
+  </tr>`
+    )
+    .join("")}
+  
+  </table>`;
+}
+
+export function returnMeasurementsTable(measurements: IMeasurements) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.cSection}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  <tr>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.palpated
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.shock
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.puls
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.bloodPressure
+  }</th>
+  </tr>
+  <tr>
+    <td>${measurements.palpated ? locale.yes : locale.no}</td>
+    <td>${measurements.shock ? locale.yes : locale.no}</td>
+    <td>${measurements.puls}</td>
+    <td>${measurements.bloodPressure}</td>
+  </tr>
+  <tr>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionTaken
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionTime
+  }</th>
+    <th style="border-color: ${colors.surface}; text-align:right">${
+    locale.actionResult
+  }</th>
+  </tr>
+  ${measurements.actions
+    .map(
+      (action) => `<tr>
+    
+    <td>${locale[action.action]}</td>
+    <td>${convertor("time", action.time)}</td>
+    <td>${action.successful ? locale.yes : locale.no}</td>
+  </tr>`
+    )
+    .join("")}
+  
+  </table>`;
+}
+export function returnESectionTable(data: string[]) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.eSection}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  <tr>
+    <td>${data.map((m) => locale[m]).join(", ")}</td>
+  </tr>
+  </table>`;
+}
+
+export function returnMedicationTable(medications: IMedicationsAndFluid) {
+  const otherMedications =
+    medications.actions.filter(
+      (med) => med.treatment === MEDICATION_TREATMENT.OTHER
+    ) ?? [];
+  const knownMedications =
+    medications.actions.filter(
+      (med) => med.treatment !== MEDICATION_TREATMENT.OTHER
+    ) ?? [];
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.medicationsAndFluid}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  <tr>
+    <th>${locale.medicationsAndFluid}</th>
+    <th>${locale.type}</th>
+    <th>${locale.dose}</th>
+    <th>${locale.time}</th>
+  </tr>
+  ${knownMedications
+    .map(
+      (med) => `<tr>
+    <td>${locale[med.treatment]}</td>
+    <td>${locale[med.type]}</td>
+    <td>${locale[med.dose]}</td>
+    <td>${convertor("time", med.time)}</td>
+  </tr>`
+    )
+    .join("")}
+    ${otherMedications
+      .map(
+        (med) => `<tr>
+      <td colspan="3">${med.other}</td>
+      <td>${convertor("time", med.time)}</td>
+    </tr>`
+      )
+      .join("")}
+  </table>`;
+}
+
+export function returnPrognosisTable(prognosis: string[]) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.prognosis}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  <tr>
+    <td>${prognosis.join(". ")}</td>
+  </tr>
+  </table>`;
+}
+export function returnCareProviderTable(careProvider: ICareProvider[]) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.careProviderSection}</strong></div>
+  <table style="width:100%; border-collapse: collapse; margin-bottom: 40px" border="1">
+  <tr>
+    <th style="text-align: right">${locale.careProviderName}</th>
+  </tr>
+  ${careProvider
+    .map(
+      (provider) =>
+        `<tr><td>${provider.full_name} ${provider.idf_id}, ${
+          locale[provider.role]
+        }</td></tr>`
+    )
+    .join("")}
+  </table>`;
+}
+
+export function returnGuidelinesTable(guides: ITreatmentGuide[]) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+  }"><strong>${locale.treatments}</strong></div>
+  <table border="1">
+      <tr>
+          <td>${locale.care_guide}</td>
+          <td>${locale.order_time}</td>
+          <td>${locale.execution_time}</td>
+
+      </tr>
+    ${guides.map(
+      (guide) => ` <tr>
+          <td colspan="2">${guide.care_guide}</td>
+          <td>${timeToDate(new Date(guide.order_time))}</td>
+          <td>${timeToDate(new Date(guide.execution_time))}</td>
+      </tr>`
+    )}
+  </table>`;
+}
+
+export function returnMeasurementsInformationTable(
+  measurements: ITreatmentGuideMeasurementsInformation
+) {
+  return `
+  <div style="width:100%; text-align:center; background-color:${
+    colors.surface
+    }"><strong>${locale.measurements}</strong></div>
+  <table border="1">
+                <tr>
+                    <td>${locale.treatment_time}</td>
+                    <td>${locale.treatment_provider}</td>
+                    <td>${locale.treatment_puls}</td>
+                    <td>${locale.treatment_bloodPressure}</td>
+                    <td>${locale.treatment_breath}</td>
+                    <td>${locale.treatment_spo2}</td>
+                    <td>${locale.etcos}</td>
+                    <td>${locale.pain}</td>
+                    <td>${locale.prpo}</td>
+                    <td>${locale.GCS}</td>
+                    <td>${locale.urine}</td>
+                    <td>${locale.treatment_blood}</td>
+  
+                </tr>
+              ${measurements.actions.map((measurement) => {
+                if (!measurement.provider) {
+                  return "";
+                }
+                return `<tr>
+                    <td>${timeToDate(new Date(measurement.time))}</td>
+                    <td>${measurement.provider?.full_name}, ${
+                  measurement.provider?.idf_id
+                }, ${locale[measurement.provider?.role]}</td>
+                  <td>${measurement.puls}</td>
+                  <td>${measurement.bloodPressure}</td>
+                  <td>${measurement.breath}</td>
+                  <td>${measurement.spo2}</td>
+                  <td>${measurement.etcos}</td>
+                  <td>${measurement.pain}</td>
+                  <td>${measurement.prpo}</td>
+                  <td>${measurement.GCS}</td>
+                  <td>${measurement.urine}</td>
+                  <td>${measurement.blood}</td>
+                </tr>`;
+              })}
+              </table>`;
 }

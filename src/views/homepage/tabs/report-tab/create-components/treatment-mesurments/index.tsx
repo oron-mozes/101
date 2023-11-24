@@ -62,7 +62,7 @@ function Measurements() {
           ref={scrollViewRef}
         >
           {new Array(actions.length + 1).fill(1).map((_, index) => (
-            <MeasurementForm formIndex={index} />
+            <MeasurementForm formIndex={index} key={index} />
           ))}
         </ScrollView>
       </Card.Content>

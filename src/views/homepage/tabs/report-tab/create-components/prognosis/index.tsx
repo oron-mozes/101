@@ -32,6 +32,7 @@ export function Prognosis() {
       <Card.Content style={[styles.innerContent]}>
         {prognosis.map((prognosis, index) => (
           <View
+            key={index}
             style={{
               flexDirection: "row",
               width: "100%",

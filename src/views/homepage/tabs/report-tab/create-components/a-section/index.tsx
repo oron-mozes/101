@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { Card, Icon, Text } from "react-native-paper";
+import { Card } from "react-native-paper";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { EAirWayTreatment, IAction } from "../../../../../../interfaces";
-import { colors, gutter, inputFontSize } from "../../../../../../shared-config";
+import { gutter } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { AddAction } from "../section-shared-components/add-a-action";
+import { AddActionCTA } from "../section-shared-components/add-action-cta";
 import { SavedAction } from "../section-shared-components/saved-action";
+import { allowToAddAction } from "../section-shared-components/utils";
 import { design } from "../shared-style";
 import { AActiveBar } from "./a-active-bar";
-import { allowToAddAction } from "../section-shared-components/utils";
-import { AddActionCTA } from "../section-shared-components/add-action-cta";
 
 export const initialEmptyAction: IAction<EAirWayTreatment> = {
   action: null,

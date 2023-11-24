@@ -103,6 +103,7 @@ const initialPatient = {
       actions: [],
     },
   },
+  image: null,
 };
 
 export const usePatientRecordsStore = create<{
@@ -926,6 +927,7 @@ export const usePatientRecordsStore = create<{
         prognosis: [],
         evacuation: undefined,
         treatmentGuide: undefined,
+        image: undefined,
       };
 
       for (const key in final) {
