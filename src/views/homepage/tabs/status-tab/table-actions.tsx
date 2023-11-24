@@ -4,10 +4,14 @@ import { Checkbox, Text } from "react-native-paper";
 import { QrIcon } from "../../../../components/qr-icon/qr";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { colors } from "../../../../shared-config";
+import { usePatientRecordsStore } from "../../../../store/patients.record.store";
+import { useNFCSender } from "../../../../hooks/useNfcSender";
 
 export function TableActions({ active }: { active: boolean }) {
   const [checked, setChecked] = useState(false);
   const [enabled, setEnabled] = useState(active);
+  const patients = usePatientRecordsStore((state) => [...state.patients]);
+  const { writeNdef } = useNFCSender();
   useEffect(() => {
     setEnabled(checked || active);
   }, [checked, active]);
@@ -67,6 +71,13 @@ export function TableActions({ active }: { active: boolean }) {
 
             <Text
               testID={`table-action-${index}`}
+              onPress={() => {
+                writeNdef(
+                  patients.map(
+                    (patient) => patient.personal_information.patientId
+                  )
+                );
+              }}
               style={[
                 styles.text,
                 { color: enabled ? colors.primary : colors.disabled },

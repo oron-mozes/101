@@ -19,8 +19,10 @@ import { usePatientRecordsStore } from "../../../../store/patients.record.store"
 import { PatientCareIcon } from "../../footer/patient-care-icon";
 import { TableActions } from "./table-actions";
 import { sortByPriority } from "./utils";
+import { useNFCSender } from "../../../../hooks/useNfcSender";
 
 export function StatusTab() {
+  const { writeNdef } = useNFCSender();
   const navigation = useNavigation<StackNavigation>();
   const patients = usePatientRecordsStore((state) => [...state.patients]);
   const [selectedPatients, setSelectedPatients] = useState<Set<string>>(
@@ -169,8 +171,9 @@ export function StatusTab() {
                 </DataTable.Cell>
                 <DataTable.Cell
                   style={[styles.title, { flex: 0.5 }]}
-                  onPress={() =>
-                    navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
+                  onPress={
+                    () => writeNdef(patient.personal_information.patientId)
+                    // navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
                   }
                 >
                   <QrIcon />
