@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import { PaperProvider } from "react-native-paper";
 import { theme } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { PatientDetails } from "./patient-details";
+import PatientDetails from ".";
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),

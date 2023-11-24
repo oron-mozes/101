@@ -1,60 +1,35 @@
-import { useEffect, useRef } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { Card, Divider, Icon, Text } from "react-native-paper";
-import { DropDown } from "../../../../../../form-components/dropdown";
+import { useEffect, useMemo, useRef } from "react";
+import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { Button, Card, Divider } from "react-native-paper";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
-import { IMeasurementsAction } from "../../../../../../interfaces";
-import { colors, gutter } from "../../../../../../shared-config";
+import { gutter } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { useStationStore } from "../../../../../../store/station.store";
 import { design } from "../shared-style";
-import { convertStringToNumber } from "../utils";
-import { MeasurementForm } from "./measurments-form";
-import { Dimensions } from "react-native";
+import { MeasurementForm, emptyState } from "./measurments-form";
 
-export const columnWidth = 30;
+export const columnWidth = 40;
 
-const emptyState: IMeasurementsAction = {
-  id: null,
-  time: null,
-  provider: null,
-  puls: null,
-  bloodPressure: null,
-  breath: null,
-  spo2: null,
-  etcos: null,
-  pain: null,
-  prpo: null,
-  GCS: null,
-  urine: null,
-  blood: null,
-};
-export function Measurements() {
-  const screenWidth = Dimensions.get("window").width;
+function Measurements() {
+  const screenWidth = Dimensions.get("window").width - 60;
   const scrollViewRef = useRef(null);
 
   const translation = useTranslation();
-  const period = usePatientRecordsStore(
-    (state) => state.activePatient.treatmentGuide.measurements.period
-  );
   const actions = usePatientRecordsStore((state) => {
-    return state.activePatient.treatmentGuide.measurements.actions ?? [];
+    return [...state.activePatient.treatmentGuide.measurements.actions];
   });
-  const scrollWidth =
-    ((screenWidth * columnWidth) / 100) * Math.max(actions.length, 3);
+  const scrollWidth = useMemo(() => {
+    if (actions.length < 2) {
+      return screenWidth;
+    }
+    return (screenWidth / 2) * (actions.length + 1);
+  }, [actions.length]);
   useEffect(() => {
     scrollViewRef.current.scrollTo({ x: -scrollWidth, animated: true });
   }, [scrollWidth]);
   const handlers = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers
   );
-
-  useEffect(() => {
-    if (actions.length === 0) {
-      addRow();
-    }
-  }, []);
 
   const addRow = () => {
     handlers.addMeasurementsAction({
@@ -69,73 +44,26 @@ export function Measurements() {
         <SectionHeader label={translation("treatment_measurements_title")} />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
-        <View style={[styles.innerContent, { flex: 1 }]}>
-          <DropDown
-            editable={false}
-            label={translation("treatment_period")}
-            initialValue={period?.toString()}
-            onSelect={(selected) => {
-              handlers.setPeriod(convertStringToNumber(selected.id));
-            }}
-            options={["15", "30", "60", "120"].map((time) => ({
-              id: time,
-              title: translation("minutes", { time }),
-            }))}
-          />
-        </View>
-        <View style={{ flex: 1 }}></View>
         <View style={[styles.innerContent, styles.addItemAction]}>
-          <Icon size={20} source="plus" color={colors.primary} />
-          <Text
-            style={{ color: colors.primary, fontSize: 17 }}
-            onPress={addRow}
-          >
+          <Button mode="contained" onPress={addRow} icon="plus">
             {translation("treatment_new")}
-          </Text>
+          </Button>
         </View>
       </Card.Content>
       <Divider />
       <Card.Content style={[styles.innerContent]}>
         <ScrollView
           horizontal={true}
-          style={{ width: scrollWidth }}
+          style={{}}
+          contentContainerStyle={{
+            justifyContent: "center",
+            width: scrollWidth / (actions.length === 0 ? 2 : 1),
+          }}
           ref={scrollViewRef}
         >
-          {actions.map((measurement, index) => (
-            <MeasurementForm
-              onComplete={addRow}
-              editable={index === actions.length - 1}
-              index={index}
-              measurement={measurement}
-              key={measurement.id + index}
-            />
+          {new Array(actions.length + 1).fill(1).map((_, index) => (
+            <MeasurementForm formIndex={index} />
           ))}
-          {actions.length < 2 && (
-            <View style={{ flex: 1 }}>
-              <MeasurementForm
-                onComplete={() => {}}
-                editable={false}
-                index={-1}
-                measurement={{
-                  ...emptyState,
-                  time: new Date().getTime(),
-                }}
-              />
-            </View>
-          )}
-          {actions.length < 3 && (
-            <View style={{ flex: 1 }}>
-              <MeasurementForm
-                onComplete={() => {}}
-                editable={false}
-                index={-1}
-                measurement={{
-                  ...emptyState,
-                  time: new Date().getTime(),
-                }}
-              />
-            </View>
-          )}
         </ScrollView>
       </Card.Content>
     </Card>
@@ -159,6 +87,7 @@ const styles = StyleSheet.create({
   addItemAction: {
     justifyContent: "flex-start",
     margin: gutter,
+    marginBottom: 20,
   },
   split: {
     flex: 1,
@@ -174,3 +103,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
+
+export default Measurements;

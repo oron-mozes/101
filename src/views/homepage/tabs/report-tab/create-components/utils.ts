@@ -37,6 +37,10 @@ export function isSelectedHandler<T>(data: T[]) {
 }
 
 export function updateDataInIndex<T>(data: T[], item: T, index: number): T[] {
+  if (data.length === 0) {
+    return [item];
+  }
+
   const newData = data;
   const replace = { ...data[index], ...item };
 

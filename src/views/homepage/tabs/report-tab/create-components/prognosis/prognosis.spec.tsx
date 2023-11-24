@@ -3,7 +3,7 @@ import { render, fireEvent, act, waitFor } from "@testing-library/react-native";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { PaperProvider } from "react-native-paper";
 import { theme } from "../../../../../../shared-config";
-import { Prognosis } from "./prognosis";
+import Prognosis from ".";
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),

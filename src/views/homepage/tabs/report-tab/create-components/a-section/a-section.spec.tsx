@@ -1,7 +1,7 @@
 import React from "react";
 import { theme } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { ASection } from "./a-section";
+import ASection from ".";
 import { fireEvent, render, act } from "@testing-library/react-native";
 import { PaperProvider } from "react-native-paper";
 import { EAirWayTreatment } from "../../../../../../interfaces";

@@ -60,7 +60,10 @@ export function DropDown({
         testID={`${testID}${testID ? "-" : ""}choose`}
       >
         <View style={styles.picker}>
-          <Text style={{ flex: 1, textAlign: "center" }}  testID={`${testID}${testID ? "-" : ""}dd-selected`}>
+          <Text
+            style={{ flex: 1, textAlign: "center" }}
+            testID={`${testID}${testID ? "-" : ""}dd-selected`}
+          >
             {selected ?? translation("select")}
           </Text>
           <View style={{ marginRight: 10, transform: "rotate(180deg)" }}>
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
   },
   field: {
     flex: 1,
-    marginTop: 4,
+    margin: 4,
   },
   label: {
     marginBottom: 10,

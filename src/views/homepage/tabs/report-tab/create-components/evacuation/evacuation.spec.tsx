@@ -1,7 +1,7 @@
 import { fireEvent, render } from "@testing-library/react-native";
 import { STATUS } from "../../../../../../interfaces";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { Evacuation } from "./evacuation";
+import Evacuation from ".";
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),

@@ -1,69 +1,68 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { BloodPressureInputFieldHandler } from "../../../../../../form-components/blood-pressure-input-field";
 import { DropDown } from "../../../../../../form-components/dropdown";
 import { InputField } from "../../../../../../form-components/input-field";
 import { TimePicker } from "../../../../../../form-components/time-picker";
-import { convertStringToNumber } from "../utils";
-import { gutter } from "../../../../../../shared-config";
-import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { design } from "../shared-style";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { IMeasurementsAction } from "../../../../../../interfaces";
+import { gutter } from "../../../../../../shared-config";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { useStationStore } from "../../../../../../store/station.store";
-import { Button } from "react-native-paper";
-import { useEffect, useState } from "react";
-import { BloodPressureInputFieldHandler } from "../../../../../../form-components/blood-pressure-input-field";
-import { Dimensions } from "react-native";
-import { columnWidth } from "./";
+import { design } from "../shared-style";
+import { convertStringToNumber } from "../utils";
 
-export function MeasurementForm({
-  measurement,
-  index,
-  editable,
-  onComplete,
-}: {
-  onComplete(): void;
-  editable: boolean;
-  index: number;
-  measurement: IMeasurementsAction;
-}) {
-  const screenWidth = Dimensions.get("window").width;
-  const widthInVw = (screenWidth * columnWidth) / 100;
-  const [lockEdit, toggleEdit] = useState<boolean>(editable);
+export const emptyState: IMeasurementsAction = {
+  id: null,
+  time: null,
+  provider: null,
+  puls: null,
+  bloodPressure: null,
+  breath: null,
+  spo2: null,
+  etcos: null,
+  pain: null,
+  prpo: null,
+  GCS: null,
+  urine: null,
+  blood: null,
+};
 
-  const translation = useTranslation();
-  const handlers = usePatientRecordsStore(
-    (state) => state.treatmentGuide_handlers
+export function MeasurementForm({ formIndex }: { formIndex: number }) {
+  const actions = usePatientRecordsStore((state) => {
+    return state.activePatient.treatmentGuide.measurements.actions;
+  });
+  const [form, updateForm] = useState<IMeasurementsAction>(
+    actions?.[formIndex] ?? { ...emptyState, time: new Date().getTime() }
   );
-  const disabled = false;
+  const translation = useTranslation();
+  const updateAtIndex = usePatientRecordsStore(
+    (state) => state.treatmentGuide_handlers.updateAtIndex
+  );
+
   const providers = useStationStore((state) => state.station.care_providers);
   const painRang = [...Array(11).keys()];
+
   useEffect(() => {
-    // toggleEdit(!disabled && editable);
-  }, [disabled, editable]);
+    updateAtIndex(form, formIndex);
+  }, [form]);
+
   return (
-    <View
-      style={[
-        styles.column,
-        editable ? {} : styles.disabled,
-        { width: widthInVw },
-      ]}
-    >
+    <View style={[styles.column]}>
       <TimePicker
-        editable={lockEdit}
-        value={measurement.time}
+        value={form.time}
         label={translation("treatment_execution_time")}
         onChange={(time) => {
-          handlers.updateAtIndex({ time }, index);
+          updateForm({ ...form, time });
         }}
       />
       <DropDown
-        editable={lockEdit}
-        initialValue={measurement.provider?.idf_id?.toString()}
+        initialValue={form.provider?.idf_id?.toString()}
         onSelect={(value) => {
           const provider = Object.values(providers).find(
             (p) => p.idf_id.toString() === value.id
           );
-          handlers.updateAtIndex({ provider }, index);
+          updateForm({ ...form, provider });
         }}
         label={translation("treatment_provider")}
         options={Object.values(providers).map((provider) => ({
@@ -72,65 +71,50 @@ export function MeasurementForm({
         }))}
       />
       <InputField
-        editable={lockEdit}
         maxLength={3}
         numeric
         label={translation("treatment_puls")}
-        value={measurement.puls?.toString()}
+        value={form.puls?.toString()}
         onChange={(puls) => {
-          handlers.updateAtIndex({ puls: convertStringToNumber(puls) }, index);
+          updateForm({ ...form, puls: convertStringToNumber(puls) });
         }}
       />
       <BloodPressureInputFieldHandler
         onChange={(bloodPressure) => {
-          handlers.updateAtIndex({ bloodPressure }, index);
+          updateForm({ ...form, bloodPressure });
         }}
         label={translation("treatment_bloodPressure")}
-        editable={lockEdit}
-        value={measurement.bloodPressure}
+        value={form.bloodPressure}
       />
 
       <InputField
-        editable={lockEdit}
         numeric
         label={translation("treatment_breath")}
-        value={measurement.breath?.toString()}
+        value={form.breath?.toString()}
         onChange={(breath) => {
-          handlers.updateAtIndex(
-            { breath: convertStringToNumber(breath) },
-            index
-          );
+          updateForm({ ...form, breath: convertStringToNumber(breath) });
         }}
       />
       <InputField
-        editable={lockEdit}
         numeric
         label={translation("treatment_spo2")}
-        value={measurement.spo2?.toString()}
+        value={form.spo2?.toString()}
         onChange={(spo2) => {
-          handlers.updateAtIndex({ spo2: convertStringToNumber(spo2) }, index);
+          updateForm({ ...form, spo2: convertStringToNumber(spo2) });
         }}
       />
       <InputField
-        editable={lockEdit}
         numeric
         label={translation("treatment_etcos")}
-        value={measurement.etcos?.toString()}
+        value={form.etcos?.toString()}
         onChange={(etcos) => {
-          handlers.updateAtIndex(
-            { etcos: convertStringToNumber(etcos) },
-            index
-          );
+          updateForm({ ...form, etcos: convertStringToNumber(etcos) });
         }}
       />
       <DropDown
-        editable={lockEdit}
-        initialValue={measurement.pain?.toString()}
+        initialValue={form.pain?.toString()}
         onSelect={(pain) => {
-          handlers.updateAtIndex(
-            { pain: convertStringToNumber(pain.id) },
-            index
-          );
+          updateForm({ ...form, pain: convertStringToNumber(pain.id) });
         }}
         label={translation("treatment_pain")}
         options={painRang.map((pain) => ({
@@ -139,67 +123,55 @@ export function MeasurementForm({
         }))}
       />
       <InputField
-        editable={lockEdit}
         numeric
         label={translation("treatment_prpo")}
-        value={measurement.prpo?.toString()}
+        value={form.prpo?.toString()}
         onChange={(prpo) => {
-          handlers.updateAtIndex({ prpo: convertStringToNumber(prpo) }, index);
+          updateForm({ ...form, prpo: convertStringToNumber(prpo) });
         }}
       />
       <InputField
-        editable={lockEdit}
         numeric
         label={translation("GCS")}
-        value={measurement.GCS?.toString()}
+        value={form.GCS?.toString()}
         onChange={(GCS) => {
-          handlers.updateAtIndex({ GCS: convertStringToNumber(GCS) }, index);
+          updateForm({ ...form, GCS: convertStringToNumber(GCS) });
         }}
       />
       <InputField
-        editable={lockEdit}
         numeric
         label={translation("treatment_urine")}
-        value={measurement.urine?.toString()}
+        value={form.urine?.toString()}
         onChange={(urine) => {
-          handlers.updateAtIndex(
-            { urine: convertStringToNumber(urine) },
-            index
-          );
+          updateForm({ ...form, urine: convertStringToNumber(urine) });
         }}
       />
       <InputField
-        editable={lockEdit}
         numeric
         label={translation("treatment_blood")}
-        value={measurement.blood?.toString()}
+        value={form.blood?.toString()}
         onChange={(blood) => {
-          handlers.updateAtIndex(
-            { blood: convertStringToNumber(blood) },
-            index
-          );
+          updateForm({ ...form, blood: convertStringToNumber(blood) });
         }}
       />
-      <Button
+      {/* <Button
         icon="check"
-        disabled={!lockEdit}
         mode="contained"
         style={{ margin: 3 }}
-        onPress={onComplete}
+        onPress={() => {
+          updateAtIndex(form, formIndex);
+        }}
       >
         {translation("done")}
-      </Button>
+      </Button> */}
     </View>
   );
 }
 const styles = StyleSheet.create({
-  disabled: {
-    ...design.disabled,
-  },
+  disabled: design.disabled,
   column: {
     flex: 1,
     flexDirection: "column",
-    width: "33%",
   },
   deleteAction: {
     justifyContent: "center",

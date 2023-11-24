@@ -1,6 +1,11 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { ScrollView, StatusBar, StyleSheet } from "react-native";
+import { useEffect, useState, lazy, Suspense } from "react";
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
@@ -8,21 +13,32 @@ import { RootStackParamList } from "../../../../interfaces";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useStationStore } from "../../../../store/station.store";
-import { ASection } from "./create-components/a-section";
-import { Avpu } from "./create-components/avpu/avpu";
-import { BSection } from "./create-components/b-section/b-section";
-import { CSection } from "./create-components/c-section/c-section";
-import { CareProvider } from "./create-components/care-provider/care-provider";
-import { DSection } from "./create-components/d-section/d-section";
-import { ESection } from "./create-components/e-section/e-section";
-import { Evacuation } from "./create-components/evacuation/evacuation";
-import { InjuryReason } from "./create-components/injury-reason/injury-reason";
-import { MedicationsAndFluidSection } from "./create-components/medication";
-import { PatientBodyPicker } from "./create-components/patient-body-picker";
-import { PatientDetails } from "./create-components/patient-details/patient-details";
-import { Prognosis } from "./create-components/prognosis/prognosis";
-import { TreatmentGuide } from "./create-components/treatment-guide";
-import { Measurements } from "./create-components/treatment-mesurments";
+import PatientDetails from "./create-components/patient-details";
+import InjuryReason from "./create-components/injury-reason";
+
+const Avpu = lazy(() => import("./create-components/avpu"));
+const ASection = lazy(() => import("./create-components/a-section"));
+const BSection = lazy(() => import("./create-components/b-section"));
+const CSection = lazy(() => import("./create-components/c-section"));
+const ESection = lazy(() => import("./create-components/e-section"));
+const DSection = lazy(() => import("./create-components/d-section"));
+const CareProvider = lazy(() => import("./create-components/care-provider"));
+const Evacuation = lazy(() => import("./create-components/evacuation"));
+const MedicationsAndFluidSection = lazy(
+  () => import("./create-components/medication")
+);
+const PatientBodyPicker = lazy(
+  () => import("./create-components/patient-body-picker")
+);
+
+const Prognosis = lazy(() => import("./create-components/prognosis"));
+const Measurements = lazy(
+  () => import("./create-components/treatment-mesurments")
+);
+
+const TreatmentGuide = lazy(
+  () => import("./create-components/treatment-guide")
+);
 
 enum ACCORDION_ITEM {
   CLOSE = "0",
@@ -76,78 +92,83 @@ export function ReportTab() {
   }, [handlers]);
 
   return (
-    <AutocompleteDropdownContextProvider>
-      <ScrollView keyboardShouldPersistTaps="handled" style={styles.container}>
-        <List.AccordionGroup
-          expandedId={selectedAccordionItemId}
-          onAccordionPress={(expend) => {
-            if (selectedAccordionItemId === expend) {
-              setSelectedAccordionItemId(ACCORDION_ITEM.CLOSE);
-            } else {
-              setSelectedAccordionItemId(expend as ACCORDION_ITEM);
-            }
-          }}
+    <Suspense fallback={<ActivityIndicator size="large" />}>
+      <AutocompleteDropdownContextProvider>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          style={styles.container}
         >
-          <List.Accordion
-            right={() => (
-              <List.Icon
-                color={colors.text}
-                style={{ marginTop: -5 }}
-                icon={
-                  selectedAccordionItemId === ACCORDION_ITEM.FIRST_TAB
-                    ? "chevron-up"
-                    : "chevron-down"
-                }
-              />
-            )}
-            title={translation("first-care")}
-            style={styles.accordion}
-            id={ACCORDION_ITEM.FIRST_TAB}
-            titleStyle={{
-              color: colors.text,
-              textAlign: "left",
+          <List.AccordionGroup
+            expandedId={selectedAccordionItemId}
+            onAccordionPress={(expend) => {
+              if (selectedAccordionItemId === expend) {
+                setSelectedAccordionItemId(ACCORDION_ITEM.CLOSE);
+              } else {
+                setSelectedAccordionItemId(expend as ACCORDION_ITEM);
+              }
             }}
           >
-            <PatientDetails />
-            <InjuryReason />
-            <PatientBodyPicker />
-            <Avpu />
-            <ASection />
-            <BSection />
-            <CSection />
-            <DSection />
-            <ESection />
-            <MedicationsAndFluidSection />
-            <Prognosis />
-            <CareProvider />
-            <Evacuation />
-          </List.Accordion>
-          <List.Accordion
-            right={() => (
-              <List.Icon
-                color={colors.text}
-                style={{ marginTop: -5 }}
-                icon={
-                  selectedAccordionItemId === ACCORDION_ITEM.SECOND_TAB
-                    ? "chevron-up"
-                    : "chevron-down"
-                }
-              />
-            )}
-            titleStyle={{
-              color: colors.text,
-              textAlign: "left",
-            }}
-            style={styles.accordion}
-            title={translation("treatments")}
-            id={ACCORDION_ITEM.SECOND_TAB}
-          >
-            <TreatmentGuide />
-            {/* <Measurements /> */}
-          </List.Accordion>
-        </List.AccordionGroup>
-      </ScrollView>
-    </AutocompleteDropdownContextProvider>
+            <List.Accordion
+              right={() => (
+                <List.Icon
+                  color={colors.text}
+                  style={{ marginTop: -5 }}
+                  icon={
+                    selectedAccordionItemId === ACCORDION_ITEM.FIRST_TAB
+                      ? "chevron-up"
+                      : "chevron-down"
+                  }
+                />
+              )}
+              title={translation("first-care")}
+              style={styles.accordion}
+              id={ACCORDION_ITEM.FIRST_TAB}
+              titleStyle={{
+                color: colors.text,
+                textAlign: "left",
+              }}
+            >
+              <PatientDetails />
+              <InjuryReason />
+              <PatientBodyPicker />
+              <Avpu />
+              <ASection />
+              <BSection />
+              <CSection />
+              <DSection />
+              <ESection />
+              <MedicationsAndFluidSection />
+              <Prognosis />
+              <CareProvider />
+              <Evacuation />
+            </List.Accordion>
+            <List.Accordion
+              right={() => (
+                <List.Icon
+                  color={colors.text}
+                  style={{ marginTop: -5 }}
+                  icon={
+                    selectedAccordionItemId === ACCORDION_ITEM.SECOND_TAB
+                      ? "chevron-up"
+                      : "chevron-down"
+                  }
+                />
+              )}
+              titleStyle={{
+                color: colors.text,
+                textAlign: "left",
+              }}
+              style={styles.accordion}
+              title={translation("treatments")}
+              id={ACCORDION_ITEM.SECOND_TAB}
+            >
+              <TreatmentGuide />
+              <Measurements />
+            </List.Accordion>
+          </List.AccordionGroup>
+        </ScrollView>
+      </AutocompleteDropdownContextProvider>
+    </Suspense>
   );
 }
 

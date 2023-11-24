@@ -911,7 +911,6 @@ export const usePatientRecordsStore = create<{
         evacuation: undefined,
         treatmentGuide: undefined,
       };
-      console.log("final", { p1: final.prognosis, p2: active.prognosis });
 
       for (const key in final) {
         if (_.isArray(active[key]) || _.isString(active[key])) {
