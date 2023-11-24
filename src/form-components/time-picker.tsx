@@ -43,26 +43,16 @@ export function TimePicker({
       <TouchableOpacity onPress={() => editable && toggleTime(true)}>
         <View style={[styles.content]}>
           <View>
-            {!value && (
-              <Text
-                onPress={() => editable && toggleTime(true)}
-                testID={`${testID ? `${testID}-` : ""}picker-toggle`}
-              >
-                {label}
-              </Text>
-            )}
-            {value && (
-              <Text
-                testID={`${testID ? `${testID}-` : ""}picker-view`}
-                onPress={() => editable && toggleTime(true)}
-                style={styles.time}
-              >
-                {date.format(
-                  new Date(value === 0 ? new Date().getTime() : value),
-                  "HH:mm"
-                )}
-              </Text>
-            )}
+            <Text
+              testID={`${testID ? `${testID}-` : ""}picker-view`}
+              onPress={() => editable && toggleTime(true)}
+              style={styles.time}
+            >
+              {date.format(
+                new Date(value === 0 ? new Date().getTime() : value),
+                "HH:mm"
+              )}
+            </Text>
           </View>
           <Icon source="clock-outline" size={20} />
         </View>
@@ -86,6 +76,7 @@ export function TimePicker({
             }}
             onChange={(data) => {
               toggleTime(false);
+
               //there is a bug that if past midnight, we change the time to the day before
               //it consider it as same day so 23:07 and 00:07 are blocked
               if (

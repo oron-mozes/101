@@ -1,20 +1,20 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StatusBar,
   StyleSheet,
-  ActivityIndicator,
 } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { Button, List } from "react-native-paper";
+import { List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { RootStackParamList, STATUS } from "../../../../interfaces";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useStationStore } from "../../../../store/station.store";
-import PatientDetails from "./create-components/patient-details";
 import InjuryReason from "./create-components/injury-reason";
+import PatientDetails from "./create-components/patient-details";
 import { emptyPatient } from "./empty-patient";
 import { generateId } from "./utils";
 

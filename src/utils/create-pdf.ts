@@ -1,16 +1,13 @@
-import date from "date-and-time";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import locale from "../../locales/he.json";
 import { IPatientRecord } from "../interfaces";
-import { timeToDate } from "./date-to-time";
-import { calcGCS } from "../views/homepage/tabs/report-tab/create-components/d-section/utils";
+import { colors } from "../shared-config";
 import {
   returnBodyPicker,
   returnInfoTable,
   returnInjuryReasonsTable,
 } from "./helpers";
-import { colors } from "../shared-config";
 
 export const createPDFWithImage = async (
   imagePath: string,

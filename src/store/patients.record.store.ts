@@ -663,7 +663,7 @@ export const usePatientRecordsStore = create<{
         const merged = _.merge(current.activePatient.incident_information, {
           care_time,
         });
-        console.log("setCareTime:", merged);
+
         current.updatePartialPatient({
           incident_information: merged,
         });
