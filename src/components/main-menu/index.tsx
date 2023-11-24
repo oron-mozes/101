@@ -8,6 +8,7 @@ import { TAB_STATUS } from "../../views/homepage";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useNFCReader } from "../../hooks/useNfcReader";
 import { useNFCSender } from "../../hooks/useNfcSender";
+import { NfcStatus, useNfcStore } from "../../store/nfc.store";
 
 export default function MainMenu() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -20,6 +21,8 @@ export default function MainMenu() {
   const { full_name = "", idf_id = "" } = patient?.personal_information ?? {};
   const { logs, readTag } = useNFCReader();
   const { logsWrite, writeNdef } = useNFCSender();
+
+  const { openNfcDialog } = useNfcStore();
   return (
     <View style={{ flexDirection: "row-reverse", alignItems: "center" }}>
       {selected !== TAB_STATUS.CREATE && (
@@ -28,8 +31,12 @@ export default function MainMenu() {
       {selected === TAB_STATUS.CREATE && (
         <Text style={[styles.text]}>{`${full_name} ${idf_id}`}</Text>
       )}
-      <Button onPress={readTag} style={{ backgroundColor: "pink" }}>
+      {/* <Button onPress={readTag} style={{ backgroundColor: "pink" }}>
         Read NFC
+        {logs}
+      </Button> */}
+      <Button onPress={() => openNfcDialog(NfcStatus.Receiving())} style={{ backgroundColor: "pink" }}>
+        Dor Read NFC
         {logs}
       </Button>
       <Button onPress={() => writeNdef()} style={{ backgroundColor: "pink" }}>

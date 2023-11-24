@@ -261,15 +261,15 @@ export interface IMedicationsAndFluidInformation {
   type?: E_FLUID_TREATMENT | E_ANTIBIOTIC_TREATMENT | E_ANASTASIA_TREATMENT;
   other?: string;
   dose?:
-    | E_ANASTASIA_DORMICUM_DOSE
-    | E_ANASTASIA_KATAMIN_DOSE
-    | E_ANASTASIA_ACTIQ_DOSE
-    | E_FLUID_HARTMAN_DOSE
-    | E_FLUID_PLASMA_DOSE
-    | E_FLUID_BLOOD_DOSE
-    | E_ANTIBIOTIC_CETRIAXONE_DOSE
-    | E_ANTIBIOTIC_FLAGYL_DOSE
-    | E_HEXAKAPRON_DOSE;
+  | E_ANASTASIA_DORMICUM_DOSE
+  | E_ANASTASIA_KATAMIN_DOSE
+  | E_ANASTASIA_ACTIQ_DOSE
+  | E_FLUID_HARTMAN_DOSE
+  | E_FLUID_PLASMA_DOSE
+  | E_FLUID_BLOOD_DOSE
+  | E_ANTIBIOTIC_CETRIAXONE_DOSE
+  | E_ANTIBIOTIC_FLAGYL_DOSE
+  | E_HEXAKAPRON_DOSE;
   time: number;
   id: number;
 }
@@ -403,7 +403,7 @@ export interface IStation {
   care_providers: ICareProvider[];
 }
 
-export interface IProps extends NativeStackScreenProps<RootStackParamList> {}
+export interface IProps extends NativeStackScreenProps<RootStackParamList> { }
 export type RootStackParamList = Record<
   string,
   { patient?: IPatientRecord; tab?: TAB_STATUS } | undefined

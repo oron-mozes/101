@@ -15,6 +15,7 @@ import QrCode from "./src/views/qr-code";
 import ReceivePatientScreen from "./src/views/recieve-patient";
 import StationScreen from "./src/views/taagad";
 import { theme } from "./src/shared-config";
+import { NfcDialogWrapper } from "./src/components/nfc-dialog/nfc-dialog";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -49,6 +50,7 @@ export default function App() {
   }
   return (
     <PaperProvider theme={theme}>
+      <NfcDialogWrapper />
       <StatusBar
         barStyle="light-content"
         backgroundColor={theme.colors.primary}

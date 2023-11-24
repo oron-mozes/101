@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { ToastAndroid } from "react-native";
 import NfcManager, { NfcEvents, NfcTech } from "react-native-nfc-manager";
 import { polyfill } from "react-native-polyfill-globals/src/encoding";
+
 polyfill();
+
 export function useNFCReader() {
   const [logs, addLog] = useState<string>();
 
@@ -21,6 +23,7 @@ export function useNFCReader() {
   //   await NfcManager.start();
   //   await NfcManager.registerTagEvent();
   // }
+  
   async function readTag() {
     await NfcManager.requestTechnology([
       NfcTech.IsoDep,
