@@ -1,9 +1,4 @@
-import {
-  IPatientRecord,
-  EReactionEyes,
-  EReactionSpeech,
-  EReactionMovement,
-} from "../../../../interfaces";
+import { IPatientRecord } from "../../../../interfaces";
 
 export const emptyPatient: IPatientRecord = {
   personal_information: {
@@ -16,7 +11,7 @@ export const emptyPatient: IPatientRecord = {
     care_time: null,
     date: null,
   },
-  providers: [{ full_name: null, idf_id: null }],
+  providers: [],
   injuries: [],
   eSection: [],
   airway: {
@@ -44,22 +39,13 @@ export const emptyPatient: IPatientRecord = {
   },
   reaction: {
     general: [],
-    eyes: EReactionEyes.NONE,
-    speech: EReactionSpeech.NONE,
-    movement: EReactionMovement.NONE,
+    eyes: null,
+    speech: null,
+    movement: null,
     GCS: null,
   },
   medicationsAndFluids: {
-    actions: [
-      {
-        id: null,
-
-        dose: null,
-        time: null,
-        type: null,
-        treatment: null,
-      },
-    ],
+    actions: [],
   },
   evacuation: {
     status: null,

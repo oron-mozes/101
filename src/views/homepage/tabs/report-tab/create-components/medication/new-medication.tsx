@@ -194,7 +194,7 @@ export function NewMedication() {
             fontSize: 17,
           }}
           onPress={() => {
-            handlers.addAction(newMedication);
+            // handlers.addAction(newMedication);
             setNewMedication({
               ...emptyState,
               time: new Date().getTime(),

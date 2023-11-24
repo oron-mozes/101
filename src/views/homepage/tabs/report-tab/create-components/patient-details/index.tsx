@@ -15,6 +15,10 @@ export function PatientDetails() {
   const idf_id = usePatientRecordsStore(
     (state) => state.activePatient.personal_information.idf_id
   );
+  const patientId = usePatientRecordsStore(
+    (state) => state.activePatient.personal_information.patientId
+  );
+  console.log(patientId);
   const incident_information = usePatientRecordsStore(
     (state) => state.activePatient.incident_information
   );

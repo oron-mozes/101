@@ -9,6 +9,7 @@ import {
   EEsectionChips,
   EInjuryReason,
   EMeasurementsTreatments,
+  EPosition,
   EReactionEyes,
   EReactionGeneral,
   EReactionMovement,
@@ -184,7 +185,9 @@ export const usePatientRecordsStore = create<{
       yPos,
       data,
       id,
+      location,
     }: {
+      location?: EPosition;
       id: number;
       xPos: number;
       yPos: number;
@@ -192,6 +195,7 @@ export const usePatientRecordsStore = create<{
     }): void;
     cleanInjuries(): void;
     removeInjury(id: number): void;
+    setMainInjury(id: number): void;
     updateByIndex(data: Partial<IInjury>, index: number): void;
   };
   evacuation_handlers: {
@@ -600,7 +604,7 @@ export const usePatientRecordsStore = create<{
           ),
         });
       },
-      addInjury({ xPos, yPos, data, id }) {
+      addInjury({ xPos, yPos, data, id, location }) {
         const current = state.getState();
         current.updatePartialPatient({
           injuries: [
@@ -610,6 +614,7 @@ export const usePatientRecordsStore = create<{
               xPos,
               yPos,
               data,
+              location,
             },
           ],
         });
@@ -629,6 +634,16 @@ export const usePatientRecordsStore = create<{
           injuries: [
             ...current.activePatient.injuries.filter((item) => item.id !== id),
           ],
+        });
+      },
+      setMainInjury(id: number) {
+        const current = state.getState();
+
+        current.updatePartialPatient({
+          injuries: current.activePatient.injuries.map((item) => {
+            item.isMain = item.id === id;
+            return item;
+          }),
         });
       },
     },
@@ -891,7 +906,7 @@ export const usePatientRecordsStore = create<{
     },
     async savePatient() {
       const active = get().activePatient;
-
+      console.log("active", active);
       const patients = get().patients;
 
       const final: IPatientRecord = {
@@ -926,6 +941,7 @@ export const usePatientRecordsStore = create<{
         );
       });
       final.new = false;
+      console.log("updateById", updateById);
       if (updateById === -1) {
         patients.push(final);
       } else {

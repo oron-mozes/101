@@ -346,6 +346,8 @@ export interface IInjury {
   data: E_InjuryType;
   time?: number;
   id: number;
+  isMain?: boolean;
+  location?: EPosition;
 }
 export interface IPatientRecord {
   id?: string;

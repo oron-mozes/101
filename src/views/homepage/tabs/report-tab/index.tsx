@@ -9,12 +9,14 @@ import {
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
-import { RootStackParamList } from "../../../../interfaces";
+import { RootStackParamList, STATUS } from "../../../../interfaces";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useStationStore } from "../../../../store/station.store";
 import PatientDetails from "./create-components/patient-details";
 import InjuryReason from "./create-components/injury-reason";
+import { emptyPatient } from "./empty-patient";
+import { generateId } from "./utils";
 
 const Avpu = lazy(() => import("./create-components/avpu"));
 const ASection = lazy(() => import("./create-components/a-section"));
@@ -47,20 +49,13 @@ enum ACCORDION_ITEM {
 }
 export function ReportTab() {
   const route = useRoute<RouteProp<RootStackParamList>>();
-  const id = usePatientRecordsStore((state) => state.activePatient.id);
-  const full_name = usePatientRecordsStore(
-    (state) => state.activePatient.personal_information.full_name
-  );
 
   const handlers = usePatientRecordsStore(
     (state) => state.personal_information_handlers
   );
 
-  const patients = usePatientRecordsStore((state) => state.patients);
-  const updatePartialPatient = usePatientRecordsStore(
-    (state) => state.updatePartialPatient
-  );
   const savePatient = usePatientRecordsStore((state) => state.savePatient);
+  const patients = usePatientRecordsStore((state) => state.patients);
   const setActivePatient = usePatientRecordsStore(
     (state) => state.setActivePatient
   );
@@ -71,21 +66,23 @@ export function ReportTab() {
     useState<ACCORDION_ITEM>(ACCORDION_ITEM.FIRST_TAB);
 
   useEffect(() => {
-    const fallback = `${taggad.unit_name}-${patients.length}`
-      .split(" ")
-      .join(".");
+    const id = generateId(taggad.unit_name);
+    const patient = route.params.patient ?? {
+      ...emptyPatient,
+      personal_information: {
+        ...emptyPatient.personal_information,
+        full_name: `${taggad.unit_name} ${patients.length}`,
+        patientId: id,
+      },
+      evacuation: {
+        ...emptyPatient.evacuation,
+        status: STATUS.NEW_PATIENT,
+      },
+      id,
+    };
 
-    updatePartialPatient({
-      id: id ?? fallback,
-    });
-    if (handlers) {
-      handlers.setFullName(full_name ?? fallback);
-      handlers.setPatientId(id ?? fallback);
-    }
+    setActivePatient(patient);
 
-    if (route?.params.patient) {
-      setActivePatient(route.params.patient);
-    }
     return () => {
       savePatient();
     };

@@ -31,11 +31,15 @@ export function StatusChip({
           onPress={() => {
             onSelect(label);
           }}
-          value={"Test"}
+          value="Test"
           status={selected ? "checked" : "unchecked"}
         />
       )}
-      <Text style={styles.text}>{label}</Text>
+      <Text
+        style={[styles.text, { textAlign: allowSelect ? "left" : "center" }]}
+      >
+        {label}
+      </Text>
     </View>
   );
 }
@@ -43,7 +47,7 @@ export function StatusChip({
 const styles = StyleSheet.create({
   text: {
     ...chipText,
-    textAlign: "left",
+
     fontSize: 14,
   },
   container: {

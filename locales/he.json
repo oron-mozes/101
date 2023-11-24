@@ -168,6 +168,7 @@
   "BACK_HEAD": "ראש",
   "STOMACH": "בטן",
   "TH": "חוסם עורקים",
+  "touniquet": "חוסם עורקים",
   "TH_time": "שעת חוסם עורקים",
   "gunshot": "חודרת",
   "hit": "קהה",
@@ -295,5 +296,14 @@
   "HOLD": "המתנה",
   "cg": "CG",
   "kateter": "קטטר פולי",
-  "legend": "מקרא פציעות:"
+  "legend": "מקרא פציעות:",
+  "all": "הכל",
+  "nfcTransfer": "העברה (עדיף) NFC",
+  "qrTransfer": "העברה QR",
+  "deletePatient": "מחיקת פצוע.ה",
+  "choose": "בחר",
+  "systemStatus": "סטטוס",
+  "patientChrecteristics": "מאפייני פצוע.ה",
+  "transfer": "העברה",
+  "mainInjurySelection": "הגדרת פציעה עיקרית (מתוך הפציעות שסומנו)"
 }
