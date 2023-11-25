@@ -23,6 +23,7 @@ export function GlobalActions() {
       setDisable(!Boolean(unit_name));
     };
   }, [unit_name]);
+  
   return (
     <View style={[styles.container]}>
       <DialogWrapper
