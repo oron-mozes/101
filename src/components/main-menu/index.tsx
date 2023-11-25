@@ -1,12 +1,11 @@
+import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { RootStackParamList } from "../../interfaces";
 import { colors } from "../../shared-config";
 import { TAB_STATUS } from "../../views/homepage";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { NfcStatus, useNfcStore } from "../../store/nfc.store";
 
 export default function MainMenu() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -17,7 +16,6 @@ export default function MainMenu() {
   );
   const patient = useMemo(() => route.params?.patient, [route.params?.patient]);
   const { full_name = "", idf_id = "" } = patient?.personal_information ?? {};
-  const { openNfcDialog } = useNfcStore();
 
   return (
     <View style={{ flexDirection: "row-reverse", alignItems: "center" }}>
@@ -27,12 +25,6 @@ export default function MainMenu() {
       {selected === TAB_STATUS.CREATE && (
         <Text style={[styles.text]}>{`${full_name} ${idf_id}`}</Text>
       )}
-      <Button onPress={() => openNfcDialog(NfcStatus.Receiving())} style={{ backgroundColor: "pink" }}>
-        Read NFC
-      </Button>
-      <Button onPress={() => openNfcDialog(NfcStatus.Sending({ patientsIds: ["דור.פלאפון-0"] }))} style={{ backgroundColor: "pink" }}>
-        Send NFC
-      </Button>
     </View>
   );
 }

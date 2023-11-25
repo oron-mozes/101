@@ -14,12 +14,14 @@ export function TableActions() {
   const [checked, setChecked] = useState<boolean>(false);
   const [enabled, setEnabled] = useState<boolean>(false);
   const patients = usePatientRecordsStore((state) => [...state.patients]);
-  const deletePatient = usePatientRecordsStore((state) => state.deletePatient);
   const translation = useTranslation();
   const { openNfcDialog } = useNfcStore();
 
-  const { performActionForPatients, setPerformActionForPatients } =
-    useGlobalStore();
+  const {
+    toggleDeleteBulkPatients,
+    performActionForPatients,
+    setPerformActionForPatients,
+  } = useGlobalStore();
   useEffect(() => {
     setEnabled(performActionForPatients.length > 0);
   }, [performActionForPatients]);
@@ -47,7 +49,7 @@ export function TableActions() {
       label: translation("deletePatient"),
       role: "delete",
       action() {
-        deletePatient(performActionForPatients);
+        toggleDeleteBulkPatients();
       },
     },
   ];

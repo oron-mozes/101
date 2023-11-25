@@ -9,7 +9,6 @@ import { useStationStore } from "../../../store/station.store";
 export function GlobalActions() {
   const translation = useTranslation();
   const [showDeleteModal, toggleDeleteModal] = useState<boolean>(false);
-  const [showShareModal, toggleShareModal] = useState<boolean>(false);
   const deletePatients = usePatientRecordsStore(
     (state) => state.deletePatients
   );
@@ -23,7 +22,7 @@ export function GlobalActions() {
       setDisable(!Boolean(unit_name));
     };
   }, [unit_name]);
-  
+
   return (
     <View style={[styles.container]}>
       <DialogWrapper
@@ -37,14 +36,7 @@ export function GlobalActions() {
           toggleDeleteModal(false);
         }}
       />
-      {/* <DialogWrapper
-        testId="share-station"
-        visible={showShareModal}
-        onClose={() => toggleShareModal(false)}
-        title={translation("shareTitle")}
-        description={translation("shareDescription")}
-        onConfirm={async () => {}}
-      /> */}
+
       <Button
         disabled={disabled}
         testID="delete-station"

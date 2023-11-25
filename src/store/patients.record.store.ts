@@ -251,9 +251,8 @@ export const usePatientRecordsStore = create<{
     async deletePatient(patientId) {
       const current = state.getState();
       const cleanPatients = current.patients.filter(
-        (patient) => patient.id !== patientId
+        (patient) => patient.personal_information.patientId !== patientId
       );
-
       await storage.save({
         key: STORAGE.PATIENTS_RECORD,
         data: { patients: cleanPatients },
@@ -977,7 +976,7 @@ export const usePatientRecordsStore = create<{
     },
     async loadPatientsState() {
       try {
-        const { patients } = await storage.load({
+        const { patients = [] } = await storage.load({
           key: STORAGE.PATIENTS_RECORD,
         });
         set((state) => {

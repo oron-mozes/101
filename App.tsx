@@ -16,6 +16,7 @@ import ReceivePatientScreen from "./src/views/recieve-patient";
 import StationScreen from "./src/views/taagad";
 import { theme } from "./src/shared-config";
 import { NfcDialogWrapper } from "./src/components/nfc-dialog/nfc-dialog";
+import { DeleteDialog } from "./src/components/delete-dialog";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -26,6 +27,7 @@ export default function App() {
   const loadPatientsState = usePatientRecordsStore(
     (state) => state.loadPatientsState
   );
+
   const [appReady, toggleReady] = useState<boolean>(false);
 
   useEffect(() => {
@@ -51,6 +53,7 @@ export default function App() {
   return (
     <PaperProvider theme={theme}>
       <NfcDialogWrapper />
+      <DeleteDialog />
       <StatusBar
         barStyle="light-content"
         backgroundColor={theme.colors.primary}
