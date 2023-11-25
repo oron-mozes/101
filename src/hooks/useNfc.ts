@@ -1,24 +1,85 @@
-import NfcManager from "react-native-nfc-manager";
+import NfcManager, { NfcEvents, NfcTech } from "react-native-nfc-manager";
+import { NfcTransferStatus, useNfcStore } from "../store/nfc.store";
+import { HCESession, NFCTagType4, NFCTagType4NDEFContentType } from "dorch-hce";
+import { polyfill } from "react-native-polyfill-globals/src/encoding";
+import { usePatientRecordsStore } from "../store/patients.record.store";
 
-import { useEffect, useState } from "react";
+polyfill();
 
 export function useNfc() {
-  const [nfcSupported, setNfcPermission] = useState<boolean>();
+  const { setTransferStatus } = useNfcStore();
+  const { addPatient } = usePatientRecordsStore();
 
-  useEffect(() => {
-    checkNfcPermission();
-  }, []);
+  async function readTag() {
+    polyfill();
 
-  const checkNfcPermission = async () => {
+    NfcManager.setEventListener(NfcEvents.DiscoverTag, () => {
+      console.log("READING STARTED")
+    });
+
     try {
-      await NfcManager.isEnabled();
-      setNfcPermission(true);
+      await NfcManager.requestTechnology([
+        NfcTech.IsoDep,
+        NfcTech.NfcA,
+        NfcTech.Ndef,
+      ]);
+
+      const tag = await NfcManager.getTag();
+      console.log("TAG", JSON.stringify(tag));
+
+      const buffer = new Uint8Array(tag.ndefMessage[0].payload);
+      const textDecoder = new TextDecoder("utf-8");
+      const decodedString = textDecoder.decode(buffer).substring(3);
+      console.log("DECODED", typeof decodedString);
+
+      const parsedData = JSON.parse(JSON.parse(JSON.stringify(decodedString)));
+      console.log("PARSED DATA", typeof parsedData);
+
+      console.log("PATIENT", parsedData["records"][0])
+      addPatient(parsedData["records"][0]);
+
+      console.log("READING SUCCESSFULL")
+      setTransferStatus(NfcTransferStatus.Success({ result: '' }));
     } catch (error) {
-      console.error("Error checking NFC permission:", error);
-      setNfcPermission(false);
+      console.log("READING FAILED", error);
+      setTransferStatus(NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) }));
     } finally {
-      //   await NfcManager.();
+      NfcManager.cancelTechnologyRequest();
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
+      console.log("READING PROCESS CLOSED");
+    };
+  };
+
+  async function writeNdef(content: string) {
+    console.log("WRITING CONTENT", content);
+    let session: HCESession;
+    const tag = new NFCTagType4({
+      type: NFCTagType4NDEFContentType.Text,
+      writable: false,
+      content,
+    });
+
+    try {
+      session = await HCESession.getInstance();
+      session.setApplication(tag);
+      await session.setEnabled(true);
+
+      const removeConnectionListener = session.on(HCESession.Events.HCE_STATE_CONNECTED, () => {
+        console.log("WRITING CONNECTED");
+        setTransferStatus(NfcTransferStatus.Loading());
+      });
+
+      const removeReadListener = session.on(HCESession.Events.HCE_STATE_READ, (data) => {
+        // console.log("WRITING SUCCESSFULL", { data });
+      });
+
+      removeReadListener();
+      removeConnectionListener();
+    } catch (error) {
+      console.log("WRITING FAILED", error);
+      setTransferStatus(NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) }));
     }
   };
-  return [nfcSupported];
-}
+
+  return { readTag, writeNdef };
+};
