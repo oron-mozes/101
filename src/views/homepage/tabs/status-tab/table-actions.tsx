@@ -8,20 +8,29 @@ import { colors } from "../../../../shared-config";
 import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
+import { useGlobalStore } from "../../../../store/global.store";
 
 export function TableActions() {
   const [checked, setChecked] = useState<boolean>(false);
   const [enabled, setEnabled] = useState<boolean>(false);
   const patients = usePatientRecordsStore((state) => [...state.patients]);
+  const deletePatient = usePatientRecordsStore((state) => state.deletePatient);
   const translation = useTranslation();
-  const { openNfcDialog, transferPatientIds, setTransferPatientIds } =
-    useNfcStore();
+  const { openNfcDialog } = useNfcStore();
 
+  const { performActionForPatients, setPerformActionForPatients } =
+    useGlobalStore();
   useEffect(() => {
-    setEnabled(transferPatientIds.length > 0);
-  }, [transferPatientIds]);
+    setEnabled(performActionForPatients.length > 0);
+  }, [performActionForPatients]);
 
-  const nfcCallback = useCallback(() => openNfcDialog(NfcStatus.Sending()), []);
+  const nfcCallback = useCallback(
+    () =>
+      openNfcDialog(
+        NfcStatus.Sending({ patientsIds: performActionForPatients })
+      ),
+    [performActionForPatients]
+  );
 
   const quickLinks = [
     {
@@ -32,12 +41,14 @@ export function TableActions() {
     {
       role: "qr",
       label: translation("qrTransfer"),
-      action() {},
+      action: () => {},
     },
     {
       label: translation("deletePatient"),
       role: "delete",
-      action() {},
+      action() {
+        deletePatient(performActionForPatients);
+      },
     },
   ];
 
@@ -58,7 +69,7 @@ export function TableActions() {
           onPress={() => {
             const toggled = !checked;
             setChecked(toggled);
-            setTransferPatientIds(
+            setPerformActionForPatients(
               toggled
                 ? patients.map((p) => p.personal_information.patientId)
                 : []

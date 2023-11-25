@@ -22,21 +22,28 @@ import { sortByPriority } from "./utils";
 import { useNFCSender } from "../../../../hooks/useNfcSender";
 import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
 import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
+import { useGlobalStore } from "../../../../store/global.store";
 
 export function StatusTab() {
   const { writeNdef } = useNFCSender();
   const navigation = useNavigation<StackNavigation>();
   const patients = usePatientRecordsStore((state) => [...state.patients]);
-  const [selectedPatients, setSelectedPatients] = useState<Set<string>>(
-    new Set()
-  );
+
   const translation = useTranslation();
 
   const goToPatientPage = (patient) => {
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   };
-  const { openNfcDialog, transferPatientIds, togglePatientId } = useNfcStore();
-  const nfcCallback = useCallback(() => openNfcDialog(NfcStatus.Sending()), []);
+  const {
+    performActionForPatients,
+
+    togglePatientId,
+  } = useGlobalStore();
+  const { openNfcDialog } = useNfcStore();
+  const nfcCallback = useCallback(
+    (ids: string[]) => openNfcDialog(NfcStatus.Sending({ patientsIds: ids })),
+    []
+  );
 
   return (
     <GestureHandlerRootView>
@@ -110,7 +117,7 @@ export function StatusTab() {
                       togglePatientId(patient.personal_information.patientId);
                     }}
                     status={
-                      transferPatientIds.includes(
+                      performActionForPatients.includes(
                         patient.personal_information.patientId
                       )
                         ? "checked"
@@ -155,7 +162,9 @@ export function StatusTab() {
                 </DataTable.Cell>
                 <DataTable.Cell
                   style={[styles.title, { flex: 0.5 }]}
-                  onPress={nfcCallback}
+                  onPress={() =>
+                    nfcCallback([patient.personal_information.patientId])
+                  }
                 >
                   <NfcIcon color={colors.primary} size={25} />
                 </DataTable.Cell>

@@ -32,10 +32,7 @@ export const NfcTransferStatus = variant({
 export const NfcStatus = variant({
   Idle: {},
   Receiving: constant({ text: "קליטת פצועים" }),
-  Sending: ({ patientsIds }: { patientsIds: string[] }) => ({
-    text: "העברת פצועים",
-    patientsIds,
-  }),
+  Sending: () => ({ text: "העברת פצועים" }),
 });
 
 export type NfcTransferStatus = VariantOf<typeof NfcTransferStatus>;
@@ -43,33 +40,27 @@ export type NfcStatus = VariantOf<typeof NfcStatus>;
 
 // STORE
 
-export const useNfcStore = create<{
-  nfcStatus: NfcStatus;
-  nfcTransferStatus: NfcTransferStatus;
-  setTransferStatus(status: NfcTransferStatus): void;
-  openNfcDialog(request: Exclude<NfcStatus, { type: "Idle" }>): void;
-  closeNfcDialog(): void;
+export const useGlobalStore = create<{
+  performActionForPatients: string[];
+  setPerformActionForPatients(ids: string[]): void;
+  togglePatientId(id: string): void;
 }>()(
   devtools((set) => ({
-    nfcStatus: NfcStatus.Idle(),
-    nfcTransferStatus: NfcTransferStatus.Waiting(),
-    setTransferStatus(status) {
+    performActionForPatients: [],
+    setPerformActionForPatients(ids) {
       set((state) => ({
         ...state,
-        nfcTransferStatus: status,
+        performActionForPatients: ids,
       }));
     },
-    openNfcDialog(request) {
+    togglePatientId(id) {
       set((state) => ({
         ...state,
-        nfcStatus: request,
-      }));
-    },
-    closeNfcDialog() {
-      set((state) => ({
-        ...state,
-        nfcStatus: NfcStatus.Idle(),
-        nfcTransferStatus: NfcTransferStatus.Waiting(),
+        performActionForPatients: state.performActionForPatients.includes(id)
+          ? state.performActionForPatients.filter(
+              (patientId) => patientId !== id
+            )
+          : [...state.performActionForPatients, id],
       }));
     },
   }))
