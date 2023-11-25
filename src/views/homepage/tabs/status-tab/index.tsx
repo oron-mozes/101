@@ -5,7 +5,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { DataTable, Text } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { DataTable, Text, Checkbox } from "react-native-paper";
 import { TAB_STATUS } from "../..";
 import { QrIcon } from "../../../../components/qr-icon/qr";
 import { StatusChip } from "../../../../form-components/status-chip";
@@ -15,125 +17,172 @@ import { ROUTES } from "../../../../routes";
 import { borderSetup, colors } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { PatientCareIcon } from "../../footer/patient-care-icon";
+import { TableActions } from "./table-actions";
 import { sortByPriority } from "./utils";
-import {
-  Swipeable,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
-import { RenderLeftActions } from "./swipe-left-actions";
+import { useNFCSender } from "../../../../hooks/useNfcSender";
 
 export function StatusTab() {
+  const { writeNdef } = useNFCSender();
   const navigation = useNavigation<StackNavigation>();
-  const patients = usePatientRecordsStore((state) => state.patients);
-
+  const patients = usePatientRecordsStore((state) => [...state.patients]);
+  const [selectedPatients, setSelectedPatients] = useState<Set<string>>(
+    new Set()
+  );
   const translation = useTranslation();
 
   const goToPatientPage = (patient) => {
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   };
+
   return (
     <GestureHandlerRootView>
-      <ScrollView>
-        <TouchableWithoutFeedback
-          onPress={() =>
-            navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE })
-          }
+      <TouchableWithoutFeedback
+        onPress={() =>
+          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE })
+        }
+      >
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            marginBottom: 10,
+          }}
         >
-          <View
-            style={{
-              width: "100%",
-              alignItems: "center",
-              marginBottom: 10,
-            }}
-          >
-            <View style={styles.textBox}>
-              <PatientCareIcon active={false} invert={true} />
-              <Text style={{ color: colors.textInputBG, marginLeft: 8 }}>
-                {translation("addPatient")}
-              </Text>
-            </View>
+          <View style={styles.textBox}>
+            <PatientCareIcon active={false} invert={true} />
+            <Text style={{ color: colors.textInputBG, marginLeft: 8 }}>
+              {translation("addPatient")}
+            </Text>
           </View>
-        </TouchableWithoutFeedback>
-        <DataTable style={styles.table}>
-          <DataTable.Header style={styles.tableHeader}>
-            <DataTable.Title style={styles.title} textStyle={styles.titleText}>
-              {translation("patientName")}
-            </DataTable.Title>
-            <DataTable.Title style={styles.title} textStyle={styles.titleText}>
-              {translation("idf_id")}
-            </DataTable.Title>
-            <DataTable.Title style={styles.title} textStyle={styles.titleText}>
-              {translation("evacStatus")}
-            </DataTable.Title>
-            <DataTable.Title style={styles.title} textStyle={styles.titleText}>
-              {translation("qr")}
-            </DataTable.Title>
-          </DataTable.Header>
+        </View>
+      </TouchableWithoutFeedback>
+      <TableActions active={Boolean(selectedPatients.size)} />
+
+      <DataTable style={styles.table}>
+        <DataTable.Header style={styles.tableHeader}>
+          <DataTable.Title
+            style={[styles.title, { flex: 0.5 }]}
+            textStyle={styles.titleText}
+          >
+            {translation("choose")}
+          </DataTable.Title>
+          <DataTable.Title
+            style={[styles.title, { flex: 0.5 }]}
+            textStyle={[styles.titleText]}
+          >
+            {translation("systemStatus")}
+          </DataTable.Title>
+          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
+            {translation("patientName")}
+          </DataTable.Title>
+          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
+            {translation("patientChrecteristics")}
+          </DataTable.Title>
+          <DataTable.Title style={styles.title} textStyle={styles.titleText}>
+            {translation("evacStatus")}
+          </DataTable.Title>
+          <DataTable.Title
+            style={[styles.title, { flex: 0.5 }]}
+            textStyle={styles.titleText}
+          >
+            {translation("transfer")}
+          </DataTable.Title>
+        </DataTable.Header>
+        <ScrollView style={{ height: 600 }}>
           {sortByPriority(patients).map((patient, index) => {
+            const mainInjury = patient?.injuries?.find(
+              (injury) => injury.isMain
+            );
+            const mainInjuryName =
+              mainInjury &&
+              `${translation(
+                mainInjury?.data?.toLowerCase() ?? ""
+              )} ${translation(mainInjury?.location ?? "")}`;
             return (
-              <Swipeable
-                key={index}
-                renderLeftActions={(
-                  progressAnimatedValue,
-                  dragAnimatedValue,
-                  swipeable
-                ) => (
-                  <RenderLeftActions
-                    progressAnimatedValue={progressAnimatedValue}
-                    dragX={dragAnimatedValue}
-                    swipeable={swipeable}
-                    patient={patient}
-                  />
-                )}
-              >
-                <DataTable.Row key={index} style={{ backgroundColor: "white" }}>
-                  <DataTable.Cell
-                    onPress={() => goToPatientPage(patient)}
-                    style={[styles.title]}
-                  >
-                    <View style={{ flexDirection: "row" }}>
-                      {patient.new && (
-                        <View style={styles.newLabelWrapper}>
-                          <Text style={styles.newLabel}>
-                            {translation("new")}
-                          </Text>
-                        </View>
-                      )}
-
-                      <Text>{patient?.personal_information?.full_name}</Text>
-                    </View>
-                  </DataTable.Cell>
-
-                  <DataTable.Cell
-                    onPress={() => goToPatientPage(patient)}
-                    style={styles.title}
-                  >
-                    {patient?.personal_information?.idf_id}
-                  </DataTable.Cell>
-                  <DataTable.Cell
-                    onPress={() => goToPatientPage(patient)}
-                    style={styles.title}
-                  >
-                    <StatusChip
-                      label={translation(patient?.evacuation?.status ?? "")}
-                      status={patient?.evacuation?.status}
-                      editable={false}
-                    />
-                  </DataTable.Cell>
-                  <DataTable.Cell
-                    style={[styles.title]}
-                    onPress={() =>
-                      navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
+              <DataTable.Row key={index} style={{ backgroundColor: "white" }}>
+                <DataTable.Cell
+                  onPress={() => goToPatientPage(patient)}
+                  style={[styles.title, { flex: 0.5 }]}
+                >
+                  <Checkbox
+                    onPress={() => {
+                      if (
+                        selectedPatients.has(
+                          patient.personal_information.patientId
+                        )
+                      ) {
+                        selectedPatients.delete(
+                          patient.personal_information.patientId
+                        );
+                        setSelectedPatients(new Set(selectedPatients));
+                      } else {
+                        setSelectedPatients(
+                          new Set(
+                            selectedPatients.add(
+                              patient.personal_information.patientId
+                            )
+                          )
+                        );
+                      }
+                    }}
+                    status={
+                      selectedPatients.has(
+                        patient.personal_information.patientId
+                      )
+                        ? "checked"
+                        : "unchecked"
                     }
-                  >
-                    <QrIcon />
-                  </DataTable.Cell>
-                </DataTable.Row>
-              </Swipeable>
+                  />
+                </DataTable.Cell>
+                <DataTable.Cell
+                  onPress={() => goToPatientPage(patient)}
+                  style={[styles.title, { flex: 0.5 }]}
+                >
+                  <View style={styles.newLabelWrapper}>
+                    {patient.new && (
+                      <Text style={styles.newLabel}>{translation("new")}</Text>
+                    )}
+                  </View>
+                </DataTable.Cell>
+                <DataTable.Cell
+                  onPress={() => goToPatientPage(patient)}
+                  style={[styles.title]}
+                >
+                  <View style={{ flexDirection: "row" }}>
+                    <Text>{patient?.personal_information?.full_name}</Text>
+                  </View>
+                </DataTable.Cell>
+
+                <DataTable.Cell
+                  onPress={() => goToPatientPage(patient)}
+                  style={styles.title}
+                >
+                  {mainInjuryName}
+                </DataTable.Cell>
+                <DataTable.Cell
+                  onPress={() => goToPatientPage(patient)}
+                  style={styles.title}
+                >
+                  <StatusChip
+                    label={translation(patient?.evacuation?.status ?? "")}
+                    status={patient?.evacuation?.status}
+                    editable={false}
+                  />
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={[styles.title, { flex: 0.5 }]}
+                  onPress={
+                    () => writeNdef(patient.personal_information.patientId)
+                    // navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
+                  }
+                >
+                  <QrIcon />
+                </DataTable.Cell>
+              </DataTable.Row>
             );
           })}
-        </DataTable>
-      </ScrollView>
+        </ScrollView>
+      </DataTable>
     </GestureHandlerRootView>
   );
 }

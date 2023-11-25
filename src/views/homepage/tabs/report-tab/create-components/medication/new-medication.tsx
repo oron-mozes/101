@@ -100,6 +100,7 @@ export function NewMedication() {
           <Divider style={{ width: "100%", marginTop: 10 }} />
           <View>
             <InputField
+              testID="medication-other"
               onChange={(other) => {
                 setNewMedication({
                   ...newMedication,
@@ -188,6 +189,7 @@ export function NewMedication() {
           color={valid ? colors.primary : colors.disabled}
         />
         <Text
+          testID="add-medication-button-handler"
           disabled={!valid}
           style={{
             color: valid ? colors.primary : colors.disabled,

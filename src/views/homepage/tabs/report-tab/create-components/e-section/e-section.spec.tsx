@@ -1,16 +1,11 @@
 import "@testing-library/jest-native/extend-expect";
-import { act, fireEvent, render } from "@testing-library/react-native";
+import { fireEvent, render } from "@testing-library/react-native";
 import React from "react";
 import { PaperProvider } from "react-native-paper";
-import locale from "../../../../../../../locales/he.json";
-import {
-  EBreathingTreatment,
-  EEsectionChips,
-  IAction,
-} from "../../../../../../interfaces";
+import ESection from ".";
+import { EEsectionChips } from "../../../../../../interfaces";
 import { theme } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { ESection } from "./e-section";
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),

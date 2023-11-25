@@ -9,6 +9,7 @@ import {
   EEsectionChips,
   EInjuryReason,
   EMeasurementsTreatments,
+  EPosition,
   EReactionEyes,
   EReactionGeneral,
   EReactionMovement,
@@ -102,6 +103,7 @@ const initialPatient = {
       actions: [],
     },
   },
+  image: null,
 };
 
 export const usePatientRecordsStore = create<{
@@ -123,9 +125,10 @@ export const usePatientRecordsStore = create<{
     prognosis: string[];
     evacuation: IEvacuationInformation;
     treatmentGuide: ITreatment;
+    image: string;
   };
   injuriesImage: Record<string, string>;
-  addInjuriesImage(id: string, image: string): void;
+  addInjuriesImage(image: string): void;
   deletePatients(): void;
   deletePatient(patientId): void;
   updatePartialPatient(data: any): void;
@@ -184,7 +187,9 @@ export const usePatientRecordsStore = create<{
       yPos,
       data,
       id,
+      location,
     }: {
+      location?: EPosition;
       id: number;
       xPos: number;
       yPos: number;
@@ -192,6 +197,7 @@ export const usePatientRecordsStore = create<{
     }): void;
     cleanInjuries(): void;
     removeInjury(id: number): void;
+    setMainInjury(id: number): void;
     updateByIndex(data: Partial<IInjury>, index: number): void;
   };
   evacuation_handlers: {
@@ -234,12 +240,12 @@ export const usePatientRecordsStore = create<{
 }>()(
   devtools((set, get, state) => ({
     injuriesImage: {},
-    addInjuriesImage(id: string, image: string) {
+    addInjuriesImage(image: string) {
       const current = state.getState();
-      current.injuriesImage[id] = image;
+
       set((state) => ({
         ...state,
-        injuriesImage: { ...current.injuriesImage },
+        activePatient: { ...current.activePatient, image },
       }));
     },
     async deletePatient(patientId) {
@@ -600,7 +606,7 @@ export const usePatientRecordsStore = create<{
           ),
         });
       },
-      addInjury({ xPos, yPos, data, id }) {
+      addInjury({ xPos, yPos, data, id, location }) {
         const current = state.getState();
         current.updatePartialPatient({
           injuries: [
@@ -610,6 +616,7 @@ export const usePatientRecordsStore = create<{
               xPos,
               yPos,
               data,
+              location,
             },
           ],
         });
@@ -631,36 +638,46 @@ export const usePatientRecordsStore = create<{
           ],
         });
       },
+      setMainInjury(id: number) {
+        const current = state.getState();
+
+        current.updatePartialPatient({
+          injuries: current.activePatient.injuries.map((item) => {
+            item.isMain = item.id === id;
+            return item;
+          }),
+        });
+      },
     },
     incident_information_handlers: {
       setTime(injury_time: number) {
         const current = state.getState();
+        const merged = _.merge(current.activePatient.incident_information, {
+          injury_time,
+        });
 
         current.updatePartialPatient({
-          incident_information: {
-            ...current.activePatient.incident_information,
-            injury_time,
-          },
+          incident_information: merged,
         });
       },
       setCareTime(care_time: number) {
         const current = state.getState();
+        const merged = _.merge(current.activePatient.incident_information, {
+          care_time,
+        });
 
         current.updatePartialPatient({
-          incident_information: {
-            ...current.activePatient.incident_information,
-            care_time,
-          },
+          incident_information: merged,
         });
       },
       setDate(date: number) {
         const current = state.getState();
+        const merged = _.merge(current.activePatient.incident_information, {
+          date,
+        });
 
         current.updatePartialPatient({
-          incident_information: {
-            ...current.activePatient.incident_information,
-            date,
-          },
+          incident_information: merged,
         });
       },
     },
@@ -910,8 +927,8 @@ export const usePatientRecordsStore = create<{
         prognosis: [],
         evacuation: undefined,
         treatmentGuide: undefined,
+        image: undefined,
       };
-      console.log("final", { p1: final.prognosis, p2: active.prognosis });
 
       for (const key in final) {
         if (_.isArray(active[key]) || _.isString(active[key])) {
@@ -927,6 +944,7 @@ export const usePatientRecordsStore = create<{
         );
       });
       final.new = false;
+
       if (updateById === -1) {
         patients.push(final);
       } else {

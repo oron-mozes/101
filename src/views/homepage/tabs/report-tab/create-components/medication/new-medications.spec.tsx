@@ -17,23 +17,52 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   setItem: jest.fn(),
 }));
 describe("NewMedication", () => {
-  const addAction = jest.fn();
+  const addAction = jest.fn((action) => {
+    usePatientRecordsStore.setState({
+      ...initialState,
+      activePatient: {
+        ...initialState.activePatient,
+        medicationsAndFluids: {
+          ...initialState.activePatient.medicationsAndFluids,
+          actions: [
+            ...initialState.activePatient.medicationsAndFluids.actions,
+            action,
+          ],
+        },
+      },
+    } as any);
+  });
+  let medicationsAndFluids = {
+    actions: [],
+  };
+
+  let initialState = {
+    activePatient: {
+      medicationsAndFluids,
+    },
+    medicationsAndFluids_handlers: {
+      addAction,
+    },
+  };
+  usePatientRecordsStore.setState(initialState as any);
 
   beforeEach(() => {
     addAction.mockClear();
 
-    usePatientRecordsStore.setState({
-      activePatient: {
-        medicationsAndFluids: { actions: [] },
-      } as any,
+    medicationsAndFluids = {
+      actions: [],
+    };
+
+    initialState = {
       medicationsAndFluids_handlers: {
         addAction,
-        removeAction: () => {},
-        updateById: () => {},
       },
-    });
+      activePatient: {
+        medicationsAndFluids,
+      },
+    };
+    usePatientRecordsStore.setState(initialState as any);
   });
-
   it("should test ANASTASIA flow", async () => {
     const { getByTestId } = render(
       <PaperProvider theme={theme}>
@@ -89,6 +118,15 @@ describe("NewMedication", () => {
     expect(getByTestId("add-medication-button").props["aria-disabled"]).toBe(
       false
     );
+    fireEvent.press(getByTestId("add-medication-button-handler"));
+    expect(addAction).toHaveBeenCalledWith({
+      dose: E_ANASTASIA_KATAMIN_DOSE.D250MG,
+      id: expect.any(Number),
+      other: null,
+      time: expect.any(Number),
+      treatment: MEDICATION_TREATMENT.ANASTASIA,
+      type: E_ANASTASIA_TREATMENT.KETAMINE,
+    });
   });
 
   it("should test HEXAKAPRON flow", async () => {
@@ -144,5 +182,18 @@ describe("NewMedication", () => {
     expect(getByTestId("add-medication-button").props["aria-disabled"]).toBe(
       true
     );
+    fireEvent.changeText(getByTestId("medication-other-input"), "other");
+
+    act(() => {
+      fireEvent.press(getByTestId("add-medication-button-handler"));
+    });
+    expect(addAction).toHaveBeenCalledWith({
+      dose: null,
+      id: expect.any(Number),
+      other: "other",
+      time: expect.any(Number),
+      treatment: MEDICATION_TREATMENT.OTHER,
+      type: null,
+    });
   });
 });

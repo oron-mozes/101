@@ -6,7 +6,7 @@ import locale from "../../../../../../../locales/he.json";
 import { EMeasurementsTreatments } from "../../../../../../interfaces";
 import { theme } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { CareProvider } from "./care-provider";
+import CareProvider from ".";
 import { useStationStore } from "../../../../../../store/station.store";
 
 jest.mock("@react-native-async-storage/async-storage", () => ({

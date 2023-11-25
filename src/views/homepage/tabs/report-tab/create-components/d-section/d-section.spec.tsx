@@ -1,15 +1,15 @@
 import "@testing-library/jest-native/extend-expect";
-import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import { act, fireEvent, render } from "@testing-library/react-native";
-import { DSection } from "./d-section";
-import { theme } from "../../../../../../shared-config";
+import { fireEvent, render } from "@testing-library/react-native";
 import { PaperProvider } from "react-native-paper";
+import DSection from ".";
 import {
   EReactionEyes,
   EReactionGeneral,
   EReactionMovement,
   EReactionSpeech,
 } from "../../../../../../interfaces";
+import { theme } from "../../../../../../shared-config";
+import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),

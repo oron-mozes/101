@@ -3,13 +3,7 @@ import date from "date-and-time";
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
-import {
-  borderRadius,
-  colors,
-  gutter,
-  inputContainer,
-  inputFontSize,
-} from "../shared-config";
+import { inputContainer, inputFontSize } from "../shared-config";
 
 export function DatePicker({
   label,

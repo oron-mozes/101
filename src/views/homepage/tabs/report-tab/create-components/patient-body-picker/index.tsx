@@ -12,11 +12,12 @@ import { GunLegend } from "./gun-legend";
 import { HitLegend } from "./hit-legend";
 import { CutLegend } from "./cut-legend";
 import { BurnLegend } from "./burns-legend";
-import { hasBeenClicked } from "./utils";
+import { getLocationByPoint, hasBeenClicked } from "./utils";
 import { ConfirmModal } from "../../../../../../components/confirm-modal";
 import { CGLegend } from "./cg-legend";
 import { KateterLegend } from "./kateter-legend";
 import { borderSetup } from "../../../../../../shared-config";
+import { DropDown } from "../../../../../../form-components/dropdown";
 
 export function PatientBodyPicker() {
   const translation = useTranslation();
@@ -31,12 +32,14 @@ export function PatientBodyPicker() {
   const handlePress = (event) => {
     const { locationX, locationY } = event.nativeEvent;
     const point = { xPos: locationX, yPos: locationY };
+
     const clickedOnInjury = injuries.find((injury) =>
       hasBeenClicked(injury, point)
     );
     if (!clickedOnInjury) {
       handlers.addInjury({
         ...point,
+        location: getLocationByPoint(point),
         data: null,
         id: new Date().getTime(),
       });
@@ -46,7 +49,12 @@ export function PatientBodyPicker() {
       setToDelete(clickedOnInjury.id);
     }
   };
-
+  const mainInjury = injuries?.find((injury) => injury.isMain);
+  const mainInjuryName =
+    mainInjury &&
+    `${translation(mainInjury?.data?.toLowerCase() ?? "")} ${translation(
+      mainInjury?.location ?? ""
+    )}`;
   return (
     <>
       {showModal && (
@@ -88,6 +96,22 @@ export function PatientBodyPicker() {
             },
           ]}
         >
+          <View>
+            <DropDown
+              testID="main-injury-selection"
+              label={translation("mainInjurySelection")}
+              initialValue={mainInjuryName}
+              options={injuries.map((injury) => ({
+                title: `${translation(
+                  injury?.data?.toLowerCase() ?? ""
+                )} ${translation(injury.location ?? "")}`,
+                id: injury.id.toString(),
+              }))}
+              onSelect={({ id }) => {
+                handlers.setMainInjury(Number(id));
+              }}
+            />
+          </View>
           <Text style={{ fontWeight: "bold" }}>{translation("legend")}</Text>
           <View style={{ flexDirection: "row", marginTop: 10 }}>
             <View style={[styles.legend, { borderLeftWidth: 0 }]}>
@@ -104,11 +128,11 @@ export function PatientBodyPicker() {
             </View>
             <View style={styles.legend}>
               <GunLegend />
-              <Text variant="bodySmall">{translation("gunshots")}</Text>
+              <Text variant="bodySmall">{translation("gunshot")}</Text>
             </View>
             <View style={styles.legend}>
               <HitLegend />
-              <Text variant="bodySmall">{translation("hits")}</Text>
+              <Text variant="bodySmall">{translation("hit")}</Text>
             </View>
             <View style={styles.legend}>
               <CutLegend />
@@ -143,3 +167,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
+
+export default PatientBodyPicker;

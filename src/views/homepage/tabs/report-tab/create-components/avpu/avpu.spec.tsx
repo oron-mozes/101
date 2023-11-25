@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import { Avpu } from "./avpu";
+import Avpu from ".";
 import { ECconsciousness } from "../../../../../../interfaces";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 jest.mock("@react-native-async-storage/async-storage", () => ({

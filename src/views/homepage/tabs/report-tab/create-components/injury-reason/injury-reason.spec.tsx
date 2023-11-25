@@ -1,5 +1,5 @@
 import { render, fireEvent } from "@testing-library/react-native";
-import { InjuryReason } from "./injury-reason";
+import InjuryReason from ".";
 import { EInjuryReason } from "../../../../../../interfaces";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 jest.mock("@react-native-async-storage/async-storage", () => ({

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React, { memo, useRef } from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 import { inputContainer } from "../shared-config";
@@ -13,45 +13,48 @@ export interface IBloodPressureInputFieldHandler {
   maxLength?: number;
   value: string;
 }
-export function BloodPressureInputFieldHandler({
-  label,
-  onChange,
-  editable = true,
-  value,
-}: IBloodPressureInputFieldHandler) {
-  const inputRef = useRef(null);
-  const handleInputPress = () => {
-    editable && inputRef.current.focus();
-  };
 
-  return (
-    <TouchableWithoutFeedback onPress={() => handleInputPress}>
-      <View style={{ flex: 1, margin: 4 }}>
-        <Text onPress={() => handleInputPress} style={styles.label}>
-          {label}
-        </Text>
+export const BloodPressureInputFieldHandler = memo(
+  function BloodPressureInputFieldHandler({
+    label,
+    onChange,
+    editable = true,
+    value,
+  }: IBloodPressureInputFieldHandler) {
+    const inputRef = useRef(null);
+    const handleInputPress = () => {
+      editable && inputRef.current.focus();
+    };
 
-        <View>
-          <TextInput
-            testID="blood-pressure-input"
-            disabled={!editable}
-            underlineColor="transparent"
-            ref={inputRef}
-            keyboardType="numeric"
-            maxLength={7}
-            value={value}
-            textAlign="right"
-            style={{ backgroundColor: "transparent" }}
-            contentStyle={[styles.text]}
-            onChangeText={(newValue) => {
-              onChange(calcBloodPressureValue(value, newValue));
-            }}
-          />
+    return (
+      <TouchableWithoutFeedback onPress={() => handleInputPress}>
+        <View style={{ flex: 1, margin: 4 }}>
+          <Text onPress={() => handleInputPress} style={styles.label}>
+            {label}
+          </Text>
+
+          <View>
+            <TextInput
+              testID="blood-pressure-input"
+              disabled={!editable}
+              underlineColor="transparent"
+              ref={inputRef}
+              keyboardType="numeric"
+              maxLength={7}
+              value={value}
+              textAlign="right"
+              style={{ backgroundColor: "transparent" }}
+              contentStyle={[styles.text]}
+              onChangeText={(newValue) => {
+                onChange(calcBloodPressureValue(value, newValue));
+              }}
+            />
+          </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-}
+      </TouchableWithoutFeedback>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   label: {

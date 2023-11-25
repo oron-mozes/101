@@ -1,4 +1,5 @@
 import { EPosition, IOption } from "../../../../../interfaces";
+import _ from "lodash";
 
 export function convertToOptions<T>(data: T, translation): IOption[] {
   return Object.values(data).map((item) => ({
@@ -37,6 +38,10 @@ export function isSelectedHandler<T>(data: T[]) {
 }
 
 export function updateDataInIndex<T>(data: T[], item: T, index: number): T[] {
+  if (data.length === 0) {
+    return [item];
+  }
+
   const newData = data;
   const replace = { ...data[index], ...item };
 
@@ -162,4 +167,20 @@ export function convertStringToNumber(value: string): number {
     return Number(value);
   }
   return null;
+}
+
+export function mergeObjects({
+  baseObj,
+  newObj,
+  initial = {},
+}: {
+  baseObj: any;
+  newObj: any;
+  initial?: any;
+}) {
+  return _.merge(
+    initial,
+    _.omitBy(baseObj, _.isNull),
+    _.omitBy(newObj, _.isNull)
+  );
 }

@@ -13,8 +13,7 @@ export function Prognosis() {
   const prognosis = usePatientRecordsStore((state) => [
     ...state.activePatient.prognosis,
   ]);
-  const activePatient = usePatientRecordsStore((state) => state.activePatient);
-  console.log(activePatient);
+
   const updatePrognosis = usePatientRecordsStore(
     (state) => state.updatePrognosis
   );

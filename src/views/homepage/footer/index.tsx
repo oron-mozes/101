@@ -1,16 +1,16 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-paper";
 import { TAB_STATUS } from "..";
+import { QrIcon } from "../../../components/qr-icon/qr";
 import { useTranslation } from "../../../hooks/useMyTranslation";
 import { RootStackParamList, StackNavigation } from "../../../interfaces";
 import { ROUTES } from "../../../routes";
 import { colors } from "../../../shared-config";
 import { PatientCareIcon } from "./patient-care-icon";
-import { StatusIcon } from "./status-icon";
-import { QrIcon } from "../../../components/qr-icon/qr";
 import { PatientStatusIcon } from "./patient-status-icon";
+import { ReceivePatientDialog } from "./recive-patient-dialog";
 
 export function HomepageFooter() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -20,8 +20,12 @@ export function HomepageFooter() {
     [route.params?.tab]
   );
   const translation = useTranslation();
+  const [showReceiveDialog, setShowReceiveDialog] = useState<boolean>(false);
   return (
     <View style={styles.container}>
+      {showReceiveDialog && (
+        <ReceivePatientDialog onClose={() => setShowReceiveDialog(false)} />
+      )}
       <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS })
@@ -57,9 +61,7 @@ export function HomepageFooter() {
           </Text>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.navigate(ROUTES.IMPORT_PATIENT)}
-      >
+      <TouchableWithoutFeedback onPress={() => setShowReceiveDialog(true)}>
         <View style={styles.textBox}>
           <QrIcon color={colors.text} label="importPatient" />
         </View>

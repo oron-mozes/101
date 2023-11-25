@@ -20,6 +20,7 @@ export function MedicationsAndFluidSection() {
   );
 }
 
+export default MedicationsAndFluidSection;
 const styles = StyleSheet.create({
   card: {
     ...design.card,
