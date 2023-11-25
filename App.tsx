@@ -17,13 +17,14 @@ import StationScreen from "./src/views/taagad";
 import { theme } from "./src/shared-config";
 import { NfcDialogWrapper } from "./src/components/nfc-dialog/nfc-dialog";
 import { DeleteDialog } from "./src/components/delete-dialog";
+import { YakarScreen } from "./src/views/yakar";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   // const [nfcSupported] = useNfc();
   const { hasPermission, requestPermission } = useCameraPermission();
-  const { loadInitialState } = useStationStore();
+  const { loadInitialState, station } = useStationStore();
   const loadPatientsState = usePatientRecordsStore(
     (state) => state.loadPatientsState
   );
@@ -60,7 +61,9 @@ export default function App() {
       />
 
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={ROUTES.HOME}>
+        <Stack.Navigator
+          initialRouteName={station.isYakar ? ROUTES.YAKAR : ROUTES.HOME}
+        >
           <Stack.Screen
             name={ROUTES.HOME}
             options={{
@@ -72,6 +75,18 @@ export default function App() {
               headerLeft: () => <Logo101 />,
             }}
             component={HomeScreen}
+          />
+          <Stack.Screen
+            name={ROUTES.YAKAR}
+            options={{
+              headerStyle: {
+                backgroundColor: theme.colors.primary,
+              },
+              title: "",
+              headerRight: () => <MainMenu />,
+              headerLeft: () => <Logo101 />,
+            }}
+            component={YakarScreen}
           />
           <Stack.Screen
             name={ROUTES.STATION}

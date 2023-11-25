@@ -12,7 +12,7 @@ import { ICareProvider, StackNavigation } from "../../interfaces";
 import { colors } from "../../shared-config";
 import { useStationStore } from "../../store/station.store";
 import { AddProvider } from "./add-provider";
-import { GlobalActions } from "./partials/global-actions";
+import { StationGlobalActions } from "./partials/global-actions";
 import { SavedProvider } from "./partials/saved-provider";
 import { StationHeader } from "./partials/station-header";
 import {
@@ -36,12 +36,13 @@ export default function StationScreen() {
   const station = useStationStore((state) => state.station);
   const addProviders = useStationStore((state) => state.addProviders);
   const updateStationName = useStationStore((state) => state.updateStationName);
+  const setAsYakar = useStationStore((state) => state.setAsYakar);
   const [stationName, setStationName] = useState<string>(station.unit_name);
   const [providers, setProviders] = useState<ICareProvider[]>(
     station.care_providers ?? []
   );
   const [newCareProvider, updateCareProvider] = useState<ICareProvider>(
-    providers.length === 0
+    providers?.length === 0
       ? {
           ...initialProviderState,
         }
@@ -63,15 +64,20 @@ export default function StationScreen() {
   useEffect(() => {
     setStationName(station.unit_name);
     setProviders(station.care_providers);
-    station.care_providers.length === 0 &&
+    station.care_providers?.length === 0 &&
       updateCareProvider({
         ...initialProviderState,
       });
   }, [station]);
 
-  const valid: boolean =
-    (Boolean(stationName) && Boolean(providers.length)) === true;
+  useEffect(() => {
+    setAsYakar(isYakar);
+  }, [station.isYakar]);
 
+  const valid: boolean =
+    (Boolean(stationName) && Boolean(providers?.length)) === true;
+
+  const [isYakar, setIsYakar] = useState<boolean>(station.isYakar);
   return (
     <SafeAreaView style={styles.container}>
       <GestureHandlerRootView>
@@ -83,89 +89,128 @@ export default function StationScreen() {
           }}
         >
           <StationHeader />
-          <GlobalActions />
-          <View style={{ width: "100%" }}>
-            <InputField
-              editable={true}
-              label={translation("idfUnit")}
-              value={stationName}
-              onChange={(unit_name: string) => {
-                setStationName(unit_name);
-              }}
-            />
-          </View>
-          {providers.map((provider) => (
-            <SavedProvider
-              key={provider.idf_id}
-              provider={provider}
-              removeProvider={(id) =>
-                setProviders(providers.filter((p) => p.idf_id !== id))
-              }
-            />
-          ))}
-          {newCareProvider && (
-            <AddProvider
-              newCareProvider={newCareProvider}
-              updateCareProvider={updateCareProvider}
-            />
-          )}
-          <View
-            style={{
-              width: "100%",
-              marginTop: 30,
-              paddingLeft: 10,
-            }}
-          >
-            <TouchableWithoutFeedback
-              onPress={() => {
-                !newCareProvider &&
-                  updateCareProvider({ ...initialProviderState });
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  width: 130,
-                }}
-              >
-                <Icon
-                  source="plus"
-                  color={!newCareProvider ? colors.primary : colors.disabled}
-                  size={20}
+          <StationGlobalActions isYakar={isYakar} setIsYakar={setIsYakar} />
+          {isYakar && (
+            <>
+              <View style={{ width: "100%" }}>
+                <InputField
+                  editable={true}
+                  label={translation("idfUnit")}
+                  value={stationName}
+                  onChange={(unit_name: string) => {
+                    setStationName(unit_name);
+                  }}
                 />
-                <Text
-                  style={{
-                    fontSize: 17,
-                    marginLeft: 10,
-                    color: !newCareProvider ? colors.primary : colors.disabled,
+              </View>
+              <View
+                style={{ alignItems: "flex-end", marginTop: 40, width: "100%" }}
+              >
+                <Button
+                  mode="contained"
+                  icon="check"
+                  style={{ width: 165 }}
+                  disabled={stationName?.length === 0}
+                  onPress={async () => {
+                    updateStationName(stationName);
+                    setAsYakar(true);
+                    navigation.navigate(ROUTES.YAKAR);
                   }}
                 >
-                  {translation("addCareProvider")}
-                </Text>
+                  {translation("saveAndContinue")}
+                </Button>
               </View>
-            </TouchableWithoutFeedback>
-            <View style={{ alignItems: "flex-end", marginTop: 40 }}>
-              <Button
-                mode="contained"
-                icon="check"
-                style={{ width: 165 }}
-                disabled={!valid}
-                onPress={async () => {
-                  updateStationName(stationName);
-                  await addProviders(
-                    providers.map((provider) => ({
-                      ...provider,
-                      unit_name: station.unit_name,
-                    }))
-                  );
-
-                  navigation.navigate(ROUTES.HOME);
+            </>
+          )}
+          {!isYakar && (
+            <>
+              <View style={{ width: "100%" }}>
+                <InputField
+                  editable={true}
+                  label={translation("idfUnit")}
+                  value={stationName}
+                  onChange={(unit_name: string) => {
+                    setStationName(unit_name);
+                  }}
+                />
+              </View>
+              {providers.map((provider) => (
+                <SavedProvider
+                  key={provider.idf_id}
+                  provider={provider}
+                  removeProvider={(id) =>
+                    setProviders(providers.filter((p) => p.idf_id !== id))
+                  }
+                />
+              ))}
+              {newCareProvider && (
+                <AddProvider
+                  newCareProvider={newCareProvider}
+                  updateCareProvider={updateCareProvider}
+                />
+              )}
+              <View
+                style={{
+                  width: "100%",
+                  marginTop: 30,
+                  paddingLeft: 10,
                 }}
               >
-                {translation("saveAndContinue")}
-              </Button>
-            </View>
-          </View>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    !newCareProvider &&
+                      updateCareProvider({ ...initialProviderState });
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      width: 130,
+                    }}
+                  >
+                    <Icon
+                      source="plus"
+                      color={
+                        !newCareProvider ? colors.primary : colors.disabled
+                      }
+                      size={20}
+                    />
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        marginLeft: 10,
+                        color: !newCareProvider
+                          ? colors.primary
+                          : colors.disabled,
+                      }}
+                    >
+                      {translation("addCareProvider")}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+                <View style={{ alignItems: "flex-end", marginTop: 40 }}>
+                  <Button
+                    mode="contained"
+                    icon="check"
+                    style={{ width: 165 }}
+                    disabled={!valid}
+                    onPress={async () => {
+                      updateStationName(stationName);
+                      await addProviders(
+                        providers.map((provider) => ({
+                          ...provider,
+                          unit_name: station.unit_name,
+                        }))
+                      );
+
+                      navigation.navigate(ROUTES.HOME);
+                    }}
+                  >
+                    {translation("saveAndContinue")}
+                  </Button>
+                </View>
+              </View>
+            </>
+          )}
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>

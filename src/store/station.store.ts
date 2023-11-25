@@ -10,17 +10,25 @@ export const useStationStore = create<{
   addProviders(data: ICareProvider[]): Promise<void>;
   updateStationName(name: string): Promise<void>;
   hardStationReset(): Promise<void>;
+  setAsYakar(isYakar: boolean): Promise<void>;
 }>()(
   devtools((set, get) => ({
+    setAsYakar: async (isYakar) => {
+      const currentData = get().station;
+      currentData.isYakar = isYakar;
+      await storage.save({ key: STORAGE.STATION, data: currentData });
+      set((state) => ({ ...state, station: currentData }));
+    },
     station: {
       unit_name: null,
       care_providers: [],
+      isYakar: false,
     },
     async hardStationReset() {
       await storage.clearMapForKey(STORAGE.STATION);
       set((state) => ({
         ...state,
-        station: { unit_name: null, care_providers: [] },
+        station: { unit_name: null, care_providers: [], isYakar: false },
       }));
     },
     async loadInitialState() {
