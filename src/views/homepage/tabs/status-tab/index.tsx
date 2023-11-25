@@ -19,13 +19,11 @@ import { usePatientRecordsStore } from "../../../../store/patients.record.store"
 import { PatientCareIcon } from "../../footer/patient-care-icon";
 import { TableActions } from "./table-actions";
 import { sortByPriority } from "./utils";
-import { useNFCSender } from "../../../../hooks/useNfcSender";
 import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
 import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
 import { useGlobalStore } from "../../../../store/global.store";
 
 export function StatusTab() {
-  const { writeNdef } = useNFCSender();
   const navigation = useNavigation<StackNavigation>();
   const patients = usePatientRecordsStore((state) => [...state.patients]);
 

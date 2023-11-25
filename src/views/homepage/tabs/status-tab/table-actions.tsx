@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import { Checkbox, Text } from "react-native-paper";
 import { QrIcon } from "../../../../components/qr-icon/qr";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
-import { useNFCSender } from "../../../../hooks/useNfcSender";
 import { colors } from "../../../../shared-config";
 import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
