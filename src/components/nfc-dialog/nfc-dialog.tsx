@@ -32,8 +32,8 @@ export function NfcDialogWrapper() {
           patientsIds.includes(patient.personal_information.patientId)
         );
 
-        const compressed = compress(patientsDataToSend);
-        console.log(JSON.stringify(compressed).length);
+        console.log("patientsDataToSend", patientsDataToSend);
+        const compressed = compress({ records: patientsDataToSend });
         writeNdef(JSON.stringify(compressed));
       },
     });

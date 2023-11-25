@@ -34,7 +34,7 @@ export function BodyPicker() {
         const b = Buffer.from(uri, "base64");
         console.log(b.length);
 
-        addInjuriesImage(uri);
+        addInjuriesImage("uri");
       },
       (error) => console.error("Oops, snapshot failed", error)
     );
