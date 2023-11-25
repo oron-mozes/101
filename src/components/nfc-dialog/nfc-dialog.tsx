@@ -13,6 +13,7 @@ import { useNfc } from "../../hooks/useNfc";
 import { useEffect } from "react";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { compress } from "compress-json";
+import _ from "lodash";
 
 export function NfcDialogWrapper() {
   const { readTag, writeNdef } = useNfc();
@@ -27,10 +28,19 @@ export function NfcDialogWrapper() {
       Idle: () => {},
       Receiving: () => readTag(),
       Sending: ({ patientsIds }) => {
-        const patientsDataToSend = patients.filter((patient) =>
+        let patientsDataToSend = patients.filter((patient) =>
           patientsIds.includes(patient.personal_information.patientId)
         );
-        writeNdef(JSON.stringify(compress({ records: patientsDataToSend })));
+        patientsDataToSend = patientsDataToSend.map((patient) => {
+          return {
+            ...patient,
+            image: "",
+          };
+        });
+
+        const compressed = compress(patientsDataToSend);
+
+        writeNdef(JSON.stringify(compressed));
       },
     });
   }, [nfcStatus, nfcTransferStatus]);

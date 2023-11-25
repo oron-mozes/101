@@ -10,6 +10,7 @@ import { Hit } from "./hit";
 import { Kateter } from "./kateter";
 import { Sharpnel } from "./sharpnel";
 import { Touniquet } from "./touniquet";
+import { Image } from "react-native-compressor";
 
 export function BodyPicker() {
   const viewRef = useRef(null);
@@ -24,16 +25,18 @@ export function BodyPicker() {
     return state.addInjuriesImage;
   });
   const captureAndSave = async () => {
+    console.log({ viewRef });
     captureRef(viewRef, {
       format: "jpg",
       quality: 1,
       width: 500,
       height: 500,
-      result: "base64",
+      result: "data-uri",
     }).then(
-      (uri) => {
-        console.log("Snap");
-        addInjuriesImage(uri);
+      async (uri) => {
+        const result = await Image.compress(uri);
+        console.log(result);
+        addInjuriesImage(result);
       },
       (error) => console.error("Oops, snapshot failed", error)
     );
