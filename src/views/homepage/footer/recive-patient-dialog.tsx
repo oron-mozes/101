@@ -3,10 +3,12 @@ import { Button, Dialog, Portal } from "react-native-paper";
 import { useTranslation } from "../../../hooks/useMyTranslation";
 import { StackNavigation } from "../../../interfaces";
 import { ROUTES } from "../../../routes";
+import { NfcStatus, useNfcStore } from "../../../store/nfc.store";
 
 export function ReceivePatientDialog({ onClose }: { onClose(): void }) {
   const translation = useTranslation();
   const navigation = useNavigation<StackNavigation>();
+  const { openNfcDialog } = useNfcStore();
 
   return (
     <Portal>
@@ -19,6 +21,7 @@ export function ReceivePatientDialog({ onClose }: { onClose(): void }) {
           <Button
             onPress={() => {
               onClose();
+              openNfcDialog(NfcStatus.Receiving());
             }}
             mode="contained"
             testID="receive-dialog-nfc-method"

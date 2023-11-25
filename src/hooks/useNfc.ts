@@ -38,9 +38,9 @@ export function useNfc() {
       );
       console.log("PARSED DATA", typeof parsedData);
 
-      console.log("PATIENTs", parsedData);
+      console.log("PATIENTS", parsedData);
       await Promise.all([
-        parsedData.record.map((patient) =>
+        parsedData.records.map((patient) =>
           addPatient({ ...patient, new: true })
         ),
       ]);
