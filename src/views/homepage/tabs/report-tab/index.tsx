@@ -1,5 +1,5 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useLayoutEffect, useState } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -17,6 +17,20 @@ import InjuryReason from "./create-components/injury-reason";
 import PatientDetails from "./create-components/patient-details";
 import { emptyPatient } from "./empty-patient";
 import { generateId } from "./utils";
+import TreatmentGuide from "./create-components/treatment-guide";
+import Measurements from "./create-components/treatment-mesurments";
+// import ASection from "./create-components/a-section";
+// import Avpu from "./create-components/avpu";
+// import BSection from "./create-components/b-section";
+// import CSection from "./create-components/c-section";
+// import CareProvider from "./create-components/care-provider";
+// import DSection from "./create-components/d-section";
+// import ESection from "./create-components/e-section";
+// import Evacuation from "./create-components/evacuation";
+// import MedicationsAndFluidSection from "./create-components/medication";
+// import PatientBodyPicker from "./create-components/patient-body-picker";
+// import Prognosis from "./create-components/prognosis";
+import { useGlobalStore } from "../../../../store/global.store";
 
 const Avpu = lazy(() => import("./create-components/avpu"));
 const ASection = lazy(() => import("./create-components/a-section"));
@@ -34,13 +48,6 @@ const PatientBodyPicker = lazy(
 );
 
 const Prognosis = lazy(() => import("./create-components/prognosis"));
-const Measurements = lazy(
-  () => import("./create-components/treatment-mesurments")
-);
-
-const TreatmentGuide = lazy(
-  () => import("./create-components/treatment-guide")
-);
 
 enum ACCORDION_ITEM {
   CLOSE = "0",
@@ -61,7 +68,7 @@ export function ReportTab() {
   );
   const taggad = useStationStore((state) => state.station);
   const translation = useTranslation();
-
+  const toggleLoading = useGlobalStore((state) => state.toggleLoading);
   const [selectedAccordionItemId, setSelectedAccordionItemId] =
     useState<ACCORDION_ITEM>(ACCORDION_ITEM.FIRST_TAB);
 
@@ -87,9 +94,13 @@ export function ReportTab() {
       savePatient();
     };
   }, [handlers]);
-  console.log("RENDER REPORT TAB");
+
+  useEffect(() => {
+    toggleLoading(false);
+  }, [selectedAccordionItemId]);
+
   return (
-    <Suspense fallback={<ActivityIndicator size="large" />}>
+    <Suspense fallback={<ActivityIndicator />}>
       <AutocompleteDropdownContextProvider>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -98,6 +109,7 @@ export function ReportTab() {
           <List.AccordionGroup
             expandedId={selectedAccordionItemId}
             onAccordionPress={(expend) => {
+              toggleLoading(true);
               if (selectedAccordionItemId === expend) {
                 setSelectedAccordionItemId(ACCORDION_ITEM.CLOSE);
               } else {

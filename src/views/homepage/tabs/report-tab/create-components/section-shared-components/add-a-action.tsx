@@ -46,7 +46,7 @@ export function AddAction<T>({
           value={information.time}
           label={translation("actionTime")}
           onChange={(time: number) => {
-            update({ ...information, time });
+            information.time !== time && update({ ...information, time });
           }}
         />
         <RadioGroup

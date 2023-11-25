@@ -31,19 +31,17 @@ export function StatusTab() {
   const goToPatientPage = (patient) => {
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   };
-  const {
-    performActionForPatients,
-
-    togglePatientId,
-  } = useGlobalStore();
+  const { performActionForPatients, toggleLoading, togglePatientId } =
+    useGlobalStore();
   const { openNfcDialog } = useNfcStore();
-  console.log("STATUS TAB RENDER");
+
   return (
     <GestureHandlerRootView>
       <TouchableWithoutFeedback
-        onPress={() =>
-          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE })
-        }
+        onPress={() => {
+          toggleLoading(true);
+          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE });
+        }}
       >
         <View
           style={{

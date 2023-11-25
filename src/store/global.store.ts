@@ -7,8 +7,17 @@ export const useGlobalStore = create<{
   togglePatientId(id: string): void;
   deleteBulkPatients: boolean;
   toggleDeleteBulkPatients(): void;
+  loading: boolean;
+  toggleLoading(show: boolean): void;
 }>()(
   devtools((set) => ({
+    loading: false,
+    toggleLoading(show: boolean) {
+      set((state) => ({
+        ...state,
+        loading: show,
+      }));
+    },
     deleteBulkPatients: false,
     toggleDeleteBulkPatients() {
       set((state) => ({

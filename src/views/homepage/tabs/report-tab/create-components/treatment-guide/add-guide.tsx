@@ -39,7 +39,8 @@ export function AddGuide({
               value={guide.order_time}
               label={translation("treatment_order_time")}
               onChange={(order_time) => {
-                setGuide({ ...guide, order_time });
+                order_time !== guide.order_time &&
+                  setGuide({ ...guide, order_time });
               }}
             />
           </View>

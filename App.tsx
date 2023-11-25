@@ -19,6 +19,7 @@ import { useStationStore } from "./src/store/station.store";
 import { theme } from "./src/shared-config";
 import { NfcDialogWrapper } from "./src/components/nfc-dialog/nfc-dialog";
 import HomeScreen from "./src/views/homepage";
+import LoadingOverlay from "./src/components/loading";
 
 const QrCode = lazy(() => import("./src/views/qr-code"));
 const ReceivePatientScreen = lazy(() => import("./src/views/recieve-patient"));
@@ -57,12 +58,13 @@ export default function App() {
       </View>
     );
   }
-  console.log("APP RENDER!!");
+
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
       <PaperProvider theme={theme}>
         <NfcDialogWrapper />
         <DeleteDialog />
+        <LoadingOverlay />
         <StatusBar
           barStyle="light-content"
           backgroundColor={theme.colors.primary}

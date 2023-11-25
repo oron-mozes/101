@@ -11,6 +11,7 @@ import { colors } from "../../../shared-config";
 import { PatientCareIcon } from "./patient-care-icon";
 import { PatientStatusIcon } from "./patient-status-icon";
 import { ReceivePatientDialog } from "./recive-patient-dialog";
+import { useGlobalStore } from "../../../store/global.store";
 
 export function HomepageFooter() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -20,6 +21,7 @@ export function HomepageFooter() {
     [route.params?.tab]
   );
   const translation = useTranslation();
+  const { toggleLoading } = useGlobalStore();
   const [showReceiveDialog, setShowReceiveDialog] = useState<boolean>(false);
   return (
     <View style={styles.container}>
@@ -45,9 +47,10 @@ export function HomepageFooter() {
         </View>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
-        onPress={() =>
-          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE })
-        }
+        onPress={() => {
+          toggleLoading(true);
+          navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE });
+        }}
       >
         <View style={styles.textBox}>
           <PatientCareIcon active={selected === TAB_STATUS.CREATE} />

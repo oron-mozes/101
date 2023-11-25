@@ -25,7 +25,6 @@ export function PatientDetails() {
   );
 
   const translation = useTranslation();
-
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
@@ -60,7 +59,8 @@ export function PatientDetails() {
             value={incident_information.care_time ?? new Date().getTime()}
             label={translation("timeOfTreatment")}
             onChange={(care_time: number) => {
-              inc_handlers.setCareTime(care_time);
+              care_time !== incident_information.care_time &&
+                inc_handlers.setCareTime(care_time);
             }}
           />
           <TimePicker
@@ -68,7 +68,8 @@ export function PatientDetails() {
             value={incident_information.injury_time ?? new Date().getTime()}
             label={translation("timeOfInjury")}
             onChange={(injury_time: number) => {
-              inc_handlers.setTime(injury_time);
+              incident_information.injury_time !== injury_time &&
+                inc_handlers.setTime(injury_time);
             }}
           />
         </View>

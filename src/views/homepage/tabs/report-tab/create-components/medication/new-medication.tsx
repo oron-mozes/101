@@ -170,7 +170,8 @@ export function NewMedication() {
                 value={newMedication.time}
                 label={translation("actionTime")}
                 onChange={(time: number) => {
-                  setNewMedication({ ...newMedication, time });
+                  time !== newMedication.time &&
+                    setNewMedication({ ...newMedication, time });
                 }}
               />
             </View>

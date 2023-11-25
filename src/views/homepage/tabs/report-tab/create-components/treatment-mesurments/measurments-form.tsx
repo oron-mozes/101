@@ -29,12 +29,15 @@ export const emptyState: IMeasurementsAction = {
 };
 
 export function MeasurementForm({ formIndex }: { formIndex: number }) {
-  const actions = usePatientRecordsStore((state) => {
-    return state.activePatient.treatmentGuide.measurements.actions;
+  const form = usePatientRecordsStore((state) => {
+    return (
+      state.activePatient.treatmentGuide.measurements.actions?.[formIndex] ?? {
+        ...emptyState,
+        time: new Date().getTime(),
+      }
+    );
   });
-  const [form, updateForm] = useState<IMeasurementsAction>(
-    actions?.[formIndex] ?? { ...emptyState, time: new Date().getTime() }
-  );
+
   const translation = useTranslation();
   const updateAtIndex = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers.updateAtIndex
@@ -43,17 +46,13 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
   const providers = useStationStore((state) => state.station.care_providers);
   const painRang = [...Array(11).keys()];
 
-  useEffect(() => {
-    updateAtIndex(form, formIndex);
-  }, [form]);
-
   return (
     <View style={[styles.column]}>
       <TimePicker
         value={form.time}
         label={translation("treatment_execution_time")}
         onChange={(time) => {
-          updateForm({ ...form, time });
+          time !== form.time && updateAtIndex({ ...form, time }, formIndex);
         }}
       />
       <DropDown
@@ -62,7 +61,8 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
           const provider = Object.values(providers).find(
             (p) => p.idf_id.toString() === value.id
           );
-          updateForm({ ...form, provider });
+          updateAtIndex({ ...form, provider }, formIndex);
+          // updateForm({ ...form, provider });
         }}
         label={translation("treatment_provider")}
         options={Object.values(providers).map((provider) => ({
@@ -76,12 +76,17 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("treatment_puls")}
         value={form.puls?.toString()}
         onChange={(puls) => {
-          updateForm({ ...form, puls: convertStringToNumber(puls) });
+          updateAtIndex(
+            { ...form, puls: convertStringToNumber(puls) },
+            formIndex
+          );
+          // updateForm({ ...form, puls: convertStringToNumber(puls) });
         }}
       />
       <BloodPressureInputFieldHandler
         onChange={(bloodPressure) => {
-          updateForm({ ...form, bloodPressure });
+          updateAtIndex({ ...form, bloodPressure }, formIndex);
+          // updateForm({ ...form, bloodPressure });
         }}
         label={translation("treatment_bloodPressure")}
         value={form.bloodPressure}
@@ -92,7 +97,11 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("treatment_breath")}
         value={form.breath?.toString()}
         onChange={(breath) => {
-          updateForm({ ...form, breath: convertStringToNumber(breath) });
+          updateAtIndex(
+            { ...form, breath: convertStringToNumber(breath) },
+            formIndex
+          );
+          // updateForm({ ...form, breath: convertStringToNumber(breath) });
         }}
       />
       <InputField
@@ -100,7 +109,11 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("treatment_spo2")}
         value={form.spo2?.toString()}
         onChange={(spo2) => {
-          updateForm({ ...form, spo2: convertStringToNumber(spo2) });
+          updateAtIndex(
+            { ...form, spo2: convertStringToNumber(spo2) },
+            formIndex
+          );
+          // updateForm({ ...form, spo2: convertStringToNumber(spo2) });
         }}
       />
       <InputField
@@ -108,13 +121,21 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("treatment_etcos")}
         value={form.etcos?.toString()}
         onChange={(etcos) => {
-          updateForm({ ...form, etcos: convertStringToNumber(etcos) });
+          updateAtIndex(
+            { ...form, etcos: convertStringToNumber(etcos) },
+            formIndex
+          );
+          // updateForm({ ...form, etcos: convertStringToNumber(etcos) });
         }}
       />
       <DropDown
         initialValue={form.pain?.toString()}
         onSelect={(pain) => {
-          updateForm({ ...form, pain: convertStringToNumber(pain.id) });
+          updateAtIndex(
+            { ...form, pain: convertStringToNumber(pain.id) },
+            formIndex
+          );
+          // updateForm({ ...form, pain: convertStringToNumber(pain.id) });
         }}
         label={translation("treatment_pain")}
         options={painRang.map((pain) => ({
@@ -127,7 +148,11 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("treatment_prpo")}
         value={form.prpo?.toString()}
         onChange={(prpo) => {
-          updateForm({ ...form, prpo: convertStringToNumber(prpo) });
+          updateAtIndex(
+            { ...form, prpo: convertStringToNumber(prpo) },
+            formIndex
+          );
+          // updateForm({ ...form, prpo: convertStringToNumber(prpo) });
         }}
       />
       <InputField
@@ -135,7 +160,11 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("GCS")}
         value={form.GCS?.toString()}
         onChange={(GCS) => {
-          updateForm({ ...form, GCS: convertStringToNumber(GCS) });
+          updateAtIndex(
+            { ...form, GCS: convertStringToNumber(GCS) },
+            formIndex
+          );
+          // updateForm({ ...form, GCS: convertStringToNumber(GCS) });
         }}
       />
       <InputField
@@ -143,7 +172,11 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("treatment_urine")}
         value={form.urine?.toString()}
         onChange={(urine) => {
-          updateForm({ ...form, urine: convertStringToNumber(urine) });
+          updateAtIndex(
+            { ...form, urine: convertStringToNumber(urine) },
+            formIndex
+          );
+          // updateForm({ ...form, urine: convertStringToNumber(urine) });
         }}
       />
       <InputField
@@ -151,7 +184,11 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("treatment_blood")}
         value={form.blood?.toString()}
         onChange={(blood) => {
-          updateForm({ ...form, blood: convertStringToNumber(blood) });
+          updateAtIndex(
+            { ...form, blood: convertStringToNumber(blood) },
+            formIndex
+          );
+          // updateForm({ ...form, blood: convertStringToNumber(blood) });
         }}
       />
       {/* <Button

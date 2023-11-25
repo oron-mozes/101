@@ -112,7 +112,7 @@ export function InjuryModal({
               value={time}
               label={translation("time")}
               onChange={(newTime: number) => {
-                setTime(newTime);
+                time !== newTime && setTime(newTime);
               }}
             />
           )}

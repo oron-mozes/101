@@ -21,8 +21,8 @@ export function EvacInformation() {
         <TimePicker
           value={time}
           label={translation("actionTime")}
-          onChange={(time: number) => {
-            handlers.setTime(time);
+          onChange={(newTime: number) => {
+            time !== newTime && handlers.setTime(newTime);
           }}
         />
       </View>

@@ -67,7 +67,8 @@ function TreatmentGuide() {
                     value={guide.order_time}
                     label={translation("treatment_order_time")}
                     onChange={(order_time) => {
-                      handlers.updateGuideAtIndex({ order_time }, index);
+                      order_time !== guide.order_time &&
+                        handlers.updateGuideAtIndex({ order_time }, index);
                     }}
                   />
                 </View>
