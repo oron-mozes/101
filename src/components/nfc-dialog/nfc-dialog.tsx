@@ -15,8 +15,7 @@ import { usePatientRecordsStore } from "../../store/patients.record.store";
 
 export function NfcDialogWrapper() {
   const { readTag, writeNdef } = useNfc();
-  const { nfcStatus, nfcTransferStatus, closeNfcDialog, transferPatientIds } =
-    useNfcStore();
+  const { nfcStatus, nfcTransferStatus, closeNfcDialog } = useNfcStore();
   const { patients } = usePatientRecordsStore();
   const translation = useTranslation();
 
@@ -24,10 +23,11 @@ export function NfcDialogWrapper() {
     if (!isType(nfcTransferStatus, NfcTransferStatus.Waiting)) return;
 
     match(nfcStatus, {
-      Idle: () => {},
+      Idle: () => { },
       Receiving: () => readTag(),
-      Sending: () => {
-        writeNdef(JSON.stringify({ records: transferPatientIds }));
+      Sending: ({ patientsIds }) => {
+        const patientsDataToSend = patients.filter(patient => patientsIds.includes(patient.personal_information.patientId));
+        writeNdef(JSON.stringify({ records: patientsDataToSend }));
       },
     });
   }, [nfcStatus, nfcTransferStatus]);
