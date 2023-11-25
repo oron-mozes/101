@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { Button, Card } from "react-native-paper";
+import { Card } from "react-native-paper";
 import { DatePicker } from "../../../../../../form-components/date-picker";
 import { InputField } from "../../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../../form-components/section-header";
@@ -7,7 +7,6 @@ import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { design } from "../shared-style";
-import { createPDFWithImage } from "../../../../../../utils/create-pdf";
 
 export function PatientDetails() {
   const personal_information = usePatientRecordsStore((state) => ({
@@ -32,13 +31,6 @@ export function PatientDetails() {
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
         <SectionHeader label={translation("accountTitle")} />
-        <Button
-          onPress={() => {
-            createPDFWithImage(activePatient);
-          }}
-        >
-          Click
-        </Button>
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
         <InputField

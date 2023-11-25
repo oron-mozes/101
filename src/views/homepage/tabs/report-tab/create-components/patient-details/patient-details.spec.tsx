@@ -1,16 +1,10 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  act,
-} from "@testing-library/react-native";
 import "@testing-library/jest-native/extend-expect";
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 
 import { PaperProvider } from "react-native-paper";
+import PatientDetails from ".";
 import { theme } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
-import PatientDetails from ".";
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
