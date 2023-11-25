@@ -38,6 +38,12 @@ function Measurements() {
     });
   };
 
+  useEffect(() => {
+    if (actions.length === 0) {
+      addRow();
+    }
+  }, []);
+
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
@@ -61,7 +67,7 @@ function Measurements() {
           }}
           ref={scrollViewRef}
         >
-          {new Array(actions.length + 1).fill(1).map((_, index) => (
+          {actions.map((_, index) => (
             <MeasurementForm formIndex={index} key={index} />
           ))}
         </ScrollView>

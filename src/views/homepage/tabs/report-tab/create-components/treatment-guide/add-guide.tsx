@@ -1,15 +1,13 @@
-import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { Card } from "react-native-paper";
 import { DropDown } from "../../../../../../form-components/dropdown";
 import { InputField } from "../../../../../../form-components/input-field";
 import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
-import { IAction, ITreatmentGuide } from "../../../../../../interfaces";
+import { ITreatmentGuide } from "../../../../../../interfaces";
 import { gutter } from "../../../../../../shared-config";
-import { emptyState } from "./treatment-guide";
-import { Card, Icon, Text } from "react-native-paper";
-import { design } from "../shared-style";
 import { useStationStore } from "../../../../../../store/station.store";
+import { design } from "../shared-style";
 
 export function AddGuide({
   guide,
@@ -20,7 +18,7 @@ export function AddGuide({
 }) {
   const translation = useTranslation();
   const providers = useStationStore((state) => state.station.care_providers);
-
+  console.log(guide.provider_issuer?.full_name);
   return (
     <View>
       <Card.Content style={[styles.innerContent]}>
@@ -45,11 +43,12 @@ export function AddGuide({
             />
           </View>
           <DropDown
-            initialValue={guide.provider_issuer?.full_name?.toString()}
+            initialValue={guide.provider_issuer?.full_name}
             onSelect={(value) => {
               const provider_issuer = Object.values(providers).find(
                 (p) => p.idf_id.toString() === value.id
               );
+              
               setGuide({ ...guide, provider_issuer });
             }}
             label={translation("treatment_provider_issuer")}

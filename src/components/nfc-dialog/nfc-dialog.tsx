@@ -14,11 +14,12 @@ import { useEffect } from "react";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { compress } from "compress-json";
 import _ from "lodash";
+import { STATUS } from "../../interfaces";
 
 export function NfcDialogWrapper() {
   const { readTag, writeNdef, close } = useNfc();
   const { nfcStatus, nfcTransferStatus, closeNfcDialog } = useNfcStore();
-  const { patients } = usePatientRecordsStore();
+  const { patients, updatePatientStatus } = usePatientRecordsStore();
   const translation = useTranslation();
 
   useEffect(() => {
@@ -32,9 +33,10 @@ export function NfcDialogWrapper() {
           patientsIds.includes(patient.personal_information.patientId)
         );
 
-        console.log("patientsDataToSend", patientsDataToSend);
         const compressed = compress({ records: patientsDataToSend });
-        writeNdef(JSON.stringify(compressed));
+        writeNdef(JSON.stringify(compressed), () => {
+          updatePatientStatus(patientsIds, STATUS.CLOSED);
+        });
       },
     });
   }, [nfcStatus, nfcTransferStatus]);

@@ -61,6 +61,7 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
           const provider = Object.values(providers).find(
             (p) => p.idf_id.toString() === value.id
           );
+          console.log(formIndex);
           updateAtIndex({ ...form, provider }, formIndex);
           // updateForm({ ...form, provider });
         }}

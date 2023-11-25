@@ -45,7 +45,7 @@ export function BodyPicker() {
   }, [injuries]);
   return (
     <>
-      <ViewShot ref={viewRef} style={{ opacity: 1, backgroundColor: "white" }}>
+      <ViewShot ref={viewRef} style={{ opacity: 1 }}>
         <Svg width={550} height={653} viewBox="0 0 442 653">
           {injuries.map((injury) => {
             return (

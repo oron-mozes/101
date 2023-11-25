@@ -79,6 +79,7 @@ function TreatmentGuide() {
                     const provider_issuer = Object.values(providers).find(
                       (p) => p.idf_id.toString() === value.id
                     );
+                    debugger;
                     handlers.updateGuideAtIndex({ provider_issuer }, index);
                   }}
                   label={translation("treatment_provider_issuer")}

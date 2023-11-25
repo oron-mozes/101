@@ -136,6 +136,7 @@ export const usePatientRecordsStore = create<{
   updatePrognosis(data: string): void;
   removePrognosis(index: number): void;
   loadPatientsState(): Promise<boolean>;
+  updatePatientStatus(ids: string[], status: STATUS): Promise<void>;
   addPatient(data: IPatientRecord): Promise<void>;
   savePatient(): Promise<void>;
   setActivePatient(selectedPatient: IPatientRecord): void;
@@ -1008,6 +1009,21 @@ export const usePatientRecordsStore = create<{
       } catch (e) {
         return false;
       }
+    },
+    async updatePatientStatus(ids: string[], status: STATUS) {
+      const currentData = get().patients;
+      const updated = currentData.map((patient) => {
+        if (ids.includes(patient.personal_information.patientId)) {
+          patient.evacuation.status = status;
+        }
+        return patient;
+      });
+
+      await storage.save({
+        key: STORAGE.PATIENTS_RECORD,
+        data: { patients: updated },
+      });
+      set((state) => ({ ...state, patients: updated }));
     },
     async addPatient(newPatient: IPatientRecord) {
       const currentData = get().patients;
