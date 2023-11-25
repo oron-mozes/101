@@ -12,6 +12,7 @@ import { PatientCareIcon } from "./patient-care-icon";
 import { PatientStatusIcon } from "./patient-status-icon";
 import { ReceivePatientDialog } from "./recive-patient-dialog";
 import { useGlobalStore } from "../../../store/global.store";
+import { NfcIcon } from "../../../components/nfc-dialog/nfc-icon";
 
 export function HomepageFooter() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -66,7 +67,15 @@ export function HomepageFooter() {
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback onPress={() => setShowReceiveDialog(true)}>
         <View style={styles.textBox}>
-          <QrIcon color={colors.text} label="importPatient" />
+          <NfcIcon size={20} color={selected ? colors.text : colors.text} />
+          <Text
+            style={[
+              styles.text,
+              selected === TAB_STATUS.SCAN ? styles.bold : {},
+            ]}
+          >
+            {translation("importPatient")}
+          </Text>
         </View>
       </TouchableWithoutFeedback>
     </View>

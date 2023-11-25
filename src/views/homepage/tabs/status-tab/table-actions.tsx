@@ -21,7 +21,9 @@ export function TableActions() {
     performActionForPatients,
     setPerformActionForPatients,
   } = useGlobalStore();
+
   useEffect(() => {
+    console.log({ performActionForPatients });
     setEnabled(performActionForPatients.length > 0);
   }, [performActionForPatients]);
 

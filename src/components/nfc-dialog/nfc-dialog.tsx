@@ -16,7 +16,7 @@ import { compress } from "compress-json";
 import _ from "lodash";
 
 export function NfcDialogWrapper() {
-  const { readTag, writeNdef } = useNfc();
+  const { readTag, writeNdef, close } = useNfc();
   const { nfcStatus, nfcTransferStatus, closeNfcDialog } = useNfcStore();
   const { patients } = usePatientRecordsStore();
   const translation = useTranslation();
@@ -51,7 +51,10 @@ export function NfcDialogWrapper() {
         >
           <IconButton
             style={{ alignSelf: "flex-start" }}
-            onPress={closeNfcDialog}
+            onPress={() => {
+              close();
+              closeNfcDialog();
+            }}
             testID="nfc-dialog-close-button"
             icon="close"
           />

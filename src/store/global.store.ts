@@ -4,6 +4,7 @@ import { devtools } from "zustand/middleware";
 export const useGlobalStore = create<{
   performActionForPatients: string[];
   setPerformActionForPatients(ids: string[]): void;
+  resetPerformActionForPatients(): void;
   togglePatientId(id: string): void;
   deleteBulkPatients: boolean;
   toggleDeleteBulkPatients(): void;
@@ -12,6 +13,12 @@ export const useGlobalStore = create<{
 }>()(
   devtools((set) => ({
     loading: false,
+    resetPerformActionForPatients() {
+      set((state) => ({
+        ...state,
+        performActionForPatients: [],
+      }));
+    },
     toggleLoading(show: boolean) {
       set((state) => ({
         ...state,

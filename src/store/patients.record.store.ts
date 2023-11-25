@@ -131,6 +131,7 @@ export const usePatientRecordsStore = create<{
   addInjuriesImage(image: string): void;
   deletePatients(): void;
   deletePatient(patientId): void;
+  deletePatientsById(ids: string[]): void;
   updatePartialPatient(data: any): void;
   updatePrognosis(data: string): void;
   removePrognosis(index: number): void;
@@ -259,10 +260,25 @@ export const usePatientRecordsStore = create<{
       });
       set((state) => ({ ...state, patients: cleanPatients }));
     },
+    async deletePatientsById(ids: string[]) {
+      const current = state.getState();
+      const keep = current.patients.filter(
+        (p) => !ids.includes(p.personal_information.patientId)
+      );
+      console.log(keep.length);
+      await storage.save({
+        key: STORAGE.PATIENTS_RECORD,
+        data: { patients: keep },
+      });
+
+      set((state) => ({ ...state, patients: keep }));
+    },
     async deletePatients() {
       const current = state.getState();
+
       current.patients.length !== 0 &&
         (await storage.remove({ key: STORAGE.PATIENTS_RECORD }));
+
       set((state) => ({ ...state, patients: [] }));
     },
     patients: [],
@@ -976,9 +992,10 @@ export const usePatientRecordsStore = create<{
     },
     async loadPatientsState() {
       try {
-        const { patients = [] } = await storage.load({
+        const { patients } = await storage.load({
           key: STORAGE.PATIENTS_RECORD,
         });
+
         set((state) => {
           if (patients) {
             return {
@@ -1006,7 +1023,10 @@ export const usePatientRecordsStore = create<{
         currentData[currentIndex] = newPatient;
       }
 
-      await storage.save({ key: STORAGE.PATIENTS_RECORD, data: currentData });
+      await storage.save({
+        key: STORAGE.PATIENTS_RECORD,
+        data: { patients: currentData },
+      });
       set((state) => ({ ...state, patients: currentData }));
     },
   }))

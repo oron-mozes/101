@@ -9,10 +9,13 @@ export function DeleteDialog() {
   const {
     performActionForPatients,
     deleteBulkPatients,
+    resetPerformActionForPatients,
     toggleDeleteBulkPatients,
   } = useGlobalStore();
 
-  const deletePatient = usePatientRecordsStore((state) => state.deletePatient);
+  const deletePatientsById = usePatientRecordsStore(
+    (state) => state.deletePatientsById
+  );
   return (
     <Portal>
       <Dialog visible={deleteBulkPatients} onDismiss={toggleDeleteBulkPatients}>
@@ -27,10 +30,9 @@ export function DeleteDialog() {
         <Dialog.Actions style={{ justifyContent: "flex-start" }}>
           <Button
             onPress={async () => {
-              await Promise.all(
-                performActionForPatients.map((pId) => deletePatient(pId))
-              );
+              await deletePatientsById(performActionForPatients);
               toggleDeleteBulkPatients();
+              resetPerformActionForPatients();
             }}
             mode="contained"
             testID="delete-dialog-confirm"

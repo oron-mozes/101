@@ -235,7 +235,7 @@ export enum E_ANASTASIA_TREATMENT {
 }
 
 export enum E_FLUID_HARTMAN_DOSE {
-  D500MG = "D500MG",
+  D500CC = "D500CC",
 }
 export enum E_FLUID_PLASMA_DOSE {
   D1 = "D1",
@@ -244,7 +244,8 @@ export enum E_FLUID_BLOOD_DOSE {
   D1 = "D1",
 }
 export enum E_ANTIBIOTIC_CETRIAXONE_DOSE {
-  D1 = "D1",
+  D1MG = "D1MG",
+  D2MG = "D2MG",
 }
 export enum E_ANTIBIOTIC_FLAGYL_DOSE {
   D500MG = "D500MG",
