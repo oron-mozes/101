@@ -24,7 +24,7 @@ import { colors } from "../../shared-config";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { splicePatient } from "./utils";
 
-export default function QrCode() {
+export function QrCode() {
   const route = useRoute<RouteProp<RootStackParamList>>();
   const patient = useMemo(() => route.params.patient, []);
   const [qrIndex, setQrIndex] = useState<number>(0);
@@ -186,3 +186,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
 });
+export default QrCode;

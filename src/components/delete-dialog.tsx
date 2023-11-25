@@ -48,3 +48,5 @@ export function DeleteDialog() {
     </Portal>
   );
 }
+
+export default DeleteDialog;

@@ -44,18 +44,17 @@ https://www.figma.com/file/arl3RP1jwbWoE9Fua9bAdp/101?type=design&node-id=49-227
 
 4. we need to make sure that build.gradle includes inside "defaultConfig":
    `missingDimensionStrategy 'react-native-camera', 'general'`
-
-
-
-
+5. setting.gradle `include ':react-native-compressor'
+project(':react-native-compressor').projectDir = new File(rootProject.projectDir,'../node_modules/react-native-compressor/android')`
+6. MainApplication.java 'import com.reactnativecompressor.CompressorPackage;'
 
 <host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
                    android:description="@string/app_name"
                    android:requireDeviceUnlock="false">
-  <aid-group android:category="other"
+<aid-group android:category="other"
              android:description="@string/app_name">
-    <!-- Create a separate <aid-filer /> node for each NFC application ID, that You intent to emulate/host. -->
-    <!-- For the NFC Type 4 tag emulation, let's put "D2760000850101" -->
-    <aid-filter android:name="D2760000850101" />
-  </aid-group>
+<!-- Create a separate <aid-filer /> node for each NFC application ID, that You intent to emulate/host. -->
+<!-- For the NFC Type 4 tag emulation, let's put "D2760000850101" -->
+<aid-filter android:name="D2760000850101" />
+</aid-group>
 </host-apdu-service>

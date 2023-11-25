@@ -8,3 +8,5 @@ export function YakarScreen() {
     </View>
   );
 }
+
+export default YakarScreen;

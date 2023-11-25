@@ -30,7 +30,7 @@ export const initialProviderState: ICareProvider = {
   role: null,
 };
 
-export default function StationScreen() {
+export function StationScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
   const station = useStationStore((state) => state.station);
@@ -228,3 +228,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
 });
+
+export default StationScreen;

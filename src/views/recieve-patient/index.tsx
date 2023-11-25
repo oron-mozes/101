@@ -10,7 +10,7 @@ import { ROUTES } from "../../routes";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { TAB_STATUS } from "../homepage";
 
-export default function ReceivePatientScreen() {
+export function ReceivePatientScreen() {
   const navigation = useNavigation<StackNavigation>();
   const translation = useTranslation();
   const [aggregatedPatient, setPatient] = useState<Partial<IPatientRecord>>({
@@ -189,3 +189,5 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
 });
+
+export default ReceivePatientScreen;

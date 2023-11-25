@@ -374,6 +374,9 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
+  - react-native-compressor (1.8.22):
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - react-native-hce (0.2.1):
     - React
   - react-native-image-base64 (0.1.4):
@@ -558,6 +561,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-compressor (from `../node_modules/react-native-compressor`)
   - react-native-hce (from `../node_modules/dorch-hce`)
   - react-native-image-base64 (from `../node_modules/react-native-image-base64`)
   - react-native-nfc-manager (from `../node_modules/react-native-nfc-manager`)
@@ -679,6 +683,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-compressor:
+    :path: "../node_modules/react-native-compressor"
   react-native-hce:
     :path: "../node_modules/dorch-hce"
   react-native-image-base64:
@@ -785,6 +791,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
+  react-native-compressor: e459258a76f689af9f236a821700a941f1d30d95
   react-native-hce: 8322f16ab4512770675ef22354c190609d4be27d
   react-native-image-base64: 2ff9ac788639c87a91361ab6652cc95e871b1e54
   react-native-nfc-manager: 250424ac5f6b2827f98bec7a1ed7f27615852ed4

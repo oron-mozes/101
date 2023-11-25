@@ -15,7 +15,7 @@ export enum TAB_STATUS {
   SCAN = "SCAN",
 }
 
-export default function HomeScreen() {
+export function HomeScreen() {
   const { station: taggad } = useStationStore();
   const route = useRoute<RouteProp<RootStackParamList>>();
   const navigation = useNavigation<StackNavigation>();
@@ -48,3 +48,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.textInputBG,
   },
 });
+
+export default HomeScreen;
