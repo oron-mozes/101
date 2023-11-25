@@ -28,18 +28,12 @@ export function NfcDialogWrapper() {
       Idle: () => {},
       Receiving: () => readTag(),
       Sending: ({ patientsIds }) => {
-        let patientsDataToSend = patients.filter((patient) =>
+        const patientsDataToSend = patients.filter((patient) =>
           patientsIds.includes(patient.personal_information.patientId)
         );
-        patientsDataToSend = patientsDataToSend.map((patient) => {
-          return {
-            ...patient,
-            image: "",
-          };
-        });
 
         const compressed = compress(patientsDataToSend);
-
+        console.log(JSON.stringify(compressed).length);
         writeNdef(JSON.stringify(compressed));
       },
     });

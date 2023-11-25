@@ -87,7 +87,7 @@ export function ReportTab() {
       savePatient();
     };
   }, [handlers]);
-
+  console.log("RENDER REPORT TAB");
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
       <AutocompleteDropdownContextProvider>
@@ -186,3 +186,4 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 });
+export default ReportTab;

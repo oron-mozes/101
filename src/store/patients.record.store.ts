@@ -994,7 +994,18 @@ export const usePatientRecordsStore = create<{
     },
     async addPatient(newPatient: IPatientRecord) {
       const currentData = get().patients;
-      currentData.push(newPatient);
+      const currentIndex = currentData.findIndex((patient) => {
+        return (
+          patient.personal_information.patientId ===
+          newPatient.personal_information.patientId
+        );
+      });
+      if (currentIndex === -1) {
+        currentData.push(newPatient);
+      } else {
+        currentData[currentIndex] = newPatient;
+      }
+
       await storage.save({ key: STORAGE.PATIENTS_RECORD, data: currentData });
       set((state) => ({ ...state, patients: currentData }));
     },

@@ -37,7 +37,7 @@ export function StatusTab() {
     togglePatientId,
   } = useGlobalStore();
   const { openNfcDialog } = useNfcStore();
-
+  console.log("STATUS TAB RENDER");
   return (
     <GestureHandlerRootView>
       <TouchableWithoutFeedback
@@ -205,3 +205,4 @@ const styles = StyleSheet.create({
   table: { margin: 4, width: "98%" },
   tableHeader: { backgroundColor: colors.surface },
 });
+export default StatusTab;

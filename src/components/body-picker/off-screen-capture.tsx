@@ -10,42 +10,40 @@ import { Hit } from "./hit";
 import { Kateter } from "./kateter";
 import { Sharpnel } from "./sharpnel";
 import { Touniquet } from "./touniquet";
-const Buffer = require("buffer").Buffer;
 
-export function BodyPicker() {
+export function OffScreenBodyPicker({ injuries, onSave }) {
   const viewRef = useRef(null);
-  const injuries = usePatientRecordsStore((state) => {
-    return state.activePatient.injuries;
-  });
 
-  const addInjuriesImage = usePatientRecordsStore((state) => {
-    return state.addInjuriesImage;
-  });
   const captureAndSave = async () => {
+    console.log({ viewRef });
     captureRef(viewRef, {
       format: "jpg",
-      quality: 0.8,
+      quality: 1,
       width: 500,
       height: 500,
       result: "data-uri",
     }).then(
       async (uri) => {
-        console.log(uri.length);
-        const b = Buffer.from(uri, "base64");
-        console.log(b.length);
-
-        addInjuriesImage(uri);
+        onSave(uri);
       },
       (error) => console.error("Oops, snapshot failed", error)
     );
   };
 
   useEffect(() => {
-    injuries.length !== 0 && captureAndSave();
+    captureAndSave();
   }, [injuries]);
   return (
     <>
-      <ViewShot ref={viewRef} style={{ opacity: 1, backgroundColor: "white" }}>
+      <ViewShot
+        ref={viewRef}
+        style={{
+          opacity: 1,
+          backgroundColor: "white",
+          position: "absolute",
+          left: 10000,
+        }}
+      >
         <Svg width={550} height={653} viewBox="0 0 442 653">
           {injuries.map((injury) => {
             return (
