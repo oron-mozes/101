@@ -17,7 +17,7 @@ export function useNfc() {
     NfcManager.cancelTechnologyRequest();
     NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
     await session?.setEnabled(false);
-    setTimeout(closeNfcDialog, 2000);
+    setTimeout(() => closeNfcDialog(), 2000);
   };
   async function readTag() {
     polyfill();
@@ -58,22 +58,25 @@ export function useNfc() {
         NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) })
       );
     } finally {
-      close();
+      await close();
     }
   }
 
   const writeNdef = async (content: string, onComplete) => {
     console.log("WRITE NDEF");
+    if (!session) {
+      console.log("INIT");
+      await init();
+    }
     try {
       const tag = new NFCTagType4({
         type: NFCTagType4NDEFContentType.Text,
         writable: false,
         content,
       });
-
-      session = await HCESession.getInstance();
-      await session.setEnabled(true);
-      await session.setApplication(tag);
+      console.log("session NDEF", session.enabled, content);
+      await session?.setEnabled(true);
+      await session?.setApplication(tag);
 
       console.log("session NDEF");
       session.on(HCESession.Events.HCE_STATE_UPDATE_APPLICATION, () => {
@@ -93,6 +96,9 @@ export function useNfc() {
     }
   };
 
+  const init = async () => {
+    session = await HCESession.getInstance();
+  };
   useEffect(() => {
     return () => {
       close();
