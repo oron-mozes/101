@@ -35,8 +35,10 @@ export function useNfc() {
       const parsedData = JSON.parse(JSON.parse(JSON.stringify(decodedString)));
       console.log("PARSED DATA", typeof parsedData);
 
-      console.log("PATIENT", parsedData["records"][0])
-      addPatient(parsedData["records"][0]);
+      console.log("PATIENTs", parsedData);
+      await Promise.all([
+        parsedData.record.map(patient => addPatient({ ...patient, new: true }))
+      ]);
 
       console.log("READING SUCCESSFULL")
       setTransferStatus(NfcTransferStatus.Success({ result: '' }));
