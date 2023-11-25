@@ -1,14 +1,15 @@
-import * as React from "react"
-import Svg, { Path } from "react-native-svg"
+import * as React from "react";
+import Svg, { Path } from "react-native-svg";
 
-export function NfcIcon({ color }: { color: string }) {
+export function NfcIcon({
+  color,
+  size = 90,
+}: {
+  color: string;
+  size?: number;
+}) {
   return (
-    <Svg
-      width={90}
-      height={90}
-      viewBox="0 0 90 90"
-      fill="none"
-    >
+    <Svg width={size} height={size} viewBox="0 0 90 90" fill="none">
       <Path
         d="M7.316 23.355a2.593 2.593 0 01-.931-3.547C13.314 7.947 27.28 0 43.2 0c15.918 0 29.886 7.947 36.815 19.808a2.593 2.593 0 11-4.478 2.616C69.619 12.294 57.443 5.186 43.2 5.186c-14.243 0-26.42 7.109-32.337 17.238a2.593 2.593 0 01-3.547.931z"
         fill={color}
@@ -28,5 +29,5 @@ export function NfcIcon({ color }: { color: string }) {
         fill={color}
       />
     </Svg>
-  )
+  );
 }

@@ -5,7 +5,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DataTable, Text, Checkbox } from "react-native-paper";
 import { TAB_STATUS } from "../..";
@@ -20,6 +20,8 @@ import { PatientCareIcon } from "../../footer/patient-care-icon";
 import { TableActions } from "./table-actions";
 import { sortByPriority } from "./utils";
 import { useNFCSender } from "../../../../hooks/useNfcSender";
+import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
+import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
 
 export function StatusTab() {
   const { writeNdef } = useNFCSender();
@@ -33,6 +35,8 @@ export function StatusTab() {
   const goToPatientPage = (patient) => {
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   };
+  const { openNfcDialog, transferPatientIds, togglePatientId } = useNfcStore();
+  const nfcCallback = useCallback(() => openNfcDialog(NfcStatus.Sending()), []);
 
   return (
     <GestureHandlerRootView>
@@ -56,7 +60,7 @@ export function StatusTab() {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      <TableActions active={Boolean(selectedPatients.size)} />
+      <TableActions />
 
       <DataTable style={styles.table}>
         <DataTable.Header style={styles.tableHeader}>
@@ -100,33 +104,13 @@ export function StatusTab() {
               )} ${translation(mainInjury?.location ?? "")}`;
             return (
               <DataTable.Row key={index} style={{ backgroundColor: "white" }}>
-                <DataTable.Cell
-                  onPress={() => goToPatientPage(patient)}
-                  style={[styles.title, { flex: 0.5 }]}
-                >
+                <DataTable.Cell style={[styles.title, { flex: 0.5 }]}>
                   <Checkbox
                     onPress={() => {
-                      if (
-                        selectedPatients.has(
-                          patient.personal_information.patientId
-                        )
-                      ) {
-                        selectedPatients.delete(
-                          patient.personal_information.patientId
-                        );
-                        setSelectedPatients(new Set(selectedPatients));
-                      } else {
-                        setSelectedPatients(
-                          new Set(
-                            selectedPatients.add(
-                              patient.personal_information.patientId
-                            )
-                          )
-                        );
-                      }
+                      togglePatientId(patient.personal_information.patientId);
                     }}
                     status={
-                      selectedPatients.has(
+                      transferPatientIds.includes(
                         patient.personal_information.patientId
                       )
                         ? "checked"
@@ -171,12 +155,9 @@ export function StatusTab() {
                 </DataTable.Cell>
                 <DataTable.Cell
                   style={[styles.title, { flex: 0.5 }]}
-                  onPress={
-                    () => writeNdef(patient.personal_information.patientId)
-                    // navigation.navigate(ROUTES.EXPORT_PATIENT, { patient })
-                  }
+                  onPress={nfcCallback}
                 >
-                  <QrIcon />
+                  <NfcIcon color={colors.primary} size={25} />
                 </DataTable.Cell>
               </DataTable.Row>
             );

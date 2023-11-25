@@ -1,33 +1,43 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Checkbox, Text } from "react-native-paper";
 import { QrIcon } from "../../../../components/qr-icon/qr";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
-import { colors } from "../../../../shared-config";
-import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useNFCSender } from "../../../../hooks/useNfcSender";
+import { colors } from "../../../../shared-config";
+import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
+import { usePatientRecordsStore } from "../../../../store/patients.record.store";
+import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
 
-export function TableActions({ active }: { active: boolean }) {
-  const [checked, setChecked] = useState(false);
-  const [enabled, setEnabled] = useState(active);
+export function TableActions() {
+  const [checked, setChecked] = useState<boolean>(false);
+  const [enabled, setEnabled] = useState<boolean>(false);
   const patients = usePatientRecordsStore((state) => [...state.patients]);
-  const { writeNdef } = useNFCSender();
-  useEffect(() => {
-    setEnabled(checked || active);
-  }, [checked, active]);
   const translation = useTranslation();
+  const { openNfcDialog, transferPatientIds, setTransferPatientIds } =
+    useNfcStore();
+
+  useEffect(() => {
+    setEnabled(transferPatientIds.length > 0);
+  }, [transferPatientIds]);
+
+  const nfcCallback = useCallback(() => openNfcDialog(NfcStatus.Sending()), []);
+
   const quickLinks = [
     {
       label: translation("nfcTransfer"),
       role: "nfc",
+      action: nfcCallback,
     },
     {
       role: "qr",
       label: translation("qrTransfer"),
+      action() {},
     },
     {
       label: translation("deletePatient"),
       role: "delete",
+      action() {},
     },
   ];
 
@@ -46,7 +56,13 @@ export function TableActions({ active }: { active: boolean }) {
         <Checkbox
           status={checked ? "checked" : "unchecked"}
           onPress={() => {
-            setChecked(!checked);
+            const toggled = !checked;
+            setChecked(toggled);
+            setTransferPatientIds(
+              toggled
+                ? patients.map((p) => p.personal_information.patientId)
+                : []
+            );
           }}
         />
         <Text
@@ -68,16 +84,16 @@ export function TableActions({ active }: { active: boolean }) {
             {link.role === "qr" && (
               <QrIcon color={enabled ? colors.primary : colors.disabled} />
             )}
+            {link.role === "nfc" && (
+              <NfcIcon
+                color={enabled ? colors.primary : colors.disabled}
+                size={25}
+              />
+            )}
 
             <Text
               testID={`table-action-${index}`}
-              onPress={() => {
-                writeNdef(
-                  patients.map(
-                    (patient) => patient.personal_information.patientId
-                  )
-                );
-              }}
+              onPress={link.action}
               style={[
                 styles.text,
                 { color: enabled ? colors.primary : colors.disabled },
