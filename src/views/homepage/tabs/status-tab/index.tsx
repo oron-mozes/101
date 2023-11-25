@@ -1,27 +1,26 @@
 import { useNavigation } from "@react-navigation/native";
+import React, { useCallback } from "react";
 import {
   ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { DataTable, Text, Checkbox } from "react-native-paper";
+import { Checkbox, DataTable, Text } from "react-native-paper";
 import { TAB_STATUS } from "../..";
-import { QrIcon } from "../../../../components/qr-icon/qr";
+import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
 import { StatusChip } from "../../../../form-components/status-chip";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { StackNavigation } from "../../../../interfaces";
 import { ROUTES } from "../../../../routes";
 import { borderSetup, colors } from "../../../../shared-config";
+import { useGlobalStore } from "../../../../store/global.store";
+import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { PatientCareIcon } from "../../footer/patient-care-icon";
 import { TableActions } from "./table-actions";
 import { sortByPriority } from "./utils";
-import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
-import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
-import { useGlobalStore } from "../../../../store/global.store";
 
 export function StatusTab() {
   const navigation = useNavigation<StackNavigation>();
@@ -38,10 +37,6 @@ export function StatusTab() {
     togglePatientId,
   } = useGlobalStore();
   const { openNfcDialog } = useNfcStore();
-  const nfcCallback = useCallback(
-    (ids: string[]) => openNfcDialog(NfcStatus.Sending({ patientsIds: ids })),
-    []
-  );
 
   return (
     <GestureHandlerRootView>
@@ -161,7 +156,11 @@ export function StatusTab() {
                 <DataTable.Cell
                   style={[styles.title, { flex: 0.5 }]}
                   onPress={() =>
-                    nfcCallback([patient.personal_information.patientId])
+                    openNfcDialog(
+                      NfcStatus.Sending({
+                        patientsIds: [patient.personal_information.patientId],
+                      })
+                    )
                   }
                 >
                   <NfcIcon color={colors.primary} size={25} />

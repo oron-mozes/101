@@ -12,6 +12,7 @@ import { match, matcher, isType } from "variant";
 import { useNfc } from "../../hooks/useNfc";
 import { useEffect } from "react";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
+import { compress } from "compress-json";
 
 export function NfcDialogWrapper() {
   const { readTag, writeNdef } = useNfc();
@@ -23,11 +24,13 @@ export function NfcDialogWrapper() {
     if (!isType(nfcTransferStatus, NfcTransferStatus.Waiting)) return;
 
     match(nfcStatus, {
-      Idle: () => { },
+      Idle: () => {},
       Receiving: () => readTag(),
       Sending: ({ patientsIds }) => {
-        const patientsDataToSend = patients.filter(patient => patientsIds.includes(patient.personal_information.patientId));
-        writeNdef(JSON.stringify({ records: patientsDataToSend }));
+        const patientsDataToSend = patients.filter((patient) =>
+          patientsIds.includes(patient.personal_information.patientId)
+        );
+        writeNdef(JSON.stringify(compress({ records: patientsDataToSend })));
       },
     });
   }, [nfcStatus, nfcTransferStatus]);

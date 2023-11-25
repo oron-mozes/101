@@ -3,6 +3,7 @@ import { NfcTransferStatus, useNfcStore } from "../store/nfc.store";
 import { HCESession, NFCTagType4, NFCTagType4NDEFContentType } from "dorch-hce";
 import { polyfill } from "react-native-polyfill-globals/src/encoding";
 import { usePatientRecordsStore } from "../store/patients.record.store";
+import { decompress } from "compress-json";
 
 polyfill();
 
@@ -14,7 +15,7 @@ export function useNfc() {
     polyfill();
 
     NfcManager.setEventListener(NfcEvents.DiscoverTag, () => {
-      console.log("READING STARTED")
+      console.log("READING STARTED");
     });
 
     try {
@@ -32,56 +33,71 @@ export function useNfc() {
       const decodedString = textDecoder.decode(buffer).substring(3);
       console.log("DECODED", typeof decodedString);
 
-      const parsedData = JSON.parse(JSON.parse(JSON.stringify(decodedString)));
+      const parsedData = decompress(
+        JSON.parse(JSON.parse(JSON.stringify(decodedString)))
+      );
       console.log("PARSED DATA", typeof parsedData);
 
       console.log("PATIENTs", parsedData);
       await Promise.all([
-        parsedData.record.map(patient => addPatient({ ...patient, new: true }))
+        parsedData.record.map((patient) =>
+          addPatient({ ...patient, new: true })
+        ),
       ]);
 
-      console.log("READING SUCCESSFULL")
-      setTransferStatus(NfcTransferStatus.Success({ result: '' }));
+      console.log("READING SUCCESSFULL");
+      setTransferStatus(NfcTransferStatus.Success({ result: "" }));
     } catch (error) {
       console.log("READING FAILED", error);
-      setTransferStatus(NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) }));
+      setTransferStatus(
+        NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) })
+      );
     } finally {
       NfcManager.cancelTechnologyRequest();
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
       console.log("READING PROCESS CLOSED");
-    };
-  };
+    }
+  }
 
   async function writeNdef(content: string) {
-    console.log("WRITING CONTENT", content);
-    let session: HCESession;
-    const tag = new NFCTagType4({
-      type: NFCTagType4NDEFContentType.Text,
-      writable: false,
-      content,
-    });
-
+    // console.log("WRITING CONTENT", content);
+    console.log("WRITING STARTED");
     try {
+      let session: HCESession;
+      const tag = new NFCTagType4({
+        type: NFCTagType4NDEFContentType.Text,
+        writable: false,
+        content,
+      });
+      console.log("WRITING TAG");
       session = await HCESession.getInstance();
       session.setApplication(tag);
       await session.setEnabled(true);
 
-      const removeConnectionListener = session.on(HCESession.Events.HCE_STATE_CONNECTED, () => {
-        console.log("WRITING CONNECTED");
-        setTransferStatus(NfcTransferStatus.Loading());
-      });
+      const removeConnectionListener = session.on(
+        HCESession.Events.HCE_STATE_CONNECTED,
+        () => {
+          console.log("WRITING CONNECTED");
+          setTransferStatus(NfcTransferStatus.Loading());
+        }
+      );
 
-      const removeReadListener = session.on(HCESession.Events.HCE_STATE_READ, (data) => {
-        // console.log("WRITING SUCCESSFULL", { data });
-      });
+      const removeReadListener = session.on(
+        HCESession.Events.HCE_STATE_READ,
+        (data) => {
+          // console.log("WRITING SUCCESSFULL", { data });
+        }
+      );
 
       removeReadListener();
       removeConnectionListener();
     } catch (error) {
       console.log("WRITING FAILED", error);
-      setTransferStatus(NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) }));
+      setTransferStatus(
+        NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) })
+      );
     }
-  };
+  }
 
   return { readTag, writeNdef };
-};
+}
