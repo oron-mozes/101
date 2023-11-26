@@ -415,7 +415,7 @@ export const usePatientRecordsStore = create<{
         current.updatePartialPatient({
           reaction: {
             ...current.activePatient.reaction,
-            eyes,
+            eyes: current.activePatient.reaction.eyes === eyes ? null : eyes,
           },
         });
       },
@@ -424,7 +424,10 @@ export const usePatientRecordsStore = create<{
         current.updatePartialPatient({
           reaction: {
             ...current.activePatient.reaction,
-            movement,
+            movement:
+              current.activePatient.reaction.movement === movement
+                ? null
+                : movement,
           },
         });
       },
@@ -433,7 +436,8 @@ export const usePatientRecordsStore = create<{
         current.updatePartialPatient({
           reaction: {
             ...current.activePatient.reaction,
-            speech,
+            speech:
+              current.activePatient.reaction.speech === speech ? null : speech,
           },
         });
       },
