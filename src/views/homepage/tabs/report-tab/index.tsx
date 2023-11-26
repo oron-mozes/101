@@ -1,13 +1,14 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { Suspense, lazy, useEffect, useLayoutEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   ScrollView,
   StatusBar,
   StyleSheet,
+  View,
 } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { List } from "react-native-paper";
+import { Button, List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { RootStackParamList, STATUS } from "../../../../interfaces";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
@@ -15,10 +16,10 @@ import { usePatientRecordsStore } from "../../../../store/patients.record.store"
 import { useStationStore } from "../../../../store/station.store";
 import InjuryReason from "./create-components/injury-reason";
 import PatientDetails from "./create-components/patient-details";
-import { emptyPatient } from "./empty-patient";
-import { generateId } from "./utils";
 import TreatmentGuide from "./create-components/treatment-guide";
 import Measurements from "./create-components/treatment-mesurments";
+import { emptyPatient } from "./empty-patient";
+import { generateId } from "./utils";
 // import ASection from "./create-components/a-section";
 // import Avpu from "./create-components/avpu";
 // import BSection from "./create-components/b-section";
@@ -89,10 +90,6 @@ export function ReportTab() {
     };
 
     setActivePatient(patient);
-
-    return () => {
-      savePatient();
-    };
   }, [handlers]);
 
   useEffect(() => {
@@ -150,6 +147,24 @@ export function ReportTab() {
               <Prognosis />
               <CareProvider />
               <Evacuation />
+              <View
+                style={{
+                  justifyContent: "flex-end",
+                  flexDirection: "row",
+                  width: "95%",
+                  margin: 8,
+                }}
+              >
+                <Button
+                  mode="contained"
+                  style={{ width: "50%" }}
+                  onPress={() => {
+                    savePatient();
+                  }}
+                >
+                  {translation("formComplete")}
+                </Button>
+              </View>
             </List.Accordion>
             <List.Accordion
               right={() => (

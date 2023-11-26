@@ -313,5 +313,6 @@
   "selectNFCMethod": "קליטת פצוע.ה ב NFC",
   "selectQrMethod": "קליטת פצוע.ה ב QR",
   "yakar": "רכז תחנה",
-  "treatmentType": "סוג טיפול"
+  "treatmentType": "סוג טיפול",
+  "formComplete": "סיימתי"
 }
