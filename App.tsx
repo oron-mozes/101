@@ -20,6 +20,7 @@ import { theme } from "./src/shared-config";
 import { NfcDialogWrapper } from "./src/components/nfc-dialog/nfc-dialog";
 import HomeScreen from "./src/views/homepage";
 import LoadingOverlay from "./src/components/loading";
+import { HCESessionProvider } from "dorch-hce";
 
 const QrCode = lazy(() => import("./src/views/qr-code"));
 const ReceivePatientScreen = lazy(() => import("./src/views/recieve-patient"));
@@ -62,7 +63,9 @@ export default function App() {
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
       <PaperProvider theme={theme}>
+        <HCESessionProvider />
         <NfcDialogWrapper />
+
         <DeleteDialog />
         <LoadingOverlay />
         <StatusBar

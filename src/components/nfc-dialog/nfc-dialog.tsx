@@ -10,11 +10,12 @@ import { StyleSheet } from "react-native";
 import { inputFontSize } from "../../shared-config";
 import { match, matcher, isType } from "variant";
 import { useNfc } from "../../hooks/useNfc";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { compress } from "compress-json";
 import _ from "lodash";
 import { STATUS } from "../../interfaces";
+import { HCESessionContext } from "dorch-hce";
 
 export function NfcDialogWrapper() {
   const { readTag, writeNdef, close } = useNfc();

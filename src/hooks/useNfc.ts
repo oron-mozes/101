@@ -1,39 +1,44 @@
 import NfcManager, { NfcEvents, NfcTech } from "react-native-nfc-manager";
 import { NfcTransferStatus, useNfcStore } from "../store/nfc.store";
-import { HCESession, NFCTagType4, NFCTagType4NDEFContentType } from "dorch-hce";
+import {
+  HCESession,
+  HCESessionContext,
+  NFCTagType4,
+  NFCTagType4NDEFContentType,
+} from "dorch-hce";
 import { polyfill } from "react-native-polyfill-globals/src/encoding";
 import { usePatientRecordsStore } from "../store/patients.record.store";
 import { decompress } from "compress-json";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 
 polyfill();
 
 export function useNfc() {
+  const { session } = useContext(HCESessionContext);
+
   const { setTransferStatus, closeNfcDialog } = useNfcStore();
   const { addPatient } = usePatientRecordsStore();
-  let session: HCESession;
-
   const close = async () => {
-    NfcManager.cancelTechnologyRequest();
-    NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
-    await session?.setEnabled(false);
+    await Promise.all([
+      //@ts-ignore
+      // NfcManager.close(),
+      NfcManager.unregisterTagEvent(),
+      NfcManager.cancelTechnologyRequest(),
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, null),
+      session.setEnabled(false),
+    ]);
+
     setTimeout(() => closeNfcDialog(), 2000);
   };
   async function readTag() {
     polyfill();
 
     try {
-      const well = await NfcManager.isEnabled();
-      console.log("WELL", well);
-      await NfcManager.start();
+      await NfcManager.registerTagEvent({ isReaderModeEnabled: true });
 
-      await NfcManager.registerTagEvent();
-
-      await NfcManager.requestTechnology([
-        NfcTech.IsoDep,
-        NfcTech.NfcA,
-        NfcTech.Ndef,
-      ]);
+      await NfcManager.requestTechnology([NfcTech.Ndef], {
+        isReaderModeEnabled: true,
+      });
 
       const tag = await NfcManager.getTag();
 
@@ -64,19 +69,15 @@ export function useNfc() {
 
   const writeNdef = async (content: string, onComplete) => {
     console.log("WRITE NDEF");
-    if (!session) {
-      console.log("INIT");
-      await init();
-    }
     try {
       const tag = new NFCTagType4({
         type: NFCTagType4NDEFContentType.Text,
         writable: false,
         content,
       });
-      console.log("session NDEF", session.enabled, content);
-      await session?.setEnabled(true);
-      await session?.setApplication(tag);
+
+      await session.setApplication(tag);
+      await session.setEnabled(true);
 
       console.log("session NDEF");
       session.on(HCESession.Events.HCE_STATE_UPDATE_APPLICATION, () => {
@@ -84,7 +85,7 @@ export function useNfc() {
         console.log("HCE_STATE_UPDATE_APPLICATION");
       });
 
-      session.on(HCESession.Events.HCE_STATE_DISCONNECTED, () => {
+      session.on(HCESession.Events.HCE_STATE_READ, () => {
         onComplete();
         close();
       });
@@ -96,10 +97,10 @@ export function useNfc() {
     }
   };
 
-  const init = async () => {
-    session = await HCESession.getInstance();
-  };
   useEffect(() => {
+    (async () => {
+      !NfcManager.isEnabled && (await NfcManager.start());
+    })();
     return () => {
       close();
     };
