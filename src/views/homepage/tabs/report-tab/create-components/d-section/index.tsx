@@ -36,7 +36,7 @@ export function DSection() {
     (state) => state.activePatient.reaction.GCS
   );
   const general = usePatientRecordsStore(
-    (state) => state.activePatient.reaction.general
+    (state) => [...state.activePatient.reaction.general]
   );
   const speech = usePatientRecordsStore(
     (state) => state.activePatient.reaction.speech

@@ -7,7 +7,6 @@ import { EEsectionChips } from "../../../../../../interfaces";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { design } from "../shared-style";
 import { isSelectedHandler } from "../utils";
-import { useState } from "react";
 
 export function ESection() {
   const eSection = usePatientRecordsStore((state) => [

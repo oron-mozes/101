@@ -1,12 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { Suspense, lazy, useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View,
-} from "react-native";
+import { useEffect, useState } from "react";
+import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { Button, List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
@@ -15,15 +9,11 @@ import {
   STATUS,
   StackNavigation,
 } from "../../../../interfaces";
+import { ROUTES } from "../../../../routes";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
+import { useGlobalStore } from "../../../../store/global.store";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useStationStore } from "../../../../store/station.store";
-import InjuryReason from "./create-components/injury-reason";
-import PatientDetails from "./create-components/patient-details";
-import TreatmentGuide from "./create-components/treatment-guide";
-import Measurements from "./create-components/treatment-mesurments";
-import { emptyPatient } from "./empty-patient";
-import { generateId } from "./utils";
 import ASection from "./create-components/a-section";
 import Avpu from "./create-components/avpu";
 import BSection from "./create-components/b-section";
@@ -32,11 +22,15 @@ import CareProvider from "./create-components/care-provider";
 import DSection from "./create-components/d-section";
 import ESection from "./create-components/e-section";
 import Evacuation from "./create-components/evacuation";
+import InjuryReason from "./create-components/injury-reason";
 import MedicationsAndFluidSection from "./create-components/medication";
 import PatientBodyPicker from "./create-components/patient-body-picker";
+import PatientDetails from "./create-components/patient-details";
 import Prognosis from "./create-components/prognosis";
-import { useGlobalStore } from "../../../../store/global.store";
-import { ROUTES } from "../../../../routes";
+import TreatmentGuide from "./create-components/treatment-guide";
+import Measurements from "./create-components/treatment-mesurments";
+import { emptyPatient } from "./empty-patient";
+import { generateId } from "./utils";
 
 enum ACCORDION_ITEM {
   CLOSE = "0",

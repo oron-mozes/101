@@ -14,6 +14,7 @@ export function InjuryReason() {
   const reasons = usePatientRecordsStore((state) => [
     ...state.activePatient.injuryReason.reasons,
   ]);
+
   const circumstance = usePatientRecordsStore(
     (state) => state.activePatient.injuryReason.circumstance
   );

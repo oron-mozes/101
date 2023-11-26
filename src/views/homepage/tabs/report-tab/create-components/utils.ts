@@ -30,7 +30,7 @@ export function toggleListData(data, value) {
   } else {
     newList.push(value);
   }
-  return newList;
+  return [...newList];
 }
 
 export function isSelectedHandler<T>(data: T[]) {

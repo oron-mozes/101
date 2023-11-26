@@ -41,7 +41,7 @@ import {
 } from "../views/homepage/tabs/report-tab/create-components/utils";
 import { emptyPatient } from "../views/homepage/tabs/report-tab/empty-patient";
 
-const initialPatient = {
+export const initialPatient = {
   incident_information: {
     injury_time: null,
     care_time: null,
@@ -405,7 +405,10 @@ export const usePatientRecordsStore = create<{
           reaction: {
             ...current.activePatient.reaction,
             general: [
-              ...toggleListData(current.activePatient.reaction.general, select),
+              ...toggleListData(
+                [...current.activePatient.reaction.general],
+                select
+              ),
             ],
           },
         });
@@ -590,7 +593,7 @@ export const usePatientRecordsStore = create<{
           injuryReason: {
             ...current.activePatient.injuryReason,
             reasons: toggleListData(
-              current.activePatient.injuryReason.reasons,
+              [...current.activePatient.injuryReason.reasons],
               reason
             ),
           },
@@ -866,7 +869,7 @@ export const usePatientRecordsStore = create<{
       toggleSelection(select: string) {
         const current = state.getState();
         current.updatePartialPatient({
-          eSection: toggleListData(current.activePatient.eSection, select),
+          eSection: toggleListData([...current.activePatient.eSection], select),
         });
       },
     },
