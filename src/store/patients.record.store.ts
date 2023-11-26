@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _, { remove } from "lodash";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import storage, { STORAGE } from "../../storage";
@@ -266,7 +266,7 @@ export const usePatientRecordsStore = create<{
       const keep = current.patients.filter(
         (p) => !ids.includes(p.personal_information.patientId)
       );
-      console.log(keep.length);
+
       await storage.save({
         key: STORAGE.PATIENTS_RECORD,
         data: { patients: keep },
@@ -554,22 +554,14 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      updateById(
-        data: Partial<IAction<EMeasurementsTreatments>>,
-        index: number
-      ) {
+      updateById(data: Partial<IAction<EMeasurementsTreatments>>, id: number) {
         const current = state.getState();
-
         current.updatePartialPatient({
           measurements: {
             ...current.activePatient.measurements,
-            actions: [
-              ...updateDataInIndex(
-                current.activePatient.measurements.actions,
-                data,
-                index
-              ),
-            ],
+            actions: current.activePatient.measurements.actions.map((action) =>
+              action.id === id ? { ...action, ...data } : action
+            ),
           },
         });
       },
@@ -580,7 +572,7 @@ export const usePatientRecordsStore = create<{
           measurements: {
             ...current.activePatient.measurements,
             actions: current.activePatient.measurements.actions.filter(
-              (a, index) => index !== id
+              (item) => item.id !== id
             ),
           },
         });
@@ -824,21 +816,19 @@ export const usePatientRecordsStore = create<{
           breathing: {
             ...current.activePatient.breathing,
             actions: current.activePatient.breathing.actions.filter(
-              (a, index) => index !== id
+              (item) => item.id !== id
             ),
           },
         });
       },
-      updateById(data: Partial<IAction<EBreathingTreatment>>, index: number) {
+      updateById(data: Partial<IAction<EBreathingTreatment>>, id: number) {
         const current = state.getState();
 
         current.updatePartialPatient({
           breathing: {
             ...current.activePatient.breathing,
-            actions: updateDataInIndex(
-              current.activePatient.breathing.actions,
-              data,
-              index
+            actions: current.activePatient.breathing.actions.map((action) =>
+              action.id === id ? { ...action, ...data } : action
             ),
           },
         });

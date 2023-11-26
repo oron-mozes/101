@@ -61,9 +61,8 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
           const provider = Object.values(providers).find(
             (p) => p.idf_id.toString() === value.id
           );
-          console.log(formIndex);
+
           updateAtIndex({ ...form, provider }, formIndex);
-          // updateForm({ ...form, provider });
         }}
         label={translation("treatment_provider")}
         options={Object.values(providers).map((provider) => ({
@@ -81,13 +80,11 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
             { ...form, puls: convertStringToNumber(puls) },
             formIndex
           );
-          // updateForm({ ...form, puls: convertStringToNumber(puls) });
         }}
       />
       <BloodPressureInputFieldHandler
         onChange={(bloodPressure) => {
           updateAtIndex({ ...form, bloodPressure }, formIndex);
-          // updateForm({ ...form, bloodPressure });
         }}
         label={translation("treatment_bloodPressure")}
         value={form.bloodPressure}

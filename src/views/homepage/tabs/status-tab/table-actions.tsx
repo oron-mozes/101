@@ -16,14 +16,17 @@ export function TableActions() {
   const translation = useTranslation();
   const { openNfcDialog } = useNfcStore();
 
-  const {
-    toggleDeleteBulkPatients,
-    performActionForPatients,
-    setPerformActionForPatients,
-  } = useGlobalStore();
+  const toggleDeleteBulkPatients = useGlobalStore(
+    (state) => state.toggleDeleteBulkPatients
+  );
+  const performActionForPatients = useGlobalStore(
+    (state) => state.performActionForPatients
+  );
+  const setPerformActionForPatients = useGlobalStore(
+    (state) => state.setPerformActionForPatients
+  );
 
   useEffect(() => {
-    console.log({ performActionForPatients });
     setEnabled(performActionForPatients.length > 0);
   }, [performActionForPatients]);
 

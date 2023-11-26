@@ -18,7 +18,7 @@ export function AddGuide({
 }) {
   const translation = useTranslation();
   const providers = useStationStore((state) => state.station.care_providers);
-  console.log(guide.provider_issuer?.full_name);
+
   return (
     <View>
       <Card.Content style={[styles.innerContent]}>
@@ -48,7 +48,7 @@ export function AddGuide({
               const provider_issuer = Object.values(providers).find(
                 (p) => p.idf_id.toString() === value.id
               );
-              
+
               setGuide({ ...guide, provider_issuer });
             }}
             label={translation("treatment_provider_issuer")}
