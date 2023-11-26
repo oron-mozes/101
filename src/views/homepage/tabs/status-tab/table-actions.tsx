@@ -1,20 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Checkbox, Text } from "react-native-paper";
-import { QrIcon } from "../../../../components/qr-icon/qr";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { colors } from "../../../../shared-config";
-import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
-import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
 import { useGlobalStore } from "../../../../store/global.store";
+import { usePatientTransfer } from "../../../../hooks/usePatientTransfer";
 
 export function TableActions() {
   const [checked, setChecked] = useState<boolean>(false);
   const [enabled, setEnabled] = useState<boolean>(false);
   const patients = usePatientRecordsStore((state) => [...state.patients]);
   const translation = useTranslation();
-  const { openNfcDialog } = useNfcStore();
+  const { CommunicationIcon, transferPatient } = usePatientTransfer();
 
   const toggleDeleteBulkPatients = useGlobalStore(
     (state) => state.toggleDeleteBulkPatients
@@ -30,24 +28,17 @@ export function TableActions() {
     setEnabled(performActionForPatients.length > 0);
   }, [performActionForPatients]);
 
-  const nfcCallback = useCallback(
+  const transferCallback = useCallback(
     () =>
-      openNfcDialog(
-        NfcStatus.Sending({ patientsIds: performActionForPatients })
-      ),
+      transferPatient({ patientsIds: performActionForPatients }),
     [performActionForPatients]
   );
 
   const quickLinks = [
     {
-      label: translation("nfcTransfer"),
-      role: "nfc",
-      action: nfcCallback,
-    },
-    {
-      role: "qr",
-      label: translation("qrTransfer"),
-      action: () => {},
+      label: translation("patientTransfer"),
+      role: "transfer",
+      action: transferCallback,
     },
     {
       label: translation("deletePatient"),
@@ -98,11 +89,8 @@ export function TableActions() {
               index === quickLinks.length - 1 ? { borderRightWidth: 0 } : {},
             ]}
           >
-            {link.role === "qr" && (
-              <QrIcon color={enabled ? colors.primary : colors.disabled} />
-            )}
-            {link.role === "nfc" && (
-              <NfcIcon
+            {link.role === "transfer" && (
+              <CommunicationIcon
                 color={enabled ? colors.primary : colors.disabled}
                 size={25}
               />

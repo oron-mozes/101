@@ -1,11 +1,12 @@
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
+import { colors } from "../../shared-config";
 
 export function NfcIcon({
-  color,
+  color = colors.primary,
   size = 90,
 }: {
-  color: string;
+  color?: string;
   size?: number;
 }) {
   return (

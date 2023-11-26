@@ -4,10 +4,8 @@ import { colors } from "../../shared-config";
 
 export function QrIcon({
   color = colors.primary,
-  label = "patientTransfer",
 }: {
   color?: string;
-  label?: string;
 }) {
   const translation = useTranslation();
   return (

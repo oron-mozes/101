@@ -1,4 +1,4 @@
-import { IStation, ICareProvider } from "../interfaces";
+import { IStation, ICareProvider, CommunicationMethod } from "../interfaces";
 import _ from "lodash";
 import storage, { STORAGE } from "../../storage";
 import { create } from "zustand";
@@ -11,24 +11,32 @@ export const useStationStore = create<{
   updateStationName(name: string): Promise<void>;
   hardStationReset(): Promise<void>;
   setAsYakar(isYakar: boolean): Promise<void>;
+  setCommunicationMethod(method: CommunicationMethod): void;
 }>()(
   devtools((set, get) => ({
+    station: {
+      unit_name: null,
+      care_providers: [],
+      isYakar: false,
+      communicationMethod: "NFC",
+    },
+    setCommunicationMethod: async (method) => {
+      const currentData = get().station;
+      currentData.communicationMethod = method;
+      await storage.save({ key: STORAGE.STATION, data: currentData });
+      set((state) => ({ ...state, station: currentData }));
+    },
     setAsYakar: async (isYakar) => {
       const currentData = get().station;
       currentData.isYakar = isYakar;
       await storage.save({ key: STORAGE.STATION, data: currentData });
       set((state) => ({ ...state, station: currentData }));
     },
-    station: {
-      unit_name: null,
-      care_providers: [],
-      isYakar: false,
-    },
     async hardStationReset() {
       await storage.clearMapForKey(STORAGE.STATION);
       set((state) => ({
         ...state,
-        station: { unit_name: null, care_providers: [], isYakar: false },
+        station: { unit_name: null, care_providers: [], isYakar: false, communicationMethod: "NFC" },
       }));
     },
     async loadInitialState() {
