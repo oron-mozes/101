@@ -27,23 +27,28 @@ export function useNfc() {
     ]);
   };
   async function readTag() {
+    if ((await NfcManager.isSupported()) === false) {
+      setTransferStatus(
+        NfcTransferStatus.Error({
+          errorMessage: "NFC is not supported on this device",
+        })
+      );
+      return;
+    }
+
+    if ((await NfcManager.isEnabled()) === false) {
+      NfcManager.goToNfcSetting();
+      close();
+      closeNfcDialog();
+      return;
+    }
+
     try {
       await NfcManager.registerTagEvent();
       NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
         setTransferStatus(NfcTransferStatus.Loading());
       });
-      NfcManager.setEventListener(NfcEvents.DiscoverBackgroundTag, (tag) => {
-        console.log("BACKGROUND DISCOVERED", { tag });
-      });
-      NfcManager.setEventListener(NfcEvents.StateChanged, (tag) => {
-        console.log("STATE CHANGED", { tag });
-      });
-      NfcManager.setEventListener(NfcEvents.SessionClosed, (tag) => {
-        console.log("SESSION CLOSED", { tag });
-      });
-      
- 
-  
+
       await NfcManager.requestTechnology([
         NfcTech.Ndef,
         NfcTech.NfcA,

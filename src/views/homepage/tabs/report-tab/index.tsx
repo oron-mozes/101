@@ -1,4 +1,4 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Suspense, lazy, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -10,7 +10,11 @@ import {
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { Button, List } from "react-native-paper";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
-import { RootStackParamList, STATUS } from "../../../../interfaces";
+import {
+  RootStackParamList,
+  STATUS,
+  StackNavigation,
+} from "../../../../interfaces";
 import { borderSetup, colors, gutter } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useStationStore } from "../../../../store/station.store";
@@ -32,6 +36,7 @@ import { generateId } from "./utils";
 // import PatientBodyPicker from "./create-components/patient-body-picker";
 // import Prognosis from "./create-components/prognosis";
 import { useGlobalStore } from "../../../../store/global.store";
+import { ROUTES } from "../../../../routes";
 
 const Avpu = lazy(() => import("./create-components/avpu"));
 const ASection = lazy(() => import("./create-components/a-section"));
@@ -57,6 +62,7 @@ enum ACCORDION_ITEM {
 }
 export function ReportTab() {
   const route = useRoute<RouteProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigation>();
 
   const handlers = usePatientRecordsStore(
     (state) => state.personal_information_handlers
@@ -160,6 +166,7 @@ export function ReportTab() {
                   style={{ width: "50%" }}
                   onPress={() => {
                     savePatient();
+                    navigation.navigate(ROUTES.HOME);
                   }}
                 >
                   {translation("formComplete")}
