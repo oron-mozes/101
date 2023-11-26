@@ -20,25 +20,35 @@ export function useNfc() {
   const { addPatient } = usePatientRecordsStore();
   const close = async () => {
     await Promise.all([
-      //@ts-ignore
-      // NfcManager.close(),
       NfcManager.unregisterTagEvent(),
       NfcManager.cancelTechnologyRequest(),
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null),
       session.setEnabled(false),
     ]);
-
-    setTimeout(() => closeNfcDialog(), 2000);
   };
   async function readTag() {
-    polyfill();
-
     try {
-      await NfcManager.registerTagEvent({ isReaderModeEnabled: true });
-
-      await NfcManager.requestTechnology([NfcTech.Ndef], {
-        isReaderModeEnabled: true,
+      await NfcManager.registerTagEvent();
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
+        setTransferStatus(NfcTransferStatus.Loading());
       });
+      NfcManager.setEventListener(NfcEvents.DiscoverBackgroundTag, (tag) => {
+        console.log("BACKGROUND DISCOVERED", { tag });
+      });
+      NfcManager.setEventListener(NfcEvents.StateChanged, (tag) => {
+        console.log("STATE CHANGED", { tag });
+      });
+      NfcManager.setEventListener(NfcEvents.SessionClosed, (tag) => {
+        console.log("SESSION CLOSED", { tag });
+      });
+      
+ 
+  
+      await NfcManager.requestTechnology([
+        NfcTech.Ndef,
+        NfcTech.NfcA,
+        NfcTech.IsoDep,
+      ]);
 
       const tag = await NfcManager.getTag();
 
@@ -68,7 +78,6 @@ export function useNfc() {
   }
 
   const writeNdef = async (content: string, onComplete) => {
-    console.log("WRITE NDEF");
     try {
       const tag = new NFCTagType4({
         type: NFCTagType4NDEFContentType.Text,
@@ -79,15 +88,12 @@ export function useNfc() {
       await session.setApplication(tag);
       await session.setEnabled(true);
 
-      console.log("session NDEF");
-      session.on(HCESession.Events.HCE_STATE_UPDATE_APPLICATION, () => {
-        // setTransferStatus(NfcTransferStatus.Loading());
-        console.log("HCE_STATE_UPDATE_APPLICATION");
+      session.on(HCESession.Events.HCE_STATE_CONNECTED, () => {
+        setTransferStatus(NfcTransferStatus.Loading());
       });
 
-      session.on(HCESession.Events.HCE_STATE_READ, () => {
+      session.on(HCESession.Events.HCE_STATE_DISCONNECTED, () => {
         onComplete();
-        close();
       });
     } catch (error) {
       console.log("WRITING FAILED", error);

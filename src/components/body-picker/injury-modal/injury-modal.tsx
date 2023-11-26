@@ -23,23 +23,17 @@ export function InjuryModal({
   closeHandler(): void;
 }) {
   const translation = useTranslation();
-  const [data, setData] = useState<
-    E_InjuryType.KATETER | E_InjuryType.CG | E_InjuryType.TOUNIQUET
-  >();
+
   const [time, setTime] = useState<number>(new Date().getTime());
+  const [selected, setSelected] = useState<E_InjuryType>();
   const cleanInjuries = usePatientRecordsStore((state) => {
     return state.injuries_handlers.cleanInjuries;
   });
-  const toggleValue = (
-    value: E_InjuryType.KATETER | E_InjuryType.CG | E_InjuryType.TOUNIQUET
-  ) => {
-    data ? setData(null) : setData(value);
-  };
 
   const onSave = () => {
-    data &&
+    selected &&
       onChange({
-        data,
+        data: selected,
         time,
       });
 
@@ -62,52 +56,51 @@ export function InjuryModal({
         }}
       >
         <View style={styles.content}>
-          <InjuryType onChange={onChange} />
+          <InjuryType
+            title={translation("injuryType")}
+            onChange={(value) => {
+              setSelected(value);
+            }}
+            options={[
+              E_InjuryType.BURN,
+              E_InjuryType.CUT,
+              E_InjuryType.GUNSHOT,
+              E_InjuryType.HIT,
+            ]}
+            selected={selected}
+          />
         </View>
         <Divider style={{ marginTop: 10, marginBottom: 10, width: "100%" }} />
 
+        <View style={styles.content}>
+          <InjuryType
+            title={translation("treatmentType")}
+            onChange={(value) => {
+              setSelected(value);
+            }}
+            options={[
+              E_InjuryType.CG,
+              E_InjuryType.TOUNIQUET,
+              E_InjuryType.KATETER,
+            ]}
+            selected={selected}
+          />
+        </View>
         <View
           style={[
             styles.content,
             {
               height: 120,
               justifyContent: "flex-start",
+              width: 100,
             },
           ]}
         >
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Checkbox
-                status={
-                  data === E_InjuryType.TOUNIQUET ? "checked" : "unchecked"
-                }
-                onPress={() => {
-                  toggleValue(E_InjuryType.TOUNIQUET);
-                }}
-              />
-              <Text>{translation("TH")}</Text>
-            </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Checkbox
-                status={data === E_InjuryType.CG ? "checked" : "unchecked"}
-                onPress={() => {
-                  toggleValue(E_InjuryType.CG);
-                }}
-              />
-
-              <Text>{translation("cg")}</Text>
-            </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Checkbox
-                status={data === E_InjuryType.KATETER ? "checked" : "unchecked"}
-                onPress={() => {
-                  toggleValue(E_InjuryType.KATETER);
-                }}
-              />
-              <Text>{translation("kateter")}</Text>
-            </View>
-          </View>
-          {data && (
+          {[
+            E_InjuryType.CG,
+            E_InjuryType.TOUNIQUET,
+            E_InjuryType.KATETER,
+          ].includes(selected) && (
             <TimePicker
               value={time}
               label={translation("time")}

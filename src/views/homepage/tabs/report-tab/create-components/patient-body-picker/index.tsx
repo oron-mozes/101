@@ -18,6 +18,7 @@ import { CGLegend } from "./cg-legend";
 import { KateterLegend } from "./kateter-legend";
 import { borderSetup } from "../../../../../../shared-config";
 import { DropDown } from "../../../../../../form-components/dropdown";
+import { E_InjuryType } from "../../../../../../interfaces";
 
 export function PatientBodyPicker() {
   const translation = useTranslation();
@@ -61,6 +62,7 @@ export function PatientBodyPicker() {
         <InjuryModal
           closeHandler={() => toggleModal(false)}
           onChange={(data) => {
+            console.log("data", data);
             handlers.updateByIndex(data, injuries.length - 1);
           }}
         />
@@ -101,12 +103,21 @@ export function PatientBodyPicker() {
               testID="main-injury-selection"
               label={translation("mainInjurySelection")}
               initialValue={mainInjuryName}
-              options={injuries.map((injury) => ({
-                title: `${translation(
-                  injury?.data?.toLowerCase() ?? ""
-                )} ${translation(injury.location ?? "")}`,
-                id: injury.id.toString(),
-              }))}
+              options={injuries
+                .filter((injury) =>
+                  [
+                    E_InjuryType.BURN,
+                    E_InjuryType.CUT,
+                    E_InjuryType.GUNSHOT,
+                    E_InjuryType.HIT,
+                  ].includes(injury.data)
+                )
+                .map((injury) => ({
+                  title: `${translation(
+                    injury?.data?.toLowerCase() ?? ""
+                  )} ${translation(injury?.location ?? "")}`,
+                  id: injury?.id.toString(),
+                }))}
               onSelect={({ id }) => {
                 handlers.setMainInjury(Number(id));
               }}

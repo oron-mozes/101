@@ -1,28 +1,27 @@
-import { Dialog, IconButton, Portal, Text } from "react-native-paper";
+import { compress } from "compress-json";
+import { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import { Button, Dialog, IconButton, Portal, Text } from "react-native-paper";
+import { isType, match, matcher } from "variant";
 import { useTranslation } from "../../hooks/useMyTranslation";
+import { useNfc } from "../../hooks/useNfc";
+import { STATUS } from "../../interfaces";
+import { inputFontSize } from "../../shared-config";
 import {
   NfcStatus,
   NfcTransferStatus,
   useNfcStore,
 } from "../../store/nfc.store";
-import { NfcIcon } from "./nfc-icon";
-import { StyleSheet } from "react-native";
-import { inputFontSize } from "../../shared-config";
-import { match, matcher, isType } from "variant";
-import { useNfc } from "../../hooks/useNfc";
-import { useContext, useEffect } from "react";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
-import { compress } from "compress-json";
-import _ from "lodash";
-import { STATUS } from "../../interfaces";
-import { HCESessionContext } from "dorch-hce";
+import { NfcIcon } from "./nfc-icon";
 
 export function NfcDialogWrapper() {
   const { readTag, writeNdef, close } = useNfc();
   const { nfcStatus, nfcTransferStatus, closeNfcDialog } = useNfcStore();
   const { patients, updatePatientStatus } = usePatientRecordsStore();
   const translation = useTranslation();
-
+  const [allowClose, setAllowClose] = useState<boolean>(false);
+  const [patientsIds, setPatientsIds] = useState<string[]>([]);
   useEffect(() => {
     if (!isType(nfcTransferStatus, NfcTransferStatus.Waiting)) return;
 
@@ -30,18 +29,24 @@ export function NfcDialogWrapper() {
       Idle: () => {},
       Receiving: () => readTag(),
       Sending: ({ patientsIds }) => {
+        setPatientsIds(patientsIds);
         const patientsDataToSend = patients.filter((patient) =>
           patientsIds.includes(patient.personal_information.patientId)
         );
 
         const compressed = compress({ records: patientsDataToSend });
-        writeNdef(JSON.stringify(compressed), () => {
-          updatePatientStatus(patientsIds, STATUS.CLOSED);
+        writeNdef(JSON.stringify(compressed), async () => {
+          setAllowClose(true);
         });
       },
     });
   }, [nfcStatus, nfcTransferStatus]);
 
+  useEffect(() => {
+    return () => {
+      setAllowClose(false);
+    };
+  }, []);
   return matcher(nfcStatus)
     .when(NfcStatus.Idle, () => null)
     .when([NfcStatus.Receiving, NfcStatus.Sending], ({ text }) => (
@@ -77,6 +82,22 @@ export function NfcDialogWrapper() {
               {nfcTransferStatus.text}
             </Text>
           </Dialog.Content>
+          <Dialog.Actions>
+            {allowClose && (
+              <Button
+                mode="contained"
+                testID="nfc-dialog-close"
+                onPress={async () => {
+                  await updatePatientStatus(patientsIds, STATUS.CLOSED);
+                  close();
+                  closeNfcDialog();
+                  setAllowClose(false);
+                }}
+              >
+                {translation("confirm")}
+              </Button>
+            )}
+          </Dialog.Actions>
         </Dialog>
       </Portal>
     ))

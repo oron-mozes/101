@@ -312,5 +312,6 @@
   "receiveMethod": "בחר שיטת קליטת פצוע.ה (עדיפות לNFC)",
   "selectNFCMethod": "קליטת פצוע.ה ב NFC",
   "selectQrMethod": "קליטת פצוע.ה ב QR",
-  "yakar": "רכז תחנה"
+  "yakar": "רכז תחנה",
+  "treatmentType": "סוג טיפול"
 }

@@ -6,19 +6,19 @@ import { useTranslation } from "../../../hooks/useMyTranslation";
 import { colors } from "../../../shared-config";
 import { E_InjuryType } from "../../../interfaces";
 
-export function InjuryType({ onChange }: { onChange(value): void }) {
+export function InjuryType({
+  onChange,
+  options,
+  selected,
+  title,
+}: {
+  title: string;
+  selected: E_InjuryType;
+  options: Partial<E_InjuryType[]>;
+  onChange(value): void;
+}) {
   const translation = useTranslation();
-  const [data, setData] = useState<E_InjuryType>();
 
-  const toggleValue = (value) => {
-    data ? setData(null) : setData(value);
-  };
-  const shouldBeDisabled = (value) => {
-    return !data ? false : data !== value;
-  };
-  useEffect(() => {
-    onChange({ data });
-  }, [data]);
   return (
     <View>
       <View
@@ -27,7 +27,7 @@ export function InjuryType({ onChange }: { onChange(value): void }) {
           width: "100%",
         }}
       >
-        <Text>{translation("injuryType")}</Text>
+        <Text>{title}</Text>
       </View>
       <View
         style={{
@@ -35,21 +35,16 @@ export function InjuryType({ onChange }: { onChange(value): void }) {
           flex: 1,
         }}
       >
-        {[
-          E_InjuryType.BURN,
-          E_InjuryType.CUT,
-          E_InjuryType.HIT,
-          E_InjuryType.GUNSHOT,
-        ].map((value) => (
+        {options.map((value) => (
           <Button
             key={value}
             mode="contained"
             onPress={(e) => {
-              toggleValue(value);
+              onChange(value);
             }}
-            disabled={shouldBeDisabled(value)}
-            style={[styles.container, data === value ? styles.checked : {}]}
-            textColor={data === value ? "#fff" : textColor}
+            // disabled={selected === value}
+            style={[styles.container, selected === value ? styles.checked : {}]}
+            textColor={selected === value ? "#fff" : colors.text}
           >
             {translation(value.toLowerCase())}
           </Button>
