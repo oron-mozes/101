@@ -1,10 +1,8 @@
 import { printToFileAsync } from "expo-print";
-import { shareAsync } from "expo-sharing";
 import locale from "../../locales/he.json";
 import { ICareProvider, IPatientRecord } from "../interfaces";
 import { colors } from "../shared-config";
 import {
-  renderInjuries,
   returnAirwayTable,
   returnBodyPicker,
   returnBreathingTable,
@@ -88,11 +86,13 @@ export const createPDFWithImage = async (patient: IPatientRecord) => {
     </html>
   `;
 
-  const file = await printToFileAsync({ html: htmlContent, base64: false });
-  await shareAsync(file.uri, {
-    mimeType:
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    dialogTitle: "101 data",
-    UTI: "com.microsoft.excel.xlsx",
-  });
+  const file = await printToFileAsync({ html: htmlContent, base64: true });
+
+  return file.base64;
+  // await shareAsync(file.uri, {
+  //   mimeType:
+  //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //   dialogTitle: "101 data",
+  //   UTI: "com.microsoft.excel.xlsx",
+  // });
 };

@@ -17,7 +17,6 @@ export function useNfc() {
   const { session } = useContext(HCESessionContext);
 
   const { setTransferStatus, closeNfcDialog } = useNfcStore();
-  const { addPatient } = usePatientRecordsStore();
   const close = async () => {
     await Promise.all([
       NfcManager.unregisterTagEvent(),
@@ -26,7 +25,8 @@ export function useNfc() {
       session.setEnabled(false),
     ]);
   };
-  async function readTag() {
+  async function readTag(callback: (data) => void) {
+    console.log("READING TAG");
     if ((await NfcManager.isSupported()) === false) {
       setTransferStatus(
         NfcTransferStatus.Error({
@@ -35,7 +35,7 @@ export function useNfc() {
       );
       return;
     }
-
+    console.log("READING TAG 2");
     if ((await NfcManager.isEnabled()) === false) {
       NfcManager.goToNfcSetting();
       close();
@@ -65,11 +65,7 @@ export function useNfc() {
         JSON.parse(JSON.parse(JSON.stringify(decodedString)))
       );
 
-      await Promise.all([
-        parsedData.records.map((patient) =>
-          addPatient({ ...patient, new: true })
-        ),
-      ]);
+      callback(parsedData);
 
       setTransferStatus(NfcTransferStatus.Success({ result: "" }));
     } catch (error) {

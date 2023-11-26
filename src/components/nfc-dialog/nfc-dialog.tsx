@@ -19,6 +19,7 @@ export function NfcDialogWrapper() {
   const { readTag, writeNdef, close } = useNfc();
   const { nfcStatus, nfcTransferStatus, closeNfcDialog } = useNfcStore();
   const { patients, updatePatientStatus } = usePatientRecordsStore();
+  const addPatient = usePatientRecordsStore((state) => state.addPatient);
   const translation = useTranslation();
   const [allowClose, setAllowClose] = useState<boolean>(false);
   const [patientsIds, setPatientsIds] = useState<string[]>([]);
@@ -27,7 +28,14 @@ export function NfcDialogWrapper() {
 
     match(nfcStatus, {
       Idle: () => {},
-      Receiving: () => readTag(),
+      Receiving: () =>
+        readTag(async (parsedData) => {
+          await Promise.all([
+            parsedData.records.map((patient) =>
+              addPatient({ ...patient, new: true })
+            ),
+          ]);
+        }),
       Sending: ({ patientsIds }) => {
         setPatientsIds(patientsIds);
         const patientsDataToSend = patients.filter((patient) =>
