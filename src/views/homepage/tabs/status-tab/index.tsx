@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useCallback } from "react";
+import React from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -9,18 +9,17 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Checkbox, DataTable, Text } from "react-native-paper";
 import { TAB_STATUS } from "../..";
-import { NfcIcon } from "../../../../components/nfc-dialog/nfc-icon";
 import { StatusChip } from "../../../../form-components/status-chip";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
 import { StackNavigation } from "../../../../interfaces";
 import { ROUTES } from "../../../../routes";
 import { borderSetup, colors } from "../../../../shared-config";
 import { useGlobalStore } from "../../../../store/global.store";
-import { NfcStatus, useNfcStore } from "../../../../store/nfc.store";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { PatientCareIcon } from "../../footer/patient-care-icon";
 import { TableActions } from "./table-actions";
 import { sortByPriority } from "./utils";
+import { usePatientTransfer } from "../../../../hooks/usePatientTransfer";
 
 export function StatusTab() {
   const navigation = useNavigation<StackNavigation>();
@@ -33,7 +32,7 @@ export function StatusTab() {
   };
   const { performActionForPatients, toggleLoading, togglePatientId } =
     useGlobalStore();
-  const { openNfcDialog } = useNfcStore();
+  const { CommunicationIcon, transferPatient } = usePatientTransfer();
 
   return (
     <GestureHandlerRootView>
@@ -154,14 +153,12 @@ export function StatusTab() {
                 <DataTable.Cell
                   style={[styles.title, { flex: 0.5 }]}
                   onPress={() =>
-                    openNfcDialog(
-                      NfcStatus.Sending({
-                        patientsIds: [patient.personal_information.patientId],
-                      })
-                    )
+                    transferPatient({
+                      patientsIds: [patient.personal_information.patientId],
+                    })
                   }
                 >
-                  <NfcIcon color={colors.primary} size={25} />
+                  <CommunicationIcon color={colors.primary} size={25} />
                 </DataTable.Cell>
               </DataTable.Row>
             );

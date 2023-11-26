@@ -1,18 +1,16 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-paper";
 import { TAB_STATUS } from "..";
-import { QrIcon } from "../../../components/qr-icon/qr";
 import { useTranslation } from "../../../hooks/useMyTranslation";
 import { RootStackParamList, StackNavigation } from "../../../interfaces";
 import { ROUTES } from "../../../routes";
 import { colors } from "../../../shared-config";
 import { PatientCareIcon } from "./patient-care-icon";
 import { PatientStatusIcon } from "./patient-status-icon";
-import { ReceivePatientDialog } from "./recive-patient-dialog";
 import { useGlobalStore } from "../../../store/global.store";
-import { NfcIcon } from "../../../components/nfc-dialog/nfc-icon";
+import { usePatientTransfer } from "../../../hooks/usePatientTransfer";
 
 export function HomepageFooter() {
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -23,12 +21,10 @@ export function HomepageFooter() {
   );
   const translation = useTranslation();
   const { toggleLoading } = useGlobalStore();
-  const [showReceiveDialog, setShowReceiveDialog] = useState<boolean>(false);
+  const { receivePatient, CommunicationIcon } = usePatientTransfer();
+
   return (
     <View style={styles.container}>
-      {showReceiveDialog && (
-        <ReceivePatientDialog onClose={() => setShowReceiveDialog(false)} />
-      )}
       <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS })
@@ -65,9 +61,9 @@ export function HomepageFooter() {
           </Text>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => setShowReceiveDialog(true)}>
+      <TouchableWithoutFeedback onPress={receivePatient}>
         <View style={styles.textBox}>
-          <NfcIcon size={20} color={selected ? colors.text : colors.text} />
+          <CommunicationIcon size={20} color={colors.text} />
           <Text
             style={[
               styles.text,
