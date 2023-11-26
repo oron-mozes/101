@@ -10,13 +10,7 @@ import { CommunicationMethod } from "../../../interfaces";
 import { NfcIcon } from "../../../components/nfc-dialog/nfc-icon";
 import { QrIcon } from "../../../components/qr-icon/qr";
 
-export function StationGlobalActions({
-  isYakar,
-  setIsYakar,
-}: {
-  setIsYakar(flag: boolean): void;
-  isYakar: boolean;
-}) {
+export function StationGlobalActions() {
   const translation = useTranslation();
   const [showDeleteModal, toggleDeleteModal] = useState<boolean>(false);
   const deletePatients = usePatientRecordsStore(
@@ -24,8 +18,12 @@ export function StationGlobalActions({
   );
   const hardStationReset = useStationStore((state) => state.hardStationReset);
   const unit_name = useStationStore((state) => state.station.unit_name);
-  const communicationMethod = useStationStore((state) => state.station.communicationMethod);
-  const setCommunicationMethod = useStationStore((state) => state.setCommunicationMethod)
+  const communicationMethod = useStationStore(
+    (state) => state.station.communicationMethod
+  );
+  const setCommunicationMethod = useStationStore(
+    (state) => state.setCommunicationMethod
+  );
   const [disabled, setDisable] = useState<boolean>(!Boolean(unit_name));
 
   useEffect(() => {
@@ -47,39 +45,41 @@ export function StationGlobalActions({
         <View style={[styles.container, { justifyContent: "flex-start" }]}>
           <Text
             style={{
-              marginRight: 5,
-              fontSize: inputFontSize,
-            }}
-          >
-            {translation("yakar")}
-          </Text>
-          <ToggleButton
-            size={35}
-            iconColor={isYakar ? "#14B881" : colors.disabled}
-            icon={isYakar ? "toggle-switch-outline" : "toggle-switch-off-outline"}
-            value="bluetooth"
-            status={isYakar ? "checked" : "unchecked"}
-            onPress={() => setIsYakar(!isYakar)}
-          />
-        </View>
-        <View style={[styles.container, { justifyContent: "flex-start" }]}>
-          <Text
-            style={{
               marginRight: 10,
               fontSize: inputFontSize,
             }}
           >
             {"שיטת העברת נתונים"}
           </Text>
-          <ToggleButton.Row onValueChange={value => { }} value={communicationMethod}>
+          <ToggleButton.Row
+            onValueChange={(value) => {}}
+            value={communicationMethod}
+          >
             <ToggleButton
               size={35}
-              icon={() => <NfcIcon size={20} color={communicationMethod === "NFC" ? colors.primary : colors.disabled} />}
+              icon={() => (
+                <NfcIcon
+                  size={20}
+                  color={
+                    communicationMethod === "NFC"
+                      ? colors.primary
+                      : colors.disabled
+                  }
+                />
+              )}
               onPress={() => setCommunicationMethod("NFC")}
             />
             <ToggleButton
               size={35}
-              icon={() => <QrIcon color={communicationMethod === "QR" ? colors.primary : colors.disabled} />}
+              icon={() => (
+                <QrIcon
+                  color={
+                    communicationMethod === "QR"
+                      ? colors.primary
+                      : colors.disabled
+                  }
+                />
+              )}
               onPress={() => setCommunicationMethod("QR")}
             />
           </ToggleButton.Row>

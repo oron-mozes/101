@@ -9,12 +9,14 @@ export const useStationStore = create<{
   loadInitialState(): Promise<boolean>;
   addProviders(data: ICareProvider[]): Promise<void>;
   updateStationName(name: string): Promise<void>;
+  updateStationId(id: number): Promise<void>;
   hardStationReset(): Promise<void>;
   setAsYakar(isYakar: boolean): Promise<void>;
   setCommunicationMethod(method: CommunicationMethod): void;
 }>()(
   devtools((set, get) => ({
     station: {
+      unit_id: null,
       unit_name: null,
       care_providers: [],
       isYakar: false,
@@ -23,6 +25,12 @@ export const useStationStore = create<{
     setCommunicationMethod: async (method) => {
       const currentData = get().station;
       currentData.communicationMethod = method;
+      await storage.save({ key: STORAGE.STATION, data: currentData });
+      set((state) => ({ ...state, station: currentData }));
+    },
+    updateStationId: async (id) => {
+      const currentData = get().station;
+      currentData.unit_id = id;
       await storage.save({ key: STORAGE.STATION, data: currentData });
       set((state) => ({ ...state, station: currentData }));
     },
@@ -36,7 +44,13 @@ export const useStationStore = create<{
       await storage.clearMapForKey(STORAGE.STATION);
       set((state) => ({
         ...state,
-        station: { unit_name: null, care_providers: [], isYakar: false, communicationMethod: "NFC" },
+        station: {
+          unit_id: null,
+          unit_name: null,
+          care_providers: [],
+          isYakar: false,
+          communicationMethod: "NFC",
+        },
       }));
     },
     async loadInitialState() {

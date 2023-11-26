@@ -18,6 +18,7 @@ export interface IInputField {
   placeholder?: string;
   value: string;
   testID?: string;
+  secureTextEntry?: boolean;
 }
 
 export const InputField = React.memo(
@@ -32,6 +33,7 @@ export const InputField = React.memo(
     icon,
     placeholder = "",
     testID,
+    secureTextEntry = false,
   }: IInputField) => {
     const inputRef = useRef(null);
     const handleInputPress = () => {
@@ -57,6 +59,7 @@ export const InputField = React.memo(
           </Text>
           <View>
             <TextInput
+              secureTextEntry={secureTextEntry}
               testID={`${testID ? `${testID}-` : ""}input`}
               placeholder={placeholder}
               ref={inputRef}

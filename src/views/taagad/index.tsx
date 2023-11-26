@@ -22,6 +22,7 @@ import {
 import { Button, Icon, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { ROUTES } from "../../routes";
+import { YakarForm } from "./partials/yakar-form";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,
@@ -89,38 +90,8 @@ export function StationScreen() {
           }}
         >
           <StationHeader />
-          <StationGlobalActions isYakar={isYakar} setIsYakar={setIsYakar} />
-          {isYakar && (
-            <>
-              <View style={{ width: "100%" }}>
-                <InputField
-                  editable={true}
-                  label={translation("idfUnit")}
-                  value={stationName}
-                  onChange={(unit_name: string) => {
-                    setStationName(unit_name);
-                  }}
-                />
-              </View>
-              <View
-                style={{ alignItems: "flex-end", marginTop: 40, width: "100%" }}
-              >
-                <Button
-                  mode="contained"
-                  icon="check"
-                  style={{ width: 165 }}
-                  disabled={stationName?.length === 0}
-                  onPress={async () => {
-                    updateStationName(stationName);
-                    setAsYakar(true);
-                    navigation.navigate(ROUTES.YAKAR);
-                  }}
-                >
-                  {translation("saveAndContinue")}
-                </Button>
-              </View>
-            </>
-          )}
+          <StationGlobalActions />
+          <YakarForm isYakar={isYakar} setIsYakar={setIsYakar} />
           {!isYakar && (
             <>
               <View style={{ width: "100%" }}>

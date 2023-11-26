@@ -314,5 +314,9 @@
   "selectQrMethod": "קליטת פצוע.ה ב QR",
   "yakar": "רכז תחנה",
   "treatmentType": "סוג טיפול",
-  "formComplete": "סיימתי"
+  "formComplete": "סיימתי",
+  "passcode": "על מנת לערוך את הפרטים יש להזין קוד גישה",
+  "stationId": "מספר תחנה",
+  "peek": "הצג",
+  "back": "חזור"
 }
