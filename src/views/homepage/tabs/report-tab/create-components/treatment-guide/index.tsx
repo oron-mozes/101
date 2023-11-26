@@ -1,14 +1,14 @@
 import _ from "lodash";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Card, Icon, Text, Divider } from "react-native-paper";
+import { Button, Card, Divider } from "react-native-paper";
 import { DropDown } from "../../../../../../form-components/dropdown";
 import { InputField } from "../../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { ITreatmentGuide } from "../../../../../../interfaces";
-import { colors, gutter } from "../../../../../../shared-config";
+import { gutter, inputFontSize } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { useStationStore } from "../../../../../../store/station.store";
 import { design } from "../shared-style";
@@ -100,24 +100,18 @@ function TreatmentGuide() {
         aria-disabled={!valid}
         testID="add-guide-button"
       >
-        <Icon
-          size={20}
-          source="plus"
-          color={valid ? colors.primary : colors.disabled}
-        />
-        <Text
-          style={{
-            color: valid ? colors.primary : colors.disabled,
-            fontSize: 17,
-          }}
-          disabled={false}
+        <Button
+          mode={valid ? "contained" : "outlined"}
+          labelStyle={{ fontSize: inputFontSize }}
+          icon="plus"
           onPress={() => {
             handlers.addGuide(guide);
             setGuide({ ...emptyState, order_time: new Date().getTime() });
           }}
+          disabled={!valid}
         >
-          {translation("treatment_guide_new")}
-        </Text>
+          {valid ? translation("save") : translation("treatment_guide_new")}
+        </Button>
       </Card.Content>
     </Card>
   );

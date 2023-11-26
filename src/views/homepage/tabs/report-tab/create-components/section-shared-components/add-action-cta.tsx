@@ -1,7 +1,7 @@
-import { Icon, Text } from "react-native-paper";
-import { colors, inputFontSize } from "../../../../../../shared-config";
-import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { View } from "react-native";
+import { Button } from "react-native-paper";
+import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { inputFontSize } from "../../../../../../shared-config";
 
 export function AddActionCTA({
   testID,
@@ -16,22 +16,16 @@ export function AddActionCTA({
 
   return (
     <View style={{ alignItems: "center", flexDirection: "row" }}>
-      <Icon
-        size={20}
-        source="plus"
-        color={valid ? colors.primary : colors.disabled}
-      />
-      <Text
+      <Button
+        mode={valid ? "contained" : "outlined"}
         testID={`${testID}-action-button`}
-        style={{
-          color: valid ? colors.primary : colors.disabled,
-          fontSize: inputFontSize,
-        }}
-        disabled={!valid}
+        labelStyle={{ fontSize: inputFontSize }}
+        icon="plus"
         onPress={saveNewAction}
+        disabled={!valid}
       >
-        {translation("addAction")}
-      </Text>
+        {valid ? translation("save") : translation("addAction")}
+      </Button>
     </View>
   );
 }

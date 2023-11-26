@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Card, Divider, Icon, Text } from "react-native-paper";
+import { Button, Card, Divider, Text } from "react-native-paper";
 import { InputField } from "../../../../../../form-components/input-field";
 import { CheckButton } from "../../../../../../form-components/select-button";
 import { TimePicker } from "../../../../../../form-components/time-picker";
@@ -9,7 +9,7 @@ import {
   IMedicationsAndFluidInformation,
   MEDICATION_TREATMENT,
 } from "../../../../../../interfaces";
-import { colors, gutter } from "../../../../../../shared-config";
+import { gutter, inputFontSize } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { design } from "../shared-style";
 import {
@@ -184,18 +184,11 @@ export function NewMedication() {
         aria-disabled={!valid}
         testID="add-medication-button"
       >
-        <Icon
-          size={20}
-          source="plus"
-          color={valid ? colors.primary : colors.disabled}
-        />
-        <Text
+        <Button
+          mode={valid ? "contained" : "outlined"}
           testID="add-medication-button-handler"
-          disabled={!valid}
-          style={{
-            color: valid ? colors.primary : colors.disabled,
-            fontSize: 17,
-          }}
+          labelStyle={{ fontSize: inputFontSize }}
+          icon="plus"
           onPress={() => {
             handlers.addAction(newMedication);
             setNewMedication({
@@ -204,9 +197,10 @@ export function NewMedication() {
               id: new Date().getTime(),
             });
           }}
+          disabled={!valid}
         >
-          {translation("addMedication")}
-        </Text>
+          {valid ? translation("save") : translation("addMedication")}
+        </Button>
       </Card.Content>
     </>
   );

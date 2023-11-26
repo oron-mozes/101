@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Card, Icon, Text, IconButton } from "react-native-paper";
+import { Button, Card, IconButton, Text } from "react-native-paper";
 import { InputField } from "../../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../../form-components/section-header";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
+import { colors, gutter, inputFontSize } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { design } from "../shared-style";
-import { colors, gutter } from "../../../../../../shared-config";
 
 export function Prognosis() {
   const translation = useTranslation();
@@ -78,25 +78,19 @@ export function Prognosis() {
         aria-disabled={!valid}
         testID="add-prognosis-button"
       >
-        <Icon
-          size={20}
-          source="plus"
-          color={valid ? colors.primary : colors.disabled}
-        />
-        <Text
-          testID="add-prognosis-cta"
-          disabled={!valid}
-          style={{
-            color: valid ? colors.primary : colors.disabled,
-            fontSize: 17,
-          }}
+        <Button
+          mode={valid ? "contained" : "outlined"}
+          testID="add-medication-button-handler"
+          labelStyle={{ fontSize: inputFontSize }}
+          icon="plus"
           onPress={() => {
             updatePrognosis(newPrognosis);
             updateNewPrognosis("");
           }}
+          disabled={!valid}
         >
-          {translation("addPrognosis")}
-        </Text>
+          {valid ? translation("save") : translation("addPrognosis")}
+        </Button>
       </Card.Content>
     </Card>
   );
