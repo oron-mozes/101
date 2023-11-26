@@ -4,6 +4,7 @@ import locale from "../../locales/he.json";
 import { ICareProvider, IPatientRecord } from "../interfaces";
 import { colors } from "../shared-config";
 import {
+  renderInjuries,
   returnAirwayTable,
   returnBodyPicker,
   returnBreathingTable,
@@ -26,6 +27,7 @@ export const createPDFWithImage = async (patient: IPatientRecord) => {
     `${locale[mainInjury?.data?.toLowerCase() ?? ""]} ${
       locale[mainInjury?.location ?? ""]
     }`;
+
   const htmlContent = `
           <html dir="rtl">
             <body>
@@ -46,7 +48,7 @@ export const createPDFWithImage = async (patient: IPatientRecord) => {
 
             </header>
             <main style="width: 740px; margin: 0 auto">
-
+           
             ${returnInfoTable(locale.accountTitle, [
               {
                 ...patient.personal_information,
@@ -58,7 +60,7 @@ export const createPDFWithImage = async (patient: IPatientRecord) => {
               patient.injuryReason.circumstance
             )}
 
-            ${returnBodyPicker(patient.image, mainInjuryName)}
+            ${returnBodyPicker(patient.injuries, mainInjuryName)}
             ${returnConsciousnessTable(patient.consciousness)}
             ${returnAirwayTable(patient.airway)}
             ${returnBreathingTable(patient.breathing)}

@@ -42,7 +42,6 @@ export function InjuryType({
             onPress={(e) => {
               onChange(value);
             }}
-            // disabled={selected === value}
             style={[styles.container, selected === value ? styles.checked : {}]}
             textColor={selected === value ? "#fff" : colors.text}
           >

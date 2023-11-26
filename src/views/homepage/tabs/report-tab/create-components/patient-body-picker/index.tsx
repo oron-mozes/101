@@ -33,7 +33,7 @@ export function PatientBodyPicker() {
   const handlePress = (event) => {
     const { locationX, locationY } = event.nativeEvent;
     const point = { xPos: locationX, yPos: locationY };
-
+   
     const clickedOnInjury = injuries.find((injury) =>
       hasBeenClicked(injury, point)
     );
@@ -62,7 +62,6 @@ export function PatientBodyPicker() {
         <InjuryModal
           closeHandler={() => toggleModal(false)}
           onChange={(data) => {
-            console.log("data", data);
             handlers.updateByIndex(data, injuries.length - 1);
           }}
         />
@@ -81,11 +80,17 @@ export function PatientBodyPicker() {
         <Card.Content style={styles.content}>
           <SectionHeader label={translation("bodyPicker")} />
         </Card.Content>
-        <TouchableWithoutFeedback onPress={handlePress}>
-          <Card.Content style={[styles.innerContent]}>
-            <BodyPicker />
-          </Card.Content>
-        </TouchableWithoutFeedback>
+
+        <Card.Content
+          style={[styles.innerContent, { justifyContent: "center" }]}
+        >
+          <TouchableWithoutFeedback onPress={handlePress}>
+            <View>
+              <BodyPicker />
+            </View>
+          </TouchableWithoutFeedback>
+        </Card.Content>
+
         <Card.Content
           style={[
             styles.innerContent,

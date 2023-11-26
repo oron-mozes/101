@@ -21,12 +21,11 @@ import { NfcDialogWrapper } from "./src/components/nfc-dialog/nfc-dialog";
 import HomeScreen from "./src/views/homepage";
 import LoadingOverlay from "./src/components/loading";
 import { HCESessionProvider } from "dorch-hce";
-
-const QrCode = lazy(() => import("./src/views/qr-code"));
-const ReceivePatientScreen = lazy(() => import("./src/views/recieve-patient"));
-const StationScreen = lazy(() => import("./src/views/taagad"));
-const DeleteDialog = lazy(() => import("./src/components/delete-dialog"));
-const YakarScreen = lazy(() => import("./src/views/yakar"));
+import QrCode from "./src/views/qr-code";
+import ReceivePatientScreen from "./src/views/recieve-patient";
+import StationScreen from "./src/views/taagad";
+import YakarScreen from "./src/views/yakar";
+import DeleteDialog from "./src/components/delete-dialog";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -61,83 +60,80 @@ export default function App() {
   }
 
   return (
-    <Suspense fallback={<ActivityIndicator size="large" />}>
-      <PaperProvider theme={theme}>
-        <HCESessionProvider />
-        <NfcDialogWrapper />
+    <PaperProvider theme={theme}>
+      <HCESessionProvider />
+      <NfcDialogWrapper />
+      <DeleteDialog />
+      <LoadingOverlay />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={theme.colors.primary}
+      />
 
-        <DeleteDialog />
-        <LoadingOverlay />
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor={theme.colors.primary}
-        />
-
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={station.isYakar ? ROUTES.YAKAR : ROUTES.HOME}
-          >
-            <Stack.Screen
-              name={ROUTES.HOME}
-              options={{
-                headerStyle: {
-                  backgroundColor: theme.colors.primary,
-                },
-                title: "",
-                headerRight: () => <MainMenu />,
-                headerLeft: () => <Logo101 />,
-              }}
-              component={HomeScreen}
-            />
-            <Stack.Screen
-              name={ROUTES.YAKAR}
-              options={{
-                headerStyle: {
-                  backgroundColor: theme.colors.primary,
-                },
-                title: "",
-                headerRight: () => <MainMenu />,
-                headerLeft: () => <Logo101 />,
-              }}
-              component={YakarScreen}
-            />
-            <Stack.Screen
-              name={ROUTES.STATION}
-              options={{
-                headerStyle: {
-                  backgroundColor: theme.colors.primary,
-                },
-                headerLeft: () => <Logo101 />,
-                title: "",
-              }}
-              component={StationScreen}
-            />
-            <Stack.Screen
-              name={ROUTES.IMPORT_PATIENT}
-              options={{
-                headerStyle: {
-                  backgroundColor: theme.colors.primary,
-                },
-                headerLeft: () => <Logo101 />,
-                title: "",
-              }}
-              component={ReceivePatientScreen}
-            />
-            <Stack.Screen
-              name={ROUTES.EXPORT_PATIENT}
-              options={{
-                headerStyle: {
-                  backgroundColor: theme.colors.primary,
-                },
-                headerLeft: () => <Logo101 />,
-                title: "",
-              }}
-              component={QrCode}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </Suspense>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName={station.isYakar ? ROUTES.YAKAR : ROUTES.HOME}
+        >
+          <Stack.Screen
+            name={ROUTES.HOME}
+            options={{
+              headerStyle: {
+                backgroundColor: theme.colors.primary,
+              },
+              title: "",
+              headerRight: () => <MainMenu />,
+              headerLeft: () => <Logo101 />,
+            }}
+            component={HomeScreen}
+          />
+          <Stack.Screen
+            name={ROUTES.YAKAR}
+            options={{
+              headerStyle: {
+                backgroundColor: theme.colors.primary,
+              },
+              title: "",
+              headerRight: () => <MainMenu />,
+              headerLeft: () => <Logo101 />,
+            }}
+            component={YakarScreen}
+          />
+          <Stack.Screen
+            name={ROUTES.STATION}
+            options={{
+              headerStyle: {
+                backgroundColor: theme.colors.primary,
+              },
+              headerLeft: () => <Logo101 />,
+              title: "",
+            }}
+            component={StationScreen}
+          />
+          <Stack.Screen
+            name={ROUTES.IMPORT_PATIENT}
+            options={{
+              headerStyle: {
+                backgroundColor: theme.colors.primary,
+              },
+              headerLeft: () => <Logo101 />,
+              title: "",
+            }}
+            component={ReceivePatientScreen}
+          />
+          <Stack.Screen
+            name={ROUTES.EXPORT_PATIENT}
+            options={{
+              headerStyle: {
+                backgroundColor: theme.colors.primary,
+              },
+              headerLeft: () => <Logo101 />,
+              title: "",
+            }}
+            component={QrCode}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
 

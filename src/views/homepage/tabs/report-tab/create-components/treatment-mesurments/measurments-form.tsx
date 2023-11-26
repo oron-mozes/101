@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { BloodPressureInputFieldHandler } from "../../../../../../form-components/blood-pressure-input-field";
 import { DropDown } from "../../../../../../form-components/dropdown";

@@ -25,7 +25,8 @@ function Measurements() {
     return (screenWidth / 2) * (actions.length + 1);
   }, [actions.length]);
   useEffect(() => {
-    scrollViewRef.current.scrollTo({ x: -scrollWidth, animated: true });
+    scrollViewRef.current.scrollTo({ x: -scrollWidth, animated: true, y: 0 });
+    scrollViewRef.current.scrollToEnd();
   }, [scrollWidth]);
   const handlers = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers
@@ -43,7 +44,7 @@ function Measurements() {
       addRow();
     }
   }, []);
-
+  const fold = Dimensions.get("window").width * 0.4;
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.content}>
@@ -59,11 +60,10 @@ function Measurements() {
       <Divider />
       <Card.Content style={[styles.innerContent]}>
         <ScrollView
-          horizontal={true}
-          style={{}}
+          horizontal
           contentContainerStyle={{
-            justifyContent: "center",
-            width: scrollWidth / (actions.length === 0 ? 2 : 1),
+            width: fold * actions.length,
+            flexDirection: "row-reverse",
           }}
           ref={scrollViewRef}
         >

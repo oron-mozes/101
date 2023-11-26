@@ -11,18 +11,18 @@ export function hasBeenClicked(
   return xInRange && yInRange;
 }
 
-const legsRange = [304, 640];
-const armsRange = [114, 350];
-const headRange = [7, 70];
-const lowerBodyRange = [242, 300];
+const legsRange = [304, 648];
+const armsRange = [110, 350];
+const headRange = [2, 70];
+const lowerBodyRange = [258, 304];
 const bodyParts = [
   {
-    xRang: [145, 188],
+    xRang: [91, 139],
     yRang: legsRange,
     location: EPosition.LEFT_LEG,
   },
   {
-    xRang: [99, 134],
+    xRang: [33, 81],
     yRang: legsRange,
     location: EPosition.RIGHT_LEG,
   },
@@ -32,64 +32,64 @@ const bodyParts = [
     location: EPosition.LEFT_LEG_BACK,
   },
   {
-    xRang: [422, 466],
+    xRang: [305, 353],
     yRang: legsRange,
     location: EPosition.RIGHT_LEG_BACK,
   },
   {
-    xRang: [368, 460],
-    yRang: [108, 240],
+    xRang: [310, 405],
+    yRang: [105, 258],
     location: EPosition.BACK,
   },
   {
-    xRang: [196, 212],
+    xRang: [135, 159],
     yRang: armsRange,
     location: EPosition.LEFT_ARM,
   },
   {
-    xRang: [60, 84],
+    xRang: [11, 38],
     yRang: armsRange,
     location: EPosition.RIGHT_ARM,
   },
   {
-    xRang: [334, 352],
+    xRang: [282, 310],
     yRang: armsRange,
     location: EPosition.LEFT_ARM_BACK,
   },
   {
-    xRang: [459, 489],
+    xRang: [405, 434],
     yRang: armsRange,
     location: EPosition.RIGHT_ARM_BACK,
   },
   {
-    xRang: [359, 498],
+    xRang: [312, 398],
     yRang: lowerBodyRange,
     location: EPosition.ASS,
   },
   {
-    xRang: [123, 158],
+    xRang: [67, 109],
     yRang: headRange,
     location: EPosition.FOREHEAD,
   },
   {
-    xRang: [396, 433],
+    xRang: [340, 381],
     yRang: headRange,
     location: EPosition.BACK_HEAD,
   },
   {
-    xRang: [91, 183],
+    xRang: [45, 127],
     yRang: lowerBodyRange,
     location: EPosition.GENITAL,
   },
   {
-    xRang: [96, 177],
-    yRang: [191, 245],
-    location: EPosition.STOMACH,
+    xRang: [38, 135],
+    yRang: [50, 190],
+    location: EPosition.CHEST,
   },
   {
-    xRang: [99, 186],
-    yRang: [106, 195],
-    location: EPosition.CHEST,
+    xRang: [96, 177],
+    yRang: [190, 238],
+    location: EPosition.STOMACH,
   },
 ];
 

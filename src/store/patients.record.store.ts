@@ -610,7 +610,18 @@ export const usePatientRecordsStore = create<{
     injuries_handlers: {
       updateByIndex(data: Partial<IInjury>, index: number) {
         const current = state.getState();
-        console.log(data);
+
+        const isMain = current.activePatient.injuries.find(
+          (injury) => injury.isMain
+        );
+
+        const canBeMain = [
+          E_InjuryType.BURN,
+          E_InjuryType.CUT,
+          E_InjuryType.GUNSHOT,
+          E_InjuryType.HIT,
+        ].includes(data.data);
+        data.isMain = canBeMain && !isMain;
         current.updatePartialPatient({
           injuries: updateDataInIndex(
             current.activePatient.injuries,
@@ -621,9 +632,7 @@ export const usePatientRecordsStore = create<{
       },
       addInjury({ xPos, yPos, data, id, location }) {
         const current = state.getState();
-        const isMain = current.activePatient.injuries.find(
-          (injury) => injury.isMain
-        );
+
         current.updatePartialPatient({
           injuries: [
             ...current.activePatient.injuries,
@@ -633,7 +642,7 @@ export const usePatientRecordsStore = create<{
               yPos,
               data,
               location,
-              isMain: !isMain,
+              isMain: false,
             },
           ],
         });

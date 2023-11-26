@@ -12,7 +12,7 @@ import { decompress } from "compress-json";
 import { useContext, useEffect } from "react";
 
 polyfill();
-
+NfcManager.start();
 export function useNfc() {
   const { session } = useContext(HCESessionContext);
 
@@ -109,9 +109,6 @@ export function useNfc() {
   };
 
   useEffect(() => {
-    (async () => {
-      !NfcManager.isEnabled && (await NfcManager.start());
-    })();
     return () => {
       close();
     };
