@@ -28,7 +28,7 @@ export function TableActions() {
 
   useEffect(() => {
     setEnabled(performActionForPatients.length > 0);
-    setChecked(performActionForPatients.length === patients.length);
+    setChecked(patients.length && performActionForPatients.length === patients.length);
   }, [performActionForPatients]);
 
   const transferCallback = useCallback(
@@ -69,6 +69,7 @@ export function TableActions() {
       <View style={[styles.item, { flex: 0.5, paddingRight: 10 }]}>
         <Checkbox
           status={checked ? "checked" : "unchecked"}
+          disabled={!patients.length}
           onPress={() => {
             const toggled = !checked;
             setChecked(toggled);
@@ -81,7 +82,7 @@ export function TableActions() {
         />
         <Text
           testID="table-action-all"
-          style={[styles.text, { borderRightWidth: 0 }]}
+          style={[styles.text, { borderRightWidth: 0 }, { color: patients.length ? colors.text : colors.disabled }]}
         >
           {translation("all")}
         </Text>
