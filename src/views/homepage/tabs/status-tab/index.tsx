@@ -30,7 +30,7 @@ export function StatusTab() {
   const goToPatientPage = (patient) => {
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE, patient });
   };
-  const { performActionForPatients, toggleLoading, togglePatientId } =
+  const { performActionForPatients, setPerformActionForPatients, toggleLoading, togglePatientId } =
     useGlobalStore();
   const { CommunicationIcon, transferPatient } = usePatientTransfer();
 
@@ -39,6 +39,7 @@ export function StatusTab() {
       <TouchableWithoutFeedback
         onPress={() => {
           toggleLoading(true);
+          setPerformActionForPatients([]);
           navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE });
         }}
       >

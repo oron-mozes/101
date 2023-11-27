@@ -20,7 +20,7 @@ export function HomepageFooter() {
     [route.params?.tab]
   );
   const translation = useTranslation();
-  const { toggleLoading } = useGlobalStore();
+  const { toggleLoading, setPerformActionForPatients } = useGlobalStore();
   const { receivePatient, CommunicationIcon } = usePatientTransfer();
 
   return (
@@ -46,6 +46,7 @@ export function HomepageFooter() {
       <TouchableWithoutFeedback
         onPress={() => {
           toggleLoading(true);
+          setPerformActionForPatients([]);
           navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.CREATE });
         }}
       >
@@ -61,7 +62,10 @@ export function HomepageFooter() {
           </Text>
         </View>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={receivePatient}>
+      <TouchableWithoutFeedback onPress={() => {
+        setPerformActionForPatients([]);
+        receivePatient();
+      }}>
         <View style={styles.textBox}>
           <CommunicationIcon size={20} color={colors.text} />
           <Text

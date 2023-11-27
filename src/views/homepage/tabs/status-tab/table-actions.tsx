@@ -28,6 +28,7 @@ export function TableActions() {
 
   useEffect(() => {
     setEnabled(performActionForPatients.length > 0);
+    setChecked(performActionForPatients.length === patients.length);
   }, [performActionForPatients]);
 
   const transferCallback = useCallback(
@@ -103,6 +104,7 @@ export function TableActions() {
 
             <Text
               testID={`table-action-${index}`}
+              disabled={!enabled}
               onPress={link.action}
               style={[
                 styles.text,
