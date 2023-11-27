@@ -1,6 +1,6 @@
 import env from "../taagad/env.json";
-import { base64StringToBlob } from "blob-util";
 import { Buffer } from "buffer";
+
 export function reportAPatient(station) {
   return async (patient) => {
     const firstStop = patient.personal_information.patientId.split("|").pop();
