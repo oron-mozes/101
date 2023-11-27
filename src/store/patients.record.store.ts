@@ -144,7 +144,7 @@ export const usePatientRecordsStore = create<{
     addGuide(guide: ITreatmentGuide): void;
     addMeasurementsAction(action: IMeasurementsAction): void;
     removeGuide(id: number): void;
-    removeMeasurementAction(id: number): void;
+    removeMeasurementAction(index: number): void;
     setPeriod(period: number): void;
     updateAtIndex(data: Partial<IMeasurementsAction>, index: number): void;
     updateGuideAtIndex(data: Partial<ITreatmentGuide>, index: number): void;
@@ -350,16 +350,17 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      removeMeasurementAction(id: number) {
+      removeMeasurementAction(indexToRemove: number) {
         const current = state.getState();
+        
         current.updatePartialPatient({
           treatmentGuide: {
             ...current.activePatient.treatmentGuide,
-            measurements:
-              current.activePatient.treatmentGuide.measurements.actions.filter(
-                (item) => item.id !== id
-              ),
-          },
+            measurements: {
+              ...current.activePatient.treatmentGuide.measurements,
+              actions: current.activePatient.treatmentGuide.measurements.actions.filter((_, index) => index !== indexToRemove),
+            },
+          }
         });
       },
       updateAtIndex(data: Partial<IMeasurementsAction>, index: number) {

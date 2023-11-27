@@ -1,15 +1,16 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import { BloodPressureInputFieldHandler } from "../../../../../../form-components/blood-pressure-input-field";
 import { DropDown } from "../../../../../../form-components/dropdown";
 import { InputField } from "../../../../../../form-components/input-field";
 import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { IMeasurementsAction } from "../../../../../../interfaces";
-import { gutter } from "../../../../../../shared-config";
+import { colors, gutter } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { useStationStore } from "../../../../../../store/station.store";
 import { design } from "../shared-style";
 import { convertStringToNumber } from "../utils";
+import { Button } from "react-native-paper";
 
 export const emptyState: IMeasurementsAction = {
   id: null,
@@ -37,6 +38,14 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
     );
   });
 
+  const handlers = usePatientRecordsStore(
+    (state) => state.treatmentGuide_handlers
+  );
+
+  const measurements = usePatientRecordsStore(
+    (state) => state.activePatient.treatmentGuide.measurements.actions
+  );
+
   const translation = useTranslation();
   const updateAtIndex = usePatientRecordsStore(
     (state) => state.treatmentGuide_handlers.updateAtIndex
@@ -47,6 +56,29 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
 
   return (
     <View style={[styles.column]}>
+      <Button
+        mode="outlined"
+        icon="delete"
+        disabled={measurements.length === 1}
+        style={[styles.deleteAction, { borderColor: measurements.length > 1 ? "#e54141" : colors.disabled }]}
+        textColor={"#e54141"}
+        onPress={() => {
+          Alert.alert(translation("treatment_delete_alert_title"), translation("treatment_delete_alert_content"), [
+            {
+              text: translation("cancel"),
+              style: 'cancel',
+            },
+            {
+              text: translation("generic_delete"),
+              style: 'destructive',
+              isPreferred: true,
+              onPress: () => handlers.removeMeasurementAction(formIndex),
+            },
+          ]);
+        }}
+      >
+        {translation("treatment_delete_cta")}
+      </Button>
       <TimePicker
         value={form.time}
         label={translation("treatment_execution_time")}
@@ -209,8 +241,7 @@ const styles = StyleSheet.create({
   },
   deleteAction: {
     justifyContent: "center",
-    marginRight: 3,
-    marginTop: 32,
+    margin: 4,
   },
   element: { flex: 1 },
   actionRow: {
