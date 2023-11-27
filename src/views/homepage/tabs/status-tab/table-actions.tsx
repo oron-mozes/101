@@ -6,6 +6,7 @@ import { colors } from "../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { useGlobalStore } from "../../../../store/global.store";
 import { usePatientTransfer } from "../../../../hooks/usePatientTransfer";
+import { useStationStore } from "../../../../store/station.store";
 
 export function TableActions() {
   const [checked, setChecked] = useState<boolean>(false);
@@ -13,6 +14,7 @@ export function TableActions() {
   const patients = usePatientRecordsStore((state) => [...state.patients]);
   const translation = useTranslation();
   const { CommunicationIcon, transferPatient } = usePatientTransfer();
+  const { station: { communicationMethod } } = useStationStore();
 
   const toggleDeleteBulkPatients = useGlobalStore(
     (state) => state.toggleDeleteBulkPatients
@@ -36,11 +38,6 @@ export function TableActions() {
 
   const quickLinks = [
     {
-      label: translation("patientTransfer"),
-      role: "transfer",
-      action: transferCallback,
-    },
-    {
       label: translation("deletePatient"),
       role: "delete",
       action() {
@@ -48,6 +45,14 @@ export function TableActions() {
       },
     },
   ];
+
+  if (communicationMethod !== "QR") {
+    quickLinks.unshift({
+      label: translation("patientTransfer"),
+      role: "transfer",
+      action: transferCallback,
+    })
+  };
 
   return (
     <View
