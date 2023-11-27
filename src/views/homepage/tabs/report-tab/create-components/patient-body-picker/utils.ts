@@ -4,10 +4,11 @@ export function hasBeenClicked(
   injury: IInjury,
   point: { xPos: number; yPos: number }
 ): boolean {
+  const rad = 25;
   const xInRange =
-    point.xPos - 18 < injury.xPos && injury.xPos < point.xPos + 18;
+    point.xPos - rad < injury.xPos && injury.xPos < point.xPos + rad;
   const yInRange =
-    point.yPos - 18 < injury.yPos && injury.yPos < point.yPos + 18;
+    point.yPos - rad < injury.yPos && injury.yPos < point.yPos + rad;
   return xInRange && yInRange;
 }
 

@@ -33,6 +33,7 @@ export function InjuryType({
         style={{
           flexDirection: "row",
           flex: 1,
+          flexWrap: "wrap",
         }}
       >
         {options.map((value) => (

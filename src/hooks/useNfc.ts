@@ -85,10 +85,10 @@ export function useNfc() {
         writable: false,
         content,
       });
-
+      console.log("WRITING TAG", session);
       await session.setApplication(tag);
       await session.setEnabled(true);
-
+      console.log("WRITING TAG 2");
       session.on(HCESession.Events.HCE_STATE_CONNECTED, () => {
         setTransferStatus(NfcTransferStatus.Loading());
       });

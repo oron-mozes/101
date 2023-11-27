@@ -55,61 +55,56 @@ export function InjuryModal({
           backgroundColor: colors.textInputBG,
         }}
       >
-        <View style={styles.content}>
+        <View style={[styles.content, { width: "80%", height: 150 }]}>
           <InjuryType
             title={translation("injuryType")}
             onChange={(value) => {
               setSelected(value);
             }}
-            options={[
-              E_InjuryType.BURN,
-              E_InjuryType.CUT,
-              E_InjuryType.GUNSHOT,
-              E_InjuryType.HIT,
-            ]}
+            options={Object.values(E_InjuryType)}
             selected={selected}
           />
         </View>
-        <Divider style={{ marginTop: 10, marginBottom: 10, width: "100%" }} />
 
-        <View style={styles.content}>
-          <InjuryType
-            title={translation("treatmentType")}
-            onChange={(value) => {
-              setSelected(value);
-            }}
-            options={[
-              E_InjuryType.CG,
-              E_InjuryType.TOUNIQUET,
-              E_InjuryType.KATETER,
+        {[
+          E_InjuryType.CG,
+          E_InjuryType.TOUNIQUET,
+          E_InjuryType.KATETER,
+        ].includes(selected) && (
+          <View
+            style={[
+              styles.content,
+              {
+                height: 120,
+                justifyContent: "space-between",
+                flexDirection: "row",
+                width: "80%",
+              },
             ]}
-            selected={selected}
-          />
-        </View>
-        <View
-          style={[
-            styles.content,
-            {
-              height: 120,
-              justifyContent: "flex-start",
-              width: 100,
-            },
-          ]}
-        >
-          {[
-            E_InjuryType.CG,
-            E_InjuryType.TOUNIQUET,
-            E_InjuryType.KATETER,
-          ].includes(selected) && (
-            <TimePicker
-              value={time}
-              label={translation("time")}
-              onChange={(newTime: number) => {
-                time !== newTime && setTime(newTime);
-              }}
-            />
-          )}
-        </View>
+          >
+            <View style={{ width: 160, opacity: time === 0 ? 0.3 : 1 }}>
+              <TimePicker
+                value={time}
+                editable={time !== 0}
+                label={translation("time")}
+                onChange={(newTime: number) => {
+                  time !== newTime && setTime(newTime);
+                }}
+              />
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Checkbox
+                status={time === 0 ? "checked" : "unchecked"}
+                onPress={() => {
+                  setTime(time === 0 ? new Date().getTime() : 0);
+                }}
+              />
+              <Text style={{ marginRight: 80 }}>
+                {translation("unknownTime")}
+              </Text>
+            </View>
+          </View>
+        )}
 
         <View style={{ marginTop: 40 }}>
           <Button mode="contained" onPress={onSave}>

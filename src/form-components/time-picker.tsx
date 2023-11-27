@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon, Text } from "react-native-paper";
 import { inputContainer, inputHeight } from "../shared-config";
-// import { Appearance, useColorScheme } from "react-native-appearance";
 import { useColorScheme } from "react-native";
 
 export function TimePicker({
@@ -35,12 +34,15 @@ export function TimePicker({
       }}
     >
       <Text
-        style={styles.label}
+        style={[styles.label]}
         testID={`${testID ? `${testID}-` : ""}picker-label`}
       >
         {label}
       </Text>
-      <TouchableOpacity onPress={() => editable && toggleTime(true)}>
+      <TouchableOpacity
+        onPress={() => editable && toggleTime(true)}
+        style={[{ height: inputHeight }]}
+      >
         <View style={[styles.content]}>
           <View>
             <Text

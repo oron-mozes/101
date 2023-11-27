@@ -6,7 +6,7 @@ import { isType, match, matcher } from "variant";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { useNfc } from "../../hooks/useNfc";
 import { STATUS } from "../../interfaces";
-import { inputFontSize } from "../../shared-config";
+import { colors, inputFontSize } from "../../shared-config";
 import {
   NfcStatus,
   NfcTransferStatus,
@@ -37,6 +37,7 @@ export function NfcDialogWrapper() {
           ]);
         }),
       Sending: ({ patientsIds }) => {
+        setAllowClose(false);
         setPatientsIds(patientsIds);
         const patientsDataToSend = patients.filter((patient) =>
           patientsIds.includes(patient.personal_information.patientId)
@@ -63,10 +64,18 @@ export function NfcDialogWrapper() {
           dismissableBackButton={false}
           dismissable={false}
           visible={true}
-          style={styles.dialog}
+          style={[
+            styles.dialog,
+            {
+              backgroundColor: nfcTransferStatus.color ?? "white",
+            },
+          ]}
         >
           <IconButton
-            style={{ alignSelf: "flex-start" }}
+            style={{
+              alignSelf: "flex-start",
+            }}
+            iconColor={nfcTransferStatus.color ? "white" : colors.text}
             onPress={() => {
               close();
               closeNfcDialog();
@@ -74,10 +83,13 @@ export function NfcDialogWrapper() {
             testID="nfc-dialog-close-button"
             icon="close"
           />
-          <NfcIcon color={nfcTransferStatus.color} />
+          <NfcIcon color={"#fff"} />
           <Dialog.Title
             testID="nfc-dialog-title"
-            style={{ ...styles.dialogTitle, color: nfcTransferStatus.color }}
+            style={{
+              ...styles.dialogTitle,
+              color: nfcTransferStatus.color ? "white" : colors.text,
+            }}
           >
             {`${text} ${nfcTransferStatus.statusText}`}
           </Dialog.Title>
@@ -85,7 +97,10 @@ export function NfcDialogWrapper() {
             <Text
               variant="bodyMedium"
               testID={`nfc-dialog-description`}
-              style={{ fontSize: inputFontSize }}
+              style={{
+                fontSize: inputFontSize,
+                color: nfcTransferStatus.color ? "white" : colors.text,
+              }}
             >
               {nfcTransferStatus.text}
             </Text>
@@ -93,13 +108,14 @@ export function NfcDialogWrapper() {
           <Dialog.Actions>
             {allowClose && (
               <Button
-                mode="contained"
+                mode="outlined"
                 testID="nfc-dialog-close"
+                textColor={nfcTransferStatus.color ? "white" : colors.text}
                 onPress={async () => {
                   await updatePatientStatus(patientsIds, STATUS.CLOSED);
+                  setAllowClose(false);
                   close();
                   closeNfcDialog();
-                  setAllowClose(false);
                 }}
               >
                 {translation("confirm")}

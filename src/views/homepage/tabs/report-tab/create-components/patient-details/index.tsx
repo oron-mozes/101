@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { Card } from "react-native-paper";
+import { Card, Text } from "react-native-paper";
 import { DatePicker } from "../../../../../../form-components/date-picker";
 import { InputField } from "../../../../../../form-components/input-field";
 import { SectionHeader } from "../../../../../../form-components/section-header";
@@ -12,6 +12,10 @@ export function PatientDetails() {
   const personal_information = usePatientRecordsStore((state) => ({
     ...state.activePatient.personal_information,
   }));
+
+  const patientId = usePatientRecordsStore(
+    (state) => state.activePatient.personal_information.patientId
+  );
 
   const incident_information = usePatientRecordsStore((state) => ({
     ...state.activePatient.incident_information,
@@ -31,6 +35,13 @@ export function PatientDetails() {
         <SectionHeader label={translation("accountTitle")} />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>
+        <Text variant="bodyLarge">
+          {patientId
+            ? translation("caseNumber", { case: patientId?.split("|").shift() })
+            : ""}
+        </Text>
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
         <InputField
           testID="patient-name"
           label={translation("patientName")}
@@ -48,7 +59,6 @@ export function PatientDetails() {
           onChange={(idf_id) => {
             handlers.setIdf(Number(idf_id));
           }}
-          numeric
           value={personal_information.idf_id?.toString()}
         />
       </Card.Content>

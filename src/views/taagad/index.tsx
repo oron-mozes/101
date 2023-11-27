@@ -165,7 +165,10 @@ export function StationScreen() {
                     style={{ width: 165 }}
                     disabled={!valid}
                     onPress={async () => {
-                      updateStationName(stationName);
+                      await Promise.all([
+                        updateStationName(stationName),
+                        setAsYakar(false),
+                      ]);
                       await addProviders(
                         providers.map((provider) => ({
                           ...provider,

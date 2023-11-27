@@ -329,5 +329,7 @@
   "patientCount": "פצוע.ה {{count}}",
   "transferStatus": "העברה {{status}}",
   "pass": "הצליחה",
-  "reSend": "שלח שוב"
+  "reSend": "שלח שוב",
+  "unknownTime": "זמן לא ידוע",
+  "caseNumber": "מקרה מספר: {{case}}"
 }
