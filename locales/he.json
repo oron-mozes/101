@@ -318,5 +318,16 @@
   "passcode": "על מנת לערוך את הפרטים יש להזין קוד גישה",
   "stationId": "מספר תחנה",
   "peek": "הצג",
-  "back": "חזור"
+  "back": "חזור",
+  "receiveANewPatient": "קליטת פצוע.ה חדש.ה",
+  "startScan": "התחל סריקה",
+  "idle": "ממתין",
+  "receiving": "קליטה",
+  "analyzing": "ניתוח",
+  "sending": "שליחה",
+  "completed": "סיום",
+  "patientCount": "פצוע.ה {{count}}",
+  "transferStatus": "העברה {{status}}",
+  "pass": "הצליחה",
+  "reSend": "שלח שוב"
 }

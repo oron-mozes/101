@@ -90,9 +90,8 @@ export const createPDFWithImage = async (patient: IPatientRecord) => {
 
   return file.base64;
   // await shareAsync(file.uri, {
-  //   mimeType:
-  //     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  //   dialogTitle: "101 data",
+  //   mimeType: "application/pdf",
+  //   dialogTitle: `${patient.personal_information.patientId} 101`,
   //   UTI: "com.microsoft.excel.xlsx",
   // });
 };
