@@ -53,8 +53,15 @@ project(':react-native-compressor').projectDir = new File(rootProject.projectDir
                    android:requireDeviceUnlock="false">
 <aid-group android:category="other"
              android:description="@string/app_name">
+
 <!-- Create a separate <aid-filer /> node for each NFC application ID, that You intent to emulate/host. -->
 <!-- For the NFC Type 4 tag emulation, let's put "D2760000850101" -->
 <aid-filter android:name="D2760000850101" />
 </aid-group>
 </host-apdu-service>
+
+### debugging
+
+$npx react-devtools
+
+If you wish to run from physical device you need to adb reverse tcp:8081 tcp:8097 otherwise adb reverse tcp:8081 tcp:8081

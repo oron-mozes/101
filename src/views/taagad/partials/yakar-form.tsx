@@ -19,6 +19,7 @@ export function YakarForm({
 }) {
   const updateStationName = useStationStore((state) => state.updateStationName);
   const updateStationId = useStationStore((state) => state.updateStationId);
+  const setAsYakar = useStationStore((state) => state.setAsYakar);
   const translation = useTranslation();
   const navigation = useNavigation<StackNavigation>();
   const station = useStationStore((state) => state.station);
@@ -26,8 +27,8 @@ export function YakarForm({
   const [stationId, setStationId] = useState<number>(station.unit_id);
   const [passcode, setPasscode] = useState<string>("");
   const [secret, toggleSecret] = useState<boolean>(true);
-  const canEdit = env.PASSCODE === passcode;
-
+  const canEdit = station.isYakar ? env.PASSCODE === passcode : true;
+  console.log({ canEdit, station });
   return (
     <>
       <View
@@ -54,13 +55,12 @@ export function YakarForm({
           onPress={() => setIsYakar(!isYakar)}
         />
       </View>
-      {station.isYakar && isYakar && (
+      {isYakar && (
         <>
           <View style={{ width: "100%" }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <InputField
                 secureTextEntry={secret}
-                editable={true}
                 label={translation("passcode")}
                 value={passcode}
                 onChange={(pass: string) => {
@@ -119,6 +119,7 @@ export function YakarForm({
               onPress={async () => {
                 updateStationName(stationName);
                 updateStationId(stationId);
+                setAsYakar(true);
                 navigation.navigate(ROUTES.YAKAR);
               }}
             >

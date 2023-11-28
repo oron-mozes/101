@@ -10,6 +10,7 @@ import { useTranslation } from "../../hooks/useMyTranslation";
 import { colors, inputHeight } from "../../shared-config";
 import StepIndicator from "react-native-step-indicator";
 import { reportAPatient } from "./utils";
+import axios from "axios";
 
 interface PatientRecordWithPdf extends IPatientRecord {
   pdf: string;
@@ -101,6 +102,22 @@ export function YakarScreen() {
     setPatients([]);
     setPatientsReadyForSend([]);
   };
+  console.log("CALLING TEST API");
+  useEffect(() => {
+    console.log("CALLING TEST API", env.TEST_API_DOCS);
+
+    axios
+      .get(env.TEST_API_DOCS, {
+        headers: { Authorization: `Bearer ${env.TOKEN}` },
+      })
+      .then((res) => {
+        console.log(res.status);
+      })
+      .catch((err) => {
+        console.log("FAIL", err);
+      });
+  }, []);
+
   return (
     <View
       style={{

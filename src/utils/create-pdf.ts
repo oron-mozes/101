@@ -85,10 +85,10 @@ export const createPDFWithImage = async (patient: IPatientRecord) => {
       </body>
     </html>
   `;
+  return htmlContent;
+  // const file = await printToFileAsync({ html: htmlContent, base64: true });
 
-  const file = await printToFileAsync({ html: htmlContent, base64: true });
-
-  return file.base64;
+  // return file.base64;
   // await shareAsync(file.uri, {
   //   mimeType: "application/pdf",
   //   dialogTitle: `${patient.personal_information.patientId} 101`,

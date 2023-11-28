@@ -23,6 +23,8 @@ import { Button, Icon, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { ROUTES } from "../../routes";
 import { YakarForm } from "./partials/yakar-form";
+import env from "../taagad/env.json";
+import axios from "axios";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,
@@ -79,6 +81,7 @@ export function StationScreen() {
     (Boolean(stationName) && Boolean(providers?.length)) === true;
 
   const [isYakar, setIsYakar] = useState<boolean>(station.isYakar);
+
   return (
     <SafeAreaView style={styles.container}>
       <GestureHandlerRootView>

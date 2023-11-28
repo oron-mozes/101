@@ -62,7 +62,6 @@ export function ReportTab() {
       ...emptyPatient,
       personal_information: {
         ...emptyPatient.personal_information,
-        full_name: `${taggad.unit_name} ${patients.length}`,
         patientId: id,
       },
       evacuation: {

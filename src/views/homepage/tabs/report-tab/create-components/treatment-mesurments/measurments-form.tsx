@@ -1,4 +1,5 @@
-import { StyleSheet, View, Alert } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
+import { Button } from "react-native-paper";
 import { BloodPressureInputFieldHandler } from "../../../../../../form-components/blood-pressure-input-field";
 import { DropDown } from "../../../../../../form-components/dropdown";
 import { InputField } from "../../../../../../form-components/input-field";
@@ -10,7 +11,6 @@ import { usePatientRecordsStore } from "../../../../../../store/patients.record.
 import { useStationStore } from "../../../../../../store/station.store";
 import { design } from "../shared-style";
 import { convertStringToNumber } from "../utils";
-import { Button } from "react-native-paper";
 
 export const emptyState: IMeasurementsAction = {
   id: null,
@@ -60,21 +60,30 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         mode="outlined"
         icon="delete"
         disabled={measurements.length === 1}
-        style={[styles.deleteAction, { borderColor: measurements.length > 1 ? "#e54141" : colors.disabled }]}
+        style={[
+          styles.deleteAction,
+          {
+            borderColor: measurements.length > 1 ? "#e54141" : colors.disabled,
+          },
+        ]}
         textColor={"#e54141"}
         onPress={() => {
-          Alert.alert(translation("treatment_delete_alert_title"), translation("treatment_delete_alert_content"), [
-            {
-              text: translation("cancel"),
-              style: 'cancel',
-            },
-            {
-              text: translation("generic_delete"),
-              style: 'destructive',
-              isPreferred: true,
-              onPress: () => handlers.removeMeasurementAction(formIndex),
-            },
-          ]);
+          Alert.alert(
+            translation("treatment_delete_alert_title"),
+            translation("treatment_delete_alert_content"),
+            [
+              {
+                text: translation("cancel"),
+                style: "cancel",
+              },
+              {
+                text: translation("generic_delete"),
+                style: "destructive",
+                isPreferred: true,
+                onPress: () => handlers.removeMeasurementAction(formIndex),
+              },
+            ]
+          );
         }}
       >
         {translation("treatment_delete_cta")}
@@ -173,7 +182,6 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         }))}
       />
       <InputField
-        numeric
         label={translation("treatment_prpo")}
         value={form.prpo?.toString()}
         onChange={(prpo) => {
@@ -181,7 +189,6 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
             { ...form, prpo: convertStringToNumber(prpo) },
             formIndex
           );
-          // updateForm({ ...form, prpo: convertStringToNumber(prpo) });
         }}
       />
       <InputField
@@ -193,7 +200,6 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
             { ...form, GCS: convertStringToNumber(GCS) },
             formIndex
           );
-          // updateForm({ ...form, GCS: convertStringToNumber(GCS) });
         }}
       />
       <InputField
@@ -205,7 +211,6 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
             { ...form, urine: convertStringToNumber(urine) },
             formIndex
           );
-          // updateForm({ ...form, urine: convertStringToNumber(urine) });
         }}
       />
       <InputField
@@ -217,19 +222,8 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
             { ...form, blood: convertStringToNumber(blood) },
             formIndex
           );
-          // updateForm({ ...form, blood: convertStringToNumber(blood) });
         }}
       />
-      {/* <Button
-        icon="check"
-        mode="contained"
-        style={{ margin: 3 }}
-        onPress={() => {
-          updateAtIndex(form, formIndex);
-        }}
-      >
-        {translation("done")}
-      </Button> */}
     </View>
   );
 }

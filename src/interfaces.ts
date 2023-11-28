@@ -2,10 +2,19 @@ import { NavigationProp } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { TAB_STATUS } from "./views/homepage";
 
+export enum EEnvironment {
+  MILITARY = "MILITARY",
+  CIVILIAN = "CIVILIAN",
+  RESERVE = "RESERVE",
+  ENEMY = "ENEMY",
+}
+
 export interface IPersonalInformation {
   full_name: string;
   idf_id: number;
   patientId: string;
+  unit: string;
+  environment: EEnvironment;
 }
 export interface IIncidentInformation {
   injury_time: number;

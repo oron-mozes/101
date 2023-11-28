@@ -7,6 +7,9 @@ import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { design } from "../shared-style";
+import { DropDown } from "../../../../../../form-components/dropdown";
+import { convertToOptions } from "../utils";
+import { EEnvironment } from "../../../../../../interfaces";
 
 export function PatientDetails() {
   const personal_information = usePatientRecordsStore((state) => ({
@@ -60,6 +63,25 @@ export function PatientDetails() {
             handlers.setIdf(Number(idf_id));
           }}
           value={personal_information.idf_id?.toString()}
+        />
+      </Card.Content>
+      <Card.Content style={[styles.innerContent]}>
+        <InputField
+          testID="unit"
+          label={translation("unit")}
+          onChange={(unit: string) => {
+            handlers.setUnit(unit);
+          }}
+          value={personal_information.unit}
+        />
+        <DropDown
+          testID="environment"
+          label={translation("environment")}
+          options={convertToOptions(Object.values(EEnvironment), translation)}
+          initialValue={personal_information.environment}
+          onSelect={(environment) => {
+            handlers.setEnvironment(environment.id as EEnvironment);
+          }}
         />
       </Card.Content>
       <Card.Content style={[styles.innerContent]}>

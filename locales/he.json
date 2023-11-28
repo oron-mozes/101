@@ -335,5 +335,11 @@
   "pass": "הצליחה",
   "reSend": "שלח שוב",
   "unknownTime": "זמן לא ידוע",
-  "caseNumber": "מקרה מספר: {{case}}"
+  "caseNumber": "מספר טופס 101: {{case}}",
+  "unit": "יחידה",
+  "environment": "מסגרת",
+  "MILITARY": "צבאי",
+  "CIVILIAN": "אזרחי",
+  "RESERVE": "מילואים",
+  "ENEMY": "אויב"
 }

@@ -6,6 +6,7 @@ import {
   EAirWayTreatment,
   EBreathingTreatment,
   ECconsciousness,
+  EEnvironment,
   EEsectionChips,
   EInjuryReason,
   EMeasurementsTreatments,
@@ -226,6 +227,8 @@ export const usePatientRecordsStore = create<{
     setDate(date: number): void;
   };
   personal_information_handlers: {
+    setUnit(unit: string): void;
+    setEnvironment(environment: EEnvironment): void;
     setFullName(full_name: string): void;
     setIdf(idf_id: number): void;
     setPatientId(data: string): void;
@@ -352,15 +355,18 @@ export const usePatientRecordsStore = create<{
       },
       removeMeasurementAction(indexToRemove: number) {
         const current = state.getState();
-        
+
         current.updatePartialPatient({
           treatmentGuide: {
             ...current.activePatient.treatmentGuide,
             measurements: {
               ...current.activePatient.treatmentGuide.measurements,
-              actions: current.activePatient.treatmentGuide.measurements.actions.filter((_, index) => index !== indexToRemove),
+              actions:
+                current.activePatient.treatmentGuide.measurements.actions.filter(
+                  (_, index) => index !== indexToRemove
+                ),
             },
-          }
+          },
         });
       },
       updateAtIndex(data: Partial<IMeasurementsAction>, index: number) {
@@ -461,7 +467,7 @@ export const usePatientRecordsStore = create<{
         current.updatePartialPatient({
           providers: _.uniqBy(
             [...(current.activePatient.providers ?? []), provider],
-            "id"
+            "idf_id"
           ),
         });
       },
@@ -712,6 +718,24 @@ export const usePatientRecordsStore = create<{
       },
     },
     personal_information_handlers: {
+      setEnvironment(environment: EEnvironment) {
+        const current = state.getState();
+        current.updatePartialPatient({
+          personal_information: {
+            ...current.activePatient.personal_information,
+            environment,
+          },
+        });
+      },
+      setUnit(unit) {
+        const current = state.getState();
+        current.updatePartialPatient({
+          personal_information: {
+            ...current.activePatient.personal_information,
+            unit,
+          },
+        });
+      },
       setFullName(full_name: string) {
         const current = state.getState();
         current.updatePartialPatient({
