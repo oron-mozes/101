@@ -11,7 +11,7 @@ export enum EEnvironment {
 
 export interface IPersonalInformation {
   full_name: string;
-  idf_id: number;
+  idf_id: string;
   patientId: string;
   unit: string;
   environment: EEnvironment;
@@ -317,7 +317,7 @@ export interface IMeasurementsAction {
   spo2: number;
   etcos: number;
   pain: number;
-  prpo: number;
+  prpo: string;
   GCS: number;
   urine: number;
   blood: number;
@@ -419,6 +419,7 @@ export interface IStation {
   isYakar: boolean;
   communicationMethod: CommunicationMethod;
   unit_id: number;
+  is_set: boolean;
 }
 
 export interface IProps extends NativeStackScreenProps<RootStackParamList> {}

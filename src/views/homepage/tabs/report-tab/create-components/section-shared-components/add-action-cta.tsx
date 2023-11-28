@@ -24,7 +24,7 @@ export function AddActionCTA({
         onPress={saveNewAction}
         disabled={!valid}
       >
-        {valid ? translation("save") : translation("addAction")}
+        {translation("save")}
       </Button>
     </View>
   );

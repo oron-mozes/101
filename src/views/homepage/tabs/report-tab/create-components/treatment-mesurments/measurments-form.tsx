@@ -185,10 +185,7 @@ export function MeasurementForm({ formIndex }: { formIndex: number }) {
         label={translation("treatment_prpo")}
         value={form.prpo?.toString()}
         onChange={(prpo) => {
-          updateAtIndex(
-            { ...form, prpo: convertStringToNumber(prpo) },
-            formIndex
-          );
+          updateAtIndex({ ...form, prpo }, formIndex);
         }}
       />
       <InputField

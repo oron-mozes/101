@@ -165,7 +165,7 @@ describe("PatientDetails", () => {
     fireEvent.changeText(idfIdInput, "987654321");
 
     act(() => {
-      expect(setIdf).toHaveBeenCalledWith(987654321);
+      expect(setIdf).toHaveBeenCalledWith("987654321");
     });
     await waitFor(() => {
       expect(idfIdInput.props.value).toBe("987654321");

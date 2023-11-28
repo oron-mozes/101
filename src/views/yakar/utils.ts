@@ -1,12 +1,13 @@
 import env from "../taagad/env.json";
-import { Buffer } from "buffer";
 
 export function reportAPatient(station) {
   return async (patient) => {
     const firstStop = patient.personal_information.patientId.split("|").pop();
-    const lastStation =
-      patient.care_providers[patient.care_providers.length - 1].unit_name;
-
+    const lastStation = firstStop;
+    // patient.care_providers?.length !== 0
+    //   ? patient.care_providers[patient.care_providers?.length - 1].unit_name
+    //   : firstStop;
+    console.log("form");
     const form = new FormData();
     form.append("record_id", patient.personal_information.patientId);
     form.append("patient_id", patient.personal_information.idf_id);
@@ -16,7 +17,9 @@ export function reportAPatient(station) {
     form.append("first_name", patient.personal_information.full_name);
     form.append("origin_station_name", firstStop);
     form.append("last_station_name", lastStation);
-    form.append("html_string", patient.pdf);
+    form.append("html_string", patient.html);
+    form.append("pdf_file_b64", patient.base64);
+
     try {
       const res = await fetch(env.TEST_API, {
         method: "POST",

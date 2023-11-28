@@ -110,7 +110,7 @@ function TreatmentGuide() {
           }}
           disabled={!valid}
         >
-          {valid ? translation("save") : translation("treatment_guide_new")}
+          {translation("save")}
         </Button>
       </Card.Content>
     </Card>

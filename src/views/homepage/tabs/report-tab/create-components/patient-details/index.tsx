@@ -60,7 +60,11 @@ export function PatientDetails() {
           label={translation("idf_id")}
           maxLength={9}
           onChange={(idf_id) => {
-            handlers.setIdf(Number(idf_id));
+            const clean = idf_id
+              .split("")
+              .filter((c) => c.match(/[0-9]/))
+              .join("");
+            handlers.setIdf(clean);
           }}
           value={personal_information.idf_id?.toString()}
         />

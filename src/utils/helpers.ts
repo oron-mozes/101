@@ -375,7 +375,7 @@ export function returnAirwayTable(data: IAirway) {
   }</th>
   </tr>
   <tr>
-    <th rowspan="${data.actions.length}" style="border-color: ${
+    <th rowspan="${data.actions?.length ?? 0}" style="border-color: ${
     colors.surface
   }; text-align:right">${data.fulfill ? locale.yes : locale.no}</th>  
   </tr>

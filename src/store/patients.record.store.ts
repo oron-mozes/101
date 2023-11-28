@@ -230,7 +230,7 @@ export const usePatientRecordsStore = create<{
     setUnit(unit: string): void;
     setEnvironment(environment: EEnvironment): void;
     setFullName(full_name: string): void;
-    setIdf(idf_id: number): void;
+    setIdf(idf_id: string): void;
     setPatientId(data: string): void;
   };
   airway_handlers: {
@@ -755,7 +755,7 @@ export const usePatientRecordsStore = create<{
           },
         });
       },
-      setIdf(idf_id: number) {
+      setIdf(idf_id: string) {
         const current = state.getState();
 
         current.updatePartialPatient({

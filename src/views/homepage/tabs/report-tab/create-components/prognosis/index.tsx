@@ -89,7 +89,7 @@ export function Prognosis() {
           }}
           disabled={!valid}
         >
-          {valid ? translation("save") : translation("addPrognosis")}
+          {translation("save")}
         </Button>
       </Card.Content>
     </Card>

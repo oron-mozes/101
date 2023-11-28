@@ -64,7 +64,11 @@ describe("AddAAction", () => {
     const resetAction = getByTestId(`clear-new-airway-action`);
     fireEvent.press(resetAction);
     expect(mockUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({ ...initialEmptyAction })
+      expect.objectContaining({
+        ...initialEmptyAction,
+        time: expect.any(Number),
+        id: expect.any(Number),
+      })
     );
   });
 });

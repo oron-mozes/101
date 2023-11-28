@@ -140,7 +140,7 @@ describe("medication utils", () => {
     ).toBe(false);
     expect(
       allowAddMedication({
-        dose: E_ANTIBIOTIC_CETRIAXONE_DOSE.D1,
+        dose: E_ANTIBIOTIC_CETRIAXONE_DOSE.D1MG,
         type: E_ANTIBIOTIC_TREATMENT.CETRIAXONE,
         treatment: MEDICATION_TREATMENT.ANTIBIOTIC,
         time: 0,

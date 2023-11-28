@@ -13,7 +13,8 @@ import { reportAPatient } from "./utils";
 import axios from "axios";
 
 interface PatientRecordWithPdf extends IPatientRecord {
-  pdf: string;
+  html: string;
+  base64: string;
 }
 
 enum STATUS {
@@ -63,23 +64,24 @@ export function YakarScreen() {
     patients.length !== 0 && setStatus(STATUS.Analyzing);
     Promise.all(
       patients.map(async (p): Promise<PatientRecordWithPdf> => {
-        const pdf = await createPDFWithImage(p);
-        return { ...p, pdf };
+        const { html, base64 } = await createPDFWithImage(p);
+
+        return { ...p, html, base64 };
       })
-    ).then((data) => {
-      setPatientsReadyForSend(data);
-    });
+    ).then(setPatientsReadyForSend);
   }, [patients]);
 
   const reportAction = reportAPatient(station);
 
   useEffect(() => {
+    console.log("patientsReadyForSend", patientsReadyForSend.length);
     patientsReadyForSend.length !== 0 && setStatus(STATUS.Sending);
     patientsReadyForSend.length !== 0 && setStatus(STATUS.Sending);
     patientsReadyForSend.length !== 0 &&
       Promise.allSettled(patientsReadyForSend.map(reportAction))
         .then((data) => {
           setStatus(STATUS.Completed);
+          console.log({ data });
         })
         .catch(() => {
           setStatus(STATUS.Error);
@@ -102,21 +104,6 @@ export function YakarScreen() {
     setPatients([]);
     setPatientsReadyForSend([]);
   };
-  console.log("CALLING TEST API");
-  useEffect(() => {
-    console.log("CALLING TEST API", env.TEST_API_DOCS);
-
-    axios
-      .get(env.TEST_API_DOCS, {
-        headers: { Authorization: `Bearer ${env.TOKEN}` },
-      })
-      .then((res) => {
-        console.log(res.status);
-      })
-      .catch((err) => {
-        console.log("FAIL", err);
-      });
-  }, []);
 
   return (
     <View

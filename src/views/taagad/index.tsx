@@ -40,10 +40,12 @@ export function StationScreen() {
   const addProviders = useStationStore((state) => state.addProviders);
   const updateStationName = useStationStore((state) => state.updateStationName);
   const setAsYakar = useStationStore((state) => state.setAsYakar);
+  const setIsSet = useStationStore((state) => state.setIsSet);
   const [stationName, setStationName] = useState<string>(station.unit_name);
   const [providers, setProviders] = useState<ICareProvider[]>(
     station.care_providers ?? []
   );
+  console.log(station.isYakar);
   const [newCareProvider, updateCareProvider] = useState<ICareProvider>(
     providers?.length === 0
       ? {
@@ -74,7 +76,7 @@ export function StationScreen() {
   }, [station]);
 
   useEffect(() => {
-    setAsYakar(isYakar);
+    setAsYakar(station.isYakar);
   }, [station.isYakar]);
 
   const valid: boolean =
@@ -94,7 +96,9 @@ export function StationScreen() {
         >
           <StationHeader />
           <StationGlobalActions />
-          <YakarForm isYakar={isYakar} setIsYakar={setIsYakar} />
+          {((station.is_set && isYakar) || !station.is_set) && (
+            <YakarForm isYakar={isYakar} setIsYakar={setIsYakar} />
+          )}
           {!isYakar && (
             <>
               <View style={{ width: "100%" }}>
@@ -171,6 +175,7 @@ export function StationScreen() {
                       await Promise.all([
                         updateStationName(stationName),
                         setAsYakar(false),
+                        setIsSet(true),
                       ]);
                       await addProviders(
                         providers.map((provider) => ({

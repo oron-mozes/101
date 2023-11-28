@@ -199,7 +199,7 @@ export function NewMedication() {
           }}
           disabled={!valid}
         >
-          {valid ? translation("save") : translation("addMedication")}
+          {translation("save")}
         </Button>
       </Card.Content>
     </>

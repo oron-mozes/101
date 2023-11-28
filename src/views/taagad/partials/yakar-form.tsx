@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "../../../hooks/useMyTranslation";
 import { StackNavigation } from "../../../interfaces";
 import { useStationStore } from "../../../store/station.store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import env from "../env.json";
 import { colors, inputFontSize } from "../../../shared-config";
 
@@ -19,6 +19,7 @@ export function YakarForm({
 }) {
   const updateStationName = useStationStore((state) => state.updateStationName);
   const updateStationId = useStationStore((state) => state.updateStationId);
+  const setIsSet = useStationStore((state) => state.setIsSet);
   const setAsYakar = useStationStore((state) => state.setAsYakar);
   const translation = useTranslation();
   const navigation = useNavigation<StackNavigation>();
@@ -28,33 +29,39 @@ export function YakarForm({
   const [passcode, setPasscode] = useState<string>("");
   const [secret, toggleSecret] = useState<boolean>(true);
   const canEdit = station.isYakar ? env.PASSCODE === passcode : true;
-  console.log({ canEdit, station });
+  useEffect(() => {
+    setPasscode("");
+  }, []);
   return (
     <>
-      <View
-        style={[
-          styles.container,
-          { justifyContent: "flex-start", width: "100%" },
-        ]}
-      >
-        <Text
-          style={{
-            marginRight: 5,
-            fontSize: inputFontSize,
-          }}
+      {!station.is_set && (
+        <View
+          style={[
+            styles.container,
+            { justifyContent: "flex-start", width: "100%" },
+          ]}
         >
-          {translation("yakar")}
-        </Text>
-        <ToggleButton
-          disabled={!canEdit}
-          size={35}
-          iconColor={isYakar ? "#14B881" : colors.disabled}
-          icon={isYakar ? "toggle-switch-outline" : "toggle-switch-off-outline"}
-          value="bluetooth"
-          status={isYakar ? "checked" : "unchecked"}
-          onPress={() => setIsYakar(!isYakar)}
-        />
-      </View>
+          <Text
+            style={{
+              marginRight: 5,
+              fontSize: inputFontSize,
+            }}
+          >
+            {translation("yakar")}
+          </Text>
+          <ToggleButton
+            disabled={!canEdit}
+            size={35}
+            iconColor={isYakar ? "#14B881" : colors.disabled}
+            icon={
+              isYakar ? "toggle-switch-outline" : "toggle-switch-off-outline"
+            }
+            value="bluetooth"
+            status={isYakar ? "checked" : "unchecked"}
+            onPress={() => setIsYakar(!isYakar)}
+          />
+        </View>
+      )}
       {isYakar && (
         <>
           <View style={{ width: "100%" }}>
@@ -117,9 +124,12 @@ export function YakarForm({
               style={{ width: 165 }}
               disabled={!canEdit}
               onPress={async () => {
-                updateStationName(stationName);
-                updateStationId(stationId);
-                setAsYakar(true);
+                await Promise.all([
+                  updateStationName(stationName),
+                  updateStationId(stationId),
+                  setAsYakar(true),
+                  setIsSet(true),
+                ]);
                 navigation.navigate(ROUTES.YAKAR);
               }}
             >
