@@ -332,7 +332,8 @@
   "completed": "סיום",
   "patientCount": "פצוע.ה {{count}}",
   "transferStatus": "העברה {{status}}",
-  "pass": "הצליחה",
+  "fulfilled": "הצליחה",
+  "rejected": "נכשלה",
   "reSend": "שלח שוב",
   "unknownTime": "זמן לא ידוע",
   "caseNumber": "מספר טופס 101: {{case}}",
@@ -341,5 +342,7 @@
   "MILITARY": "צבאי",
   "CIVILIAN": "אזרחי",
   "RESERVE": "מילואים",
-  "ENEMY": "אויב"
+  "ENEMY": "אויב",
+  "treatment": "טיפול",
+  "email": "דואר אלקטרוני"
 }

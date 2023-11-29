@@ -18,7 +18,10 @@ import {
   returnPrognosisTable,
 } from "./helpers";
 
-export const createPDFWithImage = async (patient: IPatientRecord) => {
+export const createPDFWithImage = async (
+  patient: IPatientRecord,
+  email = false
+) => {
   const mainInjury = patient.injuries.find((injury) => injury.isMain);
   const mainInjuryName =
     mainInjury &&
@@ -86,8 +89,9 @@ export const createPDFWithImage = async (patient: IPatientRecord) => {
     </html>
   `;
 
-  const file = await printToFileAsync({ html: htmlContent, base64: true });
-  return { html: htmlContent, base64: file.base64 };
+  const file = await printToFileAsync({ html: htmlContent, base64: !email });
+
+  return email ? file.uri : file.base64;
   // return file.base64;
   // await shareAsync(file.uri, {
   //   mimeType: "application/pdf",

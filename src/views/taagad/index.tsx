@@ -23,8 +23,6 @@ import { Button, Icon, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { ROUTES } from "../../routes";
 import { YakarForm } from "./partials/yakar-form";
-import env from "../taagad/env.json";
-import axios from "axios";
 
 export const initialProviderState: ICareProvider = {
   full_name: null,
@@ -45,7 +43,7 @@ export function StationScreen() {
   const [providers, setProviders] = useState<ICareProvider[]>(
     station.care_providers ?? []
   );
-  console.log(station.isYakar);
+
   const [newCareProvider, updateCareProvider] = useState<ICareProvider>(
     providers?.length === 0
       ? {

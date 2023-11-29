@@ -14,8 +14,24 @@ export const useStationStore = create<{
   setAsYakar(isYakar: boolean): Promise<void>;
   setCommunicationMethod(method: CommunicationMethod): void;
   setIsSet(isSet: boolean): void;
+  setStationDetails(station: IStation): void;
 }>()(
   devtools((set, get) => ({
+    setStationDetails: async (station) => {
+      const currentData = get().station;
+      currentData.unit_name = station.unit_name;
+      currentData.care_providers = station.care_providers;
+      currentData.isYakar = station.isYakar;
+      currentData.communicationMethod = station.communicationMethod;
+      currentData.unit_id = station.unit_id;
+      currentData.is_set = station.is_set;
+      currentData.API = station.API;
+      currentData.TOKEN = station.TOKEN;
+      currentData.email_to = station.email_to;
+
+      await storage.save({ key: STORAGE.STATION, data: currentData });
+      set((state) => ({ ...state, station: currentData }));
+    },
     station: {
       is_set: false,
       unit_id: null,
@@ -23,6 +39,9 @@ export const useStationStore = create<{
       care_providers: [],
       isYakar: null,
       communicationMethod: "NFC",
+      API: null,
+      email_to: null,
+      TOKEN: null,
     },
     setIsSet: async (isSet) => {
       const currentData = get().station;

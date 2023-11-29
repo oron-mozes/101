@@ -330,9 +330,9 @@ export interface ITreatmentGuide {
   id: number;
   care_guide: string;
   order_time: number;
-  execution_time: number;
+  execution_time?: number;
   provider_issuer: ICareProvider;
-  provider_executer: ICareProvider;
+  provider_executer?: ICareProvider;
 }
 
 export interface ITreatment {
@@ -420,6 +420,9 @@ export interface IStation {
   communicationMethod: CommunicationMethod;
   unit_id: number;
   is_set: boolean;
+  email_to?: string;
+  API?: string;
+  TOKEN?: string;
 }
 
 export interface IProps extends NativeStackScreenProps<RootStackParamList> {}

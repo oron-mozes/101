@@ -50,7 +50,7 @@ export function CareProvider() {
                 const setProvider = Object.values(careProviders).find(
                   (p) => p.idf_id.toString() === value.id
                 );
-                console.log({ setProvider });
+
                 handlers.addProvider(setProvider);
               }}
               options={Object.values(careProviders).map((provider) => {

@@ -1,19 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { Linking, ScrollView, StyleSheet, View } from "react-native";
 import { Button, DataTable, Text } from "react-native-paper";
+import StepIndicator from "react-native-step-indicator";
+import { useTranslation } from "../../hooks/useMyTranslation";
 import { useNfc } from "../../hooks/useNfc";
 import { IPatientRecord } from "../../interfaces";
+import { inputHeight } from "../../shared-config";
 import { useStationStore } from "../../store/station.store";
 import { createPDFWithImage } from "../../utils/create-pdf";
-import env from "../taagad/env.json";
-import { useTranslation } from "../../hooks/useMyTranslation";
-import { colors, inputHeight } from "../../shared-config";
-import StepIndicator from "react-native-step-indicator";
 import { reportAPatient } from "./utils";
-import axios from "axios";
 
 interface PatientRecordWithPdf extends IPatientRecord {
-  html: string;
   base64: string;
 }
 
@@ -52,36 +49,43 @@ const customStyles = {
 export function YakarScreen() {
   const translation = useTranslation();
   const { readTag, close } = useNfc();
-  const station = useStationStore((state) => state.station);
+  const station = useStationStore((state) => ({ ...state.station }));
 
   const [patients, setPatients] = useState<IPatientRecord[]>([]);
   const [patientsReadyForSend, setPatientsReadyForSend] = useState<
     PatientRecordWithPdf[]
   >([]);
   const [status, setStatus] = useState<STATUS>(STATUS.Closed);
-
+  const [results, setResults] = useState<{ patientId: string; status }[]>([]);
   useEffect(() => {
     patients.length !== 0 && setStatus(STATUS.Analyzing);
     Promise.all(
       patients.map(async (p): Promise<PatientRecordWithPdf> => {
-        const { html, base64 } = await createPDFWithImage(p);
+        const base64 = await createPDFWithImage(p);
 
-        return { ...p, html, base64 };
+        return { ...p, base64 };
       })
     ).then(setPatientsReadyForSend);
+    return () => {};
   }, [patients]);
 
   const reportAction = reportAPatient(station);
 
   useEffect(() => {
-    console.log("patientsReadyForSend", patientsReadyForSend.length);
     patientsReadyForSend.length !== 0 && setStatus(STATUS.Sending);
     patientsReadyForSend.length !== 0 && setStatus(STATUS.Sending);
     patientsReadyForSend.length !== 0 &&
       Promise.allSettled(patientsReadyForSend.map(reportAction))
         .then((data) => {
           setStatus(STATUS.Completed);
-          console.log({ data });
+
+          setResults(
+            data.map((d, index) => ({
+              patientId:
+                patientsReadyForSend[index].personal_information.patientId,
+              status: d.status,
+            }))
+          );
         })
         .catch(() => {
           setStatus(STATUS.Error);
@@ -101,6 +105,7 @@ export function YakarScreen() {
   );
 
   const reset = () => {
+    doneScanning();
     setPatients([]);
     setPatientsReadyForSend([]);
   };
@@ -149,7 +154,7 @@ export function YakarScreen() {
             {translation("startScan")}
           </Button>
         )}
-        {STATUS.Closed !== status && (
+        {STATUS.Closed !== status && results.length === 0 && (
           <Button
             style={{ width: 200, height: inputHeight }}
             contentStyle={{ borderColor: "red", borderWidth: 1 }}
@@ -161,17 +166,21 @@ export function YakarScreen() {
         )}
       </View>
       {[STATUS.Completed, STATUS.Error].includes(status) && (
-        <View>
-          <DataTable>
+        <View style={{ padding: 10, width: "100%" }}>
+          <DataTable style={{ width: "100%" }}>
             <DataTable.Header>
               <DataTable.Title>{translation("choose")}</DataTable.Title>
               <DataTable.Title>{translation("systemStatus")}</DataTable.Title>
               <DataTable.Title>{translation("patientName")}</DataTable.Title>
             </DataTable.Header>
-            <ScrollView>
-              {[{}].map((patient, index) => {
+            <ScrollView style={{ padding: 10, width: "100%" }}>
+              {results.map(({ status }, index) => {
+                const patient = patientsReadyForSend[index];
                 return (
-                  <DataTable.Row key={index} style={{ padding: 10 }}>
+                  <DataTable.Row
+                    key={index}
+                    style={{ padding: 10, width: "100%" }}
+                  >
                     <DataTable.Cell>
                       {translation("patientCount", {
                         count: (index + 1).toString(),
@@ -180,10 +189,10 @@ export function YakarScreen() {
                     <DataTable.Cell>
                       <Text
                         style={{
-                          borderColor: STATUS.Completed ? "#1AE5A1" : "#FFA299",
-                          backgroundColor: STATUS.Completed
-                            ? "#D1FAEC"
-                            : "#FFD0CC",
+                          borderColor:
+                            status === "fulfilled" ? "#1AE5A1" : "#FFA299",
+                          backgroundColor:
+                            status === "fulfilled" ? "#D1FAEC" : "#FFD0CC",
                           borderWidth: 1,
                           padding: 10,
                           paddingLeft: 15,
@@ -192,21 +201,75 @@ export function YakarScreen() {
                         }}
                       >
                         {translation("transferStatus", {
-                          status: translation("pass"),
+                          status: translation(status),
                         })}
                       </Text>
                     </DataTable.Cell>
                     <DataTable.Cell>
-                      <Button icon="undo-variant">
-                        {translation("reSend")}
-                      </Button>
+                      {status !== "fulfilled" && (
+                        <View>
+                          <Button
+                            mode="outlined"
+                            onPress={async () => {
+                              try {
+                                const data = await reportAction(patient);
+                                if (data.patientId) {
+                                  setResults((results) => {
+                                    const newResults = [...results];
+                                    newResults[index].status = data.status;
+                                    return newResults;
+                                  });
+                                }
+                              } catch (error) {}
+                            }}
+                            icon="undo-variant"
+                          >
+                            {translation("reSend")}
+                          </Button>
+                          {station.email_to && (
+                            <Button
+                              mode="outlined"
+                              style={{ marginRight: 10, marginLeft: 10 }}
+                              onPress={async () => {
+                                const attachmentUrl = await createPDFWithImage(
+                                  patients[index],
+                                  true
+                                );
+                                const attachmentEncoded = await fetch(
+                                  attachmentUrl
+                                )
+                                  .then((response) => response.blob())
+                                  .then((blob) => {
+                                    const reader = new FileReader();
+                                    reader.readAsDataURL(blob);
+                                    return new Promise((resolve) => {
+                                      reader.onloadend = () =>
+                                        resolve(reader.result);
+                                    });
+                                  });
+
+                                const emailUrl = `mailto:${station.email_to}?subject=101 fallback method&body=Seems like we failed to send the information from: station number: ${station.unit_id}, station name: ${station.unit_name}. please see attached pdf!&attachment=${attachmentEncoded}`;
+
+                                Linking.openURL(emailUrl);
+                              }}
+                              icon="email"
+                            >
+                              {translation("email")}
+                            </Button>
+                          )}
+                        </View>
+                      )}
                     </DataTable.Cell>
                   </DataTable.Row>
                 );
               })}
             </ScrollView>
           </DataTable>
-          <Button onPress={reset}>{translation("done")}</Button>
+          <View style={{ alignItems: "center", marginTop: 40 }}>
+            <Button style={{ width: "50%" }} mode="contained" onPress={reset}>
+              {translation("done")}
+            </Button>
+          </View>
         </View>
       )}
     </View>
