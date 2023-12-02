@@ -9,6 +9,7 @@ import { inputHeight } from "../../shared-config";
 import { useStationStore } from "../../store/station.store";
 import { createPDFWithImage } from "../../utils/create-pdf";
 import { reportAPatient } from "./utils";
+import { usePatientRecordsStore } from "../../store/patients.record.store";
 
 interface PatientRecordWithPdf extends IPatientRecord {
   base64: string;
@@ -50,7 +51,7 @@ export function YakarScreen() {
   const translation = useTranslation();
   const { readTag, close } = useNfc();
   const station = useStationStore((state) => ({ ...state.station }));
-
+  const addPatient = usePatientRecordsStore((state) => state.addPatient);
   const [patients, setPatients] = useState<IPatientRecord[]>([]);
   const [patientsReadyForSend, setPatientsReadyForSend] = useState<
     PatientRecordWithPdf[]
@@ -176,6 +177,9 @@ export function YakarScreen() {
             <ScrollView style={{ padding: 10, width: "100%" }}>
               {results.map(({ status }, index) => {
                 const patient = patientsReadyForSend[index];
+                if (status !== "fulfilled") {
+                  addPatient(patient);
+                }
                 return (
                   <DataTable.Row
                     key={index}
