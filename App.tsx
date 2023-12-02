@@ -4,7 +4,7 @@ import { HCESessionProvider } from "dorch-hce";
 import { useEffect, useState } from "react";
 import { I18nManager, StatusBar, StyleSheet, View } from "react-native";
 import { PaperProvider, Text } from "react-native-paper";
-import { useCameraPermission } from "react-native-vision-camera";
+
 import DeleteDialog from "./src/components/delete-dialog";
 import { Logo101 } from "./src/components/left-menu/101-logo";
 import MainMenu from "./src/components/main-menu";
@@ -15,15 +15,14 @@ import { theme } from "./src/shared-config";
 import { usePatientRecordsStore } from "./src/store/patients.record.store";
 import { useStationStore } from "./src/store/station.store";
 import HomeScreen from "./src/views/homepage";
-import QrCode from "./src/views/qr-code";
-import ReceivePatientScreen from "./src/views/recieve-patient";
+// import QrCode from "./src/views/qr-code";
+// import ReceivePatientScreen from "./src/views/recieve-patient";
 import StationScreen from "./src/views/taagad";
 import YakarScreen from "./src/views/yakar";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
-  const { hasPermission, requestPermission } = useCameraPermission();
   const { loadInitialState, station } = useStationStore();
   const loadPatientsState = usePatientRecordsStore(
     (state) => state.loadPatientsState
@@ -34,9 +33,7 @@ export default function App() {
   useEffect(() => {
     I18nManager.forceRTL(true);
     console.log(I18nManager.isRTL);
-    if (!hasPermission) {
-      requestPermission();
-    }
+
     const load = async () => {
       await Promise.all([loadInitialState(), loadPatientsState()]);
 
@@ -102,7 +99,7 @@ export default function App() {
             }}
             component={StationScreen}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name={ROUTES.IMPORT_PATIENT}
             options={{
               headerStyle: {
@@ -112,8 +109,8 @@ export default function App() {
               title: "",
             }}
             component={ReceivePatientScreen}
-          />
-          <Stack.Screen
+          /> */}
+          {/* <Stack.Screen
             name={ROUTES.EXPORT_PATIENT}
             options={{
               headerStyle: {
@@ -123,7 +120,7 @@ export default function App() {
               title: "",
             }}
             component={QrCode}
-          />
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
