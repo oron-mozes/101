@@ -2,7 +2,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HCESessionProvider } from "dorch-hce";
 import { useEffect, useState } from "react";
-import { I18nManager, StatusBar, StyleSheet, View } from "react-native";
+import {
+  I18nManager,
+  NativeEventEmitter,
+  StatusBar,
+  StyleSheet,
+  View,
+} from "react-native";
 import { PaperProvider, Text } from "react-native-paper";
 
 import DeleteDialog from "./src/components/delete-dialog";
@@ -19,6 +25,11 @@ import HomeScreen from "./src/views/homepage";
 // import ReceivePatientScreen from "./src/views/recieve-patient";
 import StationScreen from "./src/views/taagad";
 import YakarScreen from "./src/views/yakar";
+import { NativeModules } from "react-native";
+const { AndroidBeamReactNativeModule } = NativeModules;
+const eventEmitter = new NativeEventEmitter(
+  NativeModules.AndroidBeamReactNativeModule
+);
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -29,8 +40,15 @@ export default function App() {
   );
 
   const [appReady, toggleReady] = useState<boolean>(false);
-
+  const eventEmit = eventEmitter.addListener(
+    "EventReminder",
+    (message: string) => {
+      console.log(message);
+    }
+  );
   useEffect(() => {
+    console.log(AndroidBeamReactNativeModule.send("hello"));
+
     I18nManager.forceRTL(true);
     console.log(I18nManager.isRTL);
 
@@ -40,6 +58,9 @@ export default function App() {
       toggleReady(true);
     };
     load();
+    return () => {
+      eventEmit.remove();
+    };
   }, []);
   if (!appReady) {
     return (
