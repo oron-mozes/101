@@ -30,8 +30,10 @@ export function CSection() {
   const bloodPressure = usePatientRecordsStore(
     (state) => state.activePatient.measurements.bloodPressure
   );
-  const actions = usePatientRecordsStore(
-    (state) => state.activePatient.measurements.actions
+  const actions = usePatientRecordsStore((state) =>
+    state.activePatient.measurements.actions.filter(
+      (data) => data.action !== null
+    )
   );
   const handlers = usePatientRecordsStore(
     (state) => state.measurements_handlers
@@ -55,6 +57,7 @@ export function CSection() {
       time: new Date().getTime(),
     });
   };
+  console.log({ initialEmptyAction, actions });
 
   return (
     <Card style={styles.card}>

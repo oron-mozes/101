@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { decompress } from "compress-json";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { RNCamera } from "react-native-camera";
+import { BarCodeScanner } from "expo-barcode-scanner";
 import { Button, Text } from "react-native-paper";
 import { useTranslation } from "../../hooks/useMyTranslation";
 import { IPatientRecord, StackNavigation } from "../../interfaces";
@@ -12,6 +12,7 @@ import { TAB_STATUS } from "../homepage";
 
 export function ReceivePatientScreen() {
   const navigation = useNavigation<StackNavigation>();
+
   const translation = useTranslation();
   const [aggregatedPatient, setPatient] = useState<Partial<IPatientRecord>>({
     new: true,
@@ -21,12 +22,14 @@ export function ReceivePatientScreen() {
   const addPatient = usePatientRecordsStore((state) => state.addPatient);
 
   const [parts, addParts] = useState<Set<number>>(new Set([]));
+  const [scanned, setScanned] = useState(false);
 
   const goBackHome = () =>
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
 
   const handleBarcodeRead = (event) => {
     try {
+      setScanned(true);
       const parsed = JSON.parse(event.data);
 
       const patient = decompress(parsed);
@@ -48,6 +51,7 @@ export function ReceivePatientScreen() {
       updateScanCount(scanCount + 1);
 
       patient.partialData.isLast && setDone(true);
+      setScanned(false);
     } catch (e) {
       console.log({ event, e });
     }
@@ -57,10 +61,20 @@ export function ReceivePatientScreen() {
     navigation.navigate(ROUTES.HOME, { tab: TAB_STATUS.STATUS });
   };
   const current = parts?.size.toString();
+  const [hasPermission, setHasPermission] = useState(null);
 
+  useEffect(() => {
+    const getBarCodeScannerPermissions = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    };
+
+    getBarCodeScannerPermissions();
+  }, []);
+  if (!hasPermission) {
+    return <View />;
+  }
   return (
-    // <SafeAreaView style={styles.container}>
-    //   <ScrollView style={styles.scrollView}>
     <View style={styles.content}>
       <Text variant="headlineMedium" style={styles.pageTitle}>
         {translation("waitingForQrCode")}
@@ -81,12 +95,11 @@ export function ReceivePatientScreen() {
           </View>
         </>
       )}
-
-      <RNCamera
-        style={styles.camera}
-        onBarCodeRead={handleBarcodeRead}
-        captureAudio={false}
+      <BarCodeScanner
+        onBarCodeScanned={scanned ? undefined : handleBarcodeRead}
+        style={StyleSheet.absoluteFillObject}
       />
+
       <Text variant="bodyLarge" style={styles.statusMessage}>
         {!doneScanning && parts.size === 0 && translation("waitingForScan")}
         {!doneScanning &&
@@ -106,8 +119,6 @@ export function ReceivePatientScreen() {
         </Button>
       </View>
     </View>
-    //   </ScrollView>
-    // </SafeAreaView>
   );
 }
 

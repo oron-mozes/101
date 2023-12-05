@@ -69,7 +69,7 @@ export function PatientDetails() {
           value={personal_information.idf_id?.toString()}
         />
       </Card.Content>
-      <Card.Content style={[styles.innerContent]}>
+      {/* <Card.Content style={[styles.innerContent]}>
         <InputField
           testID="unit"
           label={translation("unit")}
@@ -87,7 +87,7 @@ export function PatientDetails() {
             handlers.setEnvironment(environment.id as EEnvironment);
           }}
         />
-      </Card.Content>
+      </Card.Content> */}
       <Card.Content style={[styles.innerContent]}>
         <View style={styles.personalInfo}>
           <TimePicker
