@@ -71,7 +71,7 @@ export function YakarScreen() {
   }, [patients]);
 
   const reportAction = reportAPatient(station);
-
+  const [inSendingMode, setInSendingMode] = useState<Set<string>>(new Set([]));
   useEffect(() => {
     patientsReadyForSend.length !== 0 && setStatus(STATUS.Sending);
     patientsReadyForSend.length !== 0 && setStatus(STATUS.Sending);
@@ -94,6 +94,7 @@ export function YakarScreen() {
   }, [patientsReadyForSend]);
 
   const doneScanning = () => {
+    setResults([]);
     setStatus(STATUS.Closed);
     close();
   };
@@ -215,20 +216,41 @@ export function YakarScreen() {
                           <Button
                             mode="outlined"
                             onPress={async () => {
+                              inSendingMode.add(
+                                patient.personal_information.patientId
+                              );
+                              setInSendingMode(new Set([...inSendingMode]));
                               try {
                                 const data = await reportAction(patient);
-                                if (data.patientId) {
-                                  setResults((results) => {
-                                    const newResults = [...results];
-                                    newResults[index].status = data.status;
-                                    return newResults;
-                                  });
-                                }
-                              } catch (error) {}
+                                inSendingMode.delete(
+                                  patient.personal_information.patientId
+                                );
+                                setInSendingMode(new Set([...inSendingMode]));
+                                setResults((results) => {
+                                  const newResults = [...results];
+                                  newResults[index].status = data.status;
+                                  return newResults;
+                                });
+                              } catch (error) {
+                                inSendingMode.delete(
+                                  patient.personal_information.patientId
+                                );
+                                setInSendingMode(new Set([...inSendingMode]));
+                              }
                             }}
-                            icon="undo-variant"
+                            icon={
+                              inSendingMode.has(
+                                patient.personal_information.patientId
+                              )
+                                ? "send-outline"
+                                : "undo-variant"
+                            }
                           >
-                            {translation("reSend")}
+                            {inSendingMode.has(
+                              patient.personal_information.patientId
+                            )
+                              ? translation("sending")
+                              : translation("reSend")}
                           </Button>
                           {station.email_to && (
                             <Button
