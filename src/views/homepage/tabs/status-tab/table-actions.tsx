@@ -14,7 +14,6 @@ export function TableActions() {
   const patients = usePatientRecordsStore((state) => [...state.patients]);
   const translation = useTranslation();
   const { CommunicationIcon, transferPatient } = usePatientTransfer();
-  const { station: { communicationMethod } } = useStationStore();
 
   const toggleDeleteBulkPatients = useGlobalStore(
     (state) => state.toggleDeleteBulkPatients
@@ -28,12 +27,13 @@ export function TableActions() {
 
   useEffect(() => {
     setEnabled(performActionForPatients.length > 0);
-    setChecked(patients.length && performActionForPatients.length === patients.length);
+    setChecked(
+      patients.length && performActionForPatients.length === patients.length
+    );
   }, [performActionForPatients]);
 
   const transferCallback = useCallback(
-    () =>
-      transferPatient({ patientsIds: performActionForPatients }),
+    () => transferPatient({ patientsIds: performActionForPatients }),
     [performActionForPatients]
   );
 
@@ -46,14 +46,6 @@ export function TableActions() {
       },
     },
   ];
-
-  if (communicationMethod !== "QR") {
-    quickLinks.unshift({
-      label: translation("patientTransfer"),
-      role: "transfer",
-      action: transferCallback,
-    })
-  };
 
   return (
     <View
@@ -82,7 +74,11 @@ export function TableActions() {
         />
         <Text
           testID="table-action-all"
-          style={[styles.text, { borderRightWidth: 0 }, { color: patients.length ? colors.text : colors.disabled }]}
+          style={[
+            styles.text,
+            { borderRightWidth: 0 },
+            { color: patients.length ? colors.text : colors.disabled },
+          ]}
         >
           {translation("all")}
         </Text>

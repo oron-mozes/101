@@ -6,9 +6,7 @@ import { useTranslation } from "../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../store/patients.record.store";
 import { useStationStore } from "../../../store/station.store";
 import { colors, inputFontSize } from "../../../shared-config";
-import { CommunicationMethod } from "../../../interfaces";
 import { NfcIcon } from "../../../components/nfc-dialog/nfc-icon";
-import { QrIcon } from "../../../components/qr-icon/qr";
 
 export function StationGlobalActions() {
   const translation = useTranslation();
@@ -41,50 +39,6 @@ export function StationGlobalActions() {
         justifyContent: "space-between",
       }}
     >
-      <View>
-        <View style={[styles.container, { justifyContent: "flex-start" }]}>
-          <Text
-            style={{
-              marginRight: 10,
-              fontSize: inputFontSize,
-            }}
-          >
-            {"שיטת העברת נתונים"}
-          </Text>
-          <ToggleButton.Row
-            onValueChange={(value) => {}}
-            value={communicationMethod}
-          >
-            <ToggleButton
-              size={35}
-              icon={() => (
-                <NfcIcon
-                  size={20}
-                  color={
-                    communicationMethod === "NFC"
-                      ? colors.primary
-                      : colors.disabled
-                  }
-                />
-              )}
-              onPress={() => setCommunicationMethod("NFC")}
-            />
-            <ToggleButton
-              size={35}
-              icon={() => (
-                <QrIcon
-                  color={
-                    communicationMethod === "QR"
-                      ? colors.primary
-                      : colors.disabled
-                  }
-                />
-              )}
-              onPress={() => setCommunicationMethod("QR")}
-            />
-          </ToggleButton.Row>
-        </View>
-      </View>
       <View style={[styles.container]}>
         <DialogWrapper
           testId="delete-station"

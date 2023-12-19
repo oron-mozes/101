@@ -15,8 +15,6 @@ import { theme } from "./src/shared-config";
 import { usePatientRecordsStore } from "./src/store/patients.record.store";
 import { useStationStore } from "./src/store/station.store";
 import HomeScreen from "./src/views/homepage";
-import QrCode from "./src/views/qr-code";
-import ReceivePatientScreen from "./src/views/recieve-patient";
 import StationScreen from "./src/views/taagad";
 import YakarScreen from "./src/views/yakar";
 
@@ -98,28 +96,6 @@ export default function App() {
               title: "",
             }}
             component={StationScreen}
-          />
-          <Stack.Screen
-            name={ROUTES.IMPORT_PATIENT}
-            options={{
-              headerStyle: {
-                backgroundColor: theme.colors.primary,
-              },
-              headerLeft: () => <Logo101 />,
-              title: "",
-            }}
-            component={ReceivePatientScreen}
-          />
-          <Stack.Screen
-            name={ROUTES.EXPORT_PATIENT}
-            options={{
-              headerStyle: {
-                backgroundColor: theme.colors.primary,
-              },
-              headerLeft: () => <Logo101 />,
-              title: "",
-            }}
-            component={QrCode}
           />
         </Stack.Navigator>
       </NavigationContainer>

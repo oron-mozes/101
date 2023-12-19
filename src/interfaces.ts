@@ -411,7 +411,7 @@ export interface ICareProvider {
   role: ROLE;
 }
 
-export type CommunicationMethod = "NFC" | "QR";
+export type CommunicationMethod = "NFC";
 
 export interface IStation {
   unit_name: string;
