@@ -13,6 +13,11 @@ create a build - paste in to the device and make sure to install it. then you ca
 1. $npm run start
 2. select a for android
 
+
+## java 16<
+brew install openjdk@17 
+
+
 ## Build
 
 Signup to: https://expo.dev/signup

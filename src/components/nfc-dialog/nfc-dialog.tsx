@@ -16,7 +16,7 @@ import { usePatientRecordsStore } from "../../store/patients.record.store";
 import { NfcIcon } from "./nfc-icon";
 
 export function NfcDialogWrapper() {
-  const { readTag, writeNdef, close } = useNfc();
+  const { readTag, writeNdef, close, writeNdefToCard } = useNfc();
   const { nfcStatus, nfcTransferStatus, closeNfcDialog } = useNfcStore();
   const { patients, updatePatientStatus } = usePatientRecordsStore();
   const addPatient = usePatientRecordsStore((state) => state.addPatient);
@@ -44,7 +44,7 @@ export function NfcDialogWrapper() {
         );
 
         const compressed = compress({ records: patientsDataToSend });
-        writeNdef(JSON.stringify(compressed), async () => {
+        writeNdefToCard(JSON.stringify(compressed), async () => {
           setAllowClose(true);
         });
       },

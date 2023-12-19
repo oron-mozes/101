@@ -1,15 +1,14 @@
-import NfcManager, { NfcEvents, NfcTech } from "react-native-nfc-manager";
-import { NfcTransferStatus, useNfcStore } from "../store/nfc.store";
+import { decompress } from "compress-json";
 import {
   HCESession,
   HCESessionContext,
   NFCTagType4,
   NFCTagType4NDEFContentType,
 } from "dorch-hce";
-import { polyfill } from "react-native-polyfill-globals/src/encoding";
-import { usePatientRecordsStore } from "../store/patients.record.store";
-import { decompress } from "compress-json";
 import { useContext, useEffect } from "react";
+import NfcManager, { Ndef, NfcEvents, NfcTech } from "react-native-nfc-manager";
+import { polyfill } from "react-native-polyfill-globals/src/encoding";
+import { NfcTransferStatus, useNfcStore } from "../store/nfc.store";
 
 polyfill();
 NfcManager.start();
@@ -77,7 +76,42 @@ export function useNfc() {
       await close();
     }
   }
+  async function writeNdefToCard(content: string, cb) {
+    if ((await NfcManager.isSupported()) === false) {
+      setTransferStatus(
+        NfcTransferStatus.Error({
+          errorMessage: "NFC is not supported on this device",
+        })
+      );
+      return;
+    }
 
+    if ((await NfcManager.isEnabled()) === false) {
+      NfcManager.goToNfcSetting();
+      close();
+      closeNfcDialog();
+      return;
+    }
+
+    NfcManager.requestTechnology(NfcTech.Ndef)
+      .then(() => {
+        const bytes = Ndef.encodeMessage([
+          Ndef.textRecord(content, "en", "utf-8"),
+        ]);
+
+        NfcManager.ndefHandler
+          .writeNdefMessage(bytes)
+          .then((data) => {
+            cb();
+          })
+          .catch((err) => {
+            close();
+          });
+      })
+      .catch((err) => {
+        close();
+      });
+  }
   const writeNdef = async (content: string, onComplete) => {
     try {
       const tag = new NFCTagType4({
@@ -109,5 +143,5 @@ export function useNfc() {
       close();
     };
   }, []);
-  return { readTag, writeNdef, close };
+  return { readTag, writeNdef, close, writeNdefToCard };
 }
