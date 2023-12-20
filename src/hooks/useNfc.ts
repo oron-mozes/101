@@ -59,7 +59,7 @@ export function useNfc() {
       const buffer = new Uint8Array(tag.ndefMessage[0].payload);
       const textDecoder = new TextDecoder("utf-8");
       const decodedString = textDecoder.decode(buffer).substring(3);
-
+      //how can I use crypto with old apps?
       const parsedData = decompress(
         JSON.parse(JSON.parse(JSON.stringify(decodedString)))
       );

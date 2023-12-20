@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Checkbox, DataTable, Text } from "react-native-paper";
+import { Checkbox, DataTable, Icon, Text } from "react-native-paper";
 import { TAB_STATUS } from "../..";
 import { StatusChip } from "../../../../form-components/status-chip";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
@@ -20,6 +20,7 @@ import { PatientCareIcon } from "../../footer/patient-care-icon";
 import { TableActions } from "./table-actions";
 import { sortByPriority } from "./utils";
 import { usePatientTransfer } from "../../../../hooks/usePatientTransfer";
+import { QuickView } from "./quick-view";
 
 export function StatusTab() {
   const navigation = useNavigation<StackNavigation>();
@@ -169,9 +170,11 @@ export function StatusTab() {
                         <Text>
                           {showAccordion.has(
                             patient.personal_information.patientId
-                          )
-                            ? translation("close")
-                            : translation("open")}
+                          ) ? (
+                            <Icon source="window-minimize" size={20} />
+                          ) : (
+                            <Icon source="arrow-expand" size={20} />
+                          )}
                         </Text>
                       </View>
                     </TouchableWithoutFeedback>
@@ -240,10 +243,16 @@ export function StatusTab() {
                 </DataTable.Row>
                 <View
                   style={{
+                    borderBottomWidth: showAccordion.has(
+                      patient.personal_information.patientId
+                    )
+                      ? 1
+                      : 0,
+                    borderColor: colors.textInputBorderColor,
                     height: showAccordion.has(
                       patient.personal_information.patientId
                     )
-                      ? 100
+                      ? 180
                       : 0,
                     width: "100%",
                     paddingTop: showAccordion.has(
@@ -251,10 +260,9 @@ export function StatusTab() {
                     )
                       ? 10
                       : 0,
-                    backgroundColor: colors.textInputBorderColor,
                   }}
                 >
-                  <Text>{generateMessage(patient)}</Text>
+                  <QuickView patient={patient} />
                 </View>
               </>
             );

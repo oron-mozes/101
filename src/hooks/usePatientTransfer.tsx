@@ -1,11 +1,9 @@
-import { NfcStatus, useNfcStore } from "../store/nfc.store";
-import { ComponentProps } from "react";
-import { useStationStore } from "../store/station.store";
 import { useNavigation } from "@react-navigation/native";
-import type { StackNavigation } from "../interfaces";
-import { ROUTES } from "../routes";
+import { ComponentProps } from "react";
 import { NfcIcon } from "../components/nfc-dialog/nfc-icon";
-import { usePatientRecordsStore } from "../store/patients.record.store";
+import type { StackNavigation } from "../interfaces";
+import { NfcStatus, useNfcStore } from "../store/nfc.store";
+import { useStationStore } from "../store/station.store";
 
 export function usePatientTransfer() {
   const { openNfcDialog } = useNfcStore();

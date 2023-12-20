@@ -341,7 +341,7 @@
   "treatment": "טיפול",
   "email": "דואר אלקטרוני",
   "exportPatients": "יצוא פצועים",
-  "patientSummary": "מטופל.ת כתוצאה מ{{injury}}, במצב הכרה:{{avpu}}. \n קיבל.ה את התרופות הבאות: {{medications}}. \n נמדדו לו.ה המדדים הבאים: לחץ דם {{bloodPressure}}, סטורציה {{saturation}}.",
+  "patientSummary": "מטופל.ת כתוצאה מ{{injury}}, \nבמצב הכרה:{{avpu}}. \n קיבל.ה את התרופות הבאות: {{medications}}. \n נמדדו לו.ה המדדים הבאים:\n לחץ דם {{bloodPressure}},\nסטורציה {{saturation}}.",
   "unknown": "לא ידוע",
   "expansion": "הרחבה",
   "open": "פתח"
