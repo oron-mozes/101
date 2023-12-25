@@ -29,12 +29,20 @@ export const NfcTransferStatus = variant({
   }),
 });
 
+export type TDestination = "card" | "device";
 export const NfcStatus = variant({
   Idle: {},
   Receiving: constant({ text: "קליטת פצועים" }),
-  Sending: ({ patientsIds }: { patientsIds: string[] }) => ({
+  Sending: ({
+    patientsIds,
+    destination,
+  }: {
+    patientsIds: string[];
+    destination: TDestination;
+  }) => ({
     text: "העברת פצועים",
     patientsIds,
+    destination,
   }),
 });
 

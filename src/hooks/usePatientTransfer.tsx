@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ComponentProps } from "react";
 import { NfcIcon } from "../components/nfc-dialog/nfc-icon";
 import type { StackNavigation } from "../interfaces";
-import { NfcStatus, useNfcStore } from "../store/nfc.store";
+import { NfcStatus, TDestination, useNfcStore } from "../store/nfc.store";
 import { useStationStore } from "../store/station.store";
 
 export function usePatientTransfer() {
@@ -12,8 +12,14 @@ export function usePatientTransfer() {
   } = useStationStore();
   const { navigate } = useNavigation<StackNavigation>();
 
-  const transferPatient = ({ patientsIds }: { patientsIds: string[] }) => {
-    openNfcDialog(NfcStatus.Sending({ patientsIds }));
+  const transferPatient = ({
+    patientsIds,
+    destination,
+  }: {
+    patientsIds: string[];
+    destination: TDestination;
+  }) => {
+    openNfcDialog(NfcStatus.Sending({ patientsIds, destination }));
   };
 
   const receivePatient = () => {

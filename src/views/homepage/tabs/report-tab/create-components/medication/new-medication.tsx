@@ -6,6 +6,7 @@ import { CheckButton } from "../../../../../../form-components/select-button";
 import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import {
+  E_FLUID_TREATMENT,
   IMedicationsAndFluidInformation,
   MEDICATION_TREATMENT,
 } from "../../../../../../interfaces";
@@ -137,6 +138,24 @@ export function NewMedication() {
           </Card.Content>
         </>
       )}
+      {newMedication.type === E_FLUID_TREATMENT.BLOOD && (
+        <>
+          <Divider style={{ width: "100%", marginTop: 10, marginBottom: 10 }} />
+          <Card.Content style={[styles.innerContent, styles.section]}>
+            <InputField
+              onChange={(value) => {
+                setNewMedication({
+                  ...newMedication,
+                  other: value,
+                });
+              }}
+              label={translation("bloodBagId")}
+              value={newMedication.other}
+            />
+          </Card.Content>
+        </>
+      )}
+
       {selectedTreatmentDose && (
         <>
           <Divider style={{ width: "100%", marginTop: 10, marginBottom: 10 }} />

@@ -43,7 +43,7 @@ export function getMedicationDoseByType(
     return;
   }
   return (
-    (newMedication.type === E_FLUID_TREATMENT.BLOOD && E_FLUID_BLOOD_DOSE) ||
+    // (newMedication.type === E_FLUID_TREATMENT.BLOOD && E_FLUID_BLOOD_DOSE) ||
     (newMedication.type === E_FLUID_TREATMENT.HARTMAN &&
       E_FLUID_HARTMAN_DOSE) ||
     (newMedication.type === E_FLUID_TREATMENT.PLASMA && E_FLUID_PLASMA_DOSE) ||
@@ -66,6 +66,9 @@ export function allowAddMedication(
   medication: IMedicationsAndFluidInformation
 ): boolean {
   if (medication.treatment === MEDICATION_TREATMENT.OTHER) {
+    return !!medication.other;
+  }
+  if (medication.type === E_FLUID_TREATMENT.BLOOD) {
     return !!medication.other;
   }
   return !!getMedicationDoseByType(medication)?.[medication?.dose];

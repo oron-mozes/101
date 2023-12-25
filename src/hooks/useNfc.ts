@@ -25,7 +25,6 @@ export function useNfc() {
     ]);
   };
   async function readTag(callback: (data) => void) {
-    console.log("READING TAG");
     if ((await NfcManager.isSupported()) === false) {
       setTransferStatus(
         NfcTransferStatus.Error({
@@ -34,7 +33,7 @@ export function useNfc() {
       );
       return;
     }
-    console.log("READING TAG 2");
+
     if ((await NfcManager.isEnabled()) === false) {
       NfcManager.goToNfcSetting();
       close();
@@ -94,7 +93,9 @@ export function useNfc() {
     }
 
     NfcManager.requestTechnology(NfcTech.Ndef)
-      .then(() => {
+      .then(async () => {
+        const bgTag = await NfcManager.getTag();
+
         const bytes = Ndef.encodeMessage([
           Ndef.textRecord(content, "en", "utf-8"),
         ]);
@@ -119,10 +120,10 @@ export function useNfc() {
         writable: false,
         content,
       });
-      console.log("WRITING TAG", session);
+
       await session.setApplication(tag);
       await session.setEnabled(true);
-      console.log("WRITING TAG 2");
+
       session.on(HCESession.Events.HCE_STATE_CONNECTED, () => {
         setTransferStatus(NfcTransferStatus.Loading());
       });

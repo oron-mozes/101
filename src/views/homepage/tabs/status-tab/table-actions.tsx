@@ -7,6 +7,9 @@ import { usePatientRecordsStore } from "../../../../store/patients.record.store"
 import { useGlobalStore } from "../../../../store/global.store";
 import { usePatientTransfer } from "../../../../hooks/usePatientTransfer";
 import { useStationStore } from "../../../../store/station.store";
+import { TDestination } from "../../../../store/nfc.store";
+import { DialogWrapper } from "../../../../components/dialog";
+import { DeviceSelectDialog } from "../../../../components/device-select";
 
 export function TableActions() {
   const [checked, setChecked] = useState<boolean>(false);
@@ -14,6 +17,9 @@ export function TableActions() {
   const patients = usePatientRecordsStore((state) => [...state.patients]);
   const translation = useTranslation();
   const { CommunicationIcon, transferPatient } = usePatientTransfer();
+  const {
+    station: { communicationMethod },
+  } = useStationStore();
 
   const toggleDeleteBulkPatients = useGlobalStore(
     (state) => state.toggleDeleteBulkPatients
@@ -24,6 +30,8 @@ export function TableActions() {
   const setPerformActionForPatients = useGlobalStore(
     (state) => state.setPerformActionForPatients
   );
+  const [showDeviceSelectionModal, setShowDeviceSelectionModal] =
+    useState<boolean>(false);
 
   useEffect(() => {
     setEnabled(performActionForPatients.length > 0);
@@ -33,11 +41,20 @@ export function TableActions() {
   }, [performActionForPatients]);
 
   const transferCallback = useCallback(
-    () => transferPatient({ patientsIds: performActionForPatients }),
+    (destination: TDestination) =>
+      transferPatient({ patientsIds: performActionForPatients, destination }),
     [performActionForPatients]
   );
 
+  const toggleDeviceTransfer = () =>
+    setShowDeviceSelectionModal(!showDeviceSelectionModal);
+
   const quickLinks = [
+    {
+      label: translation("patientTransfer"),
+      role: "transfer",
+      action: toggleDeviceTransfer,
+    },
     {
       label: translation("deletePatient"),
       role: "delete",
@@ -58,6 +75,13 @@ export function TableActions() {
         marginTop: 10,
       }}
     >
+      <DeviceSelectDialog
+        visible={showDeviceSelectionModal}
+        title={"Select Device"}
+        onClose={toggleDeviceTransfer}
+        onSelect={transferCallback}
+      />
+
       <View style={[styles.item, { flex: 0.5, paddingRight: 10 }]}>
         <Checkbox
           status={checked ? "checked" : "unchecked"}

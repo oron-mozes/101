@@ -103,12 +103,6 @@ export function StatusTab() {
             style={[styles.title, { flex: 0.5 }]}
             textStyle={styles.titleText}
           >
-            {translation("expansion")}
-          </DataTable.Title>
-          <DataTable.Title
-            style={[styles.title, { flex: 0.5 }]}
-            textStyle={styles.titleText}
-          >
             {translation("choose")}
           </DataTable.Title>
           <DataTable.Title
@@ -130,7 +124,7 @@ export function StatusTab() {
             style={[styles.title, { flex: 0.5 }]}
             textStyle={styles.titleText}
           >
-            {translation("transfer")}
+            {translation("expansion")}
           </DataTable.Title>
         </DataTable.Header>
         <ScrollView style={{ height: 600 }}>
@@ -146,39 +140,6 @@ export function StatusTab() {
             return (
               <>
                 <DataTable.Row key={index} style={{ backgroundColor: "white" }}>
-                  <DataTable.Cell style={[styles.title, { flex: 0.5 }]}>
-                    <TouchableWithoutFeedback
-                      onPress={() => {
-                        if (
-                          showAccordion.has(
-                            patient.personal_information.patientId
-                          )
-                        ) {
-                          showAccordion.delete(
-                            patient.personal_information.patientId
-                          );
-                          setShowAccordion(new Set(showAccordion));
-                        } else {
-                          showAccordion.add(
-                            patient.personal_information.patientId
-                          );
-                          setShowAccordion(new Set(showAccordion));
-                        }
-                      }}
-                    >
-                      <View>
-                        <Text>
-                          {showAccordion.has(
-                            patient.personal_information.patientId
-                          ) ? (
-                            <Icon source="window-minimize" size={20} />
-                          ) : (
-                            <Icon source="arrow-expand" size={20} />
-                          )}
-                        </Text>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </DataTable.Cell>
                   <DataTable.Cell style={[styles.title, { flex: 0.5 }]}>
                     <Checkbox
                       onPress={() => {
@@ -230,15 +191,39 @@ export function StatusTab() {
                       editable={false}
                     />
                   </DataTable.Cell>
-                  <DataTable.Cell
-                    style={[styles.title, { flex: 0.5 }]}
-                    onPress={() =>
-                      transferPatient({
-                        patientsIds: [patient.personal_information.patientId],
-                      })
-                    }
-                  >
-                    <CommunicationIcon color={colors.primary} size={25} />
+
+                  <DataTable.Cell style={[styles.title, { flex: 0.5 }]}>
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        if (
+                          showAccordion.has(
+                            patient.personal_information.patientId
+                          )
+                        ) {
+                          showAccordion.delete(
+                            patient.personal_information.patientId
+                          );
+                          setShowAccordion(new Set(showAccordion));
+                        } else {
+                          showAccordion.add(
+                            patient.personal_information.patientId
+                          );
+                          setShowAccordion(new Set(showAccordion));
+                        }
+                      }}
+                    >
+                      <View>
+                        <Text>
+                          {showAccordion.has(
+                            patient.personal_information.patientId
+                          ) ? (
+                            <Icon source="chevron-up" size={20} />
+                          ) : (
+                            <Icon source="chevron-down" size={20} />
+                          )}
+                        </Text>
+                      </View>
+                    </TouchableWithoutFeedback>
                   </DataTable.Cell>
                 </DataTable.Row>
                 <View

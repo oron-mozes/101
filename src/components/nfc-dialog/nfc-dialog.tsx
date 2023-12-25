@@ -36,7 +36,7 @@ export function NfcDialogWrapper() {
             ),
           ]);
         }),
-      Sending: ({ patientsIds }) => {
+      Sending: ({ patientsIds, destination }) => {
         setAllowClose(false);
         setPatientsIds(patientsIds);
         const patientsDataToSend = patients.filter((patient) =>
@@ -44,9 +44,13 @@ export function NfcDialogWrapper() {
         );
 
         const compressed = compress({ records: patientsDataToSend });
-        writeNdefToCard(JSON.stringify(compressed), async () => {
-          setAllowClose(true);
-        });
+        destination === "card"
+          ? writeNdefToCard(JSON.stringify(compressed), async () => {
+              setAllowClose(true);
+            })
+          : writeNdef(JSON.stringify(compressed), async () => {
+              setAllowClose(true);
+            });
       },
     });
   }, [nfcStatus, nfcTransferStatus]);
