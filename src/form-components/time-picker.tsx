@@ -23,7 +23,7 @@ export function TimePicker({
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    onChange(value);
+    onChange(value || new Date().getTime());
   }, [value]);
 
   return (

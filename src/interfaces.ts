@@ -14,7 +14,7 @@ export interface IPersonalInformation {
   idf_id: string;
   patientId: string;
   unit: string;
-  environment: EEnvironment;
+  environment?: EEnvironment;
 }
 export interface IIncidentInformation {
   injury_time: number;

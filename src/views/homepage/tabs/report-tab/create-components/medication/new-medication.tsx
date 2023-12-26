@@ -32,7 +32,7 @@ export function NewMedication() {
     useState<IMedicationsAndFluidInformation>({
       ...emptyState,
       id: new Date().getTime(),
-      time: new Date().getTime(),
+      time: null,
     });
   const handlers = usePatientRecordsStore(
     (state) => state.medicationsAndFluids_handlers
@@ -66,7 +66,7 @@ export function NewMedication() {
       setNewMedication({
         ...newMedication,
         type: newMedication.type,
-        dose: values[0],
+        dose: null,
       });
     }
   }, [selectedTreatmentDose]);
@@ -161,7 +161,7 @@ export function NewMedication() {
           <Divider style={{ width: "100%", marginTop: 10, marginBottom: 10 }} />
           <Card.Content style={[styles.innerContent, styles.section]}>
             <Text style={styles.title}>{translation("dose")}</Text>
-            <View style={[styles.options]}>
+            <View style={[styles.options, { alignItems: "center" }]}>
               {Object.values(selectedTreatmentDose).map((item) => (
                 <CheckButton
                   testID={`medication-dose-${item}`}
@@ -176,6 +176,18 @@ export function NewMedication() {
                   key={item}
                 />
               ))}
+              <View style={{ width: 80, marginTop: -30 }}>
+                <InputField
+                  onChange={(value) => {
+                    setNewMedication({
+                      ...newMedication,
+                      other: value,
+                    });
+                  }}
+                  label={translation("other")}
+                  value={newMedication.other}
+                />
+              </View>
             </View>
           </Card.Content>
         </>

@@ -11,7 +11,7 @@ export function EvacInformation() {
     (state) => state.activePatient.evacuation.destination
   );
   const time = usePatientRecordsStore(
-    (state) => state.activePatient.evacuation.time ?? new Date().getTime()
+    (state) => state.activePatient.evacuation.time 
   );
   const handlers = usePatientRecordsStore((state) => state.evacuation_handlers);
 

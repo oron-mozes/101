@@ -71,5 +71,8 @@ export function allowAddMedication(
   if (medication.type === E_FLUID_TREATMENT.BLOOD) {
     return !!medication.other;
   }
-  return !!getMedicationDoseByType(medication)?.[medication?.dose];
+  return (
+    !!medication.other ||
+    !!getMedicationDoseByType(medication)?.[medication?.dose]
+  );
 }

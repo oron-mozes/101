@@ -5,6 +5,7 @@ export const emptyPatient: IPatientRecord = {
     patientId: null,
     full_name: null,
     idf_id: null,
+    unit: "",
   },
   incident_information: {
     injury_time: null,

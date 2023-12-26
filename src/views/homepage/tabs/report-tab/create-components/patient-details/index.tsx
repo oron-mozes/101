@@ -7,9 +7,6 @@ import { TimePicker } from "../../../../../../form-components/time-picker";
 import { useTranslation } from "../../../../../../hooks/useMyTranslation";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { design } from "../shared-style";
-import { DropDown } from "../../../../../../form-components/dropdown";
-import { convertToOptions } from "../utils";
-import { EEnvironment } from "../../../../../../interfaces";
 
 export function PatientDetails() {
   const personal_information = usePatientRecordsStore((state) => ({
@@ -69,30 +66,12 @@ export function PatientDetails() {
           value={personal_information.idf_id?.toString()}
         />
       </Card.Content>
-      {/* <Card.Content style={[styles.innerContent]}>
-        <InputField
-          testID="unit"
-          label={translation("unit")}
-          onChange={(unit: string) => {
-            handlers.setUnit(unit);
-          }}
-          value={personal_information.unit}
-        />
-        <DropDown
-          testID="environment"
-          label={translation("environment")}
-          options={convertToOptions(Object.values(EEnvironment), translation)}
-          initialValue={personal_information.environment}
-          onSelect={(environment) => {
-            handlers.setEnvironment(environment.id as EEnvironment);
-          }}
-        />
-      </Card.Content> */}
+
       <Card.Content style={[styles.innerContent]}>
         <View style={styles.personalInfo}>
           <TimePicker
             testID="care-time"
-            value={incident_information.care_time ?? new Date().getTime()}
+            value={incident_information.care_time}
             label={translation("timeOfTreatment")}
             onChange={(care_time: number) => {
               care_time !== incident_information.care_time &&
@@ -101,7 +80,7 @@ export function PatientDetails() {
           />
           <TimePicker
             testID="injury-time"
-            value={incident_information.injury_time ?? new Date().getTime()}
+            value={incident_information.injury_time}
             label={translation("timeOfInjury")}
             onChange={(injury_time: number) => {
               incident_information.injury_time !== injury_time &&
@@ -111,7 +90,7 @@ export function PatientDetails() {
         </View>
         <DatePicker
           testID="injury"
-          value={incident_information.date ?? new Date().getTime()}
+          value={incident_information.date}
           label={translation("date")}
           onChange={(date: number) => {
             inc_handlers.setDate(date);

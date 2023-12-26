@@ -8,13 +8,13 @@
   "addPatient": "101 חדש",
   "patientsStatus": "פצועים בתחנה",
   "full_name": "שם",
-  "idf_id": "מספר מזהה",
+  "idf_id": "מספר אישי/תז ",
   "rank": "דרגה",
   "idfUnit": "שם תחנה",
   "unit_name": "שם תחנה",
   "role": "תפקיד",
   "expertise": "התמחות",
-  "save": "שמור",
+  "save": "הוסף",
   "importPatient": "קליטת פצוע.ה",
   "exportPatient": "ייצא מטופל",
   "ACTIVE": "חזרה לפעילות",
@@ -24,7 +24,7 @@
   "CLOSED": "לאחר פינוי",
   "yes": "כן",
   "no": "לא",
-  "patientName": "שם פצוע.ה",
+  "patientName": "שם / מספר כ.פינוי ",
   "avpu": "מצב הכרה AVPU",
   "evacStatus": "סטטוס פינוי",
   "status": "סטטוס פינוי",
@@ -349,5 +349,6 @@
   "deviceSelection": "כתוב לטאבלט",
   "transformTitle": "העברת מטופל",
   "transformDescription": "כיצד ההעברה תתבצע?",
-  "bloodBagId":"מספר מנת דם"
+  "bloodBagId": "מספר מנת דם",
+  "other": "אחר"
 }

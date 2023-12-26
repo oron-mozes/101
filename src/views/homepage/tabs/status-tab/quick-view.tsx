@@ -84,7 +84,7 @@ export function QuickView({ patient }: { patient: IPatientRecord }) {
                       action.other ? action.other : ""
                     }`
                 )
-                .join(", ")
+                .join("   |   ")
             : ""}
         </Text>
       </View>
