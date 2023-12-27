@@ -24,7 +24,6 @@ export function SavedAction<T>({
 }) {
   const translation = useTranslation();
   const successful = isSuccessful(information.successful);
-  console.log("???", information.action);
   return (
     <View style={{ flexDirection: "row" }}>
       <View style={styles.element}>

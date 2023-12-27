@@ -67,7 +67,6 @@ export function useNfc() {
 
       setTransferStatus(NfcTransferStatus.Success({ result: "" }));
     } catch (error) {
-      console.log("READING FAILED", { error });
       setTransferStatus(
         NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) })
       );
@@ -133,7 +132,6 @@ export function useNfc() {
         onComplete();
       });
     } catch (error) {
-      console.log("WRITING FAILED", error);
       setTransferStatus(
         NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) })
       );

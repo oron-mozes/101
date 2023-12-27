@@ -53,7 +53,6 @@ export function reportAPatient(station) {
         console.info("patient reported");
         return data;
       } else {
-        console.log(res.status, data);
         throw JSON.stringify(data);
       }
     } catch (e) {

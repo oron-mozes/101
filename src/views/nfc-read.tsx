@@ -31,7 +31,6 @@ const NFCPeerToPeer = () => {
   const handleNdefDiscovery = (tag) => {
     if (tag.ndefMessage) {
       // Process the received data from the tag
-      console.log("Received NDEF message:", tag.ndefMessage);
     }
   };
 

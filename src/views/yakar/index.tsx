@@ -144,7 +144,6 @@ export function YakarScreen() {
         return newResults;
       });
     } catch (error) {
-      console.log(JSON.parse(error.message).detail);
       setErrorMessage(
         JSON.parse(error.message).detail.map(
           (err) =>
@@ -195,10 +194,7 @@ export function YakarScreen() {
                   setPatients(parsedData.records);
                   close();
                 });
-              } catch (error) {
-                debugger;
-                console.log(error);
-              }
+              } catch (error) {}
             }}
           >
             {translation("startScan")}

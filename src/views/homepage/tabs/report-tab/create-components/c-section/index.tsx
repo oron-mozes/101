@@ -57,7 +57,6 @@ export function CSection() {
       time: new Date().getTime(),
     });
   };
-  console.log({ initialEmptyAction, actions });
 
   return (
     <Card style={styles.card}>
