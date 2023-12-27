@@ -103,6 +103,7 @@ export function useNfc() {
         NfcManager.ndefHandler
           .writeNdefMessage(bytes)
           .then((data) => {
+            setTransferStatus(NfcTransferStatus.Success({ result: "" }));
             cb();
           })
           .catch((err) => {

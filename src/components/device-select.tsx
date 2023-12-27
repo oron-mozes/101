@@ -21,20 +21,21 @@ export function DeviceSelectDialog({
 
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onClose}>
+      <Dialog
+        visible={visible}
+        onDismiss={onClose}
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Dialog.Title testID={`${testId}${testId ? "-" : ""}dialog-title`}>
           {translation("transformTitle")}
         </Dialog.Title>
         <Dialog.Content>
-          <Text
-            variant="bodyMedium"
-            testID={`${testId}${testId ? "-" : ""}dialog-description`}
-          >
-            {translation("transformDescription")}
-          </Text>
-        </Dialog.Content>
-        <Dialog.Actions style={{ justifyContent: "flex-start" }}>
           <Button
+            style={{ marginBottom: 20 }}
+            labelStyle={{ fontSize: 18, paddingTop: 10, paddingBottom: 10 }}
             onPress={() => onSelect("card")}
             mode="contained"
             testID={`${testId}${testId ? "-" : ""}dialog-confirm`}
@@ -42,12 +43,14 @@ export function DeviceSelectDialog({
             {translation("cardSelection")}
           </Button>
           <Button
+            mode="outlined"
+            labelStyle={{ fontSize: 16, paddingTop: 10, paddingBottom: 10 }}
             onPress={() => onSelect("device")}
             testID={`${testId}${testId ? "-" : ""}dialog-cancel`}
           >
             {translation("deviceSelection")}
           </Button>
-        </Dialog.Actions>
+        </Dialog.Content>
       </Dialog>
     </Portal>
   );

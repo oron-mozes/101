@@ -30,12 +30,12 @@ const bodyParts = [
   {
     xRang: [365, 402],
     yRang: legsRange,
-    location: EPosition.LEFT_LEG_BACK,
+    location: EPosition.RIGHT_LEG_BACK,
   },
   {
     xRang: [305, 353],
     yRang: legsRange,
-    location: EPosition.RIGHT_LEG_BACK,
+    location: EPosition.LEFT_LEG_BACK,
   },
   {
     xRang: [310, 405],

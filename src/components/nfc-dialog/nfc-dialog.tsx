@@ -46,7 +46,7 @@ export function NfcDialogWrapper() {
         const compressed = compress({ records: patientsDataToSend });
         destination === "card"
           ? writeNdefToCard(JSON.stringify(compressed), async () => {
-              setAllowClose(true);
+              close();
             })
           : writeNdef(JSON.stringify(compressed), async () => {
               setAllowClose(true);

@@ -138,7 +138,7 @@ export function StatusTab() {
                 mainInjury?.data?.toLowerCase() ?? ""
               )} ${translation(mainInjury?.location ?? "")}`;
             return (
-              <>
+              <View key={patient.personal_information.patientId}>
                 <DataTable.Row key={index} style={{ backgroundColor: "white" }}>
                   <DataTable.Cell style={[styles.title, { flex: 0.5 }]}>
                     <Checkbox
@@ -249,7 +249,7 @@ export function StatusTab() {
                 >
                   <QuickView patient={patient} />
                 </View>
-              </>
+              </View>
             );
           })}
         </ScrollView>

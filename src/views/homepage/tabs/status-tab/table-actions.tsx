@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Checkbox, Text } from "react-native-paper";
-import { useTranslation } from "../../../../hooks/useMyTranslation";
-import { colors } from "../../../../shared-config";
-import { usePatientRecordsStore } from "../../../../store/patients.record.store";
-import { useGlobalStore } from "../../../../store/global.store";
-import { usePatientTransfer } from "../../../../hooks/usePatientTransfer";
-import { useStationStore } from "../../../../store/station.store";
-import { TDestination } from "../../../../store/nfc.store";
-import { DialogWrapper } from "../../../../components/dialog";
 import { DeviceSelectDialog } from "../../../../components/device-select";
+import { useTranslation } from "../../../../hooks/useMyTranslation";
+import { usePatientTransfer } from "../../../../hooks/usePatientTransfer";
+import { colors } from "../../../../shared-config";
+import { useGlobalStore } from "../../../../store/global.store";
+import { TDestination } from "../../../../store/nfc.store";
+import { usePatientRecordsStore } from "../../../../store/patients.record.store";
+import { useStationStore } from "../../../../store/station.store";
 
 export function TableActions() {
   const [checked, setChecked] = useState<boolean>(false);
@@ -41,8 +40,9 @@ export function TableActions() {
   }, [performActionForPatients]);
 
   const transferCallback = useCallback(
-    (destination: TDestination) =>
-      transferPatient({ patientsIds: performActionForPatients, destination }),
+    (destination: TDestination) => {
+      transferPatient({ patientsIds: performActionForPatients, destination });
+    },
     [performActionForPatients]
   );
 
@@ -79,7 +79,10 @@ export function TableActions() {
         visible={showDeviceSelectionModal}
         title={"Select Device"}
         onClose={toggleDeviceTransfer}
-        onSelect={transferCallback}
+        onSelect={(e) => {
+          toggleDeviceTransfer();
+          transferCallback(e);
+        }}
       />
 
       <View style={[styles.item, { flex: 0.5, paddingRight: 10 }]}>

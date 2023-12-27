@@ -52,6 +52,23 @@ export function StationScreen() {
       : null
   );
 
+  // useEffect(() => {
+  //   if (
+  //     newCareProvider &&
+  //     newCareProvider.full_name &&
+  //     newCareProvider.idf_id &&
+  //     newCareProvider.role
+  //   ) {
+  //     setProviders([...providers, newCareProvider]);
+  //     ;
+  //     updateCareProvider(null);
+  //   }
+  // }, [newCareProvider]);
+  const newCareProviderValid: boolean =
+    newCareProvider &&
+    newCareProvider.full_name &&
+    newCareProvider.idf_id &&
+    newCareProvider.role;
   useEffect(() => {
     setStationName(station.unit_name);
     setProviders(station.care_providers);
@@ -121,8 +138,8 @@ export function StationScreen() {
               >
                 <TouchableWithoutFeedback
                   onPress={() => {
-                    !newCareProvider &&
-                      updateCareProvider({ ...initialProviderState });
+                    setProviders([...providers, newCareProvider]);
+                    updateCareProvider({ ...initialProviderState });
                   }}
                 >
                   <View
@@ -134,7 +151,7 @@ export function StationScreen() {
                     <Icon
                       source="plus"
                       color={
-                        !newCareProvider ? colors.primary : colors.disabled
+                        newCareProviderValid ? colors.primary : colors.disabled
                       }
                       size={20}
                     />
@@ -142,12 +159,12 @@ export function StationScreen() {
                       style={{
                         fontSize: 17,
                         marginLeft: 10,
-                        color: !newCareProvider
+                        color: newCareProviderValid
                           ? colors.primary
                           : colors.disabled,
                       }}
                     >
-                      {translation("addCareProvider")}1
+                      {translation("addCareProvider")}
                     </Text>
                   </View>
                 </TouchableWithoutFeedback>
