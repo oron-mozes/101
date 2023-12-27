@@ -351,5 +351,6 @@
   "transformTitle": "העברת מטופל",
   "transformDescription": "כיצד ההעברה תתבצע?",
   "bloodBagId": "מספר מנת דם",
-  "other": "אחר"
+  "other": "אחר",
+  "stationTest": "בדיקת תחנה:"
 }

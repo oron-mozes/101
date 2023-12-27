@@ -4,11 +4,15 @@ import { ROUTES } from "../../../routes";
 import { Button, Text, ToggleButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "../../../hooks/useMyTranslation";
-import { StackNavigation } from "../../../interfaces";
+import { IPatientRecord, StackNavigation } from "../../../interfaces";
 import { useStationStore } from "../../../store/station.store";
+import { initialPatient } from "../../../store/patients.record.store";
 import { useEffect, useState } from "react";
 import env from "../env.json";
 import { colors, inputFontSize } from "../../../shared-config";
+import { reportAPatient } from "../../yakar/utils";
+import { createPDFWithImage } from "../../../utils/create-pdf";
+import { set } from "lodash";
 
 export function YakarForm({
   isYakar,
@@ -29,9 +33,27 @@ export function YakarForm({
   const [passcode, setPasscode] = useState<string>("");
   const [secret, toggleSecret] = useState<boolean>(true);
   const canEdit = station.isYakar ? env.PASSCODE === passcode : true;
+  const [errorMessage, setErrorMessage] = useState<string[]>([]);
+  const [testCheck, setTestCheck] = useState<
+    "Ready" | "Sending" | "Success" | "Error"
+  >("Ready");
+  useEffect(() => {
+    if (Boolean(errorMessage.length)) {
+      setTimeout(() => {
+        setErrorMessage([]);
+      }, 5000);
+    }
+    if (testCheck === "Success") {
+      setTimeout(() => {
+        setTestCheck("Ready");
+      }, 5000);
+    }
+  }, [errorMessage, testCheck]);
   useEffect(() => {
     setPasscode("");
   }, []);
+
+  const reportAction = reportAPatient(station);
   return (
     <>
       {!station.is_set && (
@@ -100,6 +122,46 @@ export function YakarForm({
                 setStationId(Number(unit_id));
               }}
             />
+          </View>
+          <View>
+            <Button
+              mode="contained"
+              onPress={async () => {
+                setTestCheck("Sending");
+                const patient: IPatientRecord = {
+                  ...initialPatient,
+                  personal_information: {
+                    ...initialPatient.personal_information,
+                    idf_id: new Date().getTime().toString(),
+                    full_name: "Test Full_name",
+                    patientId: "Test|Test",
+                    unit: "Test unit",
+                  },
+                };
+                const base64 = await createPDFWithImage(patient);
+                reportAction({ ...patient, base64 })
+                  .then(() => {
+                    setTestCheck("Success");
+                    setErrorMessage([]);
+                  })
+                  .catch((e) => {
+                    const messages = JSON.parse(e.message);
+
+                    setErrorMessage(
+                      messages.detail.map((err) => JSON.stringify(err))
+                    );
+                    setTestCheck("Error");
+                  });
+              }}
+            >
+              {translation("stationTest")} {testCheck}
+            </Button>
+
+            <View>
+              {errorMessage.map((message) => (
+                <Text key={message}>{message}</Text>
+              ))}
+            </View>
           </View>
           <View
             style={{

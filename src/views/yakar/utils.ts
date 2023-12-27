@@ -26,7 +26,6 @@ export function getFormDefaultFields({ patient, station }) {
 export function reportAPatient(station) {
   return async (patient) => {
     const formConfirmedDetails = getFormDefaultFields({ patient, station });
-
     const form = new FormData();
     form.append("record_id", formConfirmedDetails.record_id);
     form.append("patient_id", formConfirmedDetails.patient_id);
@@ -51,10 +50,11 @@ export function reportAPatient(station) {
       });
       const data = await res.json();
       if (res.status === 200) {
+        console.info("patient reported");
         return data;
       } else {
         console.log(res.status, data);
-        throw new Error("not ok");
+        throw JSON.stringify(data);
       }
     } catch (e) {
       throw new Error(e);

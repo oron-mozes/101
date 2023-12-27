@@ -52,19 +52,6 @@ export function StationScreen() {
       : null
   );
 
-  // useEffect(() => {
-  //   if (
-  //     newCareProvider &&
-  //     newCareProvider.full_name &&
-  //     newCareProvider.idf_id &&
-  //     newCareProvider.role
-  //   ) {
-  //     setProviders([...providers, newCareProvider]);
-  //     ;
-  //     updateCareProvider(null);
-  //   }
-  // }, [newCareProvider]);
-
   useEffect(() => {
     setStationName(station.unit_name);
     setProviders(station.care_providers);
