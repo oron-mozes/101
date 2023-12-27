@@ -10,7 +10,7 @@ import { useStationStore } from "../../store/station.store";
 import { createPDFWithImage } from "../../utils/create-pdf";
 import { reportAPatient } from "./utils";
 import { usePatientRecordsStore } from "../../store/patients.record.store";
-
+import env from "../taagad/env.json";
 interface PatientRecordWithPdf extends IPatientRecord {
   base64: string;
 }
@@ -58,11 +58,19 @@ export function YakarScreen() {
   >([]);
   const [status, setStatus] = useState<STATUS>(STATUS.Closed);
   const [results, setResults] = useState<{ patientId: string; status }[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string[]>([]);
+  useEffect(() => {
+    if (Boolean(errorMessage.length)) {
+      setTimeout(() => {
+        setErrorMessage([]);
+      }, 15000);
+    }
+  }, [errorMessage]);
   useEffect(() => {
     patients.length !== 0 && setStatus(STATUS.Analyzing);
     Promise.all(
       patients.map(async (p): Promise<PatientRecordWithPdf> => {
-        const base64 = await createPDFWithImage(p);
+        const base64 = ""; //await createPDFWithImage(p);
 
         return { ...p, base64 };
       })
@@ -71,26 +79,36 @@ export function YakarScreen() {
   }, [patients]);
 
   const reportAction = reportAPatient(station);
+  const reportTestAction = reportAPatient({
+    ...station,
+    API: env.TEST_API,
+    TOKEN: env.TOKEN,
+  });
   const [inSendingMode, setInSendingMode] = useState<Set<string>>(new Set([]));
-  useEffect(() => {
-    patientsReadyForSend.length !== 0 && setStatus(STATUS.Sending);
-    patientsReadyForSend.length !== 0 && setStatus(STATUS.Sending);
-    patientsReadyForSend.length !== 0 &&
-      Promise.allSettled(patientsReadyForSend.map(reportAction))
-        .then((data) => {
-          setStatus(STATUS.Completed);
 
-          setResults(
-            data.map((d, index) => ({
-              patientId:
-                patientsReadyForSend[index].personal_information.patientId,
-              status: d.status,
-            }))
-          );
-        })
-        .catch(() => {
-          setStatus(STATUS.Error);
-        });
+  const send = async (sendPatients) => {
+    const data = await Promise.allSettled(sendPatients.map(reportAction));
+
+    const errors = data
+      .filter((d) => d.status === "rejected")
+      .map((d) => (d as PromiseRejectedResult).reason)
+      .flatMap((data) => {
+        return JSON.parse(data.message).detail.map((err) =>
+          JSON.stringify(err)
+        );
+      });
+    setErrorMessage(errors);
+    setStatus(STATUS.Completed);
+    setResults(
+      data.map((d, index) => ({
+        patientId: patientsReadyForSend[index].personal_information.patientId,
+        status: d.status,
+      }))
+    );
+  };
+
+  useEffect(() => {
+    patientsReadyForSend.length !== 0 && send(patientsReadyForSend);
   }, [patientsReadyForSend]);
 
   const doneScanning = () => {
@@ -112,6 +130,31 @@ export function YakarScreen() {
     setPatientsReadyForSend([]);
   };
 
+  const resend = async (patient, index) => {
+    inSendingMode.add(patient.personal_information.patientId);
+    setInSendingMode(new Set([...inSendingMode]));
+    try {
+      setErrorMessage([]);
+      const data = await reportAction(patient);
+      inSendingMode.delete(patient.personal_information.patientId);
+      setInSendingMode(new Set([...inSendingMode]));
+      setResults((results) => {
+        const newResults = [...results];
+        newResults[index].status = data.status;
+        return newResults;
+      });
+    } catch (error) {
+      console.log(JSON.parse(error.message).detail);
+      setErrorMessage(
+        JSON.parse(error.message).detail.map(
+          (err) =>
+            `${patient.personal_information.patientId}:${JSON.stringify(err)}`
+        )
+      );
+      inSendingMode.delete(patient.personal_information.patientId);
+      setInSendingMode(new Set([...inSendingMode]));
+    }
+  };
   return (
     <View
       style={{
@@ -146,11 +189,16 @@ export function YakarScreen() {
             contentStyle={{ width: 200, height: inputHeight }}
             onPress={() => {
               setStatus(STATUS.Idle);
-              readTag((parsedData) => {
-                setStatus(STATUS.Receiving);
-                setPatients(parsedData.records);
-                close();
-              });
+              try {
+                readTag((parsedData) => {
+                  setStatus(STATUS.Receiving);
+                  setPatients(parsedData.records);
+                  close();
+                });
+              } catch (error) {
+                debugger;
+                console.log(error);
+              }
             }}
           >
             {translation("startScan")}
@@ -214,29 +262,10 @@ export function YakarScreen() {
                       {status !== "fulfilled" && (
                         <View>
                           <Button
-                            mode="outlined"
+                            style={{ marginBottom: 10 }}
+                            mode="contained"
                             onPress={async () => {
-                              inSendingMode.add(
-                                patient.personal_information.patientId
-                              );
-                              setInSendingMode(new Set([...inSendingMode]));
-                              try {
-                                const data = await reportAction(patient);
-                                inSendingMode.delete(
-                                  patient.personal_information.patientId
-                                );
-                                setInSendingMode(new Set([...inSendingMode]));
-                                setResults((results) => {
-                                  const newResults = [...results];
-                                  newResults[index].status = data.status;
-                                  return newResults;
-                                });
-                              } catch (error) {
-                                inSendingMode.delete(
-                                  patient.personal_information.patientId
-                                );
-                                setInSendingMode(new Set([...inSendingMode]));
-                              }
+                              resend(patient, index);
                             }}
                             icon={
                               inSendingMode.has(
@@ -251,6 +280,17 @@ export function YakarScreen() {
                             )
                               ? translation("sending")
                               : translation("reSend")}
+                          </Button>
+                          <Button
+                            onPress={async () => {
+                              resend(patient, index);
+                            }}
+                          >
+                            {inSendingMode.has(
+                              patient.personal_information.patientId
+                            )
+                              ? translation("sendingToDev")
+                              : translation("reSendToDev")}
                           </Button>
                           {station.email_to && (
                             <Button
@@ -298,6 +338,11 @@ export function YakarScreen() {
           </View>
         </View>
       )}
+      <View>
+        {errorMessage.map((message) => (
+          <Text key={message}>{message}</Text>
+        ))}
+      </View>
     </View>
   );
 }

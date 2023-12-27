@@ -12,7 +12,6 @@ import env from "../env.json";
 import { colors, inputFontSize } from "../../../shared-config";
 import { reportAPatient } from "../../yakar/utils";
 import { createPDFWithImage } from "../../../utils/create-pdf";
-import { set } from "lodash";
 
 export function YakarForm({
   isYakar,

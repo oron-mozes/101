@@ -324,13 +324,13 @@
   "idle": "ממתין",
   "receiving": "קליטה",
   "analyzing": "ניתוח",
-  "sending": "שליחה",
+  "sending": "שליחה לתחנה",
   "completed": "סיום",
   "patientCount": "פצוע.ה {{count}}",
   "transferStatus": "העברה {{status}}",
   "fulfilled": "הצליחה",
   "rejected": "נכשלה",
-  "reSend": "שלח שוב",
+  "reSend": "שלח שוב לתחנה",
   "unknownTime": "זמן לא ידוע",
   "caseNumber": "מספר טופס 101: {{case}}",
   "unit": "יחידה",
@@ -352,5 +352,7 @@
   "transformDescription": "כיצד ההעברה תתבצע?",
   "bloodBagId": "מספר מנת דם",
   "other": "אחר",
-  "stationTest": "בדיקת תחנה:"
+  "stationTest": "בדיקת תחנה:",
+  "sendingToDev": "שולח לבדיקות",
+  "reSendToDev": "שלח לבדיקות"
 }
