@@ -380,6 +380,7 @@ export interface IPatientRecord {
   image?: string;
 }
 export enum ROLE {
+  NURSE = "NURSE",
   UNIT_MEDIC = "UNIT_MEDIC",
   MEDIC = "MEDIC",
   PARAMEDIC = "PARAMEDIC",

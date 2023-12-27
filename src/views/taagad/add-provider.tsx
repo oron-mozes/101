@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { StatusBar, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Icon } from "react-native-paper";
 import { initialProviderState } from ".";

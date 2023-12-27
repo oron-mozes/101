@@ -52,17 +52,18 @@ export function StationScreen() {
       : null
   );
 
-  useEffect(() => {
-    if (
-      newCareProvider &&
-      newCareProvider.full_name &&
-      newCareProvider.idf_id &&
-      newCareProvider.role
-    ) {
-      setProviders([...providers, newCareProvider]);
-      updateCareProvider(null);
-    }
-  }, [newCareProvider]);
+  // useEffect(() => {
+  //   if (
+  //     newCareProvider &&
+  //     newCareProvider.full_name &&
+  //     newCareProvider.idf_id &&
+  //     newCareProvider.role
+  //   ) {
+  //     setProviders([...providers, newCareProvider]);
+  //     ;
+  //     updateCareProvider(null);
+  //   }
+  // }, [newCareProvider]);
 
   useEffect(() => {
     setStationName(station.unit_name);
@@ -159,7 +160,7 @@ export function StationScreen() {
                           : colors.disabled,
                       }}
                     >
-                      {translation("addCareProvider")}
+                      {translation("addCareProvider")}1
                     </Text>
                   </View>
                 </TouchableWithoutFeedback>
@@ -175,8 +176,17 @@ export function StationScreen() {
                         setAsYakar(false),
                         setIsSet(true),
                       ]);
+                      let lastProvider = [];
+                      if (
+                        newCareProvider &&
+                        newCareProvider.full_name &&
+                        newCareProvider.idf_id &&
+                        newCareProvider.role
+                      ) {
+                        lastProvider = [newCareProvider];
+                      }
                       await addProviders(
-                        providers.map((provider) => ({
+                        providers.concat(lastProvider).map((provider) => ({
                           ...provider,
                           unit_name: station.unit_name,
                         }))
