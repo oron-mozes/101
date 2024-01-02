@@ -32,7 +32,11 @@ export function DeviceSelectDialog({
         <Dialog.Title testID={`${testId}${testId ? "-" : ""}dialog-title`}>
           {translation("transformTitle")}
         </Dialog.Title>
+
         <Dialog.Content>
+          <Text style={{ marginBottom: 20 }}>
+            {translation("transferInstruction")}
+          </Text>
           <Button
             style={{ marginBottom: 20 }}
             labelStyle={{ fontSize: 18, paddingTop: 10, paddingBottom: 10 }}

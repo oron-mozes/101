@@ -143,6 +143,7 @@ export function NewMedication() {
           <Divider style={{ width: "100%", marginTop: 10, marginBottom: 10 }} />
           <Card.Content style={[styles.innerContent, styles.section]}>
             <InputField
+              numeric
               onChange={(value) => {
                 setNewMedication({
                   ...newMedication,
@@ -198,7 +199,7 @@ export function NewMedication() {
           <Card.Content style={[styles.innerContent, styles.ctaContainer]}>
             <View style={{ width: "25%" }}>
               <TimePicker
-                value={newMedication.time}
+                value={newMedication.time || new Date().getTime()}
                 label={translation("actionTime")}
                 onChange={(time: number) => {
                   time !== newMedication.time &&

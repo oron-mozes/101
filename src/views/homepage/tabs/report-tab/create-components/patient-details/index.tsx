@@ -20,6 +20,14 @@ export function PatientDetails() {
   const incident_information = usePatientRecordsStore((state) => ({
     ...state.activePatient.incident_information,
   }));
+  const { injury_time = new Date().getTime() } = usePatientRecordsStore(
+    (state) => ({
+      ...state.activePatient.incident_information,
+    })
+  );
+  const care_time = usePatientRecordsStore(
+    (state) => state.activePatient.incident_information.care_time
+  );
 
   const handlers = usePatientRecordsStore(
     (state) => state.personal_information_handlers
@@ -71,20 +79,21 @@ export function PatientDetails() {
         <View style={styles.personalInfo}>
           <TimePicker
             testID="care-time"
-            value={incident_information.care_time}
+            value={care_time || new Date().getTime()}
             label={translation("timeOfTreatment")}
-            onChange={(care_time: number) => {
-              care_time !== incident_information.care_time &&
-                inc_handlers.setCareTime(care_time);
+            onChange={(_care_time: number) => {
+              if (_care_time !== care_time) {
+                inc_handlers.setCareTime(_care_time);
+              }
             }}
           />
           <TimePicker
             testID="injury-time"
-            value={incident_information.injury_time}
+            value={injury_time || new Date().getTime()}
             label={translation("timeOfInjury")}
-            onChange={(injury_time: number) => {
-              incident_information.injury_time !== injury_time &&
-                inc_handlers.setTime(injury_time);
+            onChange={(_injury_time: number) => {
+              injury_time !== _injury_time &&
+                inc_handlers.setTime(_injury_time);
             }}
           />
         </View>

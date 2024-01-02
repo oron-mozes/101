@@ -9,12 +9,15 @@ import { useContext, useEffect } from "react";
 import NfcManager, { Ndef, NfcEvents, NfcTech } from "react-native-nfc-manager";
 import { polyfill } from "react-native-polyfill-globals/src/encoding";
 import { NfcTransferStatus, useNfcStore } from "../store/nfc.store";
+import { useGlobalStore } from "../store/global.store";
 
 polyfill();
 NfcManager.start();
 export function useNfc() {
   const { session } = useContext(HCESessionContext);
-
+  const setPerformActionForPatients = useGlobalStore(
+    (state) => state.setPerformActionForPatients
+  );
   const { setTransferStatus, closeNfcDialog } = useNfcStore();
   const close = async () => {
     await Promise.all([
@@ -22,6 +25,7 @@ export function useNfc() {
       NfcManager.cancelTechnologyRequest(),
       NfcManager.setEventListener(NfcEvents.DiscoverTag, null),
       session.setEnabled(false),
+      setPerformActionForPatients([]),
     ]);
   };
   async function readTag(callback: (data) => void) {
@@ -53,23 +57,28 @@ export function useNfc() {
         NfcTech.IsoDep,
       ]);
 
-      const tag = await NfcManager.getTag();
+      await NfcManager.getTag()
+        .then((tag) => {
+          const buffer = new Uint8Array(tag.ndefMessage[0].payload);
+          const textDecoder = new TextDecoder("utf-8");
+          const decodedString = textDecoder.decode(buffer).substring(3);
+          //how can I use crypto with old apps?
+          const parsedData = decompress(
+            JSON.parse(JSON.parse(JSON.stringify(decodedString)))
+          );
 
-      const buffer = new Uint8Array(tag.ndefMessage[0].payload);
-      const textDecoder = new TextDecoder("utf-8");
-      const decodedString = textDecoder.decode(buffer).substring(3);
-      //how can I use crypto with old apps?
-      const parsedData = decompress(
-        JSON.parse(JSON.parse(JSON.stringify(decodedString)))
-      );
+          callback(parsedData);
 
-      callback(parsedData);
-
-      setTransferStatus(NfcTransferStatus.Success({ result: "" }));
-    } catch (error) {
-      setTransferStatus(
-        NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) })
-      );
+          setTransferStatus(NfcTransferStatus.Success({ result: "" }));
+        })
+        .catch((error) => {
+          setTransferStatus(
+            NfcTransferStatus.Error({ errorMessage: JSON.stringify(error) })
+          );
+        })
+        .finally(() => {
+          close();
+        });
     } finally {
       await close();
     }
@@ -94,7 +103,7 @@ export function useNfc() {
     NfcManager.requestTechnology(NfcTech.Ndef)
       .then(async () => {
         const bgTag = await NfcManager.getTag();
-
+        setTransferStatus(NfcTransferStatus.Loading());
         const bytes = Ndef.encodeMessage([
           Ndef.textRecord(content, "en", "utf-8"),
         ]);
@@ -106,6 +115,12 @@ export function useNfc() {
             cb();
           })
           .catch((err) => {
+            setTransferStatus(
+              NfcTransferStatus.Error({
+                errorMessage: "Fail to transfer data to card",
+              })
+            );
+
             close();
           });
       })

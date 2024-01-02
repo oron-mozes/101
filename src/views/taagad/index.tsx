@@ -44,31 +44,16 @@ export function StationScreen() {
     station.care_providers ?? []
   );
 
-  const [newCareProvider, updateCareProvider] = useState<ICareProvider>(
-    providers?.length === 0
-      ? {
-          ...initialProviderState,
-        }
-      : null
-  );
+  const [newCareProvider, updateCareProvider] = useState<ICareProvider>({
+    ...initialProviderState,
+  });
 
-  // useEffect(() => {
-  //   if (
-  //     newCareProvider &&
-  //     newCareProvider.full_name &&
-  //     newCareProvider.idf_id &&
-  //     newCareProvider.role
-  //   ) {
-  //     setProviders([...providers, newCareProvider]);
-  //     ;
-  //     updateCareProvider(null);
-  //   }
-  // }, [newCareProvider]);
-  const newCareProviderValid: boolean =
+  const newCareProviderValid: boolean = Boolean(
     newCareProvider &&
-    newCareProvider.full_name &&
-    newCareProvider.idf_id &&
-    newCareProvider.role;
+      newCareProvider.full_name &&
+      newCareProvider.idf_id &&
+      newCareProvider.role
+  );
   useEffect(() => {
     setStationName(station.unit_name);
     setProviders(station.care_providers);
@@ -95,6 +80,7 @@ export function StationScreen() {
           contentContainerStyle={{
             alignItems: "center",
             marginTop: 30,
+            paddingBottom: 150,
           }}
         >
           <StationHeader />
@@ -216,6 +202,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: StatusBar.currentHeight,
     width: "100%",
+    height: "100%",
     backgroundColor: colors.surface,
   },
   scrollView: {

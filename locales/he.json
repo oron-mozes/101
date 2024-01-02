@@ -83,6 +83,7 @@
   "palpated": "רדיאלי נימוש?",
   "puls": "דופק",
   "bloodPressureDiastolic": "לחץ דם דיאסטולי",
+  "bloodPressureClean": "לחץ דם",
   "bloodPressureSystolic": "לחץ דם סיסטולי",
   "bloodPressure": "לחץ דם דיאסטולי / סיסטולי",
   "CENTRAL_VAIN": "וריד מרכזי",
@@ -354,5 +355,6 @@
   "other": "אחר",
   "stationTest": "בדיקת תחנה:",
   "sendingToDev": "שולח לבדיקות",
-  "reSendToDev": "שלח לבדיקות"
+  "reSendToDev": "שלח לבדיקות",
+  "transferInstruction": "להעברה מיטבית, נא להצמיד מכשירים / תגיות גב אל גב"
 }

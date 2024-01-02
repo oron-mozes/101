@@ -1,4 +1,4 @@
-import _, { remove } from "lodash";
+import _, { merge } from "lodash";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import storage, { STORAGE } from "../../storage";
@@ -42,92 +42,9 @@ import {
 } from "../views/homepage/tabs/report-tab/create-components/utils";
 import { emptyPatient } from "../views/homepage/tabs/report-tab/empty-patient";
 
-export const initialPatient = {
-  incident_information: {
-    injury_time: null,
-    care_time: null,
-    date: null,
-  },
-
-  id: null,
-  prognosis: [],
-  personal_information: {
-    full_name: null,
-    idf_id: null,
-    patientId: null,
-  },
-  breathing: {
-    fulfill: null,
-    breathingCount: null,
-    saturation: null,
-    actions: [],
-  },
-  airway: {
-    fulfill: null,
-    actions: [],
-  },
-  consciousness: [],
-  providers: [],
-  eSection: [],
-  injuries: [],
-  measurements: {
-    fulfill: null,
-    bloodPressure: null,
-    actions: [],
-    shock: null,
-    palpated: null,
-    puls: null,
-  },
-  reaction: {
-    general: [],
-    eyes: null,
-    speech: null,
-    movement: null,
-    GCS: 3,
-  },
-  medicationsAndFluids: { actions: [] },
-  injuryReason: {
-    reasons: [],
-    circumstance: null,
-  },
-  evacuation: {
-    time: null,
-    destination: null,
-    transportation: null,
-    status: STATUS.NEW_PATIENT,
-    special_care: null,
-  },
-  treatmentGuide: {
-    guides: [],
-    measurements: {
-      period: null,
-      actions: [],
-    },
-  },
-  image: null,
-};
-
 export const usePatientRecordsStore = create<{
   patients: IPatientRecord[];
-  activePatient: {
-    incident_information: IIncidentInformation;
-    id: string;
-    personal_information: IPersonalInformation;
-    providers: ICareProvider[];
-    injuries: IInjury[];
-    consciousness: ECconsciousness[];
-    eSection: EEsectionChips[];
-    airway: IAirway;
-    breathing: IBreathing;
-    measurements: IMeasurements;
-    reaction: IReaction;
-    medicationsAndFluids: IMedicationsAndFluid;
-    injuryReason: IInjuryReason;
-    prognosis: string[];
-    evacuation: IEvacuationInformation;
-    treatmentGuide: ITreatment;
-    image: string;
-  };
+  activePatient: typeof emptyPatient;
   injuriesImage: Record<string, string>;
   addInjuriesImage(image: string): void;
   deletePatients(): void;
@@ -286,7 +203,7 @@ export const usePatientRecordsStore = create<{
       set((state) => ({ ...state, patients: [] }));
     },
     patients: [],
-    activePatient: _.cloneDeep(initialPatient),
+    activePatient: _.cloneDeep(emptyPatient),
     updatePrognosis(prognosis: string) {
       const current = state.getState();
       current.updatePartialPatient({
@@ -698,12 +615,11 @@ export const usePatientRecordsStore = create<{
       },
       setCareTime(care_time: number) {
         const current = state.getState();
-        const merged = _.merge(current.activePatient.incident_information, {
-          care_time,
-        });
-
         current.updatePartialPatient({
-          incident_information: merged,
+          incident_information: {
+            ...current.activePatient.incident_information,
+            care_time,
+          },
         });
       },
       setDate(date: number) {
@@ -952,11 +868,11 @@ export const usePatientRecordsStore = create<{
         });
       },
     },
-    setActivePatient(selectedPatient: IPatientRecord = emptyPatient) {
-      const patient = {
-        ...selectedPatient,
-      };
-      set((state) => ({ ...state, activePatient: { ...patient } as any }));
+    setActivePatient(selectedPatient: IPatientRecord = { ...emptyPatient }) {
+      set((state) => ({
+        ...state,
+        activePatient: { ...selectedPatient } as any,
+      }));
     },
     async savePatient() {
       const active = get().activePatient;
@@ -1010,7 +926,7 @@ export const usePatientRecordsStore = create<{
       set((state) => ({
         ...state,
         patients: [...patients],
-        activePatient: _.cloneDeep(initialPatient),
+        activePatient: _.cloneDeep(emptyPatient) as IPatientRecord,
       }));
     },
     updatePartialPatient(data) {
@@ -1069,6 +985,7 @@ export const usePatientRecordsStore = create<{
           newPatient.personal_information.patientId
         );
       });
+
       if (currentIndex === -1) {
         currentData.push(newPatient);
       } else {

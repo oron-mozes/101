@@ -6,12 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "../../../hooks/useMyTranslation";
 import { IPatientRecord, StackNavigation } from "../../../interfaces";
 import { useStationStore } from "../../../store/station.store";
-import { initialPatient } from "../../../store/patients.record.store";
 import { useEffect, useState } from "react";
 import env from "../env.json";
 import { colors, inputFontSize } from "../../../shared-config";
 import { reportAPatient } from "../../yakar/utils";
 import { createPDFWithImage } from "../../../utils/create-pdf";
+import { emptyPatient } from "../../../views/homepage/tabs/report-tab/empty-patient";
 
 export function YakarForm({
   isYakar,
@@ -128,9 +128,9 @@ export function YakarForm({
               onPress={async () => {
                 setTestCheck("Sending");
                 const patient: IPatientRecord = {
-                  ...initialPatient,
+                  ...emptyPatient,
                   personal_information: {
-                    ...initialPatient.personal_information,
+                    ...emptyPatient.personal_information,
                     idf_id: new Date().getTime().toString(),
                     full_name: "Test Full_name",
                     patientId: "Test|Test",

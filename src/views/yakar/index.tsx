@@ -70,7 +70,7 @@ export function YakarScreen() {
     patients.length !== 0 && setStatus(STATUS.Analyzing);
     Promise.all(
       patients.map(async (p): Promise<PatientRecordWithPdf> => {
-        const base64 = ""; //await createPDFWithImage(p);
+        const base64 = await createPDFWithImage(p);
 
         return { ...p, base64 };
       })
@@ -130,12 +130,14 @@ export function YakarScreen() {
     setPatientsReadyForSend([]);
   };
 
-  const resend = async (patient, index) => {
+  const resend = async (patient, index, test = false) => {
     inSendingMode.add(patient.personal_information.patientId);
     setInSendingMode(new Set([...inSendingMode]));
     try {
       setErrorMessage([]);
-      const data = await reportAction(patient);
+      const data = test
+        ? await reportTestAction(patient)
+        : await reportAction(patient);
       inSendingMode.delete(patient.personal_information.patientId);
       setInSendingMode(new Set([...inSendingMode]));
       setResults((results) => {
@@ -231,9 +233,7 @@ export function YakarScreen() {
                     style={{ padding: 10, width: "100%" }}
                   >
                     <DataTable.Cell>
-                      {translation("patientCount", {
-                        count: (index + 1).toString(),
-                      })}
+                      {patient.personal_information.full_name}
                     </DataTable.Cell>
                     <DataTable.Cell>
                       <Text
@@ -279,7 +279,7 @@ export function YakarScreen() {
                           </Button>
                           <Button
                             onPress={async () => {
-                              resend(patient, index);
+                              resend(patient, index, true);
                             }}
                           >
                             {inSendingMode.has(

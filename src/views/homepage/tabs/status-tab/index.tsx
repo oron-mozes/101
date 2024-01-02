@@ -11,16 +11,15 @@ import { Checkbox, DataTable, Icon, Text } from "react-native-paper";
 import { TAB_STATUS } from "../..";
 import { StatusChip } from "../../../../form-components/status-chip";
 import { useTranslation } from "../../../../hooks/useMyTranslation";
-import { IPatientRecord, StackNavigation } from "../../../../interfaces";
+import { StackNavigation } from "../../../../interfaces";
 import { ROUTES } from "../../../../routes";
 import { borderSetup, colors } from "../../../../shared-config";
 import { useGlobalStore } from "../../../../store/global.store";
 import { usePatientRecordsStore } from "../../../../store/patients.record.store";
 import { PatientCareIcon } from "../../footer/patient-care-icon";
+import { QuickView } from "./quick-view";
 import { TableActions } from "./table-actions";
 import { sortByPriority } from "./utils";
-import { usePatientTransfer } from "../../../../hooks/usePatientTransfer";
-import { QuickView } from "./quick-view";
 
 export function StatusTab() {
   const navigation = useNavigation<StackNavigation>();
@@ -39,38 +38,7 @@ export function StatusTab() {
     toggleLoading,
     togglePatientId,
   } = useGlobalStore();
-  const { CommunicationIcon, transferPatient } = usePatientTransfer();
-  const generateMessage = (patient: IPatientRecord) => {
-    return translation("patientSummary", {
-      injury:
-        patient.injuryReason.reasons.length !== 0
-          ? patient.injuryReason.reasons
-              .map((reason) => translation(reason))
-              .join(", ")
-          : translation("unknown"),
-      avpu:
-        patient.consciousness.length !== 0
-          ? translation(patient.consciousness.join(", "))
-          : translation("unknown"),
-      medications:
-        patient.medicationsAndFluids.actions.length !== 0
-          ? patient.medicationsAndFluids.actions
-              .map(
-                (action) =>
-                  `${action.treatment && translation(action.treatment)} ${
-                    action.type ? translation(action.type) : ""
-                  } ${action.dose ? translation(action.dose) : ""} ${
-                    action.other ? action.other : ""
-                  }`
-              )
-              .join(", ")
-          : translation("unknown"),
-      saturation:
-        patient.breathing.saturation?.toString() ?? translation("unknown"),
-      bloodPressure:
-        patient.measurements.bloodPressure ?? translation("unknown"),
-    });
-  };
+
   return (
     <GestureHandlerRootView>
       <TouchableWithoutFeedback
@@ -237,7 +205,7 @@ export function StatusTab() {
                     height: showAccordion.has(
                       patient.personal_information.patientId
                     )
-                      ? 180
+                      ? 240
                       : 0,
                     width: "100%",
                     paddingTop: showAccordion.has(
