@@ -10,6 +10,7 @@ import { IAction, TOGGLE } from "../../../../../../interfaces";
 import { colors, gutter } from "../../../../../../shared-config";
 import { convertToOptions } from "../utils";
 import { isSuccessful } from "./utils";
+import { useEffect } from "react";
 
 export function AddAction<T>({
   information,
@@ -26,6 +27,11 @@ export function AddAction<T>({
 }) {
   const translation = useTranslation();
   const successful = isSuccessful(information.successful);
+
+  useEffect(() => {
+
+  }, [])
+
   return (
     <>
       <View style={styles.element} testID={testID}>

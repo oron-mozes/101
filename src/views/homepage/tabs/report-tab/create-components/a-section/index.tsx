@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
@@ -7,9 +8,7 @@ import { EAirWayTreatment, IAction } from "../../../../../../interfaces";
 import { gutter } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { AddAction } from "../section-shared-components/add-a-action";
-import { AddActionCTA } from "../section-shared-components/add-action-cta";
 import { SavedAction } from "../section-shared-components/saved-action";
-import { allowToAddAction } from "../section-shared-components/utils";
 import { design } from "../shared-style";
 import { AActiveBar } from "./a-active-bar";
 
@@ -38,7 +37,11 @@ export function ASection() {
     });
   }, []);
 
-  const newActionValid = allowToAddAction(actions, action);
+  useEffect(() => {
+    if (action && !_.isNull(action?.action) && !_.isNull(action?.time)) {
+      saveNewAction();
+    }
+  }, [action]);
 
   const saveNewAction = () => {
     handlers.addAction({ ...action });
@@ -77,18 +80,6 @@ export function ASection() {
             initialEmptyAction={initialEmptyAction}
           />
         )}
-      </Card.Content>
-
-      <Card.Content
-        testID="add-airway-action"
-        style={[styles.innerContent, styles.addItemAction]}
-        aria-disabled={!newActionValid}
-      >
-        <AddActionCTA
-          valid={newActionValid}
-          saveNewAction={saveNewAction}
-          testID="add-airway"
-        />
       </Card.Content>
     </Card>
   );

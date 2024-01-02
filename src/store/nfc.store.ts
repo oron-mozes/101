@@ -8,7 +8,12 @@ export const NfcTransferStatus = variant({
   Waiting: constant({
     color: "#00244D",
     statusText: "בהמתנה",
-    text: "נא להצמיד את המכשירים להתחלת הפעולה",
+    text: "נא להצמיד את המכשירים גב אל גב להתחלת הפעולה",
+  }),
+  WaitingTag: constant({
+    color: "#00244D",
+    statusText: "בהמתנה",
+    text: "צמד תגיד לחלק האחורי למעלה משמאל עד הופעת המסך הירוק",
   }),
   Loading: constant({
     color: "#006BE5",
@@ -18,7 +23,7 @@ export const NfcTransferStatus = variant({
   Success: ({ result }: { result: string }) => ({
     color: "#14B881",
     statusText: "הושלמה בהצלחה",
-    text: "ניתן לנתק מכשירים",
+    text: "פעולה בוצעה בהצלחה, ניתן לסגור את החלון.",
     result,
   }),
   Error: ({ errorMessage }: { errorMessage: string }) => ({

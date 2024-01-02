@@ -159,7 +159,7 @@ export function StationScreen() {
                     mode="contained"
                     icon="check"
                     style={{ width: 165 }}
-                    disabled={!valid}
+                    disabled={!newCareProviderValid}
                     onPress={async () => {
                       await Promise.all([
                         updateStationName(stationName),

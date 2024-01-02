@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Card } from "react-native-paper";
@@ -9,9 +10,7 @@ import { EMeasurementsTreatments, IAction } from "../../../../../../interfaces";
 import { gutter } from "../../../../../../shared-config";
 import { usePatientRecordsStore } from "../../../../../../store/patients.record.store";
 import { AddAction } from "../section-shared-components/add-a-action";
-import { AddActionCTA } from "../section-shared-components/add-action-cta";
 import { SavedAction } from "../section-shared-components/saved-action";
-import { allowToAddAction } from "../section-shared-components/utils";
 import { design } from "../shared-style";
 import { RadAndShock } from "./rad-and-shock";
 
@@ -40,7 +39,11 @@ export function CSection() {
   );
 
   const [action, updateAction] = useState<IAction<EMeasurementsTreatments>>();
-
+  useEffect(() => {
+    if (action && !_.isNull(action?.action) && !_.isNull(action?.time)) {
+      saveNewAction();
+    }
+  }, [action]);
   useEffect(() => {
     updateAction({
       ...initialEmptyAction,
@@ -48,7 +51,6 @@ export function CSection() {
       id: new Date().getTime(),
     });
   }, []);
-  const newActionValid = allowToAddAction(actions, action);
   const saveNewAction = () => {
     handlers.addAction({ ...action });
     updateAction({
@@ -107,17 +109,6 @@ export function CSection() {
             initialEmptyAction={initialEmptyAction}
           />
         )}
-      </Card.Content>
-      <Card.Content
-        testID="add-measurement-treatment-action"
-        style={[styles.innerContent, styles.addItemAction]}
-        aria-disabled={!newActionValid}
-      >
-        <AddActionCTA
-          valid={newActionValid}
-          saveNewAction={saveNewAction}
-          testID="add-measurement-treatment"
-        />
       </Card.Content>
     </Card>
   );
